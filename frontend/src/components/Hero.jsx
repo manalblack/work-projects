@@ -4,8 +4,8 @@
 export default function Hero(){
 
     return(
-        <div className="bg-darkPurple h-120 w-full ">
-
+        <div className="bg-darkPurple h-150 w-full ">
+            
         </div>
     )
 }
