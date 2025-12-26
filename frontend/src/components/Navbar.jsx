@@ -7,7 +7,7 @@ import { CiMenuBurger } from "react-icons/ci";
 export default function Navbar() {
 
     return(
-        <nav className="bg-lightPurple/50 w-full p-4 flex flex-row justify-between items-center fixed shadow-md z-99">
+        <nav className="bg-lightPurple/50 w-full p-4 flex flex-row justify-between items-center fixed shadow-md z-99 top-0">
             <div className="flex gap-20">
                 <div>logo</div>
                 <div>
