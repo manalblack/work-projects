@@ -1,8 +1,22 @@
 @import "tailwindcss";
-
+@import 'tailwind-scrollbar-hide/v4';
 
 @theme {
   --color-darkPurple: #2e2237;
   --color-mediumPurple: #212529;
   --color-lightPurple: #cd99d9;
+  --color-darkBg: #1a131b;
+}
+
+@utility scrollbar-hide {
+  /* IE and Edge */
+  -ms-overflow-style: none;
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Safari and Chrome */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
