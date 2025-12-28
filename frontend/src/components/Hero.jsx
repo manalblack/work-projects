@@ -23,9 +23,9 @@ export default function Hero(){
             <div className="bg-red-0 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
 
                 <div className="relative w-full group overflow-hidd rounded-xl">
-                    <img src="/placeholder.jpg" alt="" className="w-full rounded-sm shadow-lg h-80"/>
+                    <img src="/placeholder.jpg" alt="" className="w-full rounded-sm shadow-lg h-90"/>
                     <MiniOverlay>
-                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-75 md:h-50 flex flex-row justify-between gap-8">
+                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-85 md:h-50 flex flex-row justify-between gap-8">
                             <div className="w-3/4 flex flex-col items-start gap-3 md:gap-5 bg-gray-00 p-2 mt-13 md:mt-0">
                                <h2 className="md:text-3xl font-bold text-lg">
                                     Black lights event
@@ -42,7 +42,7 @@ export default function Hero(){
                                 Venue: 1234 Event center
                             </span>
                             </div>
-                            <div className="bg-blue-2 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-10 md:mt-0">
+                            <div className="bg-blue-0 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-0">
                                 <LightBtn onPress={aboutEventModal}>
                                     About Event
                                 </LightBtn>
@@ -55,7 +55,11 @@ export default function Hero(){
                 </div>
                 <Introduction />
             </div>
-           <Modal isOpen={aboutModal}/>
+           {/* <Modal isOpen={aboutModal}>
+                <img src="placeholder.jpg" alt="" />
+                <div className="bg-green-300 size-70 w-9/10">
+                </div>
+           </Modal> */}
         </Card>
     )
 }

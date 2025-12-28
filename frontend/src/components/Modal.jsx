@@ -14,7 +14,7 @@ export default function Modal({isOpen, children}) {
                     exit={{scale:0.9, opacity: 0, y: 20}}
                     transition={{type: 'spring', duration: 0.5}}
                  className="bg-white w-9/10 h-110 z-50">
-            
+                    {children}
                 </motion.div>
 
 

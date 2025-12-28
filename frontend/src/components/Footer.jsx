@@ -7,7 +7,7 @@ import MiniBox from "./MiniBox";
 export default function Footer() {
     
     return(
-        <footer className="bg-white md:p-5 p-3 w-full flex flex-col gap-6">
+        <footer className="bg-white md:p-5 p-3 w-full flex flex-col gap-4">
             <div className="flex flex-row gap-3 md:gap-15">
                 <div className="bg-blue-30 w-1/2 flex flex-col gap-6">
                     <span className="md:text-2xl text-lg font-bold text-gray-800">Trovelista</span>
@@ -19,7 +19,7 @@ export default function Footer() {
                     </p>
                 </div>
 
-            <div className="bg-green-30 w-3/6 md:p-2 flex flex-col gap-4 mt-8 md:mt-0 pr-2">
+            <div className="bg-green-30 w-3/5 md:p-2 flex flex-col gap-4 mt-8 md:mt-0">
                 <div className="flex flex-row md:gap-3 gap-1">
                     <FaLocationDot className="md:size-6 text-darkPurple size-5"/>
                     <p className="font-bold text-sm text-lightPurple">
