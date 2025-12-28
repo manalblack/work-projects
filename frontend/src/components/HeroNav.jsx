@@ -10,11 +10,11 @@ export default function HeroNav(){
                     className="bg-gray-100 w-5/6 p-2 rounded-2xl shadow-md"
                 />
             </div> */}
-            <div className="flex w-5/6 justify-between items-center">
-                <button className="bg-white text-gray-700 font-bold px-4 py-1 rounded-2xl text-lg shadow-md">
+            <div className="flex md:w-5/6 md:justify-between items-center justify-center gap-6 w-full bg-green-0 mt-2">
+                <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-95 active:bg-darkPurple active:text-white transition-all duration-300 ease-in-out">
                 Upcoming Events
             </button>
-            <button className="bg-white text-gray-700 font-bold px-4 py-1 rounded-2xl text-lg shadow-md">
+            <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-95 active:bg-darkPurple active:text-white transition-all duration-300 ease-in-out">
                 Previous Events
             </button>
             </div>

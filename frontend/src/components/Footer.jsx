@@ -7,11 +7,11 @@ import MiniBox from "./MiniBox";
 export default function Footer() {
     
     return(
-        <footer className="bg-white p-5 w-full flex flex-col gap-6">
-            <div className="flex flex-row gap-15">
+        <footer className="bg-white md:p-5 p-3 w-full flex flex-col gap-6">
+            <div className="flex flex-row gap-3 md:gap-15">
                 <div className="bg-blue-30 w-1/2 flex flex-col gap-6">
-                    <span className="text-2xl font-bold text-gray-800">Trovelista</span>
-                    <p className="leading-7 text-lg text-gray-800">
+                    <span className="md:text-2xl text-lg font-bold text-gray-800">Trovelista</span>
+                    <p className="leading-7 md:text-lg text-gray-800">
                         Amfanin Girma Plaza, Rijiyar Zaki,
                         opp Markaz Juma'at Mosque
                         <br />
@@ -19,22 +19,22 @@ export default function Footer() {
                     </p>
                 </div>
 
-            <div className="bg-green-30 w-3/4 p-2 flex flex-col gap-4 ">
-                <div className="flex flex-row gap-3">
-                    <FaLocationDot className="size-6 text-darkPurple"/>
-                    <p className="font-bold text-lightPurple">
+            <div className="bg-green-30 w-3/6 md:p-2 flex flex-col gap-4 mt-8 md:mt-0 pr-2">
+                <div className="flex flex-row md:gap-3 gap-1">
+                    <FaLocationDot className="md:size-6 text-darkPurple size-5"/>
+                    <p className="font-bold text-sm text-lightPurple">
                         https://maps.google.com/?q=11.972223,8.446694
                     </p>
                 </div>
-                <div className="flex flex-row gap-3">
-                    <BsFillTelephoneFill  className="size-6 text-darkPurple"/>
-                    <p className="font-bold text-lightPurple">
+                <div className="flex flex-row md:gap-3 gap-1">
+                    <BsFillTelephoneFill  className="md:size-6 size-4 text-darkPurple"/>
+                    <p className="font-bold text-lightPurple text-sm">
                        +2347010010044
                     </p>
                 </div>
-                <div className="flex flex-row gap-3">
-                    <FaEnvelope className="size-6 text-darkPurple"/>
-                    <p className="font-bold text-lightPurple">
+                <div className="flex flex-row md:gap-3 gap-1">
+                    <FaEnvelope className="md:size-6 size-4 text-darkPurple"/>
+                    <p className="font-bold text-lightPurple text-sm">
                         Travelista.0info@gmail.com
                     </p>
                 </div>
@@ -42,10 +42,10 @@ export default function Footer() {
             </div>
 
             <div className="bg-amber- flex flex-row justify-between">
-              <span className="font-semibold text-darkPurple">
+              <span className="font-semibold text-darkPurple text-sm">
                 All rights reserved &copy;Brand name
               </span>
-              <span className="text-black">Made by Blue</span>
+              <span className="text-black text-xs">Made by Blue</span>
             </div>
         </footer>
     )

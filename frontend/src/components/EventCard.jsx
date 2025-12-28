@@ -4,35 +4,16 @@ import MiniOverlay from "./MiniOverlay";
 import PriceContainer from "./PriceContainer";
 import DUMMY_EVENTS from "../testData";
 
-// Create a header component
+
 
 /* 
-    id: 4,
-    title: "Startup Founders Brunch",
-    description: "Intimate networking session for early-stage startup founders.",
-    date: "2026-03-05",
-    time: "11:00",
-    location: "The Metaphor, Lagos",
-    price: 25000,
-    category: "Networking",
-    image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
-    availableTickets: 85,
-    totalTickets: 100
+     <div className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70">
 
-*/
-
-
-
-export default function EventCard() {
-
-    return(
-        <div className="w-120 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80">
-
-            <div className="relative flex justify-center items-center ">
+            <div className="relative flex justify-center items-center">
                 <img src="/placeholder.jpg" alt="" className="w-auto rounded-sm shadow-lg"/>
             <MiniOverlay>
 
-                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-40 flex flex-row justify-between gap-8">
+                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-40 flex flex-row justify-between md:gap-8">
 
                     <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4">
                         <h2 className="text-2xl text-white font-bold">
@@ -45,7 +26,7 @@ export default function EventCard() {
                             N2,000
                         </PriceContainer>
                     </div>
-                    <div className="flex flex-col justify-center items-center p-2 gap-8">
+                    <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">
                         <LightPurpleBtn>
                             AboutEvent
                         </LightPurpleBtn>
@@ -59,27 +40,103 @@ export default function EventCard() {
             </MiniOverlay>
 
             </div>
-           {/* <div className="w-full p-2 flex flex-row gap-6">
-                <div className="bg-white p-1 w-5/5 h- flex flex-col gap-6 justify-center items-center rounded-sm">
-                    <h2 className="text-4xl font-bold">Chocolate Day</h2>
-                    <p className="text-lg font-light">
-                        Event description
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, incidunt?
-                    </p>
-                    <PriceContainer>
-                        N2,000
-                    </PriceContainer>
-                </div>
-                <div className="bg-blue-3 w-1/2 flex flex-col justify-center items-center gap-10">
-                    <LightPurpleBtn>
-                        About Event
-                    </LightPurpleBtn>
-
-                   <LightBtn>
-                        Book Ticket
-                   </LightBtn>
-                </div>
-           </div> */}
+           
         </div>
+
+*/
+
+
+export default function EventCard() {
+
+    return(
+       <>
+        {/* {DUMMY_EVENTS.map((event) => (
+            <div key={event.id}
+             className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80">
+
+            <div className="relative flex justify-center items-center h-auto">
+                <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg"/>
+            <MiniOverlay>
+
+                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-50 flex flex-row justify-between md:gap-8">
+
+                    <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4">
+                        <h2 className="md:text-2xl  text-white font-bold">
+                            {event.title}
+                        </h2>
+                        <p className="text-white font-light">
+                           {event.description}
+                        </p>
+                        <PriceContainer>
+                            N2,000
+                        </PriceContainer>
+                        
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">
+                        <LightPurpleBtn>
+                            AboutEvent
+                        </LightPurpleBtn>
+                        <LightBtn>
+                            Book ticket
+                        </LightBtn>
+                    </div>
+
+                </div>
+
+            </MiniOverlay>
+
+            </div>
+           
+        </div>
+            ))} */}
+         <div className="md:w-120 w-90 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-90 md:h-60">
+
+            <div className="relative flex justify-center items-center">
+                <img src="/placeholder.jpg" alt="" className="w-auto h-80 md:h-0 rounded-sm shadow-lg"/>
+            <MiniOverlay>
+
+                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-60  flex flex-row justify-between md:gap-8">
+
+                    <div className="bg-blue- w-5/6 flex flex-col items-start p-2 gap-2">
+                        <h2 className="text-2xl text-white font-bold">
+                            Event name
+                        </h2>
+                        <p className="text-white font-light">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim, ut.
+                        </p>
+                        <PriceContainer>
+                            N2,000
+                        </PriceContainer>
+                        <div className="bg-red-0 p-1 flex flex-row gap-2">
+                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-lg ">
+                                Date: Oct/10, Time: 10:00am
+                                <br />
+                                Venue: 1234 Event center
+                            </span>
+                             {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                                Date: Oct/10
+                            </span> */}
+                            
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">
+                        <LightPurpleBtn>
+                            AboutEvent
+                        </LightPurpleBtn>
+                        <LightBtn>
+                            Book ticket
+                        </LightBtn>
+                    </div>
+
+                </div>
+
+            </MiniOverlay>
+
+            </div>
+           
+        </div>
+
+       </>
+
     )
 }
