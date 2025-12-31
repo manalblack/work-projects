@@ -6,23 +6,41 @@ import LightPurpleBtn from './LightPurpleBtn'
 import PriceContainer from './PriceContainer'
 import { useState } from "react";
 import Modal from "./Modal";
-
+import {useNavigate} from 'react-router-dom'
+import PaymentOptions from "./PaymentOptions";
+import {motion} from 'motion/react'
 
 
 export default function Hero(){
 
-    const [aboutModal, setAboutModal] = useState(false)
+    const [aboutModal, setAboutModal] = useState(false);
+    const [buyTicket, setBuyTicket] = useState(false);
 
 
     const aboutEventModal = () => {
         setAboutModal(true)
     }
 
+    const buyTicketModal = () => {
+        setBuyTicket(true)
+    }
+
+    // Buy Ticket Modal buttons functions
+    
+
+
+
+
     return(
         <Card>
-            <div className="bg-red-0 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
+            <motion.div
+                initial={{opacity:0, y: 50}}
+                whileInView={{opacity: 1, y: 0}}
+                transition={{ duration: 1, ease: "easeOut" }}
+                viewport={{amount: 0.2 }}
+             className="bg-red-0 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
 
-                <div className="relative w-full group overflow-hidd rounded-xl">
+                <div className="relative w-full group  rounded-xl">
                     <img src="/placeholder.jpg" alt="" className="w-full rounded-sm shadow-lg h-90"/>
                     <MiniOverlay>
                         <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-85 md:h-50 flex flex-row justify-between gap-8">
@@ -46,7 +64,7 @@ export default function Hero(){
                                 <LightBtn onPress={aboutEventModal}>
                                     About Event
                                 </LightBtn>
-                                <LightPurpleBtn>
+                                <LightPurpleBtn onPress={buyTicketModal}>
                                     Buy Ticket
                                 </LightPurpleBtn>
                             </div>
@@ -54,12 +72,29 @@ export default function Hero(){
                     </MiniOverlay>
                 </div>
                 <Introduction />
-            </div>
-           {/* <Modal isOpen={aboutModal}>
-                <img src="placeholder.jpg" alt="" />
-                <div className="bg-green-300 size-70 w-9/10">
+            </motion.div>
+            {/* About Event Modal */}
+           <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
+                <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
+                <div className="bg-green-30 size-70 w-9/10">
+                    <p className="text-md text-white text-center">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ipsam magnam delectus reiciendis. Rerum illum harum distinctio voluptates nisi et at vero iure. Sit corporis nihil, doloribus non similique nesciunt.
+                    </p>
                 </div>
-           </Modal> */}
+                <div className="flex gap-8">
+                    <PriceContainer>
+                        N4,000
+                    </PriceContainer>
+                    <LightPurpleBtn>
+                        Buy ticket
+                    </LightPurpleBtn>
+                </div>
+           </Modal>
+
+           {/* Buy Ticket Modal */}
+           <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
+                <PaymentOptions />
+           </Modal>
         </Card>
     )
 }

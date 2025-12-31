@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LightBtn from "./LightBtn";
 import LightPurpleBtn from "./LightPurpleBtn";
 
@@ -17,9 +18,14 @@ export default function Introduction(){
                 Your go to platform  for securing tickets to the hottest shows, sports events, and festivals, all in one place.
             </p>
             {/* This button redirect you to the Events page */}
-            <LightBtn>
+            {/* <LightBtn>
                 Discover
-            </LightBtn>
+            </LightBtn> */}
+            <Link to='/events'>
+                <span className="bg-lightPurple px-4 py-1 rounded-3xl font-bold">
+                    Discover
+                </span>
+            </Link>
         </div>
     )
 }

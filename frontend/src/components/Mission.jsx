@@ -1,4 +1,4 @@
-
+import {motion} from 'motion/react';
 
 
 export default function Mission () {
@@ -14,8 +14,13 @@ export default function Mission () {
                     We are dedicated to bringing you the latest events, ensuring you never miss out on the experiences that matter most to you.
                 </p>
             </div>
-            <div className="md:w-5/6 w-9/10 m-auto">
-                <img src="/placeholder.jpg" alt="" className="rounded-sm"/>
+            <div className="md:w-5/5 w-9/10 m-auto">
+                <motion.img 
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    viewport={{ once: true, amount: 0.2 }}
+                src="/placeholder.jpg" alt="" className="rounded-sm"/>
             </div>
         </div>
     )
