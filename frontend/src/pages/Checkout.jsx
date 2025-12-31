@@ -29,7 +29,7 @@ export default function Checkout(){
 
                <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8">
                     {/* Current Ticket */}
-                    <div className="bg-white h-90 w-5/6 p-1 flex flex-col gap-5 justify-center items-center rounded-md shadow-lg">
+                    <div className="bg-white h-100 w-5/6 p-1 flex flex-col gap-5 justify-center items-center rounded-md shadow-lg">
 
                         <div className="relative flex justify-center items-center w-5/6">
                             <img src="/placeholder.jpg" alt="" className="rounded-md"/>

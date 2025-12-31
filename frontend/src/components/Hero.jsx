@@ -11,6 +11,8 @@ import PaymentOptions from "./PaymentOptions";
 import {motion} from 'motion/react'
 
 
+const heroEventId = 'hero1'
+
 export default function Hero(){
 
     const [aboutModal, setAboutModal] = useState(false);
@@ -90,10 +92,10 @@ export default function Hero(){
                     </LightPurpleBtn>
                 </div>
            </Modal>
-
+           
            {/* Buy Ticket Modal */}
            <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
-                <PaymentOptions />
+                <PaymentOptions eventId={heroEventId}/>
            </Modal>
         </Card>
     )

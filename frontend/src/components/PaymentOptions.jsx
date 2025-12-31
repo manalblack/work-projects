@@ -1,6 +1,7 @@
 import LightBtn from "./LightBtn"
 import LightPurpleBtn from "./LightPurpleBtn"
 import { useNavigate } from "react-router-dom"
+import {Link} from 'react-router-dom';
 
 
 /* 
@@ -14,9 +15,10 @@ export default function PaymentOptions({eventId}) {
     const navigate = useNavigate()
 
     const handelPayNowBtn = (eventDetails) => {
-        console.log(eventDetails);
+        // console.log(eventId);
         
-        // navigate('/checkout', {state: {directBuyItem: eventDetails}})
+        console.log(eventDetails);
+        navigate('/checkout', {state: {directBuyItem: eventDetails}})
     }
 
 
@@ -26,9 +28,9 @@ export default function PaymentOptions({eventId}) {
                 Pay Now ?
             </LightBtn>
 
-                <h3 className="text-lg text-white font-bold">
-                    OR
-                </h3>
+            <h3 className="text-lg text-white font-bold">
+                OR
+            </h3>
 
             <LightPurpleBtn >
                 Add To Cart

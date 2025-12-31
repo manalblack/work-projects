@@ -3,8 +3,9 @@ import LightPurpleBtn from "./LightPurpleBtn";
 import MiniOverlay from "./MiniOverlay";
 import PriceContainer from "./PriceContainer";
 import DUMMY_EVENTS from "../testData";
-
-
+import { useState } from "react";
+import Modal from "./Modal";
+import PaymentOptions from "./PaymentOptions";
 
 /* 
      <div className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70">
@@ -47,6 +48,17 @@ import DUMMY_EVENTS from "../testData";
 
 
 export default function EventCard() {
+
+    const [aboutModal, setAboutModal] = useState(false);
+    const [buyTicket, setBuyTicket] = useState(false);
+    const event = 'event card id'
+
+    const buyTicketModal = () => {
+        setBuyTicket(true)
+    }
+    const aboutEventModal = () => {
+        setAboutModal(true)
+    }
 
     return(
        <>
@@ -120,20 +132,39 @@ export default function EventCard() {
                         </div>
                     </div>
                     <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">
-                        <LightPurpleBtn>
+                        <LightPurpleBtn onPress={aboutEventModal}>
                             AboutEvent
                         </LightPurpleBtn>
-                        <LightBtn>
+                        <LightBtn onPress={buyTicketModal}>
                             Book ticket
                         </LightBtn>
                     </div>
 
                 </div>
-
             </MiniOverlay>
 
             </div>
            
+           {/* modals section */}
+             <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
+                <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
+                <div className="bg-green-30 size-70 w-9/10">
+                    <p className="text-md text-white text-center">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ipsam magnam delectus reiciendis. Rerum illum harum distinctio voluptates nisi et at vero iure. Sit corporis nihil, doloribus non similique nesciunt.
+                    </p>
+                </div>
+                <div className="flex gap-8">
+                    <PriceContainer>
+                        N4,000
+                    </PriceContainer>
+                    <LightPurpleBtn onPress={buyTicketModal}>
+                        Buy ticket
+                    </LightPurpleBtn>
+                </div>
+            </Modal>
+            <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
+                <PaymentOptions eventId={event}/>
+            </Modal>
         </div>
 
        </>
