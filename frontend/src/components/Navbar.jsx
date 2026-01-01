@@ -28,7 +28,7 @@ export default function Navbar() {
                 </div>
                 <div>
                     <Link to='/events'>
-                        <span className="p-1 text-gray-800 font-bold text-xl hidden md:flex active:scale-95 transition-all duration-300 ease-in-out">Events</span>
+                        <span className="p-1 text-gray-800 font-extrabold text-xl hidden md:flex active:scale-95 transition-all duration-300 ease-in-out">Events</span>
                     </Link>
                 </div>
             </div>
@@ -38,13 +38,15 @@ export default function Navbar() {
                     <FaShoppingCart className="size-6 text-gray-800"/>
                 </Link>
 
-                <button onClick={handelOpenSidebar}>
+                <button onClick={handelOpenSidebar} className="md:hidden flex">
                     <CiMenuBurger className="size-6"/>
                 </button>
 
                 <div className="hidden md:flex gap-4">
                     <button className="bg-green-400 text-white px-3 rounded-xl font-bold shadow-md">
-                        Whatsapp
+                        <a href="https://wa.me/2347010010044">
+                            Whatsapp
+                        </a>    
                     </button>
                     <button className="bg-darkPurple text-white px-3 rounded-xl font-bold shadow-md">
                         Contact us

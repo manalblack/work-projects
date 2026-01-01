@@ -30,9 +30,9 @@ export default function UpcomingEvents(){
             viewport={{amount: 0.3 }}
             className="flex flex-row overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center h-100 p-5 px-4">
                 <EventCard />
+                {/* <EventCard />
                 <EventCard />
-                <EventCard />
-                <EventCard />
+                <EventCard /> */}
             </motion.div>
         </div>
     )

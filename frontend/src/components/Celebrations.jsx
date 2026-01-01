@@ -18,9 +18,10 @@ export default function Celebrations(){
                 transition={{ duration: 1, ease: "easeOut" }}
                 viewport={{amount: 0.2 }}
              className="relative">
-                <img src="/placeholder.jpg" alt=""/>
+                {/* fix the image width */}
+                <img src="/placeholder.jpg" alt="" className=""/>
                 <MiniOverlay>
-                    <div className="bg-black/0 absolute bottom-0 left-0 w-full h-60 p-2 md:h-70 flex flex-col  md:gap-10 md:p-4">
+                    <div className="bg-blac absolute bottom-0 left-0 w-full md:w- h-60 p-2 md:h-70 flex flex-col  md:gap-10">
                         <div className="bg-darkBg w-3/4 p-5 flex flex-col justify-center items-center rounded-4xl md:px-6 m-auto">
                             <span className="bg-amber-0 md:px-10 md:text-3xl text-sm md:py-2 px-4 rounded-sm font bold outline outline-lightPurple text-white">
                                 <Link to='/events'>

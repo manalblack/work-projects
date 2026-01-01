@@ -22,7 +22,7 @@ export default function Introduction(){
                 Discover
             </LightBtn> */}
             <Link to='/events'>
-                <span className="bg-lightPurple px-4 py-1 rounded-3xl font-bold">
+                <span className="bg-lightPurple px-4 py-1 rounded-3xl font-bold md:px-6 md:text-2xl active:scale-95 transition-all duration-300 ease-in-out">
                     Discover
                 </span>
             </Link>

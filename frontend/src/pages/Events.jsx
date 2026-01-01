@@ -34,12 +34,12 @@ export default function Events() {
 
         <div className="w-full bg-lightPurple flex flex-col gap-5">
               
-           <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6">
+           <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2">
                 {/* Temporarily use this div as an event container Make the Event Card component Re-usable */}
                 {DUMMY_EVENTS.map((event) => (
                     <div key={event.id}
-                     className="h- w-9/10 bg-darkPurple flex flex-col items-center p-2 gap-6 rounded-sm">
-                    <div className="w-full">
+                     className="md:h-120 lg:h-150 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm">
+                    <div className="w-full md:w-9/10">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
                     <div className="text-white w-full h-50 flex flex-col gap-4">
