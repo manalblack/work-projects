@@ -4,6 +4,7 @@ import Checkout from './pages/Checkout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Events from './pages/Events'
 import Cart from './pages/Cart'
+import {Toaster} from 'react-hot-toast';
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
 
   return (
     <>
+      <Toaster position='top-center' reverseOrder={false}/>
       <BrowserRouter>
         <Routes>
 

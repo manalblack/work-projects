@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 import {Link} from 'react-router-dom';
 import Modal from "./Modal";
 import { TiMinus, TiPlus } from "react-icons/ti";
+import toast from 'react-hot-toast';
+
 
 /* 
    UI IMPROVEMENTS ADD react hot toast instead of alerts 
@@ -33,6 +35,8 @@ export default function PaymentOptions({eventData}) {
 
     const handelAddToCart = (type) => {
 
+        console.log(eventData);
+        
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
 
          // Logic to prevent duplicates and only update the qty property
@@ -46,6 +50,8 @@ export default function PaymentOptions({eventData}) {
             title: eventData.title,
             type: type,
             price: type === 'vip'? eventData.vip_price: eventData.regular_price,
+            vipPrice: eventData.vip_price,
+            regularPrice: eventData.regular_price,
             qty: 1
             }
             currentCart.push(newCartItem)
@@ -53,9 +59,14 @@ export default function PaymentOptions({eventData}) {
 
         localStorage.setItem('cart', JSON.stringify(currentCart))
 
-        
+        toast.success('Ticket added to cart',{
+            style: {
+                padding:'20px',
+                fontWeight: 'bold',
+            }
 
-        
+        })
+
     }
 
 
@@ -76,11 +87,11 @@ export default function PaymentOptions({eventData}) {
 
         {/*  */}
             <Modal isOpen={addToCartModal} closeModal={() => setAddToCartModal(false)}>
-                <div className="bg- size-70 flex flex-col gap-5 items-center p-2 w-full">
-                    <div className="bg-white h-30 w-full flex flex-row gap-3 items-center justify-center shadow-2xl px-2 rounded-md">
-                        <span className="w-1/2 font-bold ">VIP: N3000</span>
+                <div className="bg- size-70 flex flex-col gap-5 items-center p-2 w-9/10">
+                    <div className="bg-white h-30 w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
+                        <span className="w-1/2 font-bold bg-green-0 text-center text-xl">VIP: {eventData.vip_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
-                            <span className="flex flex-row gap-5">
+                            {/* <span className="flex flex-row gap-5">
                                 <button className="bg-lightPurple px-3 rounded-2xl">
                                     <TiPlus className=""/>
                                 </button>
@@ -90,19 +101,19 @@ export default function PaymentOptions({eventData}) {
                                 <button className="bg-lightPurple px-3 rounded-2xl">
                                     <TiMinus />
                                 </button>
-                            </span>
-                            <button onClick={() => handelAddToCart('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold">
+                            </span> */}
+                            <button onClick={() => handelAddToCart('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-95 transition-all duration-300 ease-in-out">
                                 Add To Cart
                             </button>
                         </div>
                     
                     </div>
 
-                    <div className="bg-white h-30 w-full flex flex-row gap-3 items-center justify-center shadow-2xl px-2 rounded-md">
-                        <span className="w-1/2 font-bold ">Regular N1000</span>
+                    <div className="bg-white h-30 w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
+                        <span className="w-3/4 text-center font-bold text-xl ">Regular: N{eventData.regular_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
-                            <span className="flex flex-row gap-5">
-                                <button className="bg-lightPurple px-3 rounded-2xl">
+                            {/* <span className="flex flex-row gap-5">
+                                <button className="bg-lightPurple px-3 rounded-2xl active:scale-95 transition-all duration-300 ease-in-out">
                                     <TiPlus className=""/>
                                 </button>
                                     <span className="font-bold">
@@ -111,9 +122,9 @@ export default function PaymentOptions({eventData}) {
                                 <button className="bg-lightPurple px-3 rounded-2xl">
                                     <TiMinus />
                                 </button>
-                            </span>
+                            </span> */}
                             <button onClick={() => handelAddToCart('regular')}
-                             className="bg-lightPurple px-4 rounded-2xl font-bold">
+                             className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-90 transition-all duration-300 ease-in-out">
                                 Add To Cart
                             </button>
                         </div>

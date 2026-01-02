@@ -13,6 +13,16 @@ import {motion} from 'motion/react'
 
 const heroEventId = 'hero1'
 
+const currentEvent  = {
+    id: 11,
+    title: ' Black lights event',
+    description: ' Lorem ipsum dolor sit amet, consectetur adipisicing elit. ',
+    vip_price: 5500,
+    regular_price: 2000,
+    date: 'Date: Oct/10', 
+    time: '10:00am',
+}
+
 export default function Hero(){
 
     const [aboutModal, setAboutModal] = useState(false);
@@ -48,16 +58,16 @@ export default function Hero(){
                         <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-85 md:h-70 flex flex-row justify-between gap-8">
                             <div className="w-3/4 flex flex-col items-start gap-3 md:gap-5 bg-gray-00 p-2 mt-13 md:mt-0">
                                <h2 className="md:text-4xl font-bold text-lg">
-                                    Black lights event
+                                    {currentEvent.title}
                                 </h2> 
                                 <p className="md:text-xl font-light text-sm">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+                                   {currentEvent.description}
                                 </p>
                                 <PriceContainer>
-                                    N3,000
+                                    {currentEvent.regular_price}
                                 </PriceContainer>
                                 <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
-                                Date: Oct/10, Time: 10:00am
+                                {currentEvent.date}, {currentEvent.time}
                                 <br />
                                 Venue: 1234 Event center
                             </span>
@@ -95,7 +105,7 @@ export default function Hero(){
 
            {/* Buy Ticket Modal */}
            <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
-                <PaymentOptions eventId={heroEventId}/>
+                <PaymentOptions eventData={currentEvent}/>
            </Modal>
         </Card>
     )

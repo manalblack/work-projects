@@ -14,16 +14,16 @@ export default function Events() {
 
     // const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
-    const [ticketId, setTicketId] = useState('');
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     /* Add the event description modal if we want to add a longer description */
     // const aboutEventModal = () => {
     //     setAboutModal(true)
     // }
 
-    const buyTicketModal = (eventId) => {
+    const buyTicketModal = (eventData) => {
         setBuyTicket(true)
-        setTicketId(eventId)
+        setSelectedEvent(eventData)
         
     }
 
@@ -39,7 +39,7 @@ export default function Events() {
                 {DUMMY_EVENTS.map((event) => (
                     <div key={event.id}
                      className="md:h-120 lg:h-150 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm">
-                    <div className="w-full md:w-9/10">
+                    <div className="w-full md:w-9/10 bg-white">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
                     <div className="text-white w-full h-50 flex flex-col gap-4">
@@ -50,14 +50,14 @@ export default function Events() {
                         <div className="flex flex-row gap-2 bg-red-3 ">
                            <div>
                                 <PriceContainer>
-                                    N{event.price}
+                                    N{event.regular_pricer}
                                 </PriceContainer>
                            </div>
 
                             <div className="flex flex-row gap-3">
                                 {/* <LightBtn>About Event</LightBtn> */}
                                 <LightPurpleBtn onPress={
-                                    () => buyTicketModal(event.id)}>
+                                    () => buyTicketModal(event)}>
                                     Buy Ticket
                                 </LightPurpleBtn>
                             </div>
@@ -83,7 +83,7 @@ export default function Events() {
            </div>
            {/* Modals sections */}
                 <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
-                    <PaymentOptions eventId={ticketId}/>
+                    <PaymentOptions eventData={selectedEvent}/>
                 </Modal>
             <Footer/>
         </div>

@@ -88,7 +88,7 @@ export default function EventCard() {
                            {event.description}
                         </p>
                         <PriceContainer>
-                            N2,000
+                            N{event.regular_price}
                         </PriceContainer>
                         
                     </div>
@@ -154,7 +154,7 @@ export default function EventCard() {
         </div> */}
 
             {/* modals section */}
-             <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
+            <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
                 <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
                 <div className="bg-green-30 size-70 w-9/10">
                     <p className="text-md text-white text-center">
@@ -163,7 +163,7 @@ export default function EventCard() {
                 </div>
                 <div className="flex gap-8">
                     <PriceContainer>
-                        N4,000
+                        
                     </PriceContainer>
                     <LightPurpleBtn onPress={buyTicketModal}>
                         Buy ticket
