@@ -18,6 +18,21 @@ import MiniOverlay from '../components/MiniOverlay';
 export default function Cart() {
 
     const [cartItems, setCartItems] = useState([]);
+     const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+    })
+
+    const handelFormChange = (e) => {
+        const {name, value} = e.target;
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
+
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart')
@@ -29,8 +44,9 @@ export default function Cart() {
     }, [])
     
 
+    
     const handelPostPaymentSuccess = (paymentResponse) => {
-        console.log(paymentResponse.transactionReference);
+        console.log(paymentResponse);
         localStorage.removeItem('cart');
 
         setCartItems([]);
@@ -53,8 +69,8 @@ export default function Cart() {
             amount: Number(total),
             currency: 'NGN',
             reference: new String(new Date().getTime()),
-            customerFullName: 'Manal Test',
-            customerEmail: 'manal@gmail.com',
+            customerFullName: formData.fullName,
+            customerEmail: formData.email,
             apiKey: "MK_TEST_VM93KWVDC9",
             contractCode: '6713572503',
             paymentDescription: 'Event Ticket Purchase',
@@ -73,6 +89,8 @@ export default function Cart() {
 
     const handelFormSubmission = (e) => {
         e.preventDefault();
+        console.log(formData);
+        
 
         console.log(cartItems);
         payWithMonnify();
@@ -250,12 +268,17 @@ export default function Cart() {
             {/* user information and monnify linking */}
              <div className="w-9/10 md:w-120">
                 <form action="" className="bg-darkPurple h-100 flex flex-col justify-center items-center gap-8 rounded-sm">
-                    <input type="text" placeholder="Name" className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
-                    <input type="text" placeholder="Email" className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
-                    <input type="text" placeholder="Phone Number" className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
+                    <input type="text" placeholder="Name" name='fullName' value={formData.fullName} onChange={handelFormChange}
+                     className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
+
+                    <input type="text" placeholder="Email" name='email' value={formData.email} onChange={handelFormChange}
+                    className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
+
+                    <input type="text" placeholder="Phone Number" name='phoneNumber' value={formData.phoneNumber} onChange={handelFormChange}
+                    className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
                    
                     <LightBtn onPress={handelFormSubmission}>
-                        Proceed
+                        Proceed To Pay
                     </LightBtn>
                 </form>
 

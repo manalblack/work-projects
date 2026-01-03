@@ -14,7 +14,7 @@ export default function SocialContact(){
 
     return(
         <Card>
-            <motion.div 
+            <motion.div id='socials' 
                 initial={{opacity:0, y: 50}}
                 whileInView={{opacity: 1, y: 0}}
                 transition={{ duration: 1, ease: "easeOut" }}

@@ -15,7 +15,7 @@ export default function Events() {
     // const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-
+   
     /* Add the event description modal if we want to add a longer description */
     // const aboutEventModal = () => {
     //     setAboutModal(true)
@@ -39,7 +39,7 @@ export default function Events() {
                 {DUMMY_EVENTS.map((event) => (
                     <div key={event.id}
                      className="md:h-120 lg:h-150 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm">
-                    <div className="w-full md:w-9/10 bg-white">
+                    <div className="w-full md:w-9/10 bg-white rounded-sm">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
                     <div className="text-white w-full h-50 flex flex-col gap-4">
@@ -50,7 +50,7 @@ export default function Events() {
                         <div className="flex flex-row gap-2 bg-red-3 ">
                            <div>
                                 <PriceContainer>
-                                    N{event.regular_pricer}
+                                    N{event.regular_price}
                                 </PriceContainer>
                            </div>
 

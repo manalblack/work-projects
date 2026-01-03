@@ -4,6 +4,7 @@ import { useState } from "react";
 import Overlay from "./Overlay";
 import Rightbar from "./Rightbar";
 import { useNavigate, Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 // menu icon <CiMenuBurger />
 
@@ -43,14 +44,16 @@ export default function Navbar() {
                 </button>
 
                 <div className="hidden md:flex gap-4">
-                    <button className="bg-green-400 text-white px-3 rounded-xl font-bold shadow-md">
+                    <button className="bg-green-400 text-white px-3 rounded-xl font-bold shadow-md active:scale-95 transition-all duration-300 ease-in-out">
                         <a href="https://wa.me/2347010010044">
                             Whatsapp
                         </a>    
                     </button>
-                    <button className="bg-darkPurple text-white px-3 rounded-xl font-bold shadow-md">
-                        Contact us
-                    </button>
+                    <ScrollLink to='socials' smooth={true} duration={500} offset={-100}>
+                        <button className="bg-darkPurple text-white px-3 rounded-xl font-bold shadow-md active:scale-95 transition-all duration-300 ease-in-out">
+                            Contact us
+                        </button>
+                    </ScrollLink>
                 </div>
 
             </div>

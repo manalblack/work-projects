@@ -7,3 +7,24 @@ odoo account and password [
 Database password [
     0500762269manal
 ]
+
+payment response object [
+    amount: 2000
+    amountPaid: 2000
+    authorizedAmount: 2000
+    completed: true
+    completedOn: "2026-01-03T02:26:09.000+00:00"
+    createdOn: "2026-01-03T02:25:52.000+00:00"
+    currencyCode: "NGN"
+    customerEmail: "ma***al@gmail.com"
+    customerName: "Manal Test"
+    fee: 10
+    paidOn: "2026-01-03T02:26:09.000+00:00"
+    payableAmount: 2000
+    paymentMethod: "CARD"
+    paymentReference: "1767407150910"
+    paymentStatus: "PAID"
+    redirectUrl: undefined
+    status: "SUCCESS"
+    transactionReference: "MNFY|35|20260103032551|000749"
+]
