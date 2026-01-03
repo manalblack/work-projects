@@ -8,15 +8,15 @@ import MiniOverlay from '../components/MiniOverlay';
 
 
 
-const vipPrice = 3000;
-const regularPrice = 1000
+/*  Steps to link database with localstorage cart
+    When they click "Pay" or "Confirm Purchase," you trigger a function.
+
+   That function takes the items from their LocalStorage and sends a request to your Supabase database to say: "Someone just bought 2 tickets for Event A, please subtract 2 from the total stock."
+
+*/
 
 export default function Cart() {
 
-    const [quantities, setQuantities] = useState({
-        vip: 0,
-        regular: 0
-    })
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
@@ -29,26 +29,54 @@ export default function Cart() {
     }, [])
     
 
+    const handelPostPaymentSuccess = (paymentResponse) => {
+        console.log(paymentResponse.transactionReference);
+        localStorage.removeItem('cart');
+
+        setCartItems([]);
+
+        toast.success("Payment Received! Thank you for your purchase.", {
+        duration: 6000,
+        position: 'top-center',
+        });
+        
+    }
+
+    /* 
+         BUG: This is not working fix it,
+         the payment modal is not showing up, but i got a transaction failed modal. FIX IT : Reference your last query to gemini
+    */
+    // Monneify Testing 
+    const payWithMonnify = () => {
+
+        window.MonnifySDK.initialize({
+            amount: Number(total),
+            currency: 'NGN',
+            reference: new String(new Date().getTime()),
+            customerFullName: 'Manal Test',
+            customerEmail: 'manal@gmail.com',
+            apiKey: "MK_TEST_VM93KWVDC9",
+            contractCode: '6713572503',
+            paymentDescription: 'Event Ticket Purchase',
+            onComplete: function(response) {
+                if(response.status === 'SUCCESS') {
+                    handelPostPaymentSuccess(response);
+                }
+            },
+            onClose: function(data) {
+                toast.error('payment cancelled')
+            }
+
+        })
+    }
+
+
     const handelFormSubmission = (e) => {
         e.preventDefault();
 
         console.log(cartItems);
-
-        alert('information submitted !!');
-    }
-
-    const handelIncrement = (type) => {
-        setQuantities((prev) => ({
-            ...prev,
-            [type]: prev[type] + 1
-        })) 
-    }
-
-    const handelDecrement = (type) => {
-        setQuantities((prev) => ({
-            ...prev,
-            [type]: prev[type] - 1
-        }))
+        payWithMonnify();
+        // alert('information submitted !!');
     }
 
     const updateQuantity = (type, event, operator) => {
@@ -112,7 +140,7 @@ export default function Cart() {
         setCartItems(currentCart)
     } 
 
-
+    
   
 
     const groupedCart = cartItems.reduce((acc, item) => {
@@ -127,10 +155,6 @@ export default function Cart() {
     }
     
     // Assign the specific ticket data to the correct type
-    // acc[item.id][item.type] = { 
-    //     qty: item.qty, 
-    //     price: item.price 
-    // };
         acc[item.id][item.type].qty = item.qty;
 
 
@@ -139,15 +163,13 @@ export default function Cart() {
 
     // this line flip the grouped cart object into an array so that we can map over it
     const displayItems = Object.values(groupedCart)
-    console.log(displayItems);
-
-    // TODO: FIX THE PRICE BUG very urgent
-    // calculate total 
+ 
     const total = cartItems.reduce((total, item) => {
         return total + (item.price * item.qty)
     }, 0)
     
 
+    
 
     return(
        <>
@@ -159,7 +181,7 @@ export default function Cart() {
                 {displayItems.map((item) => (
                     <div key={`${item.id}-${item.type}`}  className='h-45 w-9/10 bg-white p-2 flex flex-row items-center gap-4 rounded-sm md:h-auto md:w-3/4'>
 
-                    <div className='w-1/2 relative'>
+                    <div className='md:w-1/2 w-3/5 relative'>
                         <img src='/placeholder.jpg' alt="" className='rounded-sm'/>
                         <MiniOverlay>
                             <h2 className='text-white font-bold text-2xl text-center'>

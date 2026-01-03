@@ -87,8 +87,8 @@ export default function PaymentOptions({eventData}) {
 
         {/*  */}
             <Modal isOpen={addToCartModal} closeModal={() => setAddToCartModal(false)}>
-                <div className="bg- size-70 flex flex-col gap-5 items-center p-2 w-9/10">
-                    <div className="bg-white h-30 w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
+                <div className="bg- size-70 flex flex-col gap-5 items-center p-2 md:w-9/10 w-full">
+                    <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
                         <span className="w-1/2 font-bold bg-green-0 text-center text-xl">VIP: {eventData.vip_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
                             {/* <span className="flex flex-row gap-5">
@@ -109,7 +109,7 @@ export default function PaymentOptions({eventData}) {
                     
                     </div>
 
-                    <div className="bg-white h-30 w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
+                    <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
                         <span className="w-3/4 text-center font-bold text-xl ">Regular: N{eventData.regular_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
                             {/* <span className="flex flex-row gap-5">
