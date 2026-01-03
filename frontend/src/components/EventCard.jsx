@@ -53,6 +53,7 @@ export default function EventCard() {
     const [buyTicket, setBuyTicket] = useState(false);
     // const [ticketId, setTicketId] = useState(null)
     const [selectedEvent, setSelectedEvent] = useState(null)
+    const [aboutPay, setAboutPay] = useState(false);
 
     // const event = 'event card upcoming id'
 
@@ -66,6 +67,11 @@ export default function EventCard() {
         console.log(eventData);
         setSelectedEvent(eventData)
         setAboutModal(true)
+        // setSelectedEvent(eventData)
+    }
+
+    const handelAboutEventPayBtn = () => {
+        setAboutPay(true)
     }
 
     return(
@@ -163,13 +169,18 @@ export default function EventCard() {
                 </div>
                 <div className="flex gap-8">
                     <PriceContainer>
-                        
+                       {/* {selectedEvent.regular_price} */}
                     </PriceContainer>
-                    <LightPurpleBtn onPress={buyTicketModal}>
-                        Buy ticket
+                    <LightPurpleBtn onPress={handelAboutEventPayBtn}>
+                        Buy ticket 1
                     </LightPurpleBtn>
                 </div>
             </Modal>
+
+            <Modal isOpen={aboutPay} closeModal={() => setAboutPay(false)}>
+                <PaymentOptions eventData={selectedEvent}/>
+            </Modal>
+
 
             <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
                 <PaymentOptions eventData={selectedEvent}/>

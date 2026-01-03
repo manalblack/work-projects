@@ -28,6 +28,8 @@ export default function Hero(){
     const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null)
+    const [aboutPay, setAboutPay] = useState(false);
+    
 
     const aboutEventModal = () => {
         setAboutModal(true)
@@ -37,8 +39,10 @@ export default function Hero(){
         setBuyTicket(true)
     }
 
-    // Buy Ticket Modal buttons functions
-    
+    const handelAboutEventPayBtn = () => {
+        setAboutPay(true)
+    }
+
 
 
 
@@ -97,11 +101,15 @@ export default function Hero(){
                     <PriceContainer>
                         N4,000
                     </PriceContainer>
-                    <LightPurpleBtn>
+                    <LightPurpleBtn onPress={handelAboutEventPayBtn}>
                         Buy ticket
                     </LightPurpleBtn>
                 </div>
            </Modal>
+           <Modal isOpen={aboutPay} closeModal={() => setAboutPay(false)}>
+                <PaymentOptions eventData={currentEvent}/>
+            </Modal>
+           
 
            {/* Buy Ticket Modal */}
            <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
