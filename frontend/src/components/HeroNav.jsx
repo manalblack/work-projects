@@ -21,7 +21,7 @@ export default function HeroNav(){
         initial='hidden'
         animate='visible'
 
-        className="bg-green-4 h- w-9/10 mt-8 flex flex-col justify-center items-center gap-8">
+        className="bg-green-4 h- w-9/10 mt-10 flex flex-col justify-center items-center gap-8">
 
             {/* <div className="bg-red-00 w-5/6 flex justify-center items-center p-6">
                 <input type="text" placeholder="Search Events"

@@ -3,10 +3,11 @@ import LightPurpleBtn from "../components/LightPurpleBtn";
 import Navbar from "../components/Navbar";
 import PriceContainer from "../components/PriceContainer";
 import DUMMY_EVENTS from "../testData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import PaymentOptions from "../components/PaymentOptions";
 import Footer from '../components/Footer'
+import { supabase } from "../supabaseConnection";
 
 
 
@@ -16,10 +17,21 @@ export default function Events() {
     const [buyTicket, setBuyTicket] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
    
-    /* Add the event description modal if we want to add a longer description */
-    // const aboutEventModal = () => {
-    //     setAboutModal(true)
-    // }
+    const [allEvents, setAllEvents] = useState([]); 
+
+
+    useEffect(()=> {
+        const fetchEvents = async () => {
+            const { data, error } = await supabase
+                .from('events')
+                .select('*');   
+                // TODO: add error handling
+                setAllEvents(data);
+            }
+
+
+            fetchEvents();
+    }, [])
 
     const buyTicketModal = (eventData) => {
         setBuyTicket(true)
@@ -36,10 +48,10 @@ export default function Events() {
               
            <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2">
                 {/* Temporarily use this div as an event container Make the Event Card component Re-usable */}
-                {DUMMY_EVENTS.map((event) => (
+                {allEvents.map((event) => (
                     <div key={event.id}
-                     className="md:h-120 lg:h-150 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm">
-                    <div className="w-full md:w-9/10 bg-white rounded-sm">
+                     className="md:h-120 lg:h-150 h-130 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm ">
+                    <div className="w-full md:w-9/10 bg-white/50 rounded-sm aspect-video">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
                     <div className="text-white w-full h-50 flex flex-col gap-4">

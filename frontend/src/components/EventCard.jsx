@@ -3,10 +3,10 @@ import LightPurpleBtn from "./LightPurpleBtn";
 import MiniOverlay from "./MiniOverlay";
 import PriceContainer from "./PriceContainer";
 import DUMMY_EVENTS from "../testData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import PaymentOptions from "./PaymentOptions";
-
+import { supabase } from "../supabaseConnection";
 /* 
      <div className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70">
 
@@ -54,8 +54,25 @@ export default function EventCard() {
     // const [ticketId, setTicketId] = useState(null)
     const [selectedEvent, setSelectedEvent] = useState(null)
     const [aboutPay, setAboutPay] = useState(false);
+    const [allEvents, setAllEvents] = useState([])
 
-    // const event = 'event card upcoming id'
+
+
+    useEffect(() => {
+
+        const testConnection = async () => {
+            const { data, error } = await supabase
+                .from('events')
+                .select('*');
+
+            console.log(data);
+
+            setAllEvents(data); 
+            
+        }
+
+        testConnection();
+    }, [])
 
     const buyTicketModal = (eventData) => {
         console.log(eventData);
@@ -76,11 +93,11 @@ export default function EventCard() {
 
     return(
        <>
-        {DUMMY_EVENTS.map((event) => (
+        {allEvents.map((event) => (
             <div key={event.id}
              className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80">
 
-            <div className="relative flex justify-center items-center h-auto">
+            <div className="relative flex justify-center items-center h-auto w-full ">
                 <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg"/>
             <MiniOverlay>
 

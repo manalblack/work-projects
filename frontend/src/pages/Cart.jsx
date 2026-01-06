@@ -193,7 +193,7 @@ export default function Cart() {
        <>
         <Navbar />
 
-        <main className='w-full bg-lightPurple mt-14 pt-5 flex flex-col items-center gap-5 pb-5 md:gap-15 md:mt-17'>
+        <main className='w-full bg-lightPurple mt-15 pt-5 flex flex-col items-center gap-5 pb-5 md:gap-15 md:mt-17'>
             <Header>Cart</Header>
             <div className='flex flex-col justify-center items-center gap-5 w-full md:mt-1'>
                 {displayItems.map((item) => (

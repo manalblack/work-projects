@@ -22,10 +22,12 @@ export default function Navbar() {
 
 
     return(
-        <nav className="bg-lightPurple/70 w-full p-4 flex flex-row justify-between items-center fixed shadow-md z-99 top-0">
-            <div className="flex gap-20">
-                <div>
-                    <Link to='/'>logo</Link>
+        <nav className="bg-lightPurple/70 w-full h-15 md:h-auto md:p-4 p-1 flex flex-row justify-between items-center fixed shadow-md z-99 top-0">
+            <div className="flex md:gap-0 gap-20 bg-red-0">
+                <div >
+                    <Link to='/'>
+                        <img src="TRAVLISTA-logo.png" alt="" className="size-16"/>
+                    </Link>
                 </div>
                 <div>
                     <Link to='/events'>
@@ -33,7 +35,7 @@ export default function Navbar() {
                     </Link>
                 </div>
             </div>
-            <div className="flex flex-row gap-6">
+            <div className="flex flex-row gap-6 mr-5 bg-amber-00">
 
                 <Link to='/cart'>
                     <FaShoppingCart className="size-6 text-gray-800"/>

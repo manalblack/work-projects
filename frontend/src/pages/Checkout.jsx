@@ -110,7 +110,7 @@ export default function Checkout(){
         total = (selectedEvent.vip.price * selectedEvent.vip.qty) + (selectedEvent.regular.price * selectedEvent.regular.qty);
     }
     
-     const payWithMonnify = () => {
+    const payWithMonnify = () => {
 
         window.MonnifySDK.initialize({
             amount: Number(total),
@@ -126,38 +126,16 @@ export default function Checkout(){
                     handelPostPaymentSuccess(response);
                 }
             },
-            onClose: function(data) {
-             const payWithMonnify = () => {
-
-        window.MonnifySDK.initialize({
-            amount: Number(total),
-            currency: 'NGN',
-            reference: new String(new Date().getTime()),
-            customerFullName: formData.fullName,
-            customerEmail: formData.email,
-            apiKey: "MK_TEST_VM93KWVDC9",
-            contractCode: '6713572503',
-            paymentDescription: 'Event Ticket Purchase',
-            onComplete: function(response) {
-                if(response.status === 'SUCCESS') {
-                    handelPostPaymentSuccess(response);
-                }
-            },
-            onClose: function(data) {
+           onClose: function(data) {
                 if(data.status === ' SUCCESS') {
                     return;
                 }
                 
                 toast.error('payment cancelled')
             }
-
         })
-    }
-                
-        }
-
-        })
-    }
+           
+    } 
     
     
     
@@ -176,7 +154,7 @@ export default function Checkout(){
         <>
             <Navbar/>
             {/* The whole screen parent container */}
-            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-14 md:mt-17 md:gap-10 md:pt-5">
+            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-15 md:mt-17 md:gap-10 md:pt-5">
                 <Header>Checkout</Header>
                <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8">
                     {/* Current Ticket */}

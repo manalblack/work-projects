@@ -18,7 +18,7 @@ export default function Home() {
         <div className="bg-lightPurple flex flex-col justify-between items-center h-screen pt-8">
             <Navbar />
             {/* I added margin top to this container because the Hero nav was appearing under the nav */}
-            <main className="bg-lightPurple h-auto w-full flex flex-col gap-5 md:gap-15 justify-center items-center  lg:mt-5 md:mt-0 grow mb-5">  
+            <main className="bg-lightPurple h-auto w-full flex flex-col gap-5 md:gap-15 justify-center items-center  lg:mt-5 md:mt-10 grow mb-5">  
                 <HeroNav />
                 <Hero />
 
