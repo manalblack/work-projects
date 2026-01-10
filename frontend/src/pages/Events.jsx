@@ -75,18 +75,21 @@ export default function Events() {
                             </div>
                         </div>
 
-                        <div className="flex flex-row gap-2 bg-red-0">
+                        <div className="flex flex-col gap-2 bg-red-0 ">
                             <div className="bg-red-0 p-1 flex flex-row gap-2">
-                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-lg ">
-                                Date: {event.date}, Time: {event.buyTicketModal}
-                                <br />
-                                Venue: {event.location}
+                                <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-lg ">
+                                    Date: {event.date}, Time: {event.buyTicketModal}
+                                    <br />
+                                    Venue: {event.location}
+                                </span>
+                                
+                                {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                                    Date: Oct/10
+                                </span> */}
+                            </div>
+                            <span className="bg-white/50 w-1/2 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                                Remaining tickets: 101
                             </span>
-                             {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
-                                Date: Oct/10
-                            </span> */}
-                            
-                        </div>
                         </div>
                     </div>
                 </div> 

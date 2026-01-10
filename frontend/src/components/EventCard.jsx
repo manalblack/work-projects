@@ -113,6 +113,9 @@ export default function EventCard() {
                         <PriceContainer>
                             N{event.regular_price}
                         </PriceContainer>
+                        <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                            Remaining tickets: 101
+                        </span>
                         
                     </div>
                     <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">

@@ -1,0 +1,76 @@
+ "summery": "[{\"ticket_id\":\"41446b84-e713-4cbc-9a5d-e14a5029cbcb\",\"typp\",\"quantity\":1},
+
+ {\"ticket_id\":\"ef68b419-ae44-4a3f-92ed-510ec9904fd2\",\"tyip\",\"quantity\":1},
+ 
+ {\"ticket_id\":\"ef68b419-ae44-4a3f-92ed-510ec9904fd2\",\"tregular\",\"quantity\":1}]"
+,
+
+for development purposes only [
+    Create a mock webhook on postman to simulate monnify's response to the server to work on qr code generation and sending it to the client, after this process is all done, test monnify with vs code ports to see it work in a real environment
+]
+
+ticket_qr column {
+    https://yezaymucpmnzguaoftrc.supabase.co/storage/v1/object/public/tickets_qr_codes/ticket_4076331e-48b8-4518-8299-e3d1117d546c.pdf
+}
+
+
+Body output [
+    {
+  "eventData": {
+    "product": {
+      "reference": "1767908164245",
+      "type": "WEB_SDK"
+    },
+    "transactionReference": "MNFY|46|20260108223606|001353",
+    "paymentReference": "1767908164245",
+    "paidOn": "2026-01-08 22:36:52.0",
+    "paymentDescription": "Event Ticket Purchase",
+    "metaData": {
+      "total_amount": "6000",
+      "customer_email": "test14@gmail.com",
+      "customer_phone": "112233344",
+      "customer_name": "test14",
+      "cart_summery": "[{\"id\":\"41446b84-e713-4cbc-9a5d-e14a5029cbcb\",\"title\":\"Lagos Summer Jam 2026\",\"type\":\"vip\",\"price\":4000,\"vipPrice\":4000,\"regularPrice\":2000,\"qty\":1},{\"id\":\"41446b84-e713-4cbc-9a5d-e14a5029cbcb\",\"title\":\"Lagos Summer Jam 2026\",\"type\":\"regular\",\"price\":2000,\"vipPrice\":4000,\"regularPrice\":2000,\"qty\":1}]",
+      "summery": "[{\"ticket_id\":\"41446b84-e713-4cbc-9a5d-e14a5029cbcb\",\"type\":\"vip\",\"quantity\":1},{\"ticket_id\":\"41446b84-e713-4cbc-9a5d-e14a5029cbcb\",\"type\":\"regular\",\"quantity\":1}]"
+    },
+    "paymentSourceInformation": [],
+    "destinationAccountInformation": {
+      "bankCode": "035",
+      "bankName": "Wema bank",
+      "accountNumber": "3310789764"
+    },
+    "amountPaid": 6000,
+    "totalPayable": 6000,
+    "cardDetails": {
+      "last4": "1111",
+      "expMonth": "09",
+      "maskedPan": "411111******1111",
+      "expYear": "29",
+      "bin": "411111",
+      "reusable": false
+    },
+    "paymentMethod": "CARD",
+    "currency": "NGN",
+    "settlementAmount": "5990.00",
+    "paymentStatus": "PAID",
+    "paymentScope": "LOCAL",
+    "customer": {
+      "email": "test14@gmail.com"
+    }
+  },
+  "eventType": "SUCCESSFUL_TRANSACTION"
+}
+Signature verified
+signature found: 01e22d02fac44561736ba7983d8682fd79efda0db0863366a722098ea4f4413e39d62ffde3028b0a037fec900ff7041a3b59f99fe88bd129d0df53b294bd888d
+ticket saved to database
+error when fetching the url undefined
+
+]
+
+
+RESEND ERROR: 
+  error sending email {
+    statusCode: 422,
+    name: 'invalid_attachment',
+    message: 'Attachment must have either a `content` or `path`.'
+  }

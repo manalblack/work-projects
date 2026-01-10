@@ -159,9 +159,9 @@ export default function PaymentOptions({eventData}) {
                     <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
                         <span className="w-3/4 text-center font-bold text-xl ">Regular: N{eventData.regular_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
-                            <button onClick={() => handelAddToCart('regular')}
+                            <button onClick={() => handelAddToStorage('regular')}
                              className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-90 transition-all duration-300 ease-in-out">
-                                Add To Cart
+                                Pay Now
                             </button>
                         </div>
                     

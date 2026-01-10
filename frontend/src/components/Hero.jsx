@@ -59,8 +59,8 @@ export default function Hero(){
                 <div className="relative w-full md:w-9/10 group rounded-xl">
                     <img src="/placeholder.jpg" alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
                     <MiniOverlay>
-                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-85 md:h-70 flex flex-row justify-between gap-8">
-                            <div className="w-3/4 flex flex-col items-start gap-3 md:gap-5 bg-gray-00 p-2 mt-13 md:mt-0">
+                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-full md:h-70 flex flex-row justify-between gap-8">
+                            <div className="w-3/4 flex flex-col items-start gap-5 md:gap-5 bg-gray-00 p-2 mt-13 md:mt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {currentEvent.title}
                                 </h2> 
@@ -74,6 +74,9 @@ export default function Hero(){
                                 {currentEvent.date}, {currentEvent.time}
                                 <br />
                                 Venue: 1234 Event center
+                            </span>
+                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                                Remaining tickets: 101
                             </span>
                             </div>
                             <div className="bg-blue-0 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-0">

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import toast from 'react-hot-toast';
 import MiniOverlay from '../components/MiniOverlay';
-
+import axios from 'axios';
 
 
 /*  Steps to link database with localstorage cart
@@ -13,6 +13,9 @@ import MiniOverlay from '../components/MiniOverlay';
 
    That function takes the items from their LocalStorage and sends a request to your Supabase database to say: "Someone just bought 2 tickets for Event A, please subtract 2 from the total stock."
 
+    TODO VERY IMPORTANT {
+        calculate the tickets quantity, event id and the username to send it as metadata to monnify to access it in the backend
+    }
 */
 
 export default function Cart() {
@@ -33,6 +36,12 @@ export default function Cart() {
         }))
     }
 
+    // const quantitySummery = () => {
+
+    //     const allTickets = cartItems.reduce((acc, ticket) => {
+    //         const id = ticket
+    //     })
+    // }
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart')
@@ -41,27 +50,47 @@ export default function Cart() {
             // if there is another way fix it
             setCartItems(JSON.parse(savedCart));
         }
-    }, [])
+    }, []);
     
 
     
     const handelPostPaymentSuccess = (paymentResponse) => {
         console.log(paymentResponse);
         localStorage.removeItem('cart');
-
         setCartItems([]);
 
+        setFormData({
+            fullName: '',
+            email: '',
+            phoneNumber: '',
+        })
+        
         toast.success("Payment Received! Thank you for your purchase.", {
         duration: 6000,
         position: 'top-center',
         });
-        
+
+        // Here, you can also add code to update your database with the purchased items
     }
 
-    /* 
-         BUG: This is not working fix it,
-         the payment modal is not showing up, but i got a transaction failed modal. FIX IT : Reference your last query to gemini
-    */
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const cartSummery = cart.map(item => ({
+        ticket_id: item.id,
+        type: item.type,
+        quantity: item.qty
+    }))
+
+    const metadata = {
+        "cart_summery": JSON.stringify(cart),
+        "summery": JSON.stringify(cartSummery),
+        "total_amount": cart.reduce((total, item) => total + (item.price * item.qty), 0),
+        "customer_name": formData.fullName,
+        "customer_email": formData.email,
+        "customer_phone": formData.phoneNumber
+    }
+
     // Monneify Testing 
     const payWithMonnify = () => {
 
@@ -73,14 +102,18 @@ export default function Cart() {
             customerEmail: formData.email,
             apiKey: "MK_TEST_VM93KWVDC9",
             contractCode: '6713572503',
+            metadata: metadata,
             paymentDescription: 'Event Ticket Purchase',
             onComplete: function(response) {
                 if(response.status === 'SUCCESS') {
                     handelPostPaymentSuccess(response);
+                    return;
                 }
             },
             onClose: function(data) {
-                toast.error('payment cancelled')
+                if(data.status === 'SUCCESS') return;
+                toast.error('payment cancelled');
+                console.log(data)
             }
 
         })
@@ -181,11 +214,22 @@ export default function Cart() {
 
     // this line flip the grouped cart object into an array so that we can map over it
     const displayItems = Object.values(groupedCart)
- 
+    
+
     const total = cartItems.reduce((total, item) => {
         return total + (item.price * item.qty)
     }, 0)
     
+    // test backend route
+    const testBackendRoute = async () => {
+
+        try {
+            await axios.post('http://localhost:3001/test-route');
+            console.log('route running')
+        } catch (error) {
+            console.log('route not running correctly', error)
+        }
+    }
 
     
 
@@ -263,6 +307,7 @@ export default function Cart() {
                 <span className="font-bold text-xl text-white">
                     Total: ₦{total}
                 </span>
+                <button onClick={testBackendRoute} className='bg-white px-2 py-2'>test</button>
             </div>
 
             {/* user information and monnify linking */}
