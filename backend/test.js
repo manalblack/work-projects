@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -79,7 +80,7 @@ dotenv.config();
 
 
 /* RESEND TESTING */
-const resend = new Resend(process.env.RESEND_KEY);                    
+// const resend = new Resend(process.env.RESEND_KEY);                    
 
 
 
@@ -100,5 +101,9 @@ async function resendFunction(){
   
 }
 
-resendFunction();
+// resendFunction();
+
+const x = crypto.randomUUID();
+
+console.log(x);
 

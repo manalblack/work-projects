@@ -268,6 +268,22 @@ app.post('/test-route', (req, res) => {
     res.status(200).send("Test route received by Express")
 })
 
+app.post('/api/verify-staff', (req, res) => {
+    const {password} = req.body;
+    const staffPass = process.env.ADMIN_PASS;
+
+    if(password === staffPass) {
+        res.json({accessGranted: true, staffToken: "EVENT_STAFF_TOKEN_2026"});
+        console.log('Match');
+        
+    } else {
+        res.json({accessGranted: false});
+    }
+
+    console.log(password);
+    
+})
+
 
 // localtunnel https://dry-sides-admire.loca.lt running
 
