@@ -177,6 +177,8 @@ async function createTicket(cart){
 
             console.log(`creating ${type} Ticket #${i + 1} with: Ticket_Id:${itemId}`);
         }
+
+        
         // testing resend with more then one ticket attachments. BUG: this is not working check the notes file for error
         const {data, error} = await resend.emails.send({
         from: 'onboarding@resend.dev',
