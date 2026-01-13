@@ -9,7 +9,7 @@ export default function Admin() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-
+    const testId = '41446b84-e713-4cbc-9a5d-e14a5029cbcb';
 
     const allowAccess = async () => {
         try {
@@ -22,7 +22,7 @@ export default function Admin() {
                     position: "top-center",
                 })
                 localStorage.setItem('pass', response.data.staffToken);
-                // navigate('/verify')
+                navigate(`/verify/${testId}?type=vip`);
             } else {
                 // alert('get out of here unauthorized access !! ');
                 toast.error('Unauthorized access! get out', {

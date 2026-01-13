@@ -77,7 +77,7 @@ export default function Cart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     const cartSummery = cart.map(item => ({
-        ticket_id: item.id,
+        ticket_id: item.eventId,
         type: item.type,
         quantity: item.qty
     }))
@@ -137,7 +137,7 @@ export default function Cart() {
 
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        const existingItemIndex = currentCart.findIndex((item) => item.id === event.id && item.type === type);
+        const existingItemIndex = currentCart.findIndex((item) => item.eventId === event.id && item.type === type);
 
         let updatedCart;
 
@@ -152,7 +152,7 @@ export default function Cart() {
         } else {
             if(operator > 0){
                 const newTicket = {
-                    id: event.id,
+                    eventId: event.id,
                     title: event.title,
                     type: type,
                     price: type == 'vip'? event.vip.price: event.regular.price,
@@ -174,7 +174,7 @@ export default function Cart() {
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
 
         // find the item
-        const existingItemIndex = currentCart.findIndex((item) => item.id === eventId && item.type === ticketType);
+        const existingItemIndex = currentCart.findIndex((item) => item.eventId === eventId && item.type === ticketType);
 
         if(existingItemIndex > -1) {
             const item = currentCart[existingItemIndex];
@@ -196,17 +196,17 @@ export default function Cart() {
 
     const groupedCart = cartItems.reduce((acc, item) => {
     // If we haven't seen this event ID yet, create a base object
-    if (!acc[item.id]) {
-        acc[item.id] = {
+    if (!acc[item.eventId]) {
+        acc[item.eventId] = {
         title: item.title,
-        id: item.id,
+        id: item.eventId,
         vip: { qty: 0, price: item.vipPrice },
         regular: { qty: 0, price: item.regularPrice }
         };
     }
     
     // Assign the specific ticket data to the correct type
-        acc[item.id][item.type].qty = item.qty;
+        acc[item.eventId][item.type].qty = item.qty;
 
 
     return acc;
@@ -231,7 +231,8 @@ export default function Cart() {
         }
     }
 
-    
+    console.log(displayItems);
+
 
     return(
        <>
@@ -261,7 +262,7 @@ export default function Cart() {
 
                             <div className="flex flex-row gap-5">
                                 
-                                <button onClick={() => handelDecrease( item.id, 'vip')}
+                                <button onClick={() => handelDecrease(item.id, 'vip')}
                                     className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
                                     <TiMinus className="size-5 text-white"/>
                                 </button>
@@ -307,7 +308,7 @@ export default function Cart() {
                 <span className="font-bold text-xl text-white">
                     Total: ₦{total}
                 </span>
-                <button onClick={testBackendRoute} className='bg-white px-2 py-2'>test</button>
+                {/* <button onClick={testBackendRoute} className='bg-white px-2 py-2'>test</button> */}
             </div>
 
             {/* user information and monnify linking */}

@@ -74,3 +74,17 @@ RESEND ERROR:
     name: 'invalid_attachment',
     message: 'Attachment must have either a `content` or `path`.'
   }
+
+
+
+
+cart received in createTicket function
+  {
+    eventId: 'ef68b419-ae44-4a3f-92ed-510ec9904fd2',
+    title: 'Tech Innovators Forum',
+    type: 'regular',
+    price: 3000,
+    vipPrice: 6500,
+    regularPrice: 3000,
+    qty: 1
+  },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LightBtn from "./LightBtn"
 import LightPurpleBtn from "./LightPurpleBtn"
 import { useNavigate } from "react-router-dom"
@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import Modal from "./Modal";
 import { TiMinus, TiPlus } from "react-icons/ti";
 import toast from 'react-hot-toast';
+import axios from "axios";
+import { IoWarningOutline, IoCogOutline  } from "react-icons/io5";
 
 
 /* 
@@ -21,6 +23,27 @@ export default function PaymentOptions({eventData}) {
         vip: 0,
         regular: 0
     })
+    const [ticketsAvailability, setTicketsAvailability] = useState(true);
+    const [loading, setLoading] = useState(true);
+
+
+    console.log(eventData);
+    
+    // check ticket availability
+    useEffect(() => {
+
+        const checkTicket = async () => {
+
+            const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id}) 
+
+            setTicketsAvailability(response.data.isAvailable)
+            console.log(response.data);
+            setLoading(false);
+        }
+
+        checkTicket();
+
+    }, [])
 
 
     const navigate = useNavigate()
@@ -29,7 +52,8 @@ export default function PaymentOptions({eventData}) {
         // const directPurchase = { eventData, type, quantity, price: type === 'vip' ? eventData.vip_price : eventData.regular_price, qty: 1 };
         // sessionStorage.setItem('temp_ticket', JSON.stringify(directPurchase))
         // navigate('/checkout');
-
+        console.log(eventData);
+        
         setPayNowModal(true)
 
     }
@@ -67,20 +91,22 @@ export default function PaymentOptions({eventData}) {
         console.log(eventData);
     }
 
-    const handelAddToCart = (type) => {
 
-        console.log(eventData);
+    const handelAddToCart = async (type) => {
         
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-         // Logic to prevent duplicates and only update the qty property
-        const existingItemIndex = currentCart.findIndex((item) => item.id === eventData.id && item.type == type)
+        console.log('current cart item');
+        console.log(currentCart);
+        
+        // Logic to prevent duplicates and only update the qty property
+        const existingItemIndex = currentCart.findIndex((item) => item.eventId === eventData.id && item.type == type)
 
         if(existingItemIndex > -1) {
             currentCart[existingItemIndex].qty += 1
         } else {
             const newCartItem = {
-            id: eventData.id,
+            eventId: eventData.id,
             title: eventData.title,
             type: type,
             price: type === 'vip'? eventData.vip_price: eventData.regular_price,
@@ -104,22 +130,38 @@ export default function PaymentOptions({eventData}) {
     }
 
 
+    if(loading) {   
+        return <div className="text-white flex flex-col gap-8 p-4 justify-center items-center">
+            <IoCogOutline  className='size-15 text-white animate-spin'/>
+            <p className="text-white text-xl font-bold">Checking Tickets Availability</p>
+        </div>
+    }
+
+
     return(
-        <div className="b h-60 w-9/10 flex flex-col justify-center items-center gap-6">
-            <LightBtn onPress={() => handelPayNowBtn()}>
-                Pay Now ?
-            </LightBtn>
+        <>
+            {ticketsAvailability ? (
+            <div className="b h-60 w-9/10 flex flex-col justify-center items-center gap-6">
+                <LightBtn onPress={() => handelPayNowBtn()}>
+                    Pay Now ?
+                </LightBtn>
 
-            <h3 className="text-lg text-white font-bold">
-                OR
-            </h3>
+                <h3 className="text-lg text-white font-bold">
+                    OR
+                </h3>
 
-            <LightPurpleBtn onPress={handelAddToCartModal}>
-                Add To Cart
-            </LightPurpleBtn>
+                <LightPurpleBtn onPress={handelAddToCartModal}>
+                    Add To Cart
+                </LightPurpleBtn>
+            </div>
+            ) : (
+            <div className='size-50 flex flex-col gap-3 justify-center items-center p-4 rounded-md'>
+                <IoWarningOutline className="text-red-500 size-20 animate-pulse"/>
+                <p className="text-white font-bold text-2xl">Sold Out !!</p>
+            </div>
 
+            )}
 
-        {/*  */}
             <Modal isOpen={addToCartModal} closeModal={() => setAddToCartModal(false)}>
                 <div className="bg- size-70 flex flex-col gap-5 items-center p-2 md:w-9/10 w-full">
                     <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
@@ -144,6 +186,7 @@ export default function PaymentOptions({eventData}) {
                     </div>
                 </div>
             </Modal>
+
             <Modal isOpen={payNowModal} closeModal={() => setPayNowModal(false)}>
                 <div className="bg- size-70 flex flex-col gap-5 items-center p-2 md:w-9/10 w-full">
                     <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
@@ -168,6 +211,6 @@ export default function PaymentOptions({eventData}) {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </>
     )
 }

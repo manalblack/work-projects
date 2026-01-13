@@ -6,6 +6,7 @@ import QRCode from 'qrcode'
 import PDFDocument from 'pdfkit'
 import { supabase } from './databaseConnection.js';
 import { Resend } from 'resend'
+import { log } from 'console'
 
 /*
     Monnify Webhook is connecting to the server through vs code ports
@@ -31,7 +32,7 @@ app.use(express.json())
     console.log(JSON.stringify(req.body, null, 2));
 
     console.log('ALL HEADERS');
-    console.log(req.headers);
+    console.log(req.headers); 
 
 */
 
@@ -65,7 +66,20 @@ function verifyMonnifySignature (req, res, next) {
     }
 }
 
-async function generatePdfTicket(customerName, ticketId, verifyUrl, type) {
+// this function is working test against the db and it updates the sold tickets count
+async function updateDb(eventId) {
+
+    const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
+        target_event_id: eventId
+    })
+
+    if(rpcError) {
+        console.log('updating db failed', rpcError);
+    
+    }
+}
+
+async function generatePdfTicket({customerName, customerEmail, ticketId, verifyUrl, type, eventId, paymentRef, eventName}) {
 
     // creating a unique design for each ticket
 
@@ -82,7 +96,9 @@ async function generatePdfTicket(customerName, ticketId, verifyUrl, type) {
     });
 
 
-    const doc = new PDFDocument({size: 'A6'});
+    const doc = new PDFDocument({size: [400, 400],
+        margins: {top:0, left:0, right:0, bottom:0}
+    });
     let chunks = [];
 
     doc.on('data', (chunk) => chunks.push(chunk));
@@ -100,42 +116,52 @@ async function generatePdfTicket(customerName, ticketId, verifyUrl, type) {
 
         const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`)
 
-        console.log('error when fetching the url', urlError)
+        updateDb(eventId)
 
+        console.log('error when fetching the url', urlError)
 
         const {error: insertToTableError} = await supabase.from('tickets').insert([{
             id: ticketId,
-            customerEmail: 'test15@gmail.com',
-            paymentRef: 'TESTPAYMENTREF1234',
+            customer_email: customerEmail,
+            customer_name: customerName,
+            paymentRef: paymentRef,
             type: type,
             ticket_qr: urlData.publicUrl,
             is_scanned: false,
-        }])
+            event_name: eventName,
+            event_id: eventId,
+        }]);
 
         if(insertToTableError) {
             console.log('ticket was not saved to database', insertToTableError);
         }
+
+        // const { error: countError } = await supabase.rpc('increment_sold_count', { 
+        //     target_event_id: eventId 
+        // });
+
+        // if(countError) console.log('could not update count', countError);
     })
 
     /* PDF DESIGN */
 
     // Background and border
     doc.rect(0, 0, doc.page.width, doc.page.height).fill(secondaryColor);
-    doc.rect(0, 0, doc.page.width, 40).fill(themeColor);
+    doc.rect(0, 0, doc.page.width, 45).fill(themeColor);
 
     // Header Text
-    doc.fillColor(isVip ? 'white' : 'white').fontSize(20).text(`${type.toUpperCase()} PASS`, 0, 12, {align: 'center'})
+    doc.fillColor(isVip ? 'white' : 'white').fontSize(20).text(`${type.toUpperCase()} PASS`, 0, 15, {align: 'center'})
 
     // Customer Name 
-    doc.fillColor(isVip? 'white': 'black').fontSize(14).text('HOLDER: manal', 20, 60).fontSize(20);
+    doc.fillColor(isVip? 'white': 'black').fontSize(14).text('HOLDER: manal', 0, 75).fontSize(20);
 
     // The qr code image
-    doc.image(qrBuffer, (doc.page.width / 2) - 100, 120, {width: 200})
+    doc.image(qrBuffer, 125, 110, {width: 150})
 
 
     // Ticket ID for manual backup
 
-    doc.fontSize(8).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
+    doc.fontSize(10).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
 
     doc.end();
     // doc.text('This is your ticket');
@@ -146,20 +172,37 @@ async function generatePdfTicket(customerName, ticketId, verifyUrl, type) {
 }
 
 
+
 /*SAVE THE PAYMENT REF TO THE DB  */
-async function createTicket(cart){
+async function createTicket(eventData){
     // const ticketId = crypto.randomUUID();
     // const verificationUrl = `http://localhost:5173/verify?ticketId=${ticketId}`;
-    const resend = new Resend(process.env.RESEND_KEY);  
-    
+    // const resend = new Resend(process.env.RESEND_KEY);  
+
+    const cartSummery = eventData.metaData.cart_summery;
+    // the parsed cart is an array of objects, each object contains one ticket.
+    const cart = JSON.parse(cartSummery);
+
     let attachments = [];
+    console.log('eventData object received in createTicket function passed from monify webhook');  
+    console.log(eventData);
+
+    const customerName = eventData.metaData.customer_name;
+    const customerEmail = eventData.metaData.customer_email;
+    const paymentRef = eventData.paymentReference;
+
+    console.log('customer name: ', customerName);
+    console.log('customer email: ', customerEmail);
+    console.log('payment ref: ', paymentRef);
 
     console.log('looping through cart items from localstorage');
+    console.log(cart);
     
     for(const item of cart) {
         const type = item.type;
         const quantity = item.qty;
-        const itemId = item.id;
+        const itemId = item.eventId;
+        const eventName = item.title;
 
         console.log('--- start the ticket generation process ---');
 
@@ -168,7 +211,17 @@ async function createTicket(cart){
 
             const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
             
-            const pdfBuffer = await generatePdfTicket('test user', ticketId, verUrl, type);
+            const pdfBuffer = await generatePdfTicket({
+                customerName: customerName,
+                customerEmail: customerEmail,
+                ticketId: ticketId,
+                verifyUrl: verUrl,
+                type: type,
+                eventId: itemId,
+                paymentRef: paymentRef,
+                eventName: eventName
+            });
+
 
             attachments.push({
                 fileName: `ticket_${ticketId}.pdf`,
@@ -180,17 +233,17 @@ async function createTicket(cart){
 
         
         // testing resend with more then one ticket attachments. BUG: this is not working check the notes file for error
-        const {data, error} = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'green.engil13@gmail.com',
-        subject: 'Hello from Resend!',
-        html: '<p>This email was sent using Resend!, see your ticket</p>',
-        attachments: attachments
-        });
+        // const {data, error} = await resend.emails.send({
+        // from: 'onboarding@resend.dev',
+        // to: 'green.engil13@gmail.com',
+        // subject: 'Hello from Resend!',
+        // html: '<p>This email was sent using Resend!, see your ticket</p>',
+        // attachments: attachments
+        // });
 
-        if(error) {
-            return console.log('error sending email', error);
-        }
+        // if(error) {
+        //     return console.log('error sending email', error);
+        // }
 
         console.log('email sent');
     }
@@ -198,34 +251,40 @@ async function createTicket(cart){
 }
 
 
-// this rote is working and the ticket is being saved to db in storage and the tickets table.
+// this rote is working and the ticket is being saved to db in storage and the tickets table. BUG: THIS ROUTE IS NOT RETURNING ANYTHING fix it before you try to do anything else
 app.post('/webhook/monnify', (req, res) => {
-    const {eventData: {metaData}} = req.body;
+    const { eventData } = req.body;
     // the line below send a response immediately yo monnify
     res.status(200).send("Webhook received by Express")
 
     console.log('METADATA');
-    console.log(metaData);
+    console.log(eventData.metaData);
 
-    const cartSummery = metaData.cart_summery;
+    const cartSummery = eventData.metaData.cart_summery;
     // the parsed cart is an array of objects, each object contains one ticket.
     const parsedCart = JSON.parse(cartSummery);
 
     console.log('parsed cart from metadata', parsedCart);
     
-    verifyMonnifySignature(req, res, () => {
-        createTicket(parsedCart);
-    });
+   
     // looking for the monnify signature header
     const sign = req.headers['x-monnify-signature'] || req.headers['monnify-signature']
     
-    if(sign) {
+
+    if(eventData.paymentStatus === 'PAID' && sign) {
+
+        verifyMonnifySignature(req, res, () => {
+            createTicket(eventData);
+        });
+
+        // debugging logs
         console.log(`signature found: ${sign}`);   
+        console.log('event data object')
+        console.log(eventData);
     } else {
         console.log('nothing found in header');
     }
 
-    // res.status(200).send("Webhook received by Express")
     
 })
 
@@ -268,6 +327,40 @@ app.post('/test-route', (req, res) => {
     res.status(200).send("Test route received by Express")
 })
 
+
+app.post('/api/check-tickets-quantity', async (req, res) => {
+
+    const {eventId} = req.body;
+
+    console.log(eventId);
+    
+    // const testData = {
+    //     totalTickets: 100,
+    //     soldTickets: 100
+    // }
+
+    const {data, error} = await supabase.from('events').select('total_tickets, sold_tickets').eq('id', eventId).single();
+
+    if(error) console.log('error when checking ticket quantity', error)
+    
+    /* This var is checking the gatekeeper to prevent overselling tickets */
+
+    const isAvailable = data.sold_tickets < data.total_tickets;
+    // if(data.sold_tickets === data.totalTickets) {
+    //     console.log('equals');
+
+    // } else if(data.sold_tickets < data.totalTickets) {
+    //     console.log('less than');
+    // }
+
+
+    // console.log(isAvailable);
+    // console.log(data);
+
+    return res.status(200).json({isAvailable});
+    
+})
+
 app.post('/api/verify-staff', (req, res) => {
     const {password} = req.body;
     const staffPass = process.env.ADMIN_PASS;
@@ -285,6 +378,7 @@ app.post('/api/verify-staff', (req, res) => {
 })
 
 
+
 // localtunnel https://dry-sides-admire.loca.lt running
 
 
@@ -293,4 +387,4 @@ app.post('/api/verify-staff', (req, res) => {
 app.listen(3001, () => {
     console.log('server running on port 3001');
     
-})
+});
