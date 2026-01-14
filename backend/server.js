@@ -20,7 +20,8 @@ const app = express();
 
 // middleware setp
 const corsOptions = {
-    origin: 'http://localhost:5173'
+    // origin: 'http://localhost:5173'
+    origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -214,7 +215,8 @@ async function createTicket(eventData){
         for(let i = 0; i < quantity; i++) {
             const ticketId = crypto.randomUUID();
 
-            const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
+            // const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
+            const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
             
             const pdfBuffer = await generatePdfTicket({
                 customerName: customerName,
