@@ -16,7 +16,7 @@ export default function Admin() {
 
     const allowAccess = async () => {
         try {
-            const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/verify-staff', { password });
+            const response = await axios.post('https://organological-shaunta-exceptionably.ngrok-free.dev/api/verify-staff', { password });
 
             if (response.data.accessGranted) {
                 console.log('access granted !');

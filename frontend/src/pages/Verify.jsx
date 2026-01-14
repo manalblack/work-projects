@@ -103,7 +103,7 @@ export default function Verify() {
                 //     ticketId: ticketId,
                 //     bouncerId: passKey
                 // })
-                  const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/scan-tickets', {
+                  const response = await axios.post('https://organological-shaunta-exceptionably.ngrok-free.dev/api/scan-tickets', {
                     ticketId: ticketId,
                     bouncerId: passKey
                 })
