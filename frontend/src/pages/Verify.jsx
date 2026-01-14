@@ -20,6 +20,7 @@ export default function Verify() {
     const passKey = 'EVENT_STAFF_TOKEN_2026';
 
     useEffect(() => {
+        
         const pass = localStorage.getItem('pass');
         if (pass === passKey){
             setIsStaff(true);

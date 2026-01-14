@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from 'react-hot-toast';
 
+
+// https://p846l2pq-3001.uks1.devtunnels.ms/
+
 export default function Admin() {
 
     const [password, setPassword] = useState('');
@@ -13,7 +16,7 @@ export default function Admin() {
 
     const allowAccess = async () => {
         try {
-            const response = await axios.post('http://localhost:3001/api/verify-staff', { password });
+            const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/verify-staff', { password });
 
             if (response.data.accessGranted) {
                 console.log('access granted !');
