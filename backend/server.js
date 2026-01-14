@@ -13,15 +13,17 @@ import staffRoutes from  './routes/staff.js'
 */
  
 
-// https://p846l2pq-3001.uks1.devtunnels.ms/
+// vs code ports tunnel:  https://p846l2pq-3001.uks1.devtunnels.ms/
+
+// Ngrok Url: https://organological-shaunta-exceptionably.ngrok-free.dev
 dotenv.config();
 
 const app = express();
 
 // middleware setp
 const corsOptions = {
-    // origin: 'http://localhost:5173'
-    origin: 'https://ticket-hub-xwhv.onrender.com',
+    origin: ['http://localhost:5173', 'https://ticket-hub-xwhv.onrender.com']
+    // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -159,15 +161,16 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
     doc.fillColor(isVip ? 'white' : 'white').fontSize(20).text(`${type.toUpperCase()} PASS`, 0, 15, {align: 'center'})
 
     // Customer Name 
-    doc.fillColor(isVip? 'white': 'black').fontSize(14).text('HOLDER: manal', 0, 75).fontSize(20);
+    doc.fillColor(isVip? 'white': 'black').fontSize(16).text(`Holder: ${customerName}`, 0, 75, {align: 'center'})
 
+    doc.fillColor(isVip? 'white': 'black').fontSize(16).text(`Event Name: ${eventName}`, 0, 75, {align: 'center'})
     // The qr code image
     doc.image(qrBuffer, 125, 110, {width: 150})
 
 
     // Ticket ID for manual backup
 
-    doc.fontSize(10).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
+    doc.fontSize(15).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
 
     doc.end();
     // doc.text('This is your ticket');

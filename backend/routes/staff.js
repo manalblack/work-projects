@@ -24,5 +24,38 @@ router.post('/verify-staff', (req, res) => {
         console.log(password);
 })
 
+router.post('/scan-tickets', async (req, res) => {
+
+    const {ticketId, bouncerId} = req.body;
+    const secretKey = process.env.ADMIN_SECRET_KEY;
+
+    const todaysDate = new Date().toISOString();
+
+    try {
+        
+        if(bouncerId === secretKey) {
+            const {data, error} = await supabase.from('tickets').update({
+                is_scanned: true,
+                scanned_at: todaysDate
+            }).eq('id', ticketId).eq('is_scanned', false).select();
+
+            if(error) {
+                console.log('error when updating ticket status in db, ', error);
+                
+            }
+
+            console.log(data);
+        }
+
+    
+ 
+    } catch (error) {
+        console.log('error when checking ticket status in the database', error);
+        
+    }
+
+    res.status(200).json({message: 'SUCCESS'})
+})
+
 export default router;
 

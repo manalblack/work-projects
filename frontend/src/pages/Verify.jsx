@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import {supabase} from '../supabaseConnection'
+import Loading from "../components/Loading";
+import { CiWarning } from "react-icons/ci";
+import axios from 'axios'
 
 
 // This page should only open when a staff member scans a ticket
@@ -10,17 +14,38 @@ export default function Verify() {
 
 
     const [isStaff, setIsStaff] = useState(false);
-    const ticketIsScanned = false;
+    const [ticketStatus, setTicketStatus] = useState(true)
+    const [isScanned, setIsScanned] = useState(false)
+    const [verifyTicket, setVerifyTicket] = useState(false);
+    const [scanningTime, setScanningTime] = useState(null)
+    const [eventName, setEventName] = useState('')
 
     const { ticketId } = useParams();
     const [searchParams] = useSearchParams();
     const ticketType = searchParams.get('type');
+    const navigate = useNavigate();
 
     // const pass = localStorage.getItem('pass')
-    const passKey = 'EVENT_STAFF_TOKEN_2026';
+    const passKey = import.meta.env.VITE_ADMIN_PASS;
+
+
+    const formatDate = (isoString) =>{
+
+        const date = new Date(isoString)
+
+        return new Intl.DateTimeFormat('en-GB', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    }).format(date).replace(',', '@');
+
+
+}
 
     useEffect(() => {
-        
         const pass = localStorage.getItem('pass');
         if (pass === passKey){
             setIsStaff(true);
@@ -28,41 +53,112 @@ export default function Verify() {
         } else {
             setIsStaff(false);
         }
+
+        // query the database to check the is_scanned and scanned_at columns 
+        const checkTicketStatus = async () => {
+            try {
+                const {data, error} = await supabase.from('tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
+
+                if(error) {
+                    console.log('error checking ticket status in the db', error);
+                }
+
+                setScanningTime(data.scanned_at);
+                setEventName(data.event_name);
+                // checking ticket validity
+                if(data.is_scanned === false) {
+                    setTicketStatus(false);
+                    
+                } else if(data.is_scanned === true) {
+                   setIsScanned(true);
+                }
+
+                // setIsScanned(true);
+                setTicketStatus(false);
+                // if(data.is_scanned) {
+                //     setIsScanned(true)
+                //     setTicketStatus(false);
+                // }
+
+                console.log(data);   
+                // setTicketStatus(data)
+            } catch (error) {
+                console.log('error when checking ticket status', error);
+                
+            }
+        }
+
+        checkTicketStatus();
+        
     }, [])
 
     const isVip = ticketType === 'vip';
 
     {/* when the verify button is clicked, 1 it will mark the ticket as scanned in the db and then decrease the number of available tickets in the events table*/}
-    const handelTicketVerification = () => {
-        console.log('ticket scanned !!');
+    const handelTicketVerification = async () => {
+            setVerifyTicket(true)
+            try {
+                
+                // const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/scan-tickets', {
+                //     ticketId: ticketId,
+                //     bouncerId: passKey
+                // })
+                  const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/scan-tickets', {
+                    ticketId: ticketId,
+                    bouncerId: passKey
+                })
+                if(response.data.message === 'SUCCESS'){
+                    navigate('/success')
+                }
+
+                console.log(response);
+                 
+            } catch (error) {
+                console.log('error when checking ticket status', error)
+            }
+     }
         
+        
+    
+
+    if(ticketStatus) {
+        return <Loading>Verifying Ticket Status</Loading>
+    }
+     if(verifyTicket) {
+        return <Loading>Verifying Ticket validity</Loading>
     }
 
     return(
-        // <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-600 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>            
-        //     
-        // </div>
-
         <>
-            {ticketIsScanned ? (
-                <div className="bg-white flex flex-col">
-                    <p className="text-green-500 font-bold text-4xl">Ticket already scanned</p>
-                    <p className="">Scanned at: 20:12</p>
+            
+            {isScanned ? (
+                <div className="bg-white flex flex-col justify-center items-center h-screen w-full gap-15">
+                    <p className="text-red-400 font-bold text-4xl !!">
+                        Ticket already scanned
+                    </p>
+                    <CiWarning className="size-35 text-red-500 animate-pulse"/>
+
+                    <p className="text-2xl font-extrabold text-gray-700 underline">
+                        Scanned at: {formatDate(scanningTime)}
+                    </p>
                     
                 </div>) : (
                     <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-600 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>
-                        <h1 className='text-4xl font-bold'>verify ticket</h1>
-                            <p className="text-2xl">category: <span className="font-extrabold">{ticketType.toUpperCase()}
+                        <div className=" flex flex-col gap-15 w-3/4 h-110 justify-center items-center shadow-xl">
+                            <h1 className='text-4xl font-extrabold'>Verify Ticket</h1>
+                            <h3 className="text-gray-700 text-2xl">Event Name: {eventName}</h3>
+                            <p className="text-2xl">Category: <span className="font-extrabold">{ticketType.toUpperCase()}
                             </span>
-                        </p>
-
-                        <p className='text-sm font-light'>Ticket id: {ticketId}</p>
+                            </p>
+ 
+                        <p className='text-sm text-gray-700'>Ticket id: {ticketId}</p>
                         {isStaff && 
                             <button onClick={handelTicketVerification}
-                            className="bg-green-500 text-white px-6 text-lg py-1 rounded-2xl font-bold">
+                            className="bg-green-500 text-white px-6 text-lg py-1 rounded-2xl font-bold active:scale-85 transition-all duration-300 ease-in-out">
                                 Verify
                             </button>
                         }
+                        </div>
                     </div>
                 )
             }
