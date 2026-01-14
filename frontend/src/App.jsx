@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import Events from './pages/Events'
 // import Cart from './pages/Cart'
 import {Toaster} from 'react-hot-toast';
+import StaffSuccessfulLogin from './pages/StaffSuccessfulLogin';
 // import Admin from './pages/Admin'
 // import Verify from './pages/Verify'
 
@@ -34,6 +35,8 @@ function App() {
 
           <Route path='/admin-setup' element={<Admin />}/>
           <Route path='/verify/:ticketId' element={<Verify />}/>
+          <Route path='/successful-login' element={<StaffSuccessfulLogin
+          />}/>
         </Routes>
         </Suspense>
       </BrowserRouter>

@@ -22,7 +22,8 @@ export default function Admin() {
                     position: "top-center",
                 })
                 localStorage.setItem('pass', response.data.staffToken);
-                navigate(`/verify/${testId}?type=vip`);
+                // navigate(`/verify/${testId}?type=vip`);
+                navigate('/successful-login')
             } else {
                 // alert('get out of here unauthorized access !! ');
                 toast.error('Unauthorized access! get out', {

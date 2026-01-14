@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 
 
+// This page should only open when a staff member scans a ticket
+
 
 
 export default function Verify() {

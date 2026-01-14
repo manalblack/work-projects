@@ -6,7 +6,7 @@ import QRCode from 'qrcode'
 import PDFDocument from 'pdfkit'
 import { supabase } from './databaseConnection.js';
 import { Resend } from 'resend'
-import { log } from 'console'
+import staffRoutes from  './routes/staff.js'
 
 /*
     Monnify Webhook is connecting to the server through vs code ports
@@ -18,12 +18,17 @@ dotenv.config();
 
 const app = express();
 
+// middleware setp
 const corsOptions = {
     origin: 'http://localhost:5173'
 }
 app.use(cors(corsOptions))
-
 app.use(express.json())
+
+
+// ROUTES 
+app.use('/api', staffRoutes)
+
 
 /* ADD these line to debug and check what the webhook 
     console.log('monnify webhook');
@@ -361,21 +366,21 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
     
 })
 
-app.post('/api/verify-staff', (req, res) => {
-    const {password} = req.body;
-    const staffPass = process.env.ADMIN_PASS;
+// app.post('/api/verify-staff', (req, res) => {
+//     const {password} = req.body;
+//     const staffPass = process.env.ADMIN_PASS;
 
-    if(password === staffPass) {
-        res.json({accessGranted: true, staffToken: "EVENT_STAFF_TOKEN_2026"});
-        console.log('Match');
+//     if(password === staffPass) {
+//         res.json({accessGranted: true, staffToken: "EVENT_STAFF_TOKEN_2026"});
+//         console.log('Match');
         
-    } else {
-        res.json({accessGranted: false});
-    }
+//     } else {
+//         res.json({accessGranted: false});
+//     }
 
-    console.log(password);
+//     console.log(password);
     
-})
+// })
 
 
 
