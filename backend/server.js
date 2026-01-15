@@ -165,7 +165,7 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
 
     doc.fillColor(isVip? 'white': 'black').fontSize(16).text(`Event Name: ${eventName}`, 50, 100, {align: 'center'})
     // The qr code image
-    doc.image(qrBuffer, 150, 220, {width: 150})
+    doc.image(qrBuffer, 150, 180, {width: 150})
 
 
     // Ticket ID for manual backup

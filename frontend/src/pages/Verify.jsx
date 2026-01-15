@@ -22,7 +22,7 @@ export default function Verify() {
 
     const { ticketId } = useParams();
     const [searchParams] = useSearchParams();
-    const ticketType = searchParams.get('type');
+    const ticketType = searchParams('type');
     const navigate = useNavigate();
 
     // const pass = localStorage.getItem('pass')
