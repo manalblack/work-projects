@@ -15,7 +15,7 @@ export default function Verify() {
 
     const [isStaff, setIsStaff] = useState(false);
     const [ticketStatus, setTicketStatus] = useState(true)
-    const [isScanned, setIsScanned] = useState(false)
+    const [isScanned, setIsScanned] = useState(false);
     const [verifyTicket, setVerifyTicket] = useState(false);
     const [scanningTime, setScanningTime] = useState(null)
     const [eventName, setEventName] = useState('')
@@ -144,7 +144,7 @@ export default function Verify() {
                     
                 </div>) : (
                     <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-600 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>
-                        <div className=" flex flex-col gap-15 w-3/4 h-110 justify-center items-center shadow-xl">
+                        <div className=" flex flex-col gap-15 md:w-3/4 w-full h-130 p-3 justify-center items-center shadow-xl">
                             <h1 className='text-4xl font-extrabold'>Verify Ticket</h1>
                             <h3 className="text-gray-700 text-2xl">Event Name: {eventName}</h3>
                             <p className="text-2xl">Category: <span className="font-extrabold">{ticketType.toUpperCase()}
