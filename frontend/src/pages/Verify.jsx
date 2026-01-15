@@ -47,7 +47,7 @@ export default function Verify() {
 
     useEffect(() => {
         const pass = localStorage.getItem('pass');
-        if (pass === passKey){
+        if (pass === "EVENT_STAFF_TOKEN_2026"){
             setIsStaff(true);
             // database query here to check if a ticket is scanned or not
         } else {
@@ -90,7 +90,7 @@ export default function Verify() {
 
         checkTicketStatus();
         
-    }, [])
+    }, [isStaff])
 
     const isVip = ticketType === 'vip';
 
