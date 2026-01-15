@@ -48,7 +48,7 @@ export default function Verify() {
     useEffect(() => {
         const pass = localStorage.getItem('pass');
 
-        if (pass === "EVENT_STAFF_TOKEN_2026"){
+        if (pass === passKey){
             setIsStaff(true);
             // database query here to check if a ticket is scanned or not
         } else {
