@@ -150,6 +150,10 @@ export default function Checkout(){
         return <div>loading....</div>
     }
 
+    const testFunc = () => {
+        
+    } 
+
     return(
         <>
             <Navbar/>
