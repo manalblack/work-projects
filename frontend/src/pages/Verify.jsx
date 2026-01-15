@@ -47,6 +47,7 @@ export default function Verify() {
 
     useEffect(() => {
         const pass = localStorage.getItem('pass');
+
         if (pass === "EVENT_STAFF_TOKEN_2026"){
             setIsStaff(true);
             // database query here to check if a ticket is scanned or not
@@ -55,7 +56,7 @@ export default function Verify() {
         }
 
         // query the database to check the is_scanned and scanned_at columns 
-        const checkTicketStatus = async () => {
+         const checkTicketStatus = async () => {
             try {
                 const {data, error} = await supabase.from('tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
 
