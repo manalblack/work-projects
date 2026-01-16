@@ -86,7 +86,7 @@ export default function Hero(){
                         {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam quae, rem suscipit inventore aliquid, animi tempore ut quas nostrum totam cupiditate. Natus ipsa quo aut voluptatibus numquam odit, tempore eius! */}
                     </p>
                     <MiniOverlay>
-                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-70 flex flex-row justify-between gap-8">
+                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-8">
                             <div className="w-3/4 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-2 mt-15 md:mt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}
@@ -102,7 +102,7 @@ export default function Hero(){
                                 <br />
                                 Venue: 1234 Event center
                             </span>
-                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg md:w-3/4 w-full">
                                 Remaining tickets: {ongoingEvent.total_tickets}
                             </span>
                             </div>
@@ -122,7 +122,7 @@ export default function Hero(){
             {/* About Event Modal */}
            <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
                 <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
-                <div className="bg-green-30 size-60 w-5/6">
+                <div className="bg-green-30 size-70 w-5/6">
                     <p className="text-md text-white text-center ">
                         {ongoingEvent.description}
                     </p>

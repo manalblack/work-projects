@@ -56,13 +56,13 @@ export default function Events() {
        <>
         <Navbar />
 
-        <div className="w-full bg-lightPurple flex flex-col gap-5">
+        <div className="w-full bg-lightPurple flex flex-col gap-5 md:mt-10">
               
-           <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2">
+           <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 w-full md:px-2 bg-green-00 p-2">
                 {/* Temporarily use this div as an event container Make the Event Card component Re-usable */}
                 {allEvents.map((event) => (
                     <div key={event.id}
-                     className="md:h-120 lg:h-150 h-130 w-9/10 md:w-5/6 lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm ">
+                     className="md:h-150 lg:h-160 h-140 w-full md:w-full lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm ">
                     <div className="w-full md:w-9/10 bg-white/50 rounded-sm aspect-video">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
@@ -71,14 +71,14 @@ export default function Events() {
                         <p className="line-clamp-2 text-xl">
                             {event.description}
                         </p>
-                        <div className="flex flex-row gap-2 bg-red-3 ">
+                        <div className="flex flex-row gap-1 bg-red-00">
                            <div>
                                 <PriceContainer>
                                     N{event.regular_price}
                                 </PriceContainer>
                            </div>
 
-                            <div className="flex flex-row gap-3">
+                            <div className="flex flex-row gap-2">
                                 <LightBtn onPress={() => aboutEventModal(event)}>About Event</LightBtn>
                                 <LightPurpleBtn onPress={
                                     () => buyTicketModal(event)}>
@@ -99,7 +99,7 @@ export default function Events() {
                                     Date: Oct/10
                                 </span> */}
                             </div>
-                            <span className="bg-white/50 w-1/2 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                            <span className="bg-white/50 md:w-1/2 w-3/4 text-gray-800 md:px-2 py-1 rounded-2xl px-2 text-sm md:text-lg ">
                                 Remaining tickets: {event.total_tickets}
                             </span>
                         </div>
@@ -115,7 +115,7 @@ export default function Events() {
 
                  <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
                     <img src={selectedEvent.image} alt="" className="w-9/10 rounded-sm shadow-xl"/>
-                    <div className="bg-green-30 size-60 w-5/6">
+                    <div className="bg-green-30 size-70 w-5/6">
                         <p className="text-md text-white text-center ">
                             {selectedEvent.description}
                         </p>
