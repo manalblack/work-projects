@@ -86,8 +86,8 @@ export default function Hero(){
                         {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam quae, rem suscipit inventore aliquid, animi tempore ut quas nostrum totam cupiditate. Natus ipsa quo aut voluptatibus numquam odit, tempore eius! */}
                     </p>
                     <MiniOverlay>
-                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-8">
-                            <div className="w-3/4 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-2 mt-15 md:mt-0 bg-green-00">
+                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4">
+                            <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-1 mt-15 md:mt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}
                                 </h2> 
