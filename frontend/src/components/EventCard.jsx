@@ -132,7 +132,7 @@ export default function EventCard() {
 
             </div>
            
-        </div>
+        </div> 
             ))}
          {/* <div className="md:w-120 w-90 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-90 md:h-100">
 
@@ -188,7 +188,7 @@ export default function EventCard() {
                 </div>
                 <div className="flex gap-8 mb-3">
                     <PriceContainer>
-                       {/* {selectedEvent.regular_price} */}
+                       {selectedEvent.regular_price}
                     </PriceContainer>
                     <LightPurpleBtn onPress={handelAboutEventPayBtn}>
                         Buy ticket 

@@ -15,8 +15,9 @@ export default function Events() {
 
     // const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null);
-   
+    const [selectedEvent, setSelectedEvent] = useState([]);
+    const [aboutModal, setAboutModal] = useState(false);
+    const [aboutPay, setAboutPay] = useState(false)
     const [allEvents, setAllEvents] = useState([]); 
 
 
@@ -39,6 +40,17 @@ export default function Events() {
         
     }
 
+    
+    const aboutEventModal = (eventData) => {
+        setAboutModal(true)
+        setSelectedEvent(eventData)
+        console.log(eventData);
+    }
+    
+    const handelAboutEventPayBtn = () => {
+        setAboutPay(true)
+    }
+
 
     return(
        <>
@@ -54,9 +66,9 @@ export default function Events() {
                     <div className="w-full md:w-9/10 bg-white/50 rounded-sm aspect-video">
                         <img src={event.image} alt="placeholder image" className="rounded-sm"/>
                     </div>
-                    <div className="text-white w-full h-50 flex flex-col gap-4">
+                    <div className="text-white bg-green-6 w-full h-70 flex flex-col gap-4">
                         <h2 className="text-xl">{event.title}</h2>
-                        <p>
+                        <p className="line-clamp-2 text-xl">
                             {event.description}
                         </p>
                         <div className="flex flex-row gap-2 bg-red-3 ">
@@ -67,7 +79,7 @@ export default function Events() {
                            </div>
 
                             <div className="flex flex-row gap-3">
-                                {/* <LightBtn>About Event</LightBtn> */}
+                                <LightBtn onPress={() => aboutEventModal(event)}>About Event</LightBtn>
                                 <LightPurpleBtn onPress={
                                     () => buyTicketModal(event)}>
                                     Buy Ticket
@@ -78,7 +90,7 @@ export default function Events() {
                         <div className="flex flex-col gap-2 bg-red-0 ">
                             <div className="bg-red-0 p-1 flex flex-row gap-2">
                                 <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-lg ">
-                                    Date: {event.date}, Time: {event.buyTicketModal}
+                                    Date: {event.date}, Time: {event.time}
                                     <br />
                                     Venue: {event.location}
                                 </span>
@@ -88,7 +100,7 @@ export default function Events() {
                                 </span> */}
                             </div>
                             <span className="bg-white/50 w-1/2 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
-                                Remaining tickets: 101
+                                Remaining tickets: {event.total_tickets}
                             </span>
                         </div>
                     </div>
@@ -98,6 +110,26 @@ export default function Events() {
            </div>
            {/* Modals sections */}
                 <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
+                    <PaymentOptions eventData={selectedEvent}/>
+                </Modal>
+
+                 <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
+                    <img src={selectedEvent.image} alt="" className="w-9/10 rounded-sm shadow-xl"/>
+                    <div className="bg-green-30 size-60 w-5/6">
+                        <p className="text-md text-white text-center ">
+                            {selectedEvent.description}
+                        </p>
+                    </div>
+                    <div className="flex gap-8 mb-2">
+                        <PriceContainer>
+                            {selectedEvent.regular_price}
+                        </PriceContainer>
+                        <LightPurpleBtn onPress={handelAboutEventPayBtn}>
+                            Buy ticket
+                        </LightPurpleBtn>
+                    </div>
+                </Modal>
+                <Modal isOpen={aboutPay} closeModal={() => setAboutPay(false)}>
                     <PaymentOptions eventData={selectedEvent}/>
                 </Modal>
             <Footer/>

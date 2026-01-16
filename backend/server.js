@@ -123,7 +123,6 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
         if(uploadError) return uploadError;
 
         const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`)
-
         updateDb(eventId)
 
         console.log('error when fetching the url', urlError)
