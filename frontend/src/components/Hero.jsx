@@ -4,11 +4,12 @@ import MiniOverlay from "./MiniOverlay";
 import LightBtn from './LightBtn';
 import LightPurpleBtn from './LightPurpleBtn'
 import PriceContainer from './PriceContainer'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import {useNavigate} from 'react-router-dom'
 import PaymentOptions from "./PaymentOptions";
 import {motion} from 'motion/react'
+import {supabase} from '../supabaseConnection.js'
 
 
 const heroEventId = 'hero1'
@@ -29,6 +30,7 @@ export default function Hero(){
     const [buyTicket, setBuyTicket] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null)
     const [aboutPay, setAboutPay] = useState(false);
+    const [ongoingEvent, setOngoingEvent] = useState([])
     
 
     const aboutEventModal = () => {
@@ -43,6 +45,28 @@ export default function Hero(){
         setAboutPay(true)
     }
 
+     useEffect(() => {
+        try {
+            const fetchCurrentEvent = async () => {
+                const {data, error} = await supabase.from('events').select('*').eq('current_event', true)
+
+                if(error){
+                    console.error('error fetching current event', error)
+                }
+
+                setOngoingEvent(data[0])
+                console.log(data[0])
+                
+            }
+
+            fetchCurrentEvent();
+
+
+        } catch (error) {
+            console.log('error fetching current even from db', error);
+            
+        }
+     }, [])
 
 
 
@@ -57,26 +81,29 @@ export default function Hero(){
              className="bg-red-0 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
 
                 <div className="relative w-full md:w-9/10 group rounded-xl">
-                    <img src="/placeholder.jpg" alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
+                    <img src={ongoingEvent.image} alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
+                    <p>
+                        {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam quae, rem suscipit inventore aliquid, animi tempore ut quas nostrum totam cupiditate. Natus ipsa quo aut voluptatibus numquam odit, tempore eius! */}
+                    </p>
                     <MiniOverlay>
-                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-full md:h-70 flex flex-row justify-between gap-8">
-                            <div className="w-3/4 flex flex-col items-start gap-5 md:gap-5 bg-gray-00 p-2 mt-13 md:mt-0 bg-green-00">
+                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-70 flex flex-row justify-between gap-8">
+                            <div className="w-3/4 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-2 mt-15 md:mt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
-                                    {currentEvent.title}
+                                    {ongoingEvent.title}
                                 </h2> 
-                                <p className="md:text-xl font-light text-sm">
-                                   {currentEvent.description}
+                                <p className="md:text-xl font-light text-sm line-clamp-2 text-white">
+                                   {ongoingEvent.description}
                                 </p>
                                 <PriceContainer>
-                                    {currentEvent.regular_price}
+                                    {ongoingEvent.regular_price}
                                 </PriceContainer>
                                 <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
-                                {currentEvent.date}, {currentEvent.time}
+                                {ongoingEvent.date}, {ongoingEvent.time}
                                 <br />
                                 Venue: 1234 Event center
                             </span>
                             <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
-                                Remaining tickets: 101
+                                Remaining tickets: {ongoingEvent.total_tickets}
                             </span>
                             </div>
                             <div className="bg-blue-0 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-0">
@@ -95,12 +122,12 @@ export default function Hero(){
             {/* About Event Modal */}
            <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
                 <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
-                <div className="bg-green-30 size-70 w-9/10">
-                    <p className="text-md text-white text-center">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ipsam magnam delectus reiciendis. Rerum illum harum distinctio voluptates nisi et at vero iure. Sit corporis nihil, doloribus non similique nesciunt.
+                <div className="bg-green-30 size-60 w-5/6">
+                    <p className="text-md text-white text-center ">
+                        {ongoingEvent.description}
                     </p>
                 </div>
-                <div className="flex gap-8">
+                <div className="flex gap-8 mb-2">
                     <PriceContainer>
                         N4,000
                     </PriceContainer>
@@ -110,13 +137,13 @@ export default function Hero(){
                 </div>
            </Modal>
            <Modal isOpen={aboutPay} closeModal={() => setAboutPay(false)}>
-                <PaymentOptions eventData={currentEvent}/>
+                <PaymentOptions eventData={ongoingEvent}/>
             </Modal>
            
 
            {/* Buy Ticket Modal */}
            <Modal isOpen={buyTicket} closeModal={() => setBuyTicket(false)}>
-                <PaymentOptions eventData={currentEvent}/>
+                <PaymentOptions eventData={ongoingEvent}/>
            </Modal>
         </Card>
     )

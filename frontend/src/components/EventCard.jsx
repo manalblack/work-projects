@@ -51,8 +51,7 @@ export default function EventCard() {
 
     const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
-    // const [ticketId, setTicketId] = useState(null)
-    const [selectedEvent, setSelectedEvent] = useState(null)
+    const [selectedEvent, setSelectedEvent] = useState([])
     const [aboutPay, setAboutPay] = useState(false);
     const [allEvents, setAllEvents] = useState([])
 
@@ -101,20 +100,20 @@ export default function EventCard() {
                 <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg"/>
             <MiniOverlay>
 
-                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-50 flex flex-row justify-between md:gap-8">
+                <div className="bg-black/50 absolute bottom-0 left-0 w-full h-50 flex flex-row justify-between md:gap-8">
 
                     <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4">
                         <h2 className="md:text-2xl  text-white font-bold">
                             {event.title}
                         </h2>
-                        <p className="text-white font-light">
+                        <p className="text-white font-light line-clamp-2">
                            {event.description}
                         </p>
                         <PriceContainer>
                             N{event.regular_price}
                         </PriceContainer>
                         <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
-                            Remaining tickets: 101
+                            Remaining tickets: {event.total_tickets}
                         </span>
                         
                     </div>
@@ -182,17 +181,17 @@ export default function EventCard() {
             {/* modals section */}
             <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
                 <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
-                <div className="bg-green-30 size-70 w-9/10">
+                <div className="bg-green-30 size-65 w-9/10">
                     <p className="text-md text-white text-center">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ipsam magnam delectus reiciendis. Rerum illum harum distinctio voluptates nisi et at vero iure. Sit corporis nihil, doloribus non similique nesciunt.
+                       {selectedEvent.description}
                     </p>
                 </div>
-                <div className="flex gap-8">
+                <div className="flex gap-8 mb-3">
                     <PriceContainer>
                        {/* {selectedEvent.regular_price} */}
                     </PriceContainer>
                     <LightPurpleBtn onPress={handelAboutEventPayBtn}>
-                        Buy ticket 1
+                        Buy ticket 
                     </LightPurpleBtn>
                 </div>
             </Modal>

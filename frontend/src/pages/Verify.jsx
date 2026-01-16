@@ -67,6 +67,7 @@ export default function Verify() {
                 setScanningTime(data.scanned_at);
                 setEventName(data.event_name);
                 // checking ticket validity
+                
                 if(data.is_scanned === false) {
                     setTicketStatus(false);
                     
@@ -147,12 +148,12 @@ export default function Verify() {
                     <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-600 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>
                         <div className=" flex flex-col gap-15 md:w-3/4 w-full h-130 p-3 justify-center items-center shadow-xl">
                             <h1 className='text-4xl font-extrabold'>Verify Ticket</h1>
-                            <h3 className="text-gray-700 text-2xl">Event Name: {eventName}</h3>
+                            <h3 className=" text-2xl">Event Name: {eventName}</h3>
                             <p className="text-2xl">Category: <span className="font-extrabold">{ticketType.toUpperCase()}
                             </span>
                             </p>
  
-                        <p className='text-sm text-gray-700'>Ticket id: {ticketId}</p>
+                        <p className='text-sm'>Ticket id: {ticketId}</p>
                         {isStaff && 
                             <button onClick={handelTicketVerification}
                             className="bg-green-500 text-white px-6 text-lg py-1 rounded-2xl font-bold active:scale-85 transition-all duration-300 ease-in-out">

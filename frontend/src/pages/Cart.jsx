@@ -165,6 +165,7 @@ export default function Cart() {
                 updatedCart = currentCart
             }
         }
+
         setCartItems(updatedCart)
         localStorage.setItem('cart', JSON.stringify(updatedCart))
     }
@@ -188,7 +189,8 @@ export default function Cart() {
         }
 
         localStorage.setItem('cart', JSON.stringify(currentCart))
-        setCartItems(currentCart)
+        setCartItems(currentCart);
+
     } 
 
     
@@ -200,6 +202,7 @@ export default function Cart() {
         acc[item.eventId] = {
         title: item.title,
         id: item.eventId,
+        img: item.image,
         vip: { qty: 0, price: item.vipPrice },
         regular: { qty: 0, price: item.regularPrice }
         };
@@ -245,7 +248,7 @@ export default function Cart() {
                     <div key={`${item.id}-${item.type}`}  className='h-45 w-9/10 bg-white p-2 flex flex-row items-center gap-4 rounded-sm md:h-auto md:w-3/4'>
 
                     <div className='md:w-1/2 w-3/5 relative'>
-                        <img src='/placeholder.jpg' alt="" className='rounded-sm'/>
+                        <img src={item.img} alt="" className='rounded-sm'/>
                         <MiniOverlay>
                             <h2 className='text-white font-bold text-2xl text-center'>
                                 {item.title}

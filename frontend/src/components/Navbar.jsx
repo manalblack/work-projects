@@ -22,7 +22,7 @@ export default function Navbar() {
 
 
     return(
-        <nav className="bg-lightPurple/70 w-full h-15 md:h-auto md:p-4 p-1 flex flex-row justify-between items-center fixed shadow-md z-99 top-0">
+        <nav className="bg-lightPurple/70 w-full h-15 md:h-auto md:p-4 flex flex-row justify-between items-center fixed shadow-md z-99 top-0">
             <div className="flex md:gap-0 gap-20 bg-red-0">
                 <div >
                     <Link to='/'>

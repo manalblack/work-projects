@@ -92,3 +92,5 @@ cart received in createTicket function
   vs code ports url [ https://p846l2pq-3001.uks1.devtunnels.ms/webhook/monnify ]
 
 https://ticket-hub-xwhv.onrender.com/verify/c0ab00c1-1995-4c65-9b31-7422d860c3e7?type=regular
+
+http://localhost:5173/verify/286b3fa4-cafa-4671-baaa-3ff047022247?type=vip

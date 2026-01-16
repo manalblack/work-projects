@@ -24,9 +24,7 @@ router.post('/verify-staff', (req, res) => {
     }
     
     console.log(password);
-
-
-})
+});
 
 router.post('/scan-tickets', async (req, res) => {
 

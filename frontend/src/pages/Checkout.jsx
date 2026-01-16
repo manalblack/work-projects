@@ -26,7 +26,7 @@ export default function Checkout(){
         }
         return {vip:0, regular:0}
     })
-    const [selectedEvent, setSelectedEvent] = useState(null)
+    const [selectedEvent, setSelectedEvent] = useState([])
     const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -61,54 +61,129 @@ export default function Checkout(){
    
 
     useEffect(() => {
-        const data = JSON.parse(sessionStorage.getItem('temp_ticket'));
+        const data = sessionStorage.getItem('temp_ticket');
 
         console.log('session data:', data);
 
         // console.log(data.eventData);
         
-        setSelectedEvent(data)
+        setSelectedEvent(JSON.parse(data));
         
     }, [])
 
-    const handelIncrement = (type, operator) => {
+  
 
-       const existingData = JSON.parse(sessionStorage.getItem('temp_ticket')) || {};
+    const storageItems = JSON.parse(sessionStorage.getItem('temp_ticket')) || [];
 
+    const storageSummery = storageItems.map(item => ({
+        ticket_id: item.eventId,
+        type: item.type,
+        quantity: item.qty
+    }))
 
-        const currentType = existingData[type] || {qty: 0, price: 0}
+     const metadata = {
+        "cart_summery": JSON.stringify(storageItems),
+        "summery": JSON.stringify(storageSummery),
+        "total_amount": storageItems.reduce((total, item) => total + (item.price * item.qty), 0),
+        "customer_name": formData.fullName,
+        "customer_email": formData.email,
+        "customer_phone": formData.phoneNumber
+    }
+    
 
-        const newQty = operator === '+' ? currentType.qty + 1 : Math.max(0, currentType.qty - 1); 
+    const updateQuantity = (type, event, operator) => {
+
+        console.log(event);
         
-        const updatedQuantities = {
-            ...existingData,
-            [type]: {
-                ...currentType,
-                qty: newQty
+
+        const currentTicket = JSON.parse(sessionStorage.getItem('temp_ticket')) || [];
+
+        const existingItemIndex = currentTicket.findIndex((item) => item.eventId === event.id && item.type === type);
+
+        let updatedStorage;
+
+        if(existingItemIndex > -1) {
+
+            updatedStorage = selectedEvent.map((item, index) => {
+            if (index === existingItemIndex) {
+                return {...item, qty: Math.max(1, item.qty + operator)}
+            }
+            return item
+        }); 
+        } else {
+            if(operator > 0){
+                const newTicket = {
+                    eventId: event.id,
+                    title: event.title,
+                    type: type,
+                    price: type == 'vip'? event.vip.price: event.regular.price,
+                    vipPrice: event.vip.price,
+                    regularPrice: event.regular.price,
+                    qty: 1
+                };
+                updatedStorage = [...currentTicket, newTicket];
+            } else {
+                updatedStorage = currentTicket
             }
         }
 
-        sessionStorage.setItem('temp_ticket', JSON.stringify(updatedQuantities))
+        setSelectedEvent(updatedStorage);
 
-        setSelectedEvent(updatedQuantities)
-        setQuantities({
-            regular: updatedQuantities.regular?.qty ||0,
-            vip: updatedQuantities.vip?.qty || 0
-        })
-
-
+        sessionStorage.setItem('temp_ticket', JSON.stringify(updatedStorage))
     }
 
+    const handelDecrease = (eventId, ticketType) => {        
+            
+        const currentTicket = JSON.parse(sessionStorage.getItem('temp_ticket')) || [];
 
+        // find the item
+        const existingItemIndex = currentTicket.findIndex((item) => item.eventId === eventId && item.type === ticketType);
 
-    // const location = useLocation()
-    // const {event, type, qty, price} = location.state || {}
+        if(existingItemIndex > -1) {
+            const item = currentTicket[existingItemIndex];
+            if (item.qty > 1) {
+                currentTicket[existingItemIndex].qty -= 1;
 
-    let total;
+            } else {
+                currentTicket.splice(existingItemIndex, 1)
+                toast.error('Removed 1 ticket')
+            }
+        }
 
-    if(selectedEvent) {
-        total = (selectedEvent.vip.price * selectedEvent.vip.qty) + (selectedEvent.regular.price * selectedEvent.regular.qty);
+        sessionStorage.setItem('temp_ticket', JSON.stringify(currentTicket))
+        setSelectedEvent(currentTicket);
+    } 
+    
+
+    const groupedItems = (selectedEvent || []).reduce((acc, item) => {
+    // If we haven't seen this event ID yet, create a base object
+    if (!acc[item.eventId]) {
+        acc[item.eventId] = {
+        title: item.title,
+        id: item.eventId,
+        img: item.image,
+        vip: { qty: 0, price: item.vipPrice },
+        regular: { qty: 0, price: item.regularPrice }
+        };
     }
+
+    // Assign the specific ticket data to the correct type
+        acc[item.eventId][item.type].qty = item.qty;
+
+    return acc;
+    }, {});
+
+    console.log(groupedItems)
+
+    // this line flip the grouped cart object into an array so that we can map over it
+    const displayItems = Object.values(groupedItems)
+    
+
+    const total = selectedEvent.reduce((total, item) => {
+        return total + (item.price * item.qty)
+    }, 0)
+
+
     
     const payWithMonnify = () => {
 
@@ -121,9 +196,11 @@ export default function Checkout(){
             apiKey: "MK_TEST_VM93KWVDC9",
             contractCode: '6713572503',
             paymentDescription: 'Event Ticket Purchase',
+            metaData: metadata,
             onComplete: function(response) {
                 if(response.status === 'SUCCESS') {
                     handelPostPaymentSuccess(response);
+                    return;
                 }
             },
            onClose: function(data) {
@@ -158,38 +235,39 @@ export default function Checkout(){
         <>
             <Navbar/>
             {/* The whole screen parent container */}
-            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-15 md:mt-17 md:gap-10 md:pt-5">
+            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-15 md:h-auto md:mt-17 md:gap-10 md:pt-5">
                 <Header>Checkout</Header>
-               <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8">
+               <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8 ">
                     {/* Current Ticket */}
-                    <div className="bg-white h-100 w-5/6 p-1 flex flex-col md:flex-row gap-5 justify-center items-center rounded-md shadow-lg px-2">
+                    {displayItems.map((item) => (
+                        <div key={`${item.id}-${item.type}`} className="bg-white p-1 flex flex-row gap-4 justify-center items-center rounded-md shadow-lg px-2 h-45 md:h-auto w-9/10 md:3/4">
 
-                        <div className="relative flex justify-center items-center w-5/6 md:w-1/2">
-                            <img src="/placeholder.jpg" alt="" className="rounded-md"/>
+                        <div className="relative flex justify-center items-center w-3/5 md:w-1/2">
+                            <img src={item.img} alt="" className="rounded-md"/>
                             <MiniOverlay>
                                 <div className="flex flex-col gap-5 text-white">
-                                    <span>event name</span>
-                                    <span>Event date / time</span>
-                                    <span>Address</span>
+                                    <h2 className="font-bold text-white text-center text-2xl">{item.title}</h2>
+                                    {/* <span>Event date / time</span>
+                                    <span>Address</span> */}
                                 </div>
                             </MiniOverlay>
                         </div>
 
-                        <div className="bg-red-40 h-40 w-9/10 md:w-1/2 flex flex-col gap-5 md:gap-10">
-                            <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-5">
+                        <div className="bg-red-40 h-40 w-1/2 flex flex-col gap-3 md:gap-6">
+                            <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-3">
                                 <p className="font-light text-lg">
-                                    VIP Ticket: {selectedEvent.vip.price}
+                                    VIP: {item.vip.price}
                                 </p>
 
 
                                 <div className="flex flex-row gap-5">
                                   
-                                    <button onClick={() => handelIncrement('vip', '-')} className="bg-darkPurple py- px-2 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
-                                        <TiMinus className="size-7 text-white"/>
+                                    <button onClick={() => handelDecrease(item.id, 'vip')} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                        <TiMinus className="size-5 text-white"/>
                                     </button>
-                                        <span className="font-extrabold text-xl">{quantities.vip}</span>
-                                    <button  onClick={() => handelIncrement('vip', '+')}className="bg-darkPurple py- px-2 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
-                                        <TiPlus className="size-7 text-white"/>
+                                        <span className="font-extrabold text-xl">{item.vip.qty}</span>
+                                    <button  onClick={() => updateQuantity('vip', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                        <TiPlus className="size-5 text-white"/>
                                     </button>
                                 </div>
 
@@ -197,19 +275,18 @@ export default function Checkout(){
                             </div>
                              <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-5">
                                 <p className="font-light text-lg">
-                                    Regular Ticket: {selectedEvent.regular.price}
+                                    Regular: {item.regular.price}
                                 </p>
 
 
                                 <div className="flex flex-row gap-5">
                                   
-                                    <button onClick={() =>
-                                        handelIncrement('regular', '-')} className="bg-darkPurple py- px-2 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
-                                        <TiMinus className="size-7 text-white"/>
+                                    <button onClick={() => handelDecrease(item.id, 'regular')} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                        <TiMinus className="size-5 text-white"/>
                                     </button>
-                                        <span className="font-extrabold text-xl">{quantities.regular}</span>
-                                    <button onClick={() => handelIncrement('regular', '+')} className="bg-darkPurple py- px-2 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
-                                        <TiPlus className="size-7 text-white"/>
+                                        <span className="font-extrabold text-xl">{item.regular.qty}</span>
+                                    <button onClick={() => updateQuantity('regular', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                        <TiPlus className="size-5 text-white"/>
                                     </button>
                                 </div>
 
@@ -218,6 +295,7 @@ export default function Checkout(){
                         </div>
 
                     </div>
+                    ))}
 
                     {/* Total Container */}
                     <div className="bg-darkPurple w-3/4 p-4 text-center rounded-3xl shadow-2xl md:w-100">

@@ -59,30 +59,38 @@ export default function PaymentOptions({eventData}) {
     }
 
     const handelAddToStorage = (type) => {
-        // const directPurchase = { 
-        //     eventData, 
-        //     type: type, 
-        //     price: type === 'vip' ? eventData.vip_price : eventData.regular_price, 
-        //     qty: 1 
-        // };
+    
+      const currentTicket = JSON.parse(sessionStorage.getItem('temp-ticket ')) || [];
 
-        const directPurchase = {
+        console.log('current cart item');
+        console.log(currentTicket);
+        
+        // Logic to prevent duplicates and only update the qty property
+        const existingItemIndex = currentTicket.findIndex((item) => item.eventId === eventData.id && item.type == type)
+
+        if(existingItemIndex > -1) {
+            currentTicket[existingItemIndex].qty += 1
+        } else {
+            const newTicket = {
             eventId: eventData.id,
             title: eventData.title,
-            regular: {
-                qty: type === "regular" ? quantities.regular + 1 : 0,
-                price: eventData.regular_price,
-                subtotal: quantities.regular * eventData.regular_price
-                },
-                vip: {
-                qty: type === "vip" ? quantities.vip + 1 : 0,
-                price: eventData.vip_price,
-                subtotal: quantities.vip * eventData.vip_price
-    },
+            type: type,
+            price: type === 'vip'? eventData.vip_price: eventData.regular_price,
+            vipPrice: eventData.vip_price,
+            regularPrice: eventData.regular_price,
+            qty: 1,
+            image: eventData.image
+            }
+            currentTicket.push(newTicket)
+
+            sessionStorage.setItem('temp_ticket', JSON.stringify(currentTicket))
+
+            navigate('/checkout');
         }
 
-        sessionStorage.setItem('temp_ticket', JSON.stringify(directPurchase))
-        navigate('/checkout');
+        // sessionStorage.setItem('cart', JSON.stringify(currentTicket))
+
+
 
     }
 
@@ -112,7 +120,8 @@ export default function PaymentOptions({eventData}) {
             price: type === 'vip'? eventData.vip_price: eventData.regular_price,
             vipPrice: eventData.vip_price,
             regularPrice: eventData.regular_price,
-            qty: 1
+            qty: 1,
+            image: eventData.image
             }
             currentCart.push(newCartItem)
         }
