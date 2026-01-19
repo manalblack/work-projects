@@ -7,12 +7,11 @@ import toast from 'react-hot-toast';
 
 // https://p846l2pq-3001.uks1.devtunnels.ms/
 
-export default function Admin() {
+export default function Staff() {
 
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const testId = '41446b84-e713-4cbc-9a5d-e14a5029cbcb';
 
     const allowAccess = async () => {
         try {
@@ -20,15 +19,14 @@ export default function Admin() {
 
             if (response.data.accessGranted) {
                 console.log('access granted !');
-                // alert('welcome staff member');
+                
                 toast.success('Access granted! welcome staff member', {
                     position: "top-center",
                 })
                 localStorage.setItem('pass', response.data.staffToken);
-                // navigate(`/verify/${testId}?type=vip`);
+              
                 navigate('/successful-login')
             } else {
-                // alert('get out of here unauthorized access !! ');
                 toast.error('Unauthorized access! get out', {
                     position: "top-center",
                 })

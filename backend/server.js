@@ -20,6 +20,9 @@ dotenv.config();
 
 const app = express();
 
+// Resend setup
+const resend = new Resend(process.env.RESEND_KEY)
+
 // middleware setp
 const corsOptions = {
     origin: ['http://localhost:5173', 'https://ticket-hub-xwhv.onrender.com']
@@ -107,6 +110,7 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
     const doc = new PDFDocument({size: [400, 400],
         margins: {top:0, left:0, right:0, bottom:0}
     });
+
     let chunks = [];
 
     doc.on('data', (chunk) => chunks.push(chunk));
@@ -122,6 +126,7 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
 
         if(uploadError) return uploadError;
 
+        // fetching the pdf url to store it in the tickets table 
         const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`)
         updateDb(eventId)
 
@@ -149,6 +154,9 @@ async function generatePdfTicket({customerName, customerEmail, ticketId, verifyU
 
         // if(countError) console.log('could not update count', countError);
     })
+
+    
+
 
     /* PDF DESIGN */
 
@@ -240,7 +248,7 @@ async function createTicket(eventData){
 
 
             attachments.push({
-                fileName: `ticket_${ticketId}.pdf`,
+                filename: `ticket_${ticketId}.pdf`,
                 content: pdfBuffer
             })
 
@@ -249,22 +257,23 @@ async function createTicket(eventData){
 
         
         // testing resend with more then one ticket attachments. BUG: this is not working check the notes file for error
-        // const {data, error} = await resend.emails.send({
-        // from: 'onboarding@resend.dev',
-        // to: 'green.engil13@gmail.com',
-        // subject: 'Hello from Resend!',
-        // html: '<p>This email was sent using Resend!, see your ticket</p>',
-        // attachments: attachments
-        // });
+        const {data: resendData, error} = await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: 'green.engil13@gmail.com',
+            subject: 'Hello from Resend!',
+            html: '<p>This email was sent using Resend!, see your ticket</p>',
+            attachments: attachments
+        });
 
-        // if(error) {
-        //     return console.log('error sending email', error);
-        // }
+        if(error) {
+            return console.log('error sending email', error);
+        }
 
-        console.log('email sent');
-    }
+        console.log('EMAIL SENT');
+        console.log(resendData)
+    };
     
-}
+};
 
 
 // this rote is working and the ticket is being saved to db in storage and the tickets table. BUG: THIS ROUTE IS NOT RETURNING ANYTHING fix it before you try to do anything else

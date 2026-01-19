@@ -21,7 +21,7 @@ export default function Rightbar({isOpen, closeSidebar}) {
                     transition={{type: 'spring', damping: 25, stiffness: 200}}
                     onClick={(e) => e.stopPropagation()} 
                     className={`fixed top-0 right-0 h-full w-70 bg-lightPurple z-50 shadow-xl`}>
-                {/* Search container */}
+                {/* Search container  MAKE IT FUNCTIONAL ASAP*/}
                 <div className="flex justify-center items-center p-4 ">
                     <input type="text" placeholder="Search events" className="bg-white px-8 py-1 rounded-2xl shadow-lg"/>
                 </div>

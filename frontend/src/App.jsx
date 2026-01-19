@@ -1,25 +1,20 @@
 import { Suspense, lazy } from 'react'
 import './App.css'
-// import Home from './pages/Home'
-// import Checkout from './pages/Checkout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-// import Events from './pages/Events'
-// import Cart from './pages/Cart'
 import {Toaster} from 'react-hot-toast';
-// import StaffSuccessfulLogin from './pages/StaffSuccessfulLogin';
-// import Success from './pages/Success';
-// import Admin from './pages/Admin'
-// import Verify from './pages/Verify'
+
 
 const Home = lazy(() => import('./pages/Home'));
 const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const Events = lazy(() => import('./pages/Events'));
-const Admin = lazy(() => import('./pages/Admin'));
+const Staff = lazy(() => import('./pages/Staff'));
 const Verify = lazy(() => import('./pages/Verify'));    
 const StaffSuccessfulLogin = lazy(() => import('./pages/StaffSuccessfulLogin'));   
 const Success = lazy(() => import('./pages/Success'));
 
+// Admin pages
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 
 function App() {
 
@@ -31,16 +26,22 @@ function App() {
         <Suspense fallback={<div>Loading...</div>}>
 
         <Routes>
+          {/* public routes */}
           <Route path='/' element={<Home />}/>
           <Route path='/checkout' element={<Checkout />}/>
           <Route path='/events' element={<Events /> } />
           <Route path='/cart' element={<Cart />} />
 
-          <Route path='/admin-setup' element={<Admin />}/>
+          {/* staff routes */}
+          <Route path='/staff-setup' element={<Staff />}/>
           <Route path='/verify/:ticketId' element={<Verify />}/>
           <Route path='/successful-login' element={<StaffSuccessfulLogin
           />}/>
           <Route path='/success' element={<Success />}/>
+
+          {/* Admin route / setup */}
+          <Route path='/admin' element={<AdminDashboard />}/>
+          
         </Routes>
         </Suspense>
       </BrowserRouter>

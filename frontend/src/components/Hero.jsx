@@ -6,29 +6,17 @@ import LightPurpleBtn from './LightPurpleBtn'
 import PriceContainer from './PriceContainer'
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import {useNavigate} from 'react-router-dom'
 import PaymentOptions from "./PaymentOptions";
 import {motion} from 'motion/react'
 import {supabase} from '../supabaseConnection.js'
 
 
-const heroEventId = 'hero1'
 
-const currentEvent  = {
-    id: 11,
-    title: ' Black lights event',
-    description: ' Lorem ipsum dolor sit amet, consectetur adipisicing elit. ',
-    vip_price: 5500,
-    regular_price: 2000,
-    date: 'Date: Oct/10', 
-    time: '10:00am',
-}
 
 export default function Hero(){
 
     const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null)
     const [aboutPay, setAboutPay] = useState(false);
     const [ongoingEvent, setOngoingEvent] = useState([])
     
@@ -45,7 +33,7 @@ export default function Hero(){
         setAboutPay(true)
     }
 
-     useEffect(() => {
+    useEffect(() => {
         try {
             const fetchCurrentEvent = async () => {
                 const {data, error} = await supabase.from('events').select('*').eq('current_event', true)
@@ -66,7 +54,7 @@ export default function Hero(){
             console.log('error fetching current even from db', error);
             
         }
-     }, [])
+    }, [])
 
 
 
@@ -82,11 +70,8 @@ export default function Hero(){
 
                 <div className="relative w-full md:w-9/10 group rounded-xl">
                     <img src={ongoingEvent.image} alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
-                    <p>
-                        {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam quae, rem suscipit inventore aliquid, animi tempore ut quas nostrum totam cupiditate. Natus ipsa quo aut voluptatibus numquam odit, tempore eius! */}
-                    </p>
                     <MiniOverlay>
-                        <div className="bg-black text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4">
+                        <div className="bg-black/50 text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4">
                             <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-1 mt-15 md:mt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Navbar from '../components/Navbar'
 import LightBtn from "../components/LightBtn";
-import Overlay from "../components/Overlay";
 import MiniOverlay from "../components/MiniOverlay";
 import { TiMinus, TiPlus } from "react-icons/ti";
 import Header from '../components/Header'
@@ -10,22 +9,9 @@ import toast from 'react-hot-toast';
 
 
 
-const vipPrice = 3000;
-const regularPrice = 1000
 
 export default function Checkout(){
 
-    const [quantities, setQuantities] = useState(() => {
-    const savedData = sessionStorage.getItem('temp_ticket')
-        if(savedData) {
-            const parsed = JSON.parse(savedData)
-            return {
-                vip: parsed.vip?.qty || 0,
-                regular: parsed.regular?.qty || 0
-            };
-        }
-        return {vip:0, regular:0}
-    })
     const [selectedEvent, setSelectedEvent] = useState([])
     const [formData, setFormData] = useState({
     fullName: '',
@@ -204,16 +190,12 @@ export default function Checkout(){
                 }
             },
            onClose: function(data) {
-                if(data.status === ' SUCCESS') {
-                    return;
-                }
-                
+               if(data.status === 'SUCCESS') return;
                 toast.error('payment cancelled')
             }
         })
            
     } 
-    
     
     
     const handelFormSubmission = (e) => {
@@ -227,9 +209,6 @@ export default function Checkout(){
         return <div>loading....</div>
     }
 
-    const testFunc = () => {
-        
-    } 
 
     return(
         <>
@@ -247,8 +226,6 @@ export default function Checkout(){
                             <MiniOverlay>
                                 <div className="flex flex-col gap-5 text-white">
                                     <h2 className="font-bold text-white text-center text-2xl">{item.title}</h2>
-                                    {/* <span>Event date / time</span>
-                                    <span>Address</span> */}
                                 </div>
                             </MiniOverlay>
                         </div>

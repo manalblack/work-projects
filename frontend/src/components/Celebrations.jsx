@@ -6,8 +6,6 @@ import {motion} from 'motion/react';
 
 
 
-
-// Style this component ASAP
 export default function Celebrations(){
 
     return(
@@ -18,7 +16,6 @@ export default function Celebrations(){
                 transition={{ duration: 1, ease: "easeOut" }}
                 viewport={{amount: 0.2 }}
              className="relative">
-                {/* fix the image width */}
                 <img src="/placeholder.jpg" alt="" className=""/>
                 <MiniOverlay>
                     <div className="bg-blac absolute bottom-0 left-0 w-full md:w- h-60 p-2 md:h-70 flex flex-col  md:gap-10">

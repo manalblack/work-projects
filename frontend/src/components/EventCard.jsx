@@ -7,44 +7,11 @@ import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import PaymentOptions from "./PaymentOptions";
 import { supabase } from "../supabaseConnection";
-/* 
-     <div className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70">
 
-            <div className="relative flex justify-center items-center">
-                <img src="/placeholder.jpg" alt="" className="w-auto rounded-sm shadow-lg"/>
-            <MiniOverlay>
 
-                <div className="bg-black/40 absolute bottom-0 left-0 w-full h-40 flex flex-row justify-between md:gap-8">
 
-                    <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4">
-                        <h2 className="text-2xl text-white font-bold">
-                            Event name
-                        </h2>
-                        <p className="text-white font-light">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim, ut.
-                        </p>
-                        <PriceContainer>
-                            N2,000
-                        </PriceContainer>
-                    </div>
-                    <div className="flex flex-col justify-center items-center p-2 gap-5 mt-5 md:mt-0 md:gap-8">
-                        <LightPurpleBtn>
-                            AboutEvent
-                        </LightPurpleBtn>
-                        <LightBtn>
-                            Book ticket
-                        </LightBtn>
-                    </div>
 
-                </div>
 
-            </MiniOverlay>
-
-            </div>
-           
-        </div>
-
-*/
 
 
 export default function EventCard() {
@@ -83,18 +50,18 @@ export default function EventCard() {
         console.log(eventData);
         setSelectedEvent(eventData)
         setAboutModal(true)
-        // setSelectedEvent(eventData)
     }
 
     const handelAboutEventPayBtn = () => {
         setAboutPay(true)
     }
+    
 
     return(
        <>
         {allEvents.map((event) => (
             <div key={event.id}
-             className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80">
+             className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70">
 
             <div className="relative flex justify-center items-center h-auto w-full ">
                 <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg"/>
@@ -112,8 +79,13 @@ export default function EventCard() {
                         <PriceContainer>
                             N{event.regular_price}
                         </PriceContainer>
-                        <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                        {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
                             Remaining tickets: {event.total_tickets}
+                        </span> */}
+                        <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
+                            {event.date}, {event.time}
+                            <br />
+                            Venue: 1234 Event center
                         </span>
                         
                     </div>
@@ -134,7 +106,7 @@ export default function EventCard() {
            
         </div> 
             ))}
-         {/* <div className="md:w-120 w-90 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-90 md:h-100">
+        
 
             <div className="relative flex justify-center items-center overflow-hidden">
                 <img src="/placeholder.jpg" alt="" className="w-auto h-80 md:h-auto md: w-5/6 rounded-sm shadow-lg"/>
@@ -175,8 +147,7 @@ export default function EventCard() {
             </MiniOverlay>
 
             </div>
-           
-        </div> */}
+        
 
             {/* modals section */}
             <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>

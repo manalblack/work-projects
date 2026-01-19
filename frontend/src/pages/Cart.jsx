@@ -8,16 +8,6 @@ import MiniOverlay from '../components/MiniOverlay';
 import axios from 'axios';
 
 
-/*  Steps to link database with localstorage cart
-    When they click "Pay" or "Confirm Purchase," you trigger a function.
-
-   That function takes the items from their LocalStorage and sends a request to your Supabase database to say: "Someone just bought 2 tickets for Event A, please subtract 2 from the total stock."
-
-    TODO VERY IMPORTANT {
-        calculate the tickets quantity, event id and the username to send it as metadata to monnify to access it in the backend
-    }
-*/
-
 export default function Cart() {
 
     const [cartItems, setCartItems] = useState([]);
@@ -36,12 +26,7 @@ export default function Cart() {
         }))
     }
 
-    // const quantitySummery = () => {
-
-    //     const allTickets = cartItems.reduce((acc, ticket) => {
-    //         const id = ticket
-    //     })
-    // }
+    
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart')
@@ -91,7 +76,7 @@ export default function Cart() {
         "customer_phone": formData.phoneNumber
     }
 
-    // Monneify Testing 
+    // Monneify Testing ADD THE REAL ACCOUNT
     const payWithMonnify = () => {
 
         window.MonnifySDK.initialize({
@@ -197,7 +182,6 @@ export default function Cart() {
   
 
     const groupedCart = cartItems.reduce((acc, item) => {
-    // If we haven't seen this event ID yet, create a base object
     if (!acc[item.eventId]) {
         acc[item.eventId] = {
         title: item.title,
@@ -223,16 +207,6 @@ export default function Cart() {
         return total + (item.price * item.qty)
     }, 0)
     
-    // test backend route
-    const testBackendRoute = async () => {
-
-        try {
-            await axios.post('http://localhost:3001/test-route');
-            console.log('route running')
-        } catch (error) {
-            console.log('route not running correctly', error)
-        }
-    }
 
     console.log(displayItems);
 
@@ -311,11 +285,10 @@ export default function Cart() {
                 <span className="font-bold text-xl text-white">
                     Total: ₦{total}
                 </span>
-                {/* <button onClick={testBackendRoute} className='bg-white px-2 py-2'>test</button> */}
+               
             </div>
 
-            {/* user information and monnify linking */}
-             <div className="w-9/10 md:w-120">
+            <div className="w-9/10 md:w-120">
                 <form action="" className="bg-darkPurple h-100 flex flex-col justify-center items-center gap-8 rounded-sm">
                     <input type="text" placeholder="Name" name='fullName' value={formData.fullName} onChange={handelFormChange}
                      className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>

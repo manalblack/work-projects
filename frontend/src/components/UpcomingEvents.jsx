@@ -16,8 +16,8 @@ export default function UpcomingEvents(){
         <div id="upcomingEvents"
             
         className="flex flex-col overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center p-5 px-4">
-            {/* <span className="m-auto">Swipe to see</span> */}
-           <div className="bg-bl flex flex-row gap-5 items-center">
+           
+           <div className="bg-bl flex flex-row gap-5 items-center overflow-hidden">
                 <span className="text-white font-light">
                     Swipe to see all events
                 </span>
@@ -30,9 +30,6 @@ export default function UpcomingEvents(){
             viewport={{amount: 0.3 }}
             className="flex flex-row overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center h-100 p-5 px-4">
                 <EventCard />
-                {/* <EventCard />
-                <EventCard />
-                <EventCard /> */}
             </motion.div>
         </div>
     )

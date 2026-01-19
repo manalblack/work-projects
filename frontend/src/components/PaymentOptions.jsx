@@ -19,17 +19,12 @@ export default function PaymentOptions({eventData}) {
 
     const [addToCartModal, setAddToCartModal] = useState(false);
     const [payNowModal, setPayNowModal] = useState(false);
-     const [quantities, setQuantities] = useState({
-        vip: 0,
-        regular: 0
-    })
+
     const [ticketsAvailability, setTicketsAvailability] = useState(true);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
 
 
-    console.log(eventData);
-    
-    // check ticket availability
     useEffect(() => {
 
         const checkTicket = async () => {
@@ -46,12 +41,9 @@ export default function PaymentOptions({eventData}) {
     }, [])
 
 
-    const navigate = useNavigate()
+    
 
-    const handelPayNowBtn = (type, quantity) => {  
-        // const directPurchase = { eventData, type, quantity, price: type === 'vip' ? eventData.vip_price : eventData.regular_price, qty: 1 };
-        // sessionStorage.setItem('temp_ticket', JSON.stringify(directPurchase))
-        // navigate('/checkout');
+    const handelPayNowBtn = () => {  
         console.log(eventData);
         
         setPayNowModal(true)
@@ -87,10 +79,6 @@ export default function PaymentOptions({eventData}) {
 
             navigate('/checkout');
         }
-
-        // sessionStorage.setItem('cart', JSON.stringify(currentTicket))
-
-
 
     }
 

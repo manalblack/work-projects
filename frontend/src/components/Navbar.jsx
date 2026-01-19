@@ -13,7 +13,6 @@ export default function Navbar() {
 
     const [openSidebar, setOpenSidebar] = useState(false)
 
-    const navigate = useNavigate();
 
     const handelOpenSidebar = () => {
         setOpenSidebar(true)
@@ -60,9 +59,6 @@ export default function Navbar() {
 
             </div>
             <Rightbar isOpen={openSidebar} closeSidebar={() => setOpenSidebar(false)}/>
-            {/* <Overlay isOpen={openSidebar} closeOverlay={setOpenSidebar}>
-                <Rightbar isOpen={openSidebar}/>
-            </Overlay> */}
         </nav>
     )
 }

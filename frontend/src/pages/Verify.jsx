@@ -25,7 +25,7 @@ export default function Verify() {
     const ticketType = searchParams.get('type');
     const navigate = useNavigate();
 
-    // const pass = localStorage.getItem('pass')
+
     const passKey = import.meta.env.VITE_ADMIN_PASS;
 
 
@@ -50,7 +50,6 @@ export default function Verify() {
 
         if (pass === passKey){
             setIsStaff(true);
-            // database query here to check if a ticket is scanned or not
         } else {
             setIsStaff(false);
         }
@@ -75,15 +74,11 @@ export default function Verify() {
                    setIsScanned(true);
                 }
 
-                // setIsScanned(true);
                 setTicketStatus(false);
-                // if(data.is_scanned) {
-                //     setIsScanned(true)
-                //     setTicketStatus(false);
-                // }
-
+                
                 console.log(data);   
-                // setTicketStatus(data)
+
+
             } catch (error) {
                 console.log('error when checking ticket status', error);
                 
@@ -96,11 +91,12 @@ export default function Verify() {
 
     const isVip = ticketType === 'vip';
 
-    {/* when the verify button is clicked, 1 it will mark the ticket as scanned in the db and then decrease the number of available tickets in the events table*/}
+    
     const handelTicketVerification = async () => {
             setVerifyTicket(true)
             try {
                 
+                // this is a vs code ports tunnel
                 // const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/scan-tickets', {
                 //     ticketId: ticketId,
                 //     bouncerId: passKey
@@ -118,7 +114,7 @@ export default function Verify() {
             } catch (error) {
                 console.log('error when checking ticket status', error)
             }
-     }
+    }
         
         
     

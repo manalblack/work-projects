@@ -4,9 +4,6 @@ import MiniBox from './MiniBox';
 import {motion} from 'motion/react'
 
 
-// Whatsapp link: https://wa.me/2347010010044
-// Tiktok link: https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-92goKd7e6dt
-// Instagram Link: https://www.instagram.com/trv.ev?igsh=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr
 
 export default function SocialContact(){
 
