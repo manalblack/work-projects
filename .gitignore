@@ -2,6 +2,6 @@
 .env
 .env.local
 .env.production
-
+notes
 # Ignore backend specific ones if they have different names
 backend/.env
