@@ -125,7 +125,7 @@ export default function AddEvents () {
         <>
             <nav className="bg-lightPurple shadow-md py-2 px-5 flex flex-row justify-between">
                 <button className="bg-darkPurple text-white px-3 font-bold rounded-xl py-1 shadow-md active:scale-85 transition-all duration-300 ease-in-out">
-                    <Link to='/admin'>
+                    <Link to='/admin/dashboard'>
                         Dashboard
                     </Link>
                 </button>

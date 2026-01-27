@@ -102,7 +102,7 @@ export default function CreateTicket(){
                     <div className="flex flex-row justify-center items-center gap-10 md:justify-between bg-green-00 md:w-3/4 md:">
 
                         <button className="bg-darkPurple text-white px-3 rounded-xl py-1">
-                           <Link to='/admin'>
+                           <Link to='/admin/dashboard'>
                               Dashboard
                            </Link>
                         </button>

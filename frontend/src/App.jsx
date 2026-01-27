@@ -19,7 +19,8 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const CustomerTicket = lazy(() => import('./pages/admin/FindTicket'));
 const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
 const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
-
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'))
 
 function App() {
 
@@ -44,11 +45,16 @@ function App() {
           />}/>
           <Route path='/success' element={<Success />}/>
 
-          {/* Admin route / setup */}
-          <Route path='/admin' element={<AdminDashboard />}/>
-          <Route path='/admin/search-tickets' element={<CustomerTicket/>} />
-          <Route path='/admin/add-events' element={<AddEvents />} />
-          <Route path='/admin/create-ticket' element={<CreateTicket />}/>
+          <Route path='/admin-login' element={<AdminLogin />}/>
+          {/* Admin routes / setup */}
+          <Route element={<AdminProtectedRoute />}>
+            <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+            <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
+            <Route path='/admin/add-events' element={<AddEvents />} />
+            <Route path='/admin/create-ticket' element={<CreateTicket />}/>
+          </Route>
+
+          
           
         </Routes>
         </Suspense>

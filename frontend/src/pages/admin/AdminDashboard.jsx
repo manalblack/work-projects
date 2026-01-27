@@ -6,6 +6,7 @@ import DUMMY_EVENTS from "../../testData";
 import AllEvents from "../../components/admin-components/AllEvents";
 import axios from 'axios';
 import Loading from "../../components/Loading";
+import { supabase } from "../../supabaseConnection";
 
 
 // Add the event to the database and work on the number input fields they nee fixing
@@ -14,7 +15,7 @@ export default function AdminDashboard() {
 
     const [addEventModal, setAddEventModal] = useState(false);
     // const [eventDate, setEventDate] = useState(new Date());
-
+    const [ongoingEvent, setOngoingEvent] = useState(false);
 
     const [allEvents, setAllEvents] = useState([])
     const [loading, setLoading] = useState(true);
@@ -50,7 +51,15 @@ export default function AdminDashboard() {
 
 
 
-    
+    const handelOngoingBox = async () => {
+        // const newValue = !ongoingEvent;
+        // const {error} = supabase.from('events').update({current_event: newValue});
+        
+        // if(error) {
+        //     alert('error updating event Status')
+        // }
+        // setOngoingEvent(newValue);
+    }
 
     /*
         title, date, time, location, image, regular_price, vip_price
@@ -105,15 +114,16 @@ export default function AdminDashboard() {
                        
                     </h2>
 
-                    <div className="bg-darkPurple flex md:flex-row flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center">
-                        <div className="md:w-1/2 flex flex-col gap-2 justify-center items-center">
-                            <div className="bg-green-00 w-full flex">
-                                <IoEllipsisVerticalCircle className="size-8 ml-auto text-white"/>
-                            </div>
-                            <img src={currentEvent.image} alt="" className="rounded-sm"/>
+                    <div className="bg-darkPurple flex md:flex-w flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center"> 
+                     {/* <IoEllipsisVerticalCircle className="size-8 ml-auto text-white md:mr-auto self-start"/> */}
+                        <div className="md:w-5/6 flex flex-col gap-2 justify-center items-center md:gap-15 md:h-full bg-red-30">
+                            {/* <div className="bg-green-200 w-full flex md:mr-auto items-start">
+                                <IoEllipsisVerticalCircle className="size-8 ml-auto text-white md:mr-auto"/>
+                            </div> */}
+                            <img src={currentEvent.image} alt="" className="rounded-sm shadow-md w-9/10"/>
                             <h3 className="text-white text-2xl">
-                            Title: {currentEvent.title}
-                        </h3>
+                                Title: {currentEvent.title}
+                            </h3>
                         </div>
                         {/* 2nd container */}
                         <div className="md:w-3/4 flex flex-col gap-3 justify-center items-center bg-green-00">
@@ -121,18 +131,18 @@ export default function AdminDashboard() {
                             <p className="text-white leading-7 "> Description: {currentEvent.description}
                             </p>
                             {/* Price / ticket count container */}
-                            <div className="bg-white/70 flex flex-row justify-between p-2 rounded-sm shadow-lg">
+                            <div className="bg-white/70 flex flex-row justify-between p-2 rounded-sm shadow-lg ">
                                 <div className="flex flex-col gap-2">
                                     <span className="font-bold">Vip Price: {currentEvent.vip_price}</span> 
                                     <span className="font-bold">
                                         Regular price: {currentEvent.regular_price}</span> 
                                 </div>
 
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 bg-blue-300">
                                     <span className="font-bold">
                                         Remaining Tickets: {currentEvent.total_tickets}
                                     </span>
-                                    <span className="font-bold">
+                                    <span className="font-bold md:ml-5">
                                         Sold Tickets: {currentEvent.sold_tickets}
                                     </span>
                                 </div>       
@@ -193,7 +203,7 @@ export default function AdminDashboard() {
 
                                         <div className="flex flex-row gap-2">
                                             <label htmlFor="">Ongoing</label>
-                                            <input type="checkbox" className="h-5 w-5"/>
+                                            <input type="checkbox" checked={ongoingEvent} onChange={handelOngoingBox} className="h-5 w-5"/>
                                         </div>
                                     </div>
 
