@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import toast from 'react-hot-toast';
 import MiniOverlay from '../components/MiniOverlay';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Cart() {
@@ -16,6 +17,7 @@ export default function Cart() {
         email: '',
         phoneNumber: '',
     })
+    const navigate = useNavigate();
 
     const handelFormChange = (e) => {
         const {name, value} = e.target;
@@ -107,18 +109,11 @@ export default function Cart() {
 
     const handelFormSubmission = (e) => {
         e.preventDefault();
-        console.log(formData);
-        
-
-        console.log(cartItems);
         payWithMonnify();
         // alert('information submitted !!');
     }
 
-    const updateQuantity = (type, event, operator) => {
-
-        console.log(event);
-        
+    const updateQuantity = (type, event, operator) => {     
 
         const currentCart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -143,7 +138,8 @@ export default function Cart() {
                     price: type == 'vip'? event.vip.price: event.regular.price,
                     vipPrice: event.vip.price,
                     regularPrice: event.regular.price,
-                    qty: 1
+                    qty: 1, 
+                    image: event.img
                 };
                 updatedCart = [...currentCart, newTicket];
             } else {
@@ -208,14 +204,16 @@ export default function Cart() {
     }, 0)
     
 
-    console.log(displayItems);
+    // if(!cartItems) {
+    //     navigate('/')
+    // }
 
 
     return(
        <>
         <Navbar />
 
-        <main className='w-full bg-lightPurple mt-15 pt-5 flex flex-col items-center gap-5 pb-5 md:gap-15 md:mt-17'>
+        <main className='w-full bg-lightPurple mt-15 pt-5 flex flex-col items-center gap-5 pb-5 md:gap-15 md:mt-20'>
             <Header>Cart</Header>
             <div className='flex flex-col justify-center items-center gap-5 w-full md:mt-1'>
                 {displayItems.map((item) => (
@@ -231,7 +229,7 @@ export default function Cart() {
                     </div>
 
                     <div className="bg-red-0 h- w-1/2 flex flex-col gap-3 md:gap-6">
-                        <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-3">
+                        <div className=" py-1 flex flex-col gap-3 justify-center items-center md:py-3">
                             <p className="font-light text-">
                                 VIP Ticket: {item.vip.price}
                             </p>
@@ -240,35 +238,35 @@ export default function Cart() {
                             <div className="flex flex-row gap-5">
                                 
                                 <button onClick={() => handelDecrease(item.id, 'vip')}
-                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                     <TiMinus className="size-5 text-white"/>
                                 </button>
                                     <span className="font-extrabold text-xl">
                                         {item.vip.qty}
                                     </span>
                                 <button onClick={() => updateQuantity('vip', item, 1)}
-                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                     <TiPlus className="size-5 text-white"/>
                                 </button>
                             </div>
 
 
                         </div>
-                        <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-3">
+                        <div className="py-1 flex flex-col gap-3 justify-center items-center md:py-3">
                             <p className="font-light text-">
                                 Regular Ticket: {item.regular.price}
                             </p>
 
 
-                            <div className="flex flex-row gap-3">
+                            <div className="flex flex-row gap-5">
                                 
                                 <button onClick={() => handelDecrease( item.id, 'regular')}
-                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                     <TiMinus className="size-5 text-white"/>
                                 </button>
                                     <span className="font-extrabold text-xl">{item.regular.qty}</span>
                                 <button onClick={() => updateQuantity('regular', item, 1)}
-                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                     <TiPlus className="size-5 text-white"/>
                                 </button>
                             </div>

@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
+// import CustomerTicket from './pages/admin/CustomerTicket';
 
 
 const Home = lazy(() => import('./pages/Home'));
@@ -14,7 +15,11 @@ const StaffSuccessfulLogin = lazy(() => import('./pages/StaffSuccessfulLogin'));
 const Success = lazy(() => import('./pages/Success'));
 
 // Admin pages
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const CustomerTicket = lazy(() => import('./pages/admin/FindTicket'));
+const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
+const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
+
 
 function App() {
 
@@ -41,6 +46,9 @@ function App() {
 
           {/* Admin route / setup */}
           <Route path='/admin' element={<AdminDashboard />}/>
+          <Route path='/admin/search-tickets' element={<CustomerTicket/>} />
+          <Route path='/admin/add-events' element={<AddEvents />} />
+          <Route path='/admin/create-ticket' element={<CreateTicket />}/>
           
         </Routes>
         </Suspense>

@@ -29,7 +29,7 @@ export default function PaymentOptions({eventData}) {
 
         const checkTicket = async () => {
 
-            const response = await axios.post('https://organological-shaunta-exceptionably.ngrok-free.dev/api/check-tickets-quantity', {eventId: eventData.id}) 
+            const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id}) 
 
             setTicketsAvailability(response.data.isAvailable)
             console.log(response.data);
@@ -130,7 +130,7 @@ export default function PaymentOptions({eventData}) {
     if(loading) {   
         return <div className="text-white flex flex-col gap-8 p-4 justify-center items-center w-9/10">
             <IoCogOutline  className='size-15 text-white animate-spin'/>
-            <p className="text-white md:text-xl font-bold">Checking Tickets Availability</p>
+            <p className="text-white md: font-bold">Checking Tickets Availability</p>
         </div>
     }
 

@@ -7,7 +7,7 @@ import Modal from "../components/Modal";
 import PaymentOptions from "../components/PaymentOptions";
 import Footer from '../components/Footer'
 import { supabase } from "../supabaseConnection";
-
+import Loading from '../components/Loading'
 
 
 export default function Events() {
@@ -18,15 +18,19 @@ export default function Events() {
     const [aboutModal, setAboutModal] = useState(false);
     const [aboutPay, setAboutPay] = useState(false)
     const [allEvents, setAllEvents] = useState([]); 
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(()=> {
+        setLoading(true);
+
         const fetchEvents = async () => {
             const { data, error } = await supabase
                 .from('events')
                 .select('*');   
                 // TODO: add error handling
                 setAllEvents(data);
+                setLoading(false)
             }
 
 
@@ -50,6 +54,12 @@ export default function Events() {
         setAboutPay(true)
     }
 
+
+    if(loading) {
+        return <Loading>
+            Please wait a moment
+        </Loading>
+    }
 
     return(
        <>
@@ -78,16 +88,16 @@ export default function Events() {
                                         N{event.regular_price}
                                     </PriceContainer>
                                 </div>
-                                    <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-1 text-sm md:text-lg ">
+                                    <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-1 text-sm md:text-lg shadow-md">
                                         Date: {event.date}, Time: {event.time}
                                         <br />
                                         Venue: {event.location}
                                     </span>
                                     
                                 </div>
-                                <span className="bg-white/50 md:w-1/2 text-gray-800 md:px-2 py-1 rounded-2xl px-2 text-sm md:text-lg">
+                                {/* <span className="bg-white/50 md:w-1/2 text-gray-800 md:px-2 py-1 rounded-2xl px-2 text-sm md:text-lg">
                                     Remaining tickets: {event.total_tickets}
-                                </span>
+                                </span> */}
                             </div>
                             <div className="flex flex-col gap-5 mt-8 w-1/2 ">
                                 <LightBtn onPress={() => aboutEventModal(event)}>About Event</LightBtn>

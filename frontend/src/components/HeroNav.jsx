@@ -26,16 +26,16 @@ export default function HeroNav(){
 
             <div className="flex md:w-5/6 md:justify-between items-center justify-center gap-6 w-full bg-green-0 mt-2">
                <ScrollLink to='upcomingEvents' smooth={true} duration={500} offset={-100}>
-                    <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-95 active:bg-darkPurple active:text-white transition-all duration-300 ease-in-out">
+                    <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-85 active:bg-darkPurple active:text-white hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in-out">
                         Upcoming Events
                     </button>
                </ScrollLink>
 
-                <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-95 active:bg-darkPurple active:text-white transition-all duration-300 ease-in-out">
-                    <Link to='/admin-setup'>
-                    admin page
-                    </Link>
-                </button>
+                <ScrollLink>
+                    <button className="bg-white text-gray-700 font-bold w-/1-2 md:px-4 py-1 rounded-2xl md:text-lg shadow-md px-2 active:scale-85 active:bg-darkPurple active:text-white hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in-out">
+                        Previous Events
+                    </button>
+                </ScrollLink>
             </div>
             
         </motion.div>

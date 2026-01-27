@@ -71,8 +71,8 @@ export default function Hero(){
                 <div className="relative w-full md:w-9/10 group rounded-xl">
                     <img src={ongoingEvent.image} alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
                     <MiniOverlay>
-                        <div className="bg-black/50 text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4">
-                            <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-80 p-1 mt-15 md:mt-0 bg-green-00">
+                        <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4 pt-7 md:pt-0">
+                            <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-60 p-1 mt-20 md:mt-25 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}
                                 </h2> 
@@ -87,11 +87,11 @@ export default function Hero(){
                                 <br />
                                 Venue: 1234 Event center
                             </span>
-                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg md:w-3/4 w-full">
+                            {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg md:w-3/4 w-full">
                                 Remaining tickets: {ongoingEvent.total_tickets}
-                            </span>
+                            </span> */}
                             </div>
-                            <div className="bg-blue-0 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-0">
+                            <div className="bg-blu300 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-25">
                                 <LightBtn onPress={aboutEventModal}>
                                     About Event
                                 </LightBtn>
@@ -106,13 +106,21 @@ export default function Hero(){
             </motion.div>
             {/* About Event Modal */}
            <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
-                <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl"/>
-                <div className="bg-green-30 size-70 w-5/6">
+                <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl md:w-1/2"/>
+                <div className="bg-green-30  w-5/6 flex flex-col gap-8">
                     <p className="text-md text-white text-center ">
                         {ongoingEvent.description}
                     </p>
+                    <div className="md:flex gap-8 mb-2 hidden">
+                        <PriceContainer>
+                            N4,000
+                        </PriceContainer>
+                        <LightPurpleBtn onPress={handelAboutEventPayBtn}>
+                            Buy ticket
+                        </LightPurpleBtn>
+                    </div>
                 </div>
-                <div className="flex gap-8 mb-2">
+                <div className="flex gap-8 mb-2 md:hidden">
                     <PriceContainer>
                         N4,000
                     </PriceContainer>
@@ -120,6 +128,7 @@ export default function Hero(){
                         Buy ticket
                     </LightPurpleBtn>
                 </div>
+                
            </Modal>
            <Modal isOpen={aboutPay} closeModal={() => setAboutPay(false)}>
                 <PaymentOptions eventData={ongoingEvent}/>

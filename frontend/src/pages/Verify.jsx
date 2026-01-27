@@ -107,13 +107,13 @@ export default function Verify() {
                 })
                 if(response.data.message === 'SUCCESS'){
                     navigate('/success')
-                }
+                };
 
                 console.log(response);
                  
             } catch (error) {
                 console.log('error when checking ticket status', error)
-            }
+            };
     }
         
         

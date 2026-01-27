@@ -9,13 +9,12 @@ import { FaArrowRight } from "react-icons/fa";
     ADD ANIMATION TO THE REST OF THE COMPONENTS
 */
 
-
 export default function UpcomingEvents(){
 
     return (
         <div id="upcomingEvents"
             
-        className="flex flex-col overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center p-5 px-4">
+        className="flex flex-col overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center p-5 px-4 overflow-y-hidden">
            
            <div className="bg-bl flex flex-row gap-5 items-center overflow-hidden">
                 <span className="text-white font-light">
@@ -33,4 +32,4 @@ export default function UpcomingEvents(){
             </motion.div>
         </div>
     )
-}
+};

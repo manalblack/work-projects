@@ -10,6 +10,8 @@ import SocialContact from "../components/SocialContact";
 import Footer from "../components/Footer";
 
 
+/** NAMECHEAP DOMAIN ISSUE PLEASE GO TO YOUR EMAIL AND SOLVE THIS ISSUE. ASAP */
+
 
 export default function Home() {
 

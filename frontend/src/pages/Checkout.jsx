@@ -105,7 +105,8 @@ export default function Checkout(){
                     price: type == 'vip'? event.vip.price: event.regular.price,
                     vipPrice: event.vip.price,
                     regularPrice: event.regular.price,
-                    qty: 1
+                    qty: 1, 
+                    image: event.img
                 };
                 updatedStorage = [...currentTicket, newTicket];
             } else {
@@ -214,24 +215,24 @@ export default function Checkout(){
         <>
             <Navbar/>
             {/* The whole screen parent container */}
-            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-15 md:h-auto md:mt-17 md:gap-10 md:pt-5">
+            <div className="h- w-full bg-lightPurple flex flex-col justify-center items-center mt-15 md:h-auto md:mt-20 md:gap-10 md:pt-5">
                 <Header>Checkout</Header>
                <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8 ">
                     {/* Current Ticket */}
                     {displayItems.map((item) => (
                         <div key={`${item.id}-${item.type}`} className="bg-white p-1 flex flex-row gap-4 justify-center items-center rounded-md shadow-lg px-2 h-45 md:h-auto w-9/10 md:3/4">
 
-                        <div className="relative flex justify-center items-center w-3/5 md:w-1/2">
+                        <div className="relative flex justify-center items-center w-3/5 md:w-1/2 bg-green-00">
                             <img src={item.img} alt="" className="rounded-md"/>
                             <MiniOverlay>
-                                <div className="flex flex-col gap-5 text-white">
+                                <div className="flex flex-col gap-5 text-white justify-center items-center bg-green-00 w-full">
                                     <h2 className="font-bold text-white text-center text-2xl">{item.title}</h2>
                                 </div>
                             </MiniOverlay>
                         </div>
 
-                        <div className="bg-red-40 h-40 w-1/2 flex flex-col gap-3 md:gap-6">
-                            <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-3">
+                        <div className="bg-red-00 h-40 md:h- w-1/2 flex flex-col gap-3 md:gap-6">
+                            <div className=" py-1 flex flex-col gap-3 justify-center items-center md:py bg-blue-00">
                                 <p className="font-light text-lg">
                                     VIP: {item.vip.price}
                                 </p>
@@ -239,18 +240,16 @@ export default function Checkout(){
 
                                 <div className="flex flex-row gap-5">
                                   
-                                    <button onClick={() => handelDecrease(item.id, 'vip')} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    <button onClick={() => handelDecrease(item.id, 'vip')} className="bg-darkPurple py- px-1 rounded-3xl shadow-xl active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                         <TiMinus className="size-5 text-white"/>
                                     </button>
                                         <span className="font-extrabold text-xl">{item.vip.qty}</span>
-                                    <button  onClick={() => updateQuantity('vip', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    <button  onClick={() => updateQuantity('vip', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out ">
                                         <TiPlus className="size-5 text-white"/>
                                     </button>
                                 </div>
-
-
                             </div>
-                             <div className="shadow-md py-1 flex flex-col gap-3 justify-center items-center md:py-5">
+                             <div className="bg-green-00 py-1 flex flex-col gap-3 justify-center items-center md:py">
                                 <p className="font-light text-lg">
                                     Regular: {item.regular.price}
                                 </p>
@@ -258,11 +257,11 @@ export default function Checkout(){
 
                                 <div className="flex flex-row gap-5">
                                   
-                                    <button onClick={() => handelDecrease(item.id, 'regular')} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    <button onClick={() => handelDecrease(item.id, 'regular')} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                         <TiMinus className="size-5 text-white"/>
                                     </button>
                                         <span className="font-extrabold text-xl">{item.regular.qty}</span>
-                                    <button onClick={() => updateQuantity('regular', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-95 transition-all duration-300 ease-in-out">
+                                    <button onClick={() => updateQuantity('regular', item, 1)} className="bg-darkPurple py- px-1 rounded-3xl shadow-lg active:scale-85 hover:bg-lightPurple hover:text-darkPurple transition-all duration-300 ease-in-out">
                                         <TiPlus className="size-5 text-white"/>
                                     </button>
                                 </div>

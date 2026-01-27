@@ -30,14 +30,14 @@ export default function Navbar() {
                 </div>
                 <div>
                     <Link to='/events'>
-                        <span className="p-1 text-gray-800 font-extrabold text-xl hidden md:flex active:scale-95 transition-all duration-300 ease-in-out">Events</span>
+                        <span className="p-1 text-gray-800 font-extrabold text-xl hidden md:flex active:scale-85 hover:text-white transition-all duration-300 ease-in-out">Events</span>
                     </Link>
                 </div>
             </div>
             <div className="flex flex-row gap-6 mr-5 bg-amber-00">
 
                 <Link to='/cart'>
-                    <FaShoppingCart className="size-6 text-gray-800"/>
+                    <FaShoppingCart className="size-6 text-gray-800 hover:text-white transition-all duration-300 ease-in-out"/>
                 </Link>
 
                 <button onClick={handelOpenSidebar} className="md:hidden flex">
@@ -45,13 +45,13 @@ export default function Navbar() {
                 </button>
 
                 <div className="hidden md:flex gap-4">
-                    <button className="bg-green-400 text-white px-3 rounded-xl font-bold shadow-md active:scale-95 transition-all duration-300 ease-in-out">
+                    <button className="bg-green-400 text-white px-3 rounded-xl font-bold shadow-md active:scale-85 hover:bg-white hover:text-green-400 transition-all duration-300 ease-in-out">
                         <a href="https://wa.me/2347010010044">
                             Whatsapp
                         </a>    
                     </button>
                     <ScrollLink to='socials' smooth={true} duration={500} offset={-100}>
-                        <button className="bg-darkPurple text-white px-3 rounded-xl font-bold shadow-md active:scale-95 transition-all duration-300 ease-in-out">
+                        <button className="bg-darkPurple text-white px-3 rounded-xl font-bold shadow-md active:scale-85 hover:bg-white hover:text-darkPurple transition-all duration-300 ease-in-out">
                             Contact us
                         </button>
                     </ScrollLink>
