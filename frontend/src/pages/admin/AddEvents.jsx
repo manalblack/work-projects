@@ -91,7 +91,7 @@ export default function AddEvents () {
                 image: uploadedImage.publicUrl,
             }
 
-            const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
+            const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/admin/add-events', newEvent);
             console.log(response);
             if(response.data.message === 'SUCCESS') {
                 toast.success("event added to database", {

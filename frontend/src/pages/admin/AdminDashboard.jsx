@@ -28,7 +28,7 @@ export default function AdminDashboard() {
         try {
             const fetchEvents = async () => {
                 // change this link to ngrok 
-                const response = await axios.get('http://localhost:3001/api/admin/all-events');
+                const response = await axios.get('https://p846l2pq-3001.uks1.devtunnels.ms/api/admin/all-events');
 
                 console.log(response.data);
                 setAllEvents(response.data);
@@ -61,10 +61,6 @@ export default function AdminDashboard() {
         // setOngoingEvent(newValue);
     }
 
-    /*
-        title, date, time, location, image, regular_price, vip_price
-        description, total tickets
-    */
 
    if(loading) {
     return <Loading>

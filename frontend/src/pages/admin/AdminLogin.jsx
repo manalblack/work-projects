@@ -30,7 +30,6 @@ export default function AdminLogin() {
 
         setLoading(true);
         try {
-            
             const {error} = await supabase.auth.signInWithPassword({email, password});
 
             if(error) {
@@ -41,7 +40,7 @@ export default function AdminLogin() {
             setLoading(false)
 
         } catch (error) {
-            console.log('error when admin tries to signup');
+            console.log('error when admin tries to signup', error);
             
         }
     }
@@ -54,7 +53,7 @@ export default function AdminLogin() {
     return(
        <div className="flex flex-col gap-10 justify-center items-center">
             <h1 className="mt-10">Admin login </h1>
-            <div className="bg-darkPurple p-3 w-1/2 h-90 rounded-sm shadow-xl">
+            <div className="bg-darkPurple p-3 w-5/6 md:w-1/2 h-90 rounded-sm shadow-xl">
                 <form action="" className="flex flex-col gap-9 justify-center items-center p-3">
                     <input type="text" placeholder="username" onChange={handelFormChange} className="bg-white px-2 py-1 rounded-sm shadow-md"/>
                     <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-white px-2 py-1 rounded-sm shadow-md"/>
