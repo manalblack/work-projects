@@ -23,16 +23,17 @@ export default function AdminDashboard() {
 
     // fetching all events from database
     useEffect(() => {
-        // setLoading(true);
+        setLoading(true);
 
         try {
             const fetchEvents = async () => {
                 // change this link to ngrok 
-                const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/all-events');
+                const response = await axios.get(' http://localhost:3001/api/admin/all-events');
 
                 console.log(response.data);
                 setAllEvents(response.data);
                 // set the current event logic
+
                const ongoingEvent = response.data.filter(event => event.current_event === true);
                setCurrentEvent(ongoingEvent[0])
 
