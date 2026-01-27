@@ -149,7 +149,7 @@ async function createTicket({eventData, ticketInfo}){
     const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
 
     // const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
-           
+        
     const pdfBuffer = await generatePdfTicket({
         customerName: customerName,
         ticketId: ticketId,

@@ -28,7 +28,7 @@ export default function AdminDashboard() {
         try {
             const fetchEvents = async () => {
                 // change this link to ngrok 
-                const response = await axios.get('https://p846l2pq-3001.uks1.devtunnels.ms/api/admin/all-events');
+                const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/all-events');
 
                 console.log(response.data);
                 setAllEvents(response.data);

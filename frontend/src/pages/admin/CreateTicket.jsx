@@ -38,7 +38,7 @@ export default function CreateTicket(){
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/admin/all-events');
+                const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/all-events');
 
                 console.log(response.data);
                 setEvents(response.data)

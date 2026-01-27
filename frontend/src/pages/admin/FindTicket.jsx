@@ -14,7 +14,7 @@ export default function FindTicket() {
 
     const handelTicketSearch = async () => {
         setLoading(true);
-        const response = await axios.get('https://p846l2pq-3001.uks1.devtunnels.ms/api/admin/find-ticket', {
+        const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/find-ticket', {
             params: {
                 query: searchQuery,
             }
