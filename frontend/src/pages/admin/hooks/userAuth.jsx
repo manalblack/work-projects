@@ -7,7 +7,7 @@ export function useAuth() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
-
+    const [isStaff, setIsStaff] = useState(false);
 
 
 
@@ -20,14 +20,15 @@ export function useAuth() {
                 setUser(user);
 
                 // fetch admin status from tdb table
-                const {data, error} = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
+                const {data, error} = await supabase.from('profiles').select('is_admin, is_staff').eq('id', user.id).single();
 
                 if(error) {
                     console.log('Error when checking admin');
                 }
 
-                if(data?.is_admin) {
-                    setIsAdmin(true);
+                if(data) {
+                    setIsAdmin(data.is_admin);
+                    setIsStaff(data.is_staff)
                 }
             }
             setLoading(false);
@@ -57,7 +58,7 @@ export function useAuth() {
     }, [])
 
     
-    return { user, loading, isAdmin };
+    return { user, loading, isAdmin, isStaff };
 
 
 

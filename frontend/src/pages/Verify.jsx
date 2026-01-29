@@ -4,6 +4,7 @@ import {supabase} from '../supabaseConnection.js'
 import Loading from "../components/Loading";
 import { CiWarning } from "react-icons/ci";
 import axios from 'axios'
+import { useAuth } from "./admin/hooks/userAuth.jsx";
 
 
 // This page should only open when a staff member scans a ticket
@@ -13,7 +14,7 @@ import axios from 'axios'
 export default function Verify() {
 
 
-    const [isStaff, setIsStaff] = useState(false);
+    const [isLoggedStaff, setIsLoggedStaff] = useState(false);
     const [ticketStatus, setTicketStatus] = useState(true)
     const [isScanned, setIsScanned] = useState(false);
     const [verifyTicket, setVerifyTicket] = useState(false);
@@ -23,6 +24,7 @@ export default function Verify() {
     const { ticketId } = useParams();
     const [searchParams] = useSearchParams();
     const ticketType = searchParams.get('type');
+    const {isStaff} = useAuth();
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,12 +48,12 @@ export default function Verify() {
 }
 
     useEffect(() => {
-        const pass = localStorage.getItem('pass');
+        // const pass = localStorage.getItem('pass');
 
-        if (pass === passKey){
-            setIsStaff(true);
+        if (isStaff){
+            setIsLoggedStaff(true);
         } else {
-            setIsStaff(false);
+            setIsLoggedStaff(false);
         }
 
         // query the database to check the is_scanned and scanned_at columns 
@@ -87,7 +89,7 @@ export default function Verify() {
 
         checkTicketStatus();
         
-    }, [isStaff])
+    }, [isLoggedStaff])
 
     const isVip = ticketType === 'vip';
 
@@ -144,7 +146,7 @@ export default function Verify() {
                             </p>
  
                         <p className='text-sm'>Ticket id: {ticketId}</p>
-                        {isStaff && 
+                        {isLoggedStaff && 
                             <button onClick={handelTicketVerification}
                             className="bg-green-500 text-white px-6 text-lg py-1 rounded-2xl font-bold active:scale-85 transition-all duration-300 ease-in-out">
                                 Verify
