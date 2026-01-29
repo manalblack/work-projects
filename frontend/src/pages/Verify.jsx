@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import {supabase} from '../supabaseConnection'
+import {supabase} from '../supabaseConnection.js'
 import Loading from "../components/Loading";
 import { CiWarning } from "react-icons/ci";
 import axios from 'axios'
@@ -95,7 +95,7 @@ export default function Verify() {
     const handelTicketVerification = async () => {
             setVerifyTicket(true)
             try {
-                  const response = await axios.post(`${API_URL}/scan-tickets`, {
+                  const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
                     ticketId: ticketId,
                     bouncerId: passKey
                 })

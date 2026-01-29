@@ -8,7 +8,8 @@ export default function StaffSuccessfulLogin() {
 
 
     return (
-        <div className="bg-white mt-20 flex flex-col justify-center items-center gap-20 h-screen w-full">
+        <div className="bg-we mt-20 flex flex-col justify-center items-center gap-20 h-full
+         w-full">
             <h1 className="text-gray-700 font-extrabold text-2xl">
                 you can now use your phone scanner to scan tickets
             </h1>
