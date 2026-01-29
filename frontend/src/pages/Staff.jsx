@@ -16,7 +16,7 @@ export default function Staff() {
 
     const allowAccess = async () => {
         try {
-            const response = await axios.post(`${API_URL}/verify-staff`, { password });
+            const response = await axios.post(`${API_URL}/staff/verify-staff`, { password });
 
             if (response.data.accessGranted) {
                 console.log('access granted !');
