@@ -81,7 +81,6 @@ router.post('/create-ticket', async (req, res) => {
 
     const {data, error} = await supabase.from('events').select('*').eq('id', eventId);
 
-    const eventInformation = data[0];
         if(error){
             console.log('error when admin tries to create a ticket: ', error);
         }

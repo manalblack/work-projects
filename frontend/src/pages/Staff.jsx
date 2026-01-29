@@ -11,11 +11,12 @@ export default function Staff() {
 
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL;
 
 
     const allowAccess = async () => {
         try {
-            const response = await axios.post('https://organological-shaunta-exceptionably.ngrok-free.dev/api/verify-staff', { password });
+            const response = await axios.post(`${API_URL}/api/verify-staff`, { password });
 
             if (response.data.accessGranted) {
                 console.log('access granted !');
