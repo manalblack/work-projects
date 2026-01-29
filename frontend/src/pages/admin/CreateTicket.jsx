@@ -61,6 +61,13 @@ export default function CreateTicket(){
     const handelTicketCreation = async (e) => {
         e.preventDefault();
 
+        if(formData.customerName == '' && formData.customerEmail == '' && formData.eventId == '' && formData.ticketType == '') {
+            toast.error('Please fill out the form', {
+                duration: 8000
+            });
+            return;
+        }
+
         setLoading(true);
 
         const newTicket = {
@@ -70,15 +77,28 @@ export default function CreateTicket(){
             eventId: selectedEventId,
             eventName: eventName
 
-        }
+        };
+
+        // checking if inputs are empty 
+        
 
         try {
             const response = await axios.post(`${API_URL}/admin/create-ticket`, {ticketInfo:
                 newTicket});
 
                 console.log(response);
-                setPdfUrl(response.data)
+                setPdfUrl(response.data);
+               
                 setLoading(false);
+                setFormData({
+                    customerName: '',
+                    customerEmail: '',
+                    ticketType: '',
+                    eventId: '',
+                });
+                 toast.success('Ticket Created Successfully', {
+                    duration: 6000
+                })
 
         } catch (error) {
             console.log('Error when creating a ticket!: ', error);
@@ -116,7 +136,7 @@ export default function CreateTicket(){
                         <div className='flex flex-col bg-darkPurple justify-center items-center gap-8 p- w-5/6 md: h-100 mt-10 md:w-110 rounded-sm shadow-md'>
                             <input type="text" className="bg-white px-3 py-1 rounded-sm shadow-md" placeholder='Customer Name' name='customerName' value={formData.customerName} onChange={handelFormChange}/>
 
-                            <input type="text" className="bg-white px-3 py-1 rounded-sm shadow-md" placeholder='Customer Email' name='customerEmail' value={formData.customerEmail} onChange={handelFormChange}/>
+                            <input type="Email" className="bg-white px-3 py-1 rounded-sm shadow-md" placeholder='Customer Email' name='customerEmail' value={formData.customerEmail} onChange={handelFormChange}/>
 
                            {/* <input type="text" className="bg-white px-3 py-1 rounded-sm" placeholder='Ticket type'/> */}
                            <select name="ticketType" id="" className="bg-white px-2 rounded-md shadow-md text-gray-700 py-1" value={formData.ticketType} onChange={handelFormChange}>
