@@ -125,7 +125,7 @@ export default function Verify() {
             
             {isScanned ? (
                 <div className="bg-white flex flex-col justify-center items-center h-screen w-full gap-15">
-                    <p className="text-red-400 font-bold text-4xl !!">
+                    <p className="text-red-400 font-bold text-3xl !!">
                         Ticket already scanned
                     </p>
                     <CiWarning className="size-35 text-red-500 animate-pulse"/>
