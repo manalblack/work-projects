@@ -30,7 +30,7 @@ const resend = new Resend(process.env.RESEND_KEY)
 
 // middleware setp
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://ticket-hub-xwhv.onrender.com']
+    origin: ['http://localhost:5173', 'https://ticket-hub-xwhv.onrender.com', 'https://troveista.com/'];
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 app.use(cors(corsOptions))
