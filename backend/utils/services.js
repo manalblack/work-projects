@@ -92,7 +92,7 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
         doc.fontSize(12).font('Helvetica').fillColor('#444444')
         .text(`Holder: ${customerName}`, leftCardX + 20, rowTop + 90)
         .text(`Date: ${date}`, leftCardX + 20, rowTop + 40)
-        .text(`Location: ${location}`, leftCardX + 20, rowTop + 80, {
+        .text(`Location: ${location}`, leftCardX + 20, rowTop + 60, {
             width: 200,
             lineGap: 2,
         })
