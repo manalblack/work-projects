@@ -32,13 +32,14 @@ export default function CreateTicket(){
         }))
     }
 
+    const API_URL = import.meta.env.VITE_API_URL;;
 
 
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/all-events');
+                const response = await axios.get(`${API_URL}/admin/all-events`);
 
                 console.log(response.data);
                 setEvents(response.data)

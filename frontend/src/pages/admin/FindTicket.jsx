@@ -10,11 +10,12 @@ export default function FindTicket() {
     const [ticketInfo, setTicketInfo] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(false);
+     const API_URL = import.meta.env.VITE_API_URL;
 
 
     const handelTicketSearch = async () => {
         setLoading(true);
-        const response = await axios.get(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/find-ticket', {
+        const response = await axios.get(`${API_URL}/admin/find-ticket`, {
             params: {
                 query: searchQuery,
             }

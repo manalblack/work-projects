@@ -24,7 +24,7 @@ export default function Verify() {
     const [searchParams] = useSearchParams();
     const ticketType = searchParams.get('type');
     const navigate = useNavigate();
-
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const passKey = import.meta.env.VITE_ADMIN_PASS;
 
@@ -95,13 +95,7 @@ export default function Verify() {
     const handelTicketVerification = async () => {
             setVerifyTicket(true)
             try {
-                
-                // this is a vs code ports tunnel
-                // const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/scan-tickets', {
-                //     ticketId: ticketId,
-                //     bouncerId: passKey
-                // })
-                  const response = await axios.post('https://organological-shaunta-exceptionably.ngrok-free.dev/api/scan-tickets', {
+                  const response = await axios.post(`${API_URL}/scan-tickets`, {
                     ticketId: ticketId,
                     bouncerId: passKey
                 })

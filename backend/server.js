@@ -275,7 +275,8 @@ async function createTicket(eventData){
         for(let i = 0; i < quantity; i++) {
             const ticketId = crypto.randomUUID();
 
-            const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
+            const siteUrl = process.env.SITE_URL;
+            const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`;
             // const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
              // {customerName, ticketId, verifyUrl, type, eventName}
             const pdfBuffer = await generatePdfTicket({

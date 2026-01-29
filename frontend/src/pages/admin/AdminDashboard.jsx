@@ -26,6 +26,8 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [currentEvent, setCurrentEvent] = useState([]);
     const [soldOut, setSoldOut] = useState(false);
+    
+    const API_URL = import.meta.env.VITE_API_URL;
 
     // fetching all events from database
     useEffect(() => {
@@ -34,7 +36,7 @@ export default function AdminDashboard() {
         try {
             const fetchEvents = async () => {
                 // change this link to ngrok 
-                const response = await axios.get(' http://localhost:3001/api/admin/all-events');
+                const response = await axios.get(`${API_URL}/admin/all-events`);
 
                 console.log(response.data);
                 setAllEvents(response.data);
