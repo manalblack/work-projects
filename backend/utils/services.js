@@ -90,9 +90,12 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
         .text(eventName, leftCardX + 20, rowTop + 20);
         
         doc.fontSize(12).font('Helvetica').fillColor('#444444')
-        .text(`Holder: ${customerName}`, leftCardX + 20, rowTop + 100)
-        .text(`Date: ${date}`, leftCardX + 20, rowTop + 50)
-        .text(`Location: ${location}`, leftCardX + 20, rowTop + 75)
+        .text(`Holder: ${customerName}`, leftCardX + 20, rowTop + 90)
+        .text(`Date: ${date}`, leftCardX + 20, rowTop + 40)
+        .text(`Location: ${location}`, leftCardX + 20, rowTop + 80, {
+            width: 200,
+            lineGap: 2,
+        })
 
         doc.fillColor(ticketType).fontSize(10).text(`${type.toUpperCase()} TICKET`, leftCardX + 170, rowTop + 10).fillColor(ticketType);
          
