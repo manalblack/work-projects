@@ -276,6 +276,7 @@ async function createTicket(eventData){
             const ticketId = crypto.randomUUID();
 
             const siteUrl = process.env.SITE_URL;
+            
             const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`;
             // const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
              // {customerName, ticketId, verifyUrl, type, eventName}

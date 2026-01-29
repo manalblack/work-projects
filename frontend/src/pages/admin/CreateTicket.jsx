@@ -73,7 +73,7 @@ export default function CreateTicket(){
         }
 
         try {
-            const response = await axios.post('https://p846l2pq-3001.uks1.devtunnels.ms/api/admin/create-ticket', {ticketInfo:
+            const response = await axios.post(`${API_URL}/admin/create-ticket`, {ticketInfo:
                 newTicket});
 
                 console.log(response);

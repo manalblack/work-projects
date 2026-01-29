@@ -3,6 +3,8 @@ import PDFDocument from 'pdfkit'
 import { supabase } from '../databaseConnection.js';
 
 
+// frontend url
+const siteUrl = process.env.SITE_URL;
 
 async function updateDb(eventId) {
 
@@ -130,7 +132,7 @@ async function createTicket({eventData, ticketInfo}){
 
     const ticketId = crypto.randomUUID();
 
-    const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
+    const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`
 
     // const verUrl = `http://localhost:5173/verify/${ticketId}?type=${type}`;
         

@@ -26,7 +26,7 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [currentEvent, setCurrentEvent] = useState([]);
     const [soldOut, setSoldOut] = useState(false);
-    
+
     const API_URL = import.meta.env.VITE_API_URL;
 
     // fetching all events from database
@@ -42,19 +42,21 @@ export default function AdminDashboard() {
                 setAllEvents(response.data);
                 // set the current event logic
 
-               const ongoingEvent = response.data.filter(event => event.current_event === true);
+               const ongoingEvent = response.data.filter(event => event.current_event === true) || [];
                setCurrentEvent(ongoingEvent[0])
                 
                 //  Find the sold out / finished event
-                const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
+                
+                if(response.data.length > 0) {
+                    const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
 
-                const eventStatus = soldOutEvent[0].total_tickets <= 0 ? true : false;
-
-                console.log(eventStatus);
-
-                setSoldOut(eventStatus)
+                    const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
+                    console.log(eventStatus);
+                    setSoldOut(eventStatus);
                
-
+                } else {
+                    setSoldOut(null)
+                }
                 setLoading(false)
             }
 
