@@ -72,7 +72,7 @@ export default function Hero(){
                     <img src={ongoingEvent.image} alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
                     <MiniOverlay>
                         <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4 pt-7 md:pt-0">
-                            <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-60 p-1 mt-20 md:mt-25 bg-green-00">
+                            <div className="w-5/6 flex flex-col items-start gap-5 md:gap-5 bg-gray-4 h-60 p-1 mt-20 md:mt-25 pt-10 md:pt-0 bg-green-00">
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}
                                 </h2> 
@@ -106,14 +106,14 @@ export default function Hero(){
             </motion.div>
             {/* About Event Modal */}
            <Modal isOpen={aboutModal} closeModal={()=> setAboutModal(false)}>
-                <img src="placeholder.jpg" alt="" className="w-9/10 rounded-sm shadow-xl md:w-1/2"/>
+                <img src={ongoingEvent.image} alt="" className="w-9/10 rounded-sm shadow-xl md:w-1/2"/>
                 <div className="bg-green-30  w-5/6 flex flex-col gap-8">
                     <p className="text-md text-white text-center ">
                         {ongoingEvent.description}
                     </p>
                     <div className="md:flex gap-8 mb-2 hidden">
                         <PriceContainer>
-                            N4,000
+                            {ongoingEvent.regular_price}
                         </PriceContainer>
                         <LightPurpleBtn onPress={handelAboutEventPayBtn}>
                             Buy ticket
@@ -122,7 +122,7 @@ export default function Hero(){
                 </div>
                 <div className="flex gap-8 mb-2 md:hidden">
                     <PriceContainer>
-                        N4,000
+                        {ongoingEvent.regular_price}
                     </PriceContainer>
                     <LightPurpleBtn onPress={handelAboutEventPayBtn}>
                         Buy ticket

@@ -16,9 +16,6 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-/*
-    Monnify Webhook is connecting to the server through vs code ports
-*/
  
 
 // vs code ports tunnel:  https://p846l2pq-3001.uks1.devtunnels.ms/
@@ -42,19 +39,10 @@ app.use(express.static('public'));
 
 
 // ROUTES 
+
 app.use('/api', staffRoutes);
 app.use('/api/admin', adminRoutes);
 
-/* ADD these line to debug and check what the webhook 
-    console.log('monnify webhook');
-
-    console.log('BODY');
-    console.log(JSON.stringify(req.body, null, 2));
-
-    console.log('ALL HEADERS');
-    console.log(req.headers); 
-
-*/
 
 function verifyMonnifySignature (req, res, next) {
 
@@ -63,12 +51,6 @@ function verifyMonnifySignature (req, res, next) {
     const requestBody = JSON.stringify(req.body, null, 2);
 
     const requestMetadata = JSON.parse(requestBody).requestMetadata || {};
-
-    console.log('sign var from verification function', sign);
-
-    console.log('BODY');
-    console.log(req.body);
-    
     
 
     const secretKey = process.env.MONNIFY_SECRET_KEY;
@@ -77,7 +59,6 @@ function verifyMonnifySignature (req, res, next) {
 
     // compare the hash with the signature
     if(hash === sign) {
-        console.log('Signature verified');
         next();
     } else {
         console.error('Security Alert, invalid signature');
@@ -267,34 +248,16 @@ async function createImageBuffer(url) {
 
 /*SAVE THE PAYMENT REF TO THE DB  */
 async function createTicket(eventData){
-    // const ticketId = crypto.randomUUID();
-    // const verificationUrl = `http://localhost:5173/verify?ticketId=${ticketId}`;
-    // const resend = new Resend(process.env.RESEND_KEY);  
-
-   
     const cartSummery = eventData.metaData.cart_summery;
     // the parsed cart is an array of objects, each object contains one ticket.
     const cart = JSON.parse(cartSummery);
 
-    // let attachments = [];
-    console.log('eventData object received in createTicket function passed from monify webhook');  
-    console.log(eventData);
 
     const customerName = eventData.metaData.customer_name;
     const customerEmail = eventData.metaData.customer_email;
     const paymentRef = eventData.paymentReference;
 
-    console.log('customer name: ', customerName);
-    console.log('customer email: ', customerEmail);
-    console.log('payment ref: ', paymentRef);
-
-    console.log('looping through cart items from localstorage');
-    console.log(cart);
-
-    // 
-
     const attachments = [];
-    // let pdfBuffer;
     for(const item of cart) {
         const type = item.type;
         const quantity = item.qty;
@@ -381,10 +344,6 @@ async function createTicket(eventData){
             return console.log('error sending email', error);
         };
         // RESEND IS NOT WORKING FIX IT
-
-        console.log('EMAIL SENT');
-        console.log(resendData);
-    
 };
 
 
@@ -427,42 +386,6 @@ app.post('/webhook/monnify', (req, res) => {
 
 // file:///C:/Users/king/Downloads/ticket_e03537c0-1af9-4bfc-a3fb-cec082827ed6.pdf
 
-const testItems = [
-  {
-    id: 11,
-    title: ' Black lights event',
-    type: 'regular',
-    price: 2000,
-    vipPrice: 5500,
-    regularPrice: 2000,
-    qty: 1
-  },
-  {
-    id: '41446b84-e713-4cbc-9a5d-e14a5029cbcb',
-    title: 'Lagos Summer Jam 2026',
-    type: 'vip',
-    price: 4000,
-    vipPrice: 4000,
-    regularPrice: 2000,
-    qty: 1
-  },
-  {
-    id: '41446b84-e713-4cbc-9a5d-e14a5029cbcb',
-    title: 'Lagos Summer Jam 2026',
-    type: 'regular',
-    price: 2000,
-    vipPrice: 4000,
-    regularPrice: 2000,
-    qty: 1
-  }
-]
-
-
-app.post('/test-route', (req, res) => {
-
-    createTicket();
-    res.status(200).send("Test route received by Express")
-})
 
 
 app.post('/api/check-tickets-quantity', async (req, res) => {
@@ -470,52 +393,22 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
     const {eventId} = req.body;
 
     console.log(eventId);
-    
-    // const testData = {
-    //     totalTickets: 100,
-    //     soldTickets: 100
-    // }
 
+    
     const {data, error} = await supabase.from('events').select('total_tickets, sold_tickets').eq('id', eventId).single();
 
-    if(error) console.log('error when checking ticket quantity', error)
+    if(error) console.log('error when checking ticket quantity', error);
     
-    /* This var is checking the gatekeeper to prevent overselling tickets */
-
+    /* This var is the gatekeeper to prevent overselling tickets */
     const isAvailable = data.sold_tickets < data.total_tickets;
-    // if(data.sold_tickets === data.totalTickets) {
-    //     console.log('equals');
-
-    // } else if(data.sold_tickets < data.totalTickets) {
-    //     console.log('less than');
-    // }
-
 
     return res.status(200).json({isAvailable});
-    
+
 })
 
-// app.post('/api/verify-staff', (req, res) => {
-//     const {password} = req.body;
-//     const staffPass = process.env.ADMIN_PASS;
-
-//     if(password === staffPass) {
-//         res.json({accessGranted: true, staffToken: "EVENT_STAFF_TOKEN_2026"});
-//         console.log('Match');
-        
-//     } else {
-//         res.json({accessGranted: false});
-//     }
-
-//     console.log(password);
-    
-// })
-
-
-
-// localtunnel https://dry-sides-admire.loca.lt running
-
-
+app.get('/api/test', (req, res) => {
+    res.status(200).json({message: 'Backend is talking to Nginx'})
+})
 
 
 app.listen(3001, () => {

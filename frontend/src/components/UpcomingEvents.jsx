@@ -27,7 +27,7 @@ export default function UpcomingEvents(){
             whileInView={{opacity: 1, y: 0}}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{amount: 0.3 }}
-            className="flex flex-row overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center h-100 p-5 px-4">
+            className="flex flex-row overflow-x-auto gap-6 scrollbar-hide snap-x bg-darkPurple w-full items-center h-100 p-5 px-4 overflow-y-hidden">
                 <EventCard />
             </motion.div>
         </div>

@@ -69,8 +69,9 @@ export default function AddEvents () {
        setEventTime(formattedTime);
         
         try {
-            // upload image to a storage bucket first before adding to table,
+            // upload image to a storage bucket first before adding to database table
             const fileName = `eventImage-${imageFile.name}`
+
             const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile);
 
             if(error) throw error;

@@ -35,7 +35,7 @@ export default function Checkout(){
 
         setSelectedEvent([]);
 
-        toast.success("Payment Received! Thank you for your purchase.", {
+        toast.success("Payment Received! we sent the Ticket to Your email.", {
         duration: 6000,
         });
 
@@ -202,7 +202,16 @@ export default function Checkout(){
     const handelFormSubmission = (e) => {
         e.preventDefault();
         console.log(formData);
-        payWithMonnify();
+        if(formData.fullName == '' && formData.email == '' && formData.phoneNumber == '') {
+            toast.error('Please fill the the form !', {
+                duration: 6000
+            });
+            return;
+        } else {
+            payWithMonnify();
+        }
+
+        // payWithMonnify();
     }
 
 
@@ -220,7 +229,7 @@ export default function Checkout(){
                <div className="flex flex-col justify-center items-center mt-7 bg-blue-30 gap-8 pb-8 ">
                     {/* Current Ticket */}
                     {displayItems.map((item) => (
-                        <div key={`${item.id}-${item.type}`} className="bg-white p-1 flex flex-row gap-4 justify-center items-center rounded-md shadow-lg px-2 h-45 md:h-auto w-9/10 md:3/4">
+                        <div key={`${item.id}-${item.type}`} className="bg-white p-1 flex flex-row gap-4 justify-center items-center rounded-md shadow-lg px-2 h-45 md:h-60 w-9/10 md:w-">
 
                         <div className="relative flex justify-center items-center w-3/5 md:w-1/2 bg-green-00">
                             <img src={item.img} alt="" className="rounded-md"/>
@@ -282,13 +291,18 @@ export default function Checkout(){
 
                     {/* Form Container */}
                     <div className="w-9/10 md:w-120">
-                        <form action="" className="bg-darkPurple h-100 md:h-120 flex flex-col justify-center items-center gap-8 rounded-sm md:gap-10">
+                        <h2 className="text-center m-5">Enter the correct Information, please confirm your email before paying</h2>
+                        <form action="" className="bg-darkPurple h-100 md:h-120 flex flex-col justify-center items-center gap-8 rounded-sm md:gap-8">
 
                             <input type="text" placeholder="Name" name="fullName" value={formData.fullName} onChange={handelFormChange}
-                            className="border bg-white w-3/4 md:w-1/2 md:py-2 p-1 px-3 rounded-lg"/>
-                            <input type="text" placeholder="Email" name="email" value={formData.email} onChange={handelFormChange}
-                            className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
-                            <input type="text" placeholder="Phone Number" name='phoneNumber' value={formData.phoneNumber} onChange={handelFormChange}
+                            className="border bg-white w-3/4 md:w-1/2 md:py-2 p-1 px-3 rounded-lg" required/>
+                            <div className="bg-amber-00 md:w-1/2 w-3/4 flex flex-col p-1 gap-1 items-center">
+                                <label htmlFor="" className="text-white font bold text-sm">we will email  your ticket to this provided email </label>
+                                <input type="email" placeholder="Email" name="email" value={formData.email} onChange={handelFormChange} required
+                            className="border bg-white w-full p-1 px-3 rounded-lg md:py-2"/>
+                            </div>
+                           
+                            <input type="text" placeholder="Phone Number" name='phoneNumber' value={formData.phoneNumber} onChange={handelFormChange} required
                              className="border bg-white w-3/4 p-1 px-3 rounded-lg md:w-1/2 md:py-2"/>
         
                             <LightBtn onPress={handelFormSubmission}>

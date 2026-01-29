@@ -10,10 +10,6 @@ const router = express.Router();
 
 
 
-// Create a route to verify the admin preferably using jwt authentication
-
-
-
 router.get('/all-events', async (req, res) => {
     
     try {
@@ -34,8 +30,6 @@ router.post('/add-events', async (req, res) => {
 
     const {title, description, date, time, image, location, totalTickets, vipPrice, regularPrice} = req.body;
     // const {newEvent} = req.body;
-   
-    
 
     const newEvent  = {
         title: title,
@@ -48,7 +42,7 @@ router.post('/add-events', async (req, res) => {
         vip_price: vipPrice,
         regular_price: regularPrice
     }
-     console.log(newEvent);
+    
     try {
         const {data, error} = await supabase.from('events').insert([newEvent])
         if(error) throw error;
@@ -88,15 +82,11 @@ router.post('/create-ticket', async (req, res) => {
     const {data, error} = await supabase.from('events').select('*').eq('id', eventId);
 
     const eventInformation = data[0];
-
         if(error){
             console.log('error when admin tries to create a ticket: ', error);
         }
-        
 
     try {
-        console.log(data[0]);
-
         const pdfFileLink = await createTicket({
         ticketInfo: ticketInfo,
         eventData: data[0]

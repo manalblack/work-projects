@@ -38,6 +38,7 @@ export default function PaymentOptions({eventData}) {
 
         checkTicket();
 
+
     }, [])
 
 
@@ -164,8 +165,8 @@ export default function PaymentOptions({eventData}) {
                     <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
                         <span className="w-1/2 font-bold bg-green-0 text-center text-xl">VIP: {eventData.vip_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
-                            <button onClick={() => handelAddToCart('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-95 transition-all duration-300 ease-in-out">
-                                Add To Cart
+                            <button disabled={eventData.vip_price === 0} onClick={() => handelAddToCart('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-95 transition-all duration-300 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed">
+                                {eventData.vip_price === 0 ? 'Vip Not available': 'Pay Now'}
                             </button>
                         </div>
                     
@@ -184,13 +185,14 @@ export default function PaymentOptions({eventData}) {
                 </div>
             </Modal>
 
+
             <Modal isOpen={payNowModal} closeModal={() => setPayNowModal(false)}>
                 <div className="bg- size-70 flex flex-col gap-5 items-center p-2 md:w-9/10 w-full">
                     <div className="bg-white h-30 w-9/10 md:w-3/4 flex flex-col gap-3 items-center justify-center shadow-2xl px- rounded-md p-2">
                         <span className="w-1/2 font-bold bg-green-0 text-center text-xl">VIP: {eventData.vip_price}</span>
                         <div className="bg-blue-40 w-3/4 h-30 flex flex-col gap-8 items-center p-2">
-                            <button onClick={() => handelAddToStorage('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-95 transition-all duration-300 ease-in-out">
-                                Pay Now
+                            <button disabled={eventData.vip_price === 0} onClick={() => handelAddToStorage('vip')} className="bg-lightPurple px-4 rounded-2xl font-bold py-1 active:scale-95 transition-all duration-300 ease-in-out disabled:bg-gray-300 disabled:cursor-not-allowed">
+                                {eventData.vip_price === 0 ? 'Vip Not available': 'Pay Now'}
                             </button>
                         </div>
                     

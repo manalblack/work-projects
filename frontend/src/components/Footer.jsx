@@ -43,7 +43,7 @@ export default function Footer() {
 
             <div className="bg-amber- flex flex-row justify-between">
               <span className="font-semibold text-darkPurple text-sm">
-                All rights reserved &copy;Brand name
+                All rights reserved &copy;<span className="font-bold">Troveista  Limited</span>
               </span>
               <span className="text-black text-xs">Made by Blue</span>
             </div>

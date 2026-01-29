@@ -61,46 +61,46 @@ export default function EventCard() {
        <>
         {allEvents.map((event) => (
             <div key={event.id}
-             className="md:w-120 w-100 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-70 md:h-100">
+             className="md:w-120 w-90 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80 md:h-100">
 
             <div className="relative flex justify-center items-center h-auto w-full md:h-120">
-                <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg md:h-95"/>
-            <MiniOverlay>
+                <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg h-70 md:h-70"/>
+                <MiniOverlay>
 
-                <div className="bg-black/50 absolute bottom-0 left-0 w-full h-full flex flex-row justify-between md:gap-4 md:h">
+                    <div className="bg-black/50 absolute bottom-0 left-0 w-full h-full flex flex-row justify-between md:gap-4 md:h">
 
-                    <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4 md:gap-2 mt-6 md:mt-18">
-                        <h2 className="md:text-2xl  text-white font-bold">
-                            {event.title}
-                        </h2>
-                        <p className="text-white font-light line-clamp-2">
-                           {event.description}
-                        </p>
-                        <PriceContainer>
-                            N{event.regular_price}
-                        </PriceContainer>
-                        {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
-                            Remaining tickets: {event.total_tickets}
-                        </span> */}
-                        <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
-                            {event.date}, {event.time}
-                            <br />
-                            Venue: 1234 Event center
-                        </span>
-                        
+                        <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4 md:gap-2 mt-6 md:mt-18 pt-12 md:pt-15">
+                            <h2 className="md:text-2xl  text-white font-bold">
+                                {event.title}
+                            </h2>
+                            <p className="text-white font-light line-clamp-2">
+                            {event.description}
+                            </p>
+                            <PriceContainer>
+                                N{event.regular_price}
+                            </PriceContainer>
+                            {/* <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-2xl px-2 text-sm md:text-lg ">
+                                Remaining tickets: {event.total_tickets}
+                            </span> */}
+                            <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
+                                {event.date}, {event.time}
+                                <br />
+                                Venue: 1234 Event center
+                            </span>
+                            
+                        </div>
+                        <div className="flex flex-col justify-center items-center p-2 gap-5 mt-20 bg-amber-0 md:gap-8 md:mt-15">
+                            <LightPurpleBtn onPress={() => aboutEventModal(event)}>
+                                AboutEvent
+                            </LightPurpleBtn>
+                            <LightBtn onPress={() => buyTicketModal(event)}>
+                                Book ticket
+                            </LightBtn>
+                        </div>
+
                     </div>
-                    <div className="flex flex-col justify-center items-center p-2 gap-5 mt-20 bg-amber-0 md:gap-8 md:mt-15">
-                        <LightPurpleBtn onPress={() => aboutEventModal(event)}>
-                            AboutEvent
-                        </LightPurpleBtn>
-                        <LightBtn onPress={() => buyTicketModal(event)}>
-                            Book ticket
-                        </LightBtn>
-                    </div>
 
-                </div>
-
-            </MiniOverlay>
+                </MiniOverlay>
 
             </div>
            

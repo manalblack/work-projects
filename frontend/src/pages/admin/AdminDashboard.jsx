@@ -9,6 +9,11 @@ import Loading from "../../components/Loading";
 import { supabase } from "../../supabaseConnection";
 
 
+/**   # VERY IMPORTANT #
+    MAJOR BUG ON DROPLET, THE BACKEND IS NOT WORKING AND THE FRONTEND NEEDS AN UPDATE 
+ */
+
+
 // Add the event to the database and work on the number input fields they nee fixing
 
 export default function AdminDashboard() {
@@ -19,11 +24,12 @@ export default function AdminDashboard() {
 
     const [allEvents, setAllEvents] = useState([])
     const [loading, setLoading] = useState(true);
-    const [currentEvent, setCurrentEvent] = useState([])
+    const [currentEvent, setCurrentEvent] = useState([]);
+    const [soldOut, setSoldOut] = useState(false);
 
     // fetching all events from database
     useEffect(() => {
-        setLoading(true);
+        // setLoading(true);
 
         try {
             const fetchEvents = async () => {
@@ -36,7 +42,15 @@ export default function AdminDashboard() {
 
                const ongoingEvent = response.data.filter(event => event.current_event === true);
                setCurrentEvent(ongoingEvent[0])
+                
+                //  Find the sold out / finished event
+                const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
 
+                const eventStatus = soldOutEvent[0].total_tickets <= 0 ? true : false;
+
+                console.log(eventStatus);
+
+                setSoldOut(eventStatus)
                
 
                 setLoading(false)
@@ -52,14 +66,29 @@ export default function AdminDashboard() {
 
 
 
-    const handelOngoingBox = async () => {
-        // const newValue = !ongoingEvent;
-        // const {error} = supabase.from('events').update({current_event: newValue});
-        
-        // if(error) {
-        //     alert('error updating event Status')
-        // }
-        // setOngoingEvent(newValue);
+    const handelOngoingBox = async (eventId) => {
+
+        try {
+            const { error } = await supabase.rpc('set_single_current_event', { target_id: eventId });
+
+                if(error) {
+                    alert('failed to update current event');
+                    console.log(error);
+                    
+                }
+            
+
+
+                const updatedEvents = allEvents.map((ev) => ({
+                    ...ev,
+                    is_current: ev.id === eventId // True for the one clicked, false for others
+                }));
+
+                setAllEvents(updatedEvents);
+        } catch (error) {
+            console.log('error when updating current event: ', error);
+            
+        }
     }
 
 
@@ -77,14 +106,14 @@ export default function AdminDashboard() {
                 <nav className="bg-lightPurple p-2 flex justify-center items-center shadow-md">
                     <div className="flex flex-row justify-center items-center gap-10 md:justify-between bg-green-00 md:w-3/4 md: pt-4">
                         <button
-                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 transition-all duration-300 ease-in shadow-md">
+                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in shadow-md">
                            <Link to='/admin/add-events'>
                                 Add Events
                            </Link>
                         </button>
 
                         <button
-                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 transition-all duration-300 ease-in shadow-md">
+                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in shadow-md">
                            <Link to='/admin/create-ticket'>
                                 Create Ticket
                            </Link>
@@ -93,7 +122,7 @@ export default function AdminDashboard() {
 
                         {/* Work on this button FUCKING fix it ASAP */}
                         <button
-                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 transition-all duration-300 ease-in shadow-md">
+                        className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in shadow-md">
                             <Link to='/admin/search-tickets'>
                                 Find Ticket
                             </Link>
@@ -121,6 +150,10 @@ export default function AdminDashboard() {
                             <h3 className="text-white text-2xl">
                                 Title: {currentEvent.title}
                             </h3>
+                            {currentEvent.total_tickets <= 0 && 
+                                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold uppercase">
+                                    Sold Out / Finished
+                                </span>}
                         </div>
                         {/* 2nd container */}
                         <div className="md:w-3/4 flex flex-col gap-3 justify-center items-center bg-green-00">
@@ -135,7 +168,7 @@ export default function AdminDashboard() {
                                         Regular price: {currentEvent.regular_price}</span> 
                                 </div>
 
-                                <div className="flex flex-col gap-2 bg-blue-300">
+                                <div className="flex flex-col gap-2 ">
                                     <span className="font-bold">
                                         Remaining Tickets: {currentEvent.total_tickets}
                                     </span>
@@ -162,7 +195,6 @@ export default function AdminDashboard() {
                     <h3 className="text-3xl font-bold md:text-4xl">All Events</h3>
                     <div className="bg-red00 w-full py-5 grid grid-cols-1 md:grid-cols-2 place-items-center gap-6">
                     {allEvents.map((event) => (
-                        
                         <div key={event.id}  className="w-9/10 md:w- h- bg-darkPurple flex flex-col gap-4 p-2 rounded-sm shadow-lg">
                             <div>
                                 <img src={event.image} alt=""  className="rounded-sm"/>
@@ -170,6 +202,10 @@ export default function AdminDashboard() {
                             {/* inside this we need, title, description, date, location, time, the two tickets prices, remaining tickets */}
                             <div className="bg-red-0 flex flex-col gap-2">
                                 <h2 className="text-xl font-bold text-white">Title: {event.title}</h2>
+                                {event.total_tickets <= 0 && 
+                                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold uppercase">
+                                    Sold Out / Finished
+                                </span>}
                                 <p className="leading-6 text-white">
                                     Description: {event.description}
                                 </p>
@@ -200,7 +236,7 @@ export default function AdminDashboard() {
 
                                         <div className="flex flex-row gap-2">
                                             <label htmlFor="">Ongoing</label>
-                                            <input type="checkbox" checked={ongoingEvent} onChange={handelOngoingBox} className="h-5 w-5"/>
+                                            <input type="checkbox" checked={event.current_event && soldOut} onChange={()=> handelOngoingBox(event.id)} disabled={event.current_event && soldOut}  className="h-5 w-5"/>
                                         </div>
                                     </div>
 

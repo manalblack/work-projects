@@ -8,7 +8,6 @@ dotenv.config();
 
 const router = express.Router();
 
-// https://ticket-hub-xwhv.onrender.com/verify/5bd535ac-80d7-4dad-90c4-6b0967aa73aa?type=vip
 
 router.post('/verify-staff', (req, res) => {
     const {password} = req.body;
@@ -22,8 +21,6 @@ router.post('/verify-staff', (req, res) => {
     } else {
         res.json({accessGranted: false});
     }
-    
-    console.log(password);
 });
 
 router.post('/scan-tickets', async (req, res) => {
@@ -45,8 +42,6 @@ router.post('/scan-tickets', async (req, res) => {
                 console.log('error when updating ticket status in db, ', error);
                 
             }
-
-            console.log(data);
         }
 
     

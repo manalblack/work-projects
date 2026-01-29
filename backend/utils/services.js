@@ -4,13 +4,6 @@ import { supabase } from '../databaseConnection.js';
 
 
 
-/*
-    1- ADD THE CORRECT EVENT DATE, LOCATION TO THE PDF
-    2- FIND A WAY TO SEND THE PUBLIC URL TO THE ADMIN TO BE ABLE TO SHARE IT WITH OTHER PEOPLE.
-
-*/
-
-
 async function updateDb(eventId) {
 
     const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
@@ -54,13 +47,6 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     doc.on('data', (chunk) => chunks.push(chunk));
     doc.on('end', () => resolve(Buffer.concat(chunks)))
 
-   
-    //     const finalPdfBuffer = Buffer.concat(chunks);   
-
-    //     // sending to supabse storage bucket
-    //     const {data: uploadedData, error: uploadError} = await supabase.storage.from('tickets_qr_codes').upload(`ticket_${ticketId}.pdf`, finalPdfBuffer, {
-    //         contentType: 'application/pdf',
-    //    
 
     // Adding event image as the ticket background 
     doc.image(imageBuffer, 0, 0, {
@@ -125,9 +111,7 @@ async function createImageBuffer(url) {
 } 
 
 async function createTicket({eventData, ticketInfo}){
-    console.log('FROM CREATE TICKET FUNCTION')
-    console.log(eventData)
-    console.log(ticketInfo)
+    
 
     // Event information
     const image = eventData.image
