@@ -30,7 +30,10 @@ const resend = new Resend(process.env.RESEND_KEY)
 
 // middleware setp
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://ticket-hub-xwhv.onrender.com', 'https://troveista.com/'];
+    origin: [
+        'http://localhost:5173',
+        'https://ticket-hub-xwhv.onrender.com', 
+        'https://troveista.com/']
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 app.use(cors(corsOptions))
@@ -40,8 +43,8 @@ app.use(express.static('public'));
 
 // ROUTES 
 
-app.use('/api', staffRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/staff', staffRoutes);
+app.use('/admin', adminRoutes);
 
 
 function verifyMonnifySignature (req, res, next) {

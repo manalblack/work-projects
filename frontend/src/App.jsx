@@ -30,7 +30,7 @@ function App() {
       <Toaster position='top-center' reverseOrder={false}/>
       <BrowserRouter>
         <Suspense fallback={<div>Loading...</div>}>
-
+        
         <Routes>
           {/* public routes */}
           <Route path='/' element={<Home />}/>
