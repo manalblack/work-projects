@@ -23,7 +23,7 @@ export default function PaymentOptions({eventData}) {
     const [ticketsAvailability, setTicketsAvailability] = useState(true);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    
+
     const apiUrl = import.meta.env.VITE_API_URL;
 
 
@@ -31,7 +31,7 @@ export default function PaymentOptions({eventData}) {
 
         const checkTicket = async () => {
 
-            const response = await axios.post(`${apiUrl}/api/check-tickets-quantity`, {eventId: eventData.id}) 
+            const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}) 
 
             setTicketsAvailability(response.data.isAvailable)
             console.log(response.data);
