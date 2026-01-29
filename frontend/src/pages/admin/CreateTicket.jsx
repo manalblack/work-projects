@@ -134,9 +134,9 @@ export default function CreateTicket(){
                     <h2 className="text-3xl mt-10">Create Ticket</h2>
                     <form action="" className="w-full flex justify-center items-center">
                         <div className='flex flex-col bg-darkPurple justify-center items-center gap-8 p- w-5/6 md: h-100 mt-10 md:w-110 rounded-sm shadow-md'>
-                            <input type="text" className="bg-white px-3 py-1 rounded-sm shadow-md" placeholder='Customer Name' name='customerName' value={formData.customerName} onChange={handelFormChange}/>
+                            <input type="text" className="bg-white px-3 py-1 rounded-sm shadow-md w-5/6" placeholder='Customer Name' name='customerName' value={formData.customerName} onChange={handelFormChange}/>
 
-                            <input type="Email" className="bg-white px-3 py-1 rounded-sm shadow-md" placeholder='Customer Email' name='customerEmail' value={formData.customerEmail} onChange={handelFormChange}/>
+                            <input type="Email" className="bg-white px-3 py-1 rounded-sm shadow-md w-5/6" placeholder='Customer Email' name='customerEmail' value={formData.customerEmail} onChange={handelFormChange}/>
 
                            {/* <input type="text" className="bg-white px-3 py-1 rounded-sm" placeholder='Ticket type'/> */}
                            <select name="ticketType" id="" className="bg-white px-2 rounded-md shadow-md text-gray-700 py-1" value={formData.ticketType} onChange={handelFormChange}>
