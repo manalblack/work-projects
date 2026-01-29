@@ -33,6 +33,8 @@ export default function AddEvents () {
 
     const [imageFile, setImageFile] = useState(null)
     const [imagePreview, setImagePreview] = useState(null);
+    const API_URL = import.meta.env.VITE_API_URL;
+
 
     const handelFormChange = (e) => {
         const {name, value} = e.target;
@@ -92,7 +94,7 @@ export default function AddEvents () {
                 image: uploadedImage.publicUrl,
             }
 
-            const response = await axios.post(' https://organological-shaunta-exceptionably.ngrok-free.dev/api/admin/add-events', newEvent);
+            const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
             console.log(response);
             if(response.data.message === 'SUCCESS') {
                 toast.success("event added to database", {

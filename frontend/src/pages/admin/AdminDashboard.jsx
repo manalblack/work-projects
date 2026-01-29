@@ -144,7 +144,8 @@ export default function AdminDashboard() {
                        
                     </h2>
 
-                    <div className="bg-darkPurple flex md:flex-w flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center"> 
+                   {currentEvent && 
+                     <div className="bg-darkPurple flex md:flex-w flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center"> 
                      {/* <IoEllipsisVerticalCircle className="size-8 ml-auto text-white md:mr-auto self-start"/> */}
                         <div className="md:w-5/6 flex flex-col gap-2 justify-center items-center md:gap-15 md:h-full bg-red-30">
                             {/* <div className="bg-green-200 w-full flex md:mr-auto items-start">
@@ -196,6 +197,7 @@ export default function AdminDashboard() {
                         </div>
 
                     </div>
+                   }
                     <h3 className="text-3xl font-bold md:text-4xl">All Events</h3>
                     <div className="bg-red00 w-full py-5 grid grid-cols-1 md:grid-cols-2 place-items-center gap-6">
                     {allEvents.map((event) => (
