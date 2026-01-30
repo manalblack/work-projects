@@ -30,16 +30,6 @@ const verifyStaff = async (req, res, next) => {
     .eq('id', user.id)
     .single();
 
-//   const { data, error: profilesError } = await supabase
-//     .from('profiles')
-//     .select('*');
-//     console.log('user from db', data);
-
-//     if (profilesError) {
-//         console.log('error fetching users', error);
-        
-//     }
-    
 
   if (profile?.is_staff) {
     req.user = user; // Attach user to request
@@ -47,6 +37,8 @@ const verifyStaff = async (req, res, next) => {
   } else {
     res.status(403).json({ error: 'Unauthorized: Staff only' });
   }
+
+
 };
 
 // pm2 restart all && pm2 logs
@@ -66,10 +58,10 @@ router.post('/verify-staff', (req, res) => {
     }
 });
 
-router.post('/scan-tickets', verifyStaff, async (req, res) => {
-
+router.post('/scan-tickets', async (req, res) => {
     const {ticketId} = req.body;
-    // const secretKey = process.env.ADMIN_SECRET_KEY;
+    verifyStaff(req, res, async () => {
+         // const secretKey = process.env.ADMIN_SECRET_KEY;
 
     const todaysDate = new Date().toISOString();
 
@@ -91,6 +83,9 @@ router.post('/scan-tickets', verifyStaff, async (req, res) => {
     }
 
     res.status(200).json({message: 'SUCCESS'})
+    });
+    
+   
 })
 
 export default router;

@@ -53,11 +53,11 @@ export default function Verify() {
         // const pass = localStorage.getItem('pass');
         console.log(isStaff);
         
-        if (isStaff){
-            setIsLoggedStaff(true);
-        } else {
-            setIsLoggedStaff(false);
-        }
+        // if(isStaff){
+        //     setIsLoggedStaff(true);
+        // } else {
+        //     setIsLoggedStaff(false);
+        // }
 
         // query the database to check the is_scanned and scanned_at columns 
          const checkTicketStatus = async () => {
@@ -92,7 +92,7 @@ export default function Verify() {
 
         checkTicketStatus();
         
-    }, [isLoggedStaff])
+    }, [])
 
     const isVip = ticketType === 'vip';
 
