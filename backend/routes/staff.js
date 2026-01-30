@@ -23,30 +23,30 @@ const verifyStaff = async (req, res, next) => {
     return res.status(401).json({ error: 'Invalid token' });
   }
 
-  // 2. Check the database for Admin or Staff status
-//   const { data: profile } = await supabase
-//     .from('profiles')
-//     .select('is_admin, is_staff')
-//     .eq('id', user.id)
-//     .single();
-
-  const { data, error: profilesError } = await supabase
+//   2. Check the database for Admin or Staff status
+  const { data: profile } = await supabase
     .from('profiles')
-    .select('*');
-    console.log('user from db', data);
+    .select('is_admin, is_staff')
+    .eq('id', user.id)
+    .single();
 
-    if (profilesError) {
-        console.log('error fetching users', error);
+//   const { data, error: profilesError } = await supabase
+//     .from('profiles')
+//     .select('*');
+//     console.log('user from db', data);
+
+//     if (profilesError) {
+//         console.log('error fetching users', error);
         
-    }
+//     }
     
 
-//   if (profile?.is_staff) {
-//     req.user = user; // Attach user to request
-//     next(); // Move to the next function
-//   } else {
-//     res.status(403).json({ error: 'Unauthorized: Staff only' });
-//   }
+  if (profile?.is_staff) {
+    req.user = user; // Attach user to request
+    next(); // Move to the next function
+  } else {
+    res.status(403).json({ error: 'Unauthorized: Staff only' });
+  }
 };
 
 // pm2 restart all && pm2 logs
