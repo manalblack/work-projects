@@ -20,7 +20,7 @@ const verifyStaff = async (req, res, next) => {
   // 1. Validate the user via the token
   const { data: { user }, error } = await supabase.auth.getUser(token);
 
-  console.log('get session, ', data);
+//   console.log('get session, ', data);
   
   if (error || !user) {
     return res.status(401).json({ error: 'Invalid token' });
