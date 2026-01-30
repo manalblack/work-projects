@@ -40,6 +40,7 @@ const verifyStaff = async (req, res, next) => {
   }
 };
 
+// pm2 restart all && pm2 logs
 
 
 router.post('/verify-staff', (req, res) => {
