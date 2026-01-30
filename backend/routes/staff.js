@@ -13,12 +13,15 @@ const router = express.Router();
 
 const verifyStaff = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
-
+    console.log(token);
+    
   if (!token) return res.status(401).json({ error: 'No token provided' });
 
   // 1. Validate the user via the token
   const { data: { user }, error } = await supabase.auth.getUser(token);
 
+  console.log('get session, ', data);
+  
   if (error || !user) {
     return res.status(401).json({ error: 'Invalid token' });
   }
@@ -29,10 +32,13 @@ const verifyStaff = async (req, res, next) => {
     .select('is_admin, is_staff')
     .eq('id', user.id)
     .single();
-
+  console.log('users from profiles tb: ', profile);
+  
 
   if (profile?.is_staff) {
     req.user = user; // Attach user to request
+    console.log('use obj: ', user);
+    
     next(); // Move to the next function
   } else {
     res.status(403).json({ error: 'Unauthorized: Staff only' });
@@ -60,6 +66,8 @@ router.post('/verify-staff', (req, res) => {
 
 router.post('/scan-tickets', async (req, res) => {
     const {ticketId} = req.body;
+    console.log('scanning route');
+    
     verifyStaff(req, res, async () => {
          // const secretKey = process.env.ADMIN_SECRET_KEY;
 
