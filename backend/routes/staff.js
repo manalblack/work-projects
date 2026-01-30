@@ -37,10 +37,6 @@ const verifyStaff = async (req, res, next) => {
   }
 };
 
-// Use it on your route
-app.post('/verify-ticket', verifyStaff, (req, res) => {
-  // Your logic here
-});
 
 
 router.post('/verify-staff', (req, res) => {
@@ -63,7 +59,7 @@ router.post('/scan-tickets', verifyStaff, async (req, res) => {
     // const secretKey = process.env.ADMIN_SECRET_KEY;
 
     const todaysDate = new Date().toISOString();
-    
+
     if(!token) {
         res.status(404).json({error: 'No token provided'});
     }
