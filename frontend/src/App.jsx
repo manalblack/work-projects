@@ -20,7 +20,8 @@ const CustomerTicket = lazy(() => import('./pages/admin/FindTicket'));
 const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
 const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
-const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'))
+const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'));
+const StaffFindTicket = lazy(() => import('./pages/StaffFindTicket'))
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='/successful-login' element={<StaffSuccessfulLogin
           />}/>
           <Route path='/success' element={<Success />}/>
+          <Route path='/staff-find-ticket' element={<StaffFindTicket />}/>
 
           <Route path='/admin-login' element={<AdminLogin />}/>
           {/* Admin routes / setup */}
