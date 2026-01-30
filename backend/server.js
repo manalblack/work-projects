@@ -17,13 +17,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
  
-
-// vs code ports tunnel:  https://p846l2pq-3001.uks1.devtunnels.ms/
-
-// Ngrok Url: https://organological-shaunta-exceptionably.ngrok-free.dev
 dotenv.config();
 
 const app = express();
+// Absolute route for testing
+app.use((req, res, next) => {
+  console.log("HEADERS RECEIVED:", JSON.stringify(req.headers, null, 2));
+  next();
+});
+
 
 // Resend setup
 const resend = new Resend(process.env.RESEND_KEY)
