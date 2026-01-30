@@ -29,7 +29,7 @@ const verifyStaff = async (req, res, next) => {
     .eq('id', user.id)
     .single();
 
-  if (profile?.is_admin || profile?.is_staff) {
+  if (profile?.is_staff) {
     req.user = user; // Attach user to request
     next(); // Move to the next function
   } else {
