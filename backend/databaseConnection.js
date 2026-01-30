@@ -5,6 +5,8 @@ dotenv.config();
 
 
 const supabaseUrl = process.env.PROJECT_URL
+
 const supabaseKey = process.env.SECRET_KEY
+
 // update
 export const supabase = createClient(supabaseUrl, supabaseKey)
