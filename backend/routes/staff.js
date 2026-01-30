@@ -2,6 +2,7 @@ import express from 'express';
 import { supabase } from '../databaseConnection.js';
 import dotenv from 'dotenv'
 import { verify } from 'crypto';
+import { log } from 'console';
 
 
 dotenv.config();
@@ -29,18 +30,23 @@ const verifyStaff = async (req, res, next) => {
 //     .eq('id', user.id)
 //     .single();
 
-  const { data, error } = await supabase
+  const { data, error: profilesError } = await supabase
     .from('profiles')
     .select('*');
-    console.log('user from db', profile);
+    console.log('user from db', data);
+
+    if (profilesError) {
+        console.log('error fetching users', error);
+        
+    }
     
 
-  if (profile?.is_staff) {
-    req.user = user; // Attach user to request
-    next(); // Move to the next function
-  } else {
-    res.status(403).json({ error: 'Unauthorized: Staff only' });
-  }
+//   if (profile?.is_staff) {
+//     req.user = user; // Attach user to request
+//     next(); // Move to the next function
+//   } else {
+//     res.status(403).json({ error: 'Unauthorized: Staff only' });
+//   }
 };
 
 // pm2 restart all && pm2 logs
