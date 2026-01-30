@@ -33,7 +33,9 @@ const corsOptions = {
     origin: [
         'http://localhost:5173',
         'https://ticket-hub-xwhv.onrender.com', 
-        'https://troveista.com']
+        'https://troveista.com'],
+        allowedHeaders: ['Content-Type', 'Authorization'], 
+        credentials: true
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 app.use(cors(corsOptions))
