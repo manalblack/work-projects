@@ -29,6 +29,9 @@ const verifyStaff = async (req, res, next) => {
     .eq('id', user.id)
     .single();
 
+    console.log('user from db', profile);
+    
+
   if (profile?.is_staff) {
     req.user = user; // Attach user to request
     next(); // Move to the next function
@@ -60,9 +63,6 @@ router.post('/scan-tickets', verifyStaff, async (req, res) => {
 
     const todaysDate = new Date().toISOString();
 
-    if(!token) {
-        res.status(404).json({error: 'No token provided'});
-    }
     try {
         
         const {data, error} = await supabase.from('tickets').update({
