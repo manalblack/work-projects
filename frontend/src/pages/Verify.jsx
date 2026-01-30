@@ -24,7 +24,9 @@ export default function Verify() {
     const { ticketId } = useParams();
     const [searchParams] = useSearchParams();
     const ticketType = searchParams.get('type');
-    const {isStaff} = useAuth();
+
+    const {isStaff, IsAdmin} = useAuth();
+
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -49,7 +51,8 @@ export default function Verify() {
 
     useEffect(() => {
         // const pass = localStorage.getItem('pass');
-
+        console.log(isStaff);
+        
         if (isStaff){
             setIsLoggedStaff(true);
         } else {
@@ -94,13 +97,23 @@ export default function Verify() {
     const isVip = ticketType === 'vip';
 
     
+    // This function is not working
     const handelTicketVerification = async () => {
-            setVerifyTicket(true)
+            setVerifyTicket(true);
+            const { data: { session } } = await supabase.auth.getSession();
+            if(!session) {
+                console.error('no active session found');
+                return;   
+            }
+
             try {
                   const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
                     ticketId: ticketId,
                     bouncerId: passKey
-                })
+                }, {headers: {
+                    'Authorization': `Bearer ${session.access_token}`,
+                    'Content-Type': 'application/json'
+                }})
                 if(response.data.message === 'SUCCESS'){
                     navigate('/success')
                 };
@@ -146,7 +159,7 @@ export default function Verify() {
                             </p>
  
                         <p className='text-sm'>Ticket id: {ticketId}</p>
-                        {isLoggedStaff && 
+                        {isStaff && 
                             <button onClick={handelTicketVerification}
                             className="bg-green-500 text-white px-6 text-lg py-1 rounded-2xl font-bold active:scale-85 transition-all duration-300 ease-in-out">
                                 Verify
