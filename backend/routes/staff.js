@@ -23,12 +23,15 @@ const verifyStaff = async (req, res, next) => {
   }
 
   // 2. Check the database for Admin or Staff status
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin, is_staff')
-    .eq('id', user.id)
-    .single();
+//   const { data: profile } = await supabase
+//     .from('profiles')
+//     .select('is_admin, is_staff')
+//     .eq('id', user.id)
+//     .single();
 
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*');
     console.log('user from db', profile);
     
 
