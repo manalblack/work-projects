@@ -21,10 +21,10 @@ dotenv.config();
 
 const app = express();
 // Absolute route for testing
-app.use((req, res, next) => {
-  console.log("HEADERS RECEIVED:", JSON.stringify(req.headers, null, 2));
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("HEADERS RECEIVED:", JSON.stringify(req.headers, null, 2));
+//   next();
+// });
 
 
 // Resend setup
@@ -401,18 +401,22 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
 
     const {eventId} = req.body;
 
-    console.log(eventId);
+   try {
+        console.log(eventId);
 
     
-    const {data, error} = await supabase.from('events').select('total_tickets, sold_tickets').eq('id', eventId).single();
+        const {data, error} = await supabase.from('events').select('total_tickets, sold_tickets').eq('id', eventId).single();
 
-    if(error) console.log('error when checking ticket quantity', error);
+        if(error) console.log('error when checking ticket quantity', error);
     
     /* This var is the gatekeeper to prevent overselling tickets */
-    const isAvailable = data.sold_tickets < data.total_tickets;
+        const isAvailable = data.sold_tickets < data.total_tickets;
 
-    return res.status(200).json({isAvailable});
+        return res.status(200).json({isAvailable});
 
+   } catch (error) {
+    
+   }
 })
 
 app.get('/api/test', (req, res) => {

@@ -74,7 +74,6 @@ export default function Verify() {
                 
                 if(data.is_scanned === false) {
                     setTicketStatus(false);
-                    
                 } else if(data.is_scanned === true) {
                    setIsScanned(true);
                 }

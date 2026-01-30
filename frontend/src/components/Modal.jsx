@@ -28,7 +28,7 @@ export default function Modal({isOpen, children, closeModal}) {
                     animate={{scale: 1, opacity: 1, y: 0}}
                     exit={{scale:0.9, opacity: 0, y: 20}}
                     transition={{type: 'spring', duration: 0.5}}
-                 className="bg-darkPurple w-9/10 md:w-5/6 md:h- h-auto z-999 flex flex-col md:flex-row justify-center items-center p-1 gap-3 rounded-sm ">
+                 className="bg-darkPurple w-9/10 md:w-5/6 md:h- h-auto z-999 flex flex-col md:flex-row justify-center items-center p-1 gap-3 rounded-sm mt-4 ">
                     {children}
                 </motion.div>
 
