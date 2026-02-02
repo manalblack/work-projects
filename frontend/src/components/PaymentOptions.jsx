@@ -29,7 +29,8 @@ export default function PaymentOptions({eventData}) {
 
     useEffect(() => {
 
-        const checkTicket = async () => {
+       try {
+         const checkTicket = async () => {
 
             // UNCOMMENT BEFORE UPDATING  DROPLET
             const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}); 
@@ -45,6 +46,9 @@ export default function PaymentOptions({eventData}) {
 
         checkTicket();
 
+       } catch (error) {
+            alert('Error: ', error.message);
+       }
 
     }, [])
 
