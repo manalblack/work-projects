@@ -77,7 +77,6 @@ export default function AddEvents () {
             const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile);
 
             if(error) throw error;
-
             // Get the public url to save to table
             const {data: uploadedImage} = supabase.storage.from('events_images').getPublicUrl(fileName);
             

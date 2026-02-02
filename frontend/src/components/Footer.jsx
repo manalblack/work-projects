@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="flex flex-row gap-3 md:gap-15">
                 <div className="bg-blue-30 w-1/2 flex flex-col gap-6">
                     <span className="md:text-2xl text-lg font-bold text-gray-800">Trovelista</span>
-                    <p className="leading-7 md:text-lg text-gray-800">
+                    <p className="leading-7 md:text-lg text-sm text-gray-800">
                         Amfanin Girma Plaza, Rijiyar Zaki,
                         opp Markaz Juma'at Mosque
                         <br />
@@ -19,7 +19,7 @@ export default function Footer() {
                     </p>
                 </div>
 
-            <div className="bg-green-30 w-3/5 md:p-2 flex flex-col gap-4 mt-8 md:mt-0">
+            <div className="bg-green-00 w-3/4 md:p-2 flex flex-col gap-4 mt-8 md:mt-0 p-2">
                 <div className="flex flex-row md:gap-3 gap-1">
                     <FaLocationDot className="md:size-6 text-darkPurple size-5"/>
                     <p className="font-bold text-sm text-lightPurple">

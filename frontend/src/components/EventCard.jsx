@@ -64,10 +64,10 @@ export default function EventCard() {
              className="md:w-120 w-90 bg-lightPurple flex flex-col justify-center items-center gap-2 p-2 rounded-sm shadow-lg flex-none h-80 md:h-100">
 
             <div className="relative flex justify-center items-center h-auto w-full md:h-120">
-                <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg h-70 md:h-70"/>
+                <img src={event.image} alt="" className="w-auto rounded-sm shadow-lg h-75 md:h-70"/>
                 <MiniOverlay>
 
-                    <div className="bg-black/50 absolute bottom-0 left-0 w-full h-full flex flex-row justify-between md:gap-4 md:h">
+                    <div className="bg-black/50 absolute bottom-0 left-0 w-full h-full flex flex-row justify-between md:gap-4 md:h ">
 
                         <div className="bg-blue-0 w-5/6 flex flex-col items-start p-2 gap-4 md:gap-2 mt-6 md:mt-18 pt-12 md:pt-15">
                             <h2 className="md:text-2xl  text-white font-bold">
@@ -89,7 +89,7 @@ export default function EventCard() {
                             </span>
                             
                         </div>
-                        <div className="flex flex-col justify-center items-center p-2 gap-5 mt-20 bg-amber-0 md:gap-8 md:mt-15">
+                        <div className="flex flex-col justify-center items-center p-2 gap-5 mt-20 bg-amber00 md:gap-8  md:mt-15">
                             <LightPurpleBtn onPress={() => aboutEventModal(event)}>
                                 AboutEvent
                             </LightPurpleBtn>

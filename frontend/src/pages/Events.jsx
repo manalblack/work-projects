@@ -70,19 +70,19 @@ export default function Events() {
            <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 w-full md:px-2 bg-green-00 p-2">
                 {allEvents.map((event) => (
                     <div key={event.id}
-                     className="md:h-150 lg:h-160 h-135 w-full md:w-full lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm ">
-                    <div className="w-full md:w-9/10 bg-white/50 rounded-sm aspect-video">
-                        <img src={event.image} alt="placeholder image" className="rounded-sm"/>
+                     className="md:max-h-150 lg:h-160 h-135 max-h-160 w-full md:w-full lg:w-3/4 bg-darkPurple flex flex-col items-center p-2 gap-6 md:gap-8 rounded-sm ">
+                    <div className="w-full md:w-9/10 bgwhite/50 rounded-sm aspect-video flex justify-center items-center">
+                        <img src={event.image} alt="placeholder image" className="rounded-sm h-60"/>
                     </div>
                     <div className="text-white bg-green-6 w-full  flex flex-col gap-3">
                         <h2 className="text-xl font-bold">{event.title}</h2>
                         <p className="line-clamp-2 text-lg">
                             {event.description}
                         </p>
-                        <div className="flex flex-row gap-3 bg-red-70">
+                        <div className="flex flex-row gap-3 bg-red-">
                            
-                            <div className="flex flex-col gap-3 bg-red-">
-                                <div className="bg-red-0 p-1 flex flex-col gap-6">
+                            <div className="flex flex-col gap-3 bg-red-00 w-3/4">
+                                <div className="bg-red-0 p-1 flex flex-col gap-4">
                                     <div>
                                     <PriceContainer>
                                         N{event.regular_price}

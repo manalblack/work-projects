@@ -2,6 +2,7 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import {motion, AnimatePresence} from 'motion/react';
 import Overlay from "./Overlay";
 import { Link } from "react-router-dom";
+import {Link as ScrollLink} from 'react-scroll';
 
 
 
@@ -23,7 +24,7 @@ export default function Rightbar({isOpen, closeSidebar}) {
                     className={`fixed top-0 right-0 h-full w-70 bg-lightPurple z-50 shadow-xl`}>
                 {/* Search container  MAKE IT FUNCTIONAL ASAP*/}
                 <div className="flex justify-center items-center p-4 ">
-                    <input type="text" placeholder="Search events" className="bg-white px-8 py-1 rounded-2xl shadow-lg"/>
+                    <input type="text" placeholder="Search events" className="bg-white px-8 py-1 rounded-2xl shadow-lg w-9/10"/>
                 </div>
 
                 <div className="bg-blue-10 flex flex-col mt-10 gap-9 p-2">
@@ -34,9 +35,12 @@ export default function Rightbar({isOpen, closeSidebar}) {
                     </Link>
 
 
-                    <span className="outline px-3 outline-darkPurple shadow-md text-lg active:scale-95 transition-all duration-300 ease-in-out">
+                    <ScrollLink to='socials' smooth={true} duration={500} offset={-100} className="outline px-3 outline-darkPurple shadow-md text-lg active:scale-95 transition-all duration-300 ease-in-out">
+                        <span >
                         Contact Us
                     </span>
+                    </ScrollLink>
+                    
                     <span className="outline px-3 outline-darkPurple shadow-md text-lg active:scale-95 transition-all duration-300 ease-in-out flex flex-row py-2 gap-3">
                         <BsFillTelephoneFill className="size-6 text-gray-700"/>
                         +2347010010044

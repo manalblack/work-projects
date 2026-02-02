@@ -82,19 +82,46 @@ router.post('/scan-tickets', async (req, res) => {
 
         if(error) {
             console.log('error when updating ticket status in db, ', error);
+            return res.status(500).json({
+              error: 'Database Error',
+              message: 'could not connect to the database please try again'
+            })
         }
     
  
     } catch (error) {
         console.log('error when checking ticket status in the database', error);
+        toast.error('Connection failed.Please try again');
+        window.location.reload();
         
     }
 
     res.status(200).json({message: 'SUCCESS'})
+
     });
     
    
 })
+
+router.get('/find-ticket', async (req, res) => {
+    const {query} = req.query;
+    console.log('route hit')
+
+    try {
+        const {data, error} = await supabase.from('tickets').select('*').or(`customer_name.ilike.%${query}%, customer_email.ilike.%${query}%`);
+
+        if (error) {
+            console.log(error);
+            
+            return res.status(500).json({error: error.message});
+        }
+
+        res.json(data)
+    } catch (error) {
+        
+    }
+})
+
 
 export default router;
 
