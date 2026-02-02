@@ -32,9 +32,9 @@ export default function PaymentOptions({eventData}) {
         const checkTicket = async () => {
 
             // UNCOMMENT BEFORE UPDATING  DROPLET
-            // const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}); 
+            const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}); 
 
-            const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id});
+            // const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id});
 
 
             setTicketsAvailability(response.data.isAvailable);

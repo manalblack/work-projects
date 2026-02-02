@@ -402,8 +402,8 @@ app.post('/webhook/monnify', (req, res) => {
 // file:///C:/Users/king/Downloads/ticket_e03537c0-1af9-4bfc-a3fb-cec082827ed6.pdf
 
 
-
-app.post('/api/check-tickets-quantity', async (req, res) => {
+// When testing locally add the api prefix before the route name
+app.post('/check-tickets-quantity', async (req, res) => {
 
     const {eventId} = req.body;
 
