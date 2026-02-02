@@ -82,15 +82,22 @@ router.post('/scan-tickets', async (req, res) => {
 
         if(error) {
             console.log('error when updating ticket status in db, ', error);
+            return res.status(500).json({
+              error: 'Database Error',
+              message: 'could not connect to the database please try again'
+            })
         }
     
  
     } catch (error) {
         console.log('error when checking ticket status in the database', error);
+        toast.error('Connection failed.Please try again');
+        window.location.reload();
         
     }
 
     res.status(200).json({message: 'SUCCESS'})
+
     });
     
    

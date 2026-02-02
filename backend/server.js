@@ -13,6 +13,12 @@ import {dirname, join} from 'path';
 import { fileURLToPath } from 'url'
 
 
+/*
+
+    TEST THE STAFF VERIFICATION LOGIC, FOR EXAMPLE IF TH NETWORK LAGS WHAT SHOULD HAPPEN?
+
+*/
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
