@@ -29,6 +29,7 @@ export default function PaymentOptions({eventData}) {
 
     useEffect(() => {
 
+        
        try {
          const checkTicket = async () => {
 
