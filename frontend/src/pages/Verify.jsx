@@ -5,6 +5,8 @@ import Loading from "../components/Loading";
 import { CiWarning } from "react-icons/ci";
 import axios from 'axios'
 import { useAuth } from "./admin/hooks/userAuth.jsx";
+import toast from 'react-hot-toast';
+
 
 
 // This page should only open when a staff member scans a ticket
@@ -74,7 +76,6 @@ export default function Verify() {
                 
                 if(data.is_scanned === false) {
                     setTicketStatus(false);
-                    
                 } else if(data.is_scanned === true) {
                    setIsScanned(true);
                 }
@@ -86,6 +87,9 @@ export default function Verify() {
 
             } catch (error) {
                 console.log('error when checking ticket status', error);
+                toast.error('Check your internet connection, refresh the page', {
+                    duration: 8000
+                });
                 
             }
         }
@@ -114,15 +118,21 @@ export default function Verify() {
                     'Authorization': `Bearer ${session.access_token}`,
                     'Content-Type': 'application/json'
                 }})
+<<<<<<< HEAD
+=======
+                console.log(response);
+>>>>>>> 0b54835b6560564748b26f00155d1edf1c456d6a
                 
                 if(response.data.message === 'SUCCESS'){
-                    navigate('/success')
+                    // navigate('/success')
                 };
 
                 console.log(response);
                  
             } catch (error) {
-                console.log('error when checking ticket status', error)
+                console.log('error when checking ticket status', error);
+                toast.error('Connection failed.Please try again');
+                window.location.reload();
             };
     }
         

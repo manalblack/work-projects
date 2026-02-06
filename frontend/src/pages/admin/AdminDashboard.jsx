@@ -9,10 +9,6 @@ import Loading from "../../components/Loading";
 import { supabase } from "../../supabaseConnection";
 
 
-/**   # VERY IMPORTANT #
-    MAJOR BUG ON DROPLET, THE BACKEND IS NOT WORKING AND THE FRONTEND NEEDS AN UPDATE 
- */
-
 
 // Add the event to the database and work on the number input fields they nee fixing
 
@@ -81,7 +77,6 @@ export default function AdminDashboard() {
                     
                 }
             
-
 
                 const updatedEvents = allEvents.map((ev) => ({
                     ...ev,

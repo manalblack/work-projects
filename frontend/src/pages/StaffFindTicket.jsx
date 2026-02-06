@@ -1,47 +1,46 @@
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import axios from 'axios';
-import Loading from "../../components/Loading";
+import Loading from ".././components/Loading";
 
 
 
-export default function FindTicket() {
+export default function StaffFindTicket() {
 
     const [ticketInfo, setTicketInfo] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [loading, setLoading] = useState(false);
-     const API_URL = import.meta.env.VITE_API_URL;
+        const [searchQuery, setSearchQuery] = useState('');
+        const [loading, setLoading] = useState(false);
+         const API_URL = import.meta.env.VITE_API_URL;
+    
+    
+        const handelTicketSearch = async () => {
+            setLoading(true);
+            // const response = await axios.get(`${API_URL}/staff/find-ticket`, {
+            //     params: {
+            //         query: searchQuery,
+            //     }
+            // });
 
-
-    const handelTicketSearch = async () => {
-        setLoading(true);
-        const response = await axios.get(`${API_URL}/admin/find-ticket`, {
-            params: {
+            const response = await axios.get(`http://localhost:3001/staff/find-ticket`, {
+                params: {
                 query: searchQuery,
             }
-        });
-
+            });
         
-        console.log(response.data);
-        setTicketInfo(response.data);
-        setLoading(false);
-    }
-
-
-
-    if(loading) {
-        return <Loading>Searching for ticket</Loading>
-    }
+    
+            console.log(response.data);
+            setTicketInfo(response.data);
+            setLoading(false);
+        }
+    
+    
+    
+        if(loading) {
+            return <Loading>Searching for ticket</Loading>
+        }
 
     return (
         <>
-            <nav className="bg-lightPurple shadow-md py-2 px-5 flex flex-row justify-between">
-                <button className="bg-darkPurple text-white px-3 font-bold rounded-xl py-1 shadow-md active:scale-85 transition-all duration-300 ease-in-out">
-                    <Link to='/admin'>
-                        Dashboard
-                    </Link>
-                </button>
-            </nav>
             <div className="mt-10 flex flex-col justify-center items-center gap-8 ">
                 <h1 className="text-2xl font-bold">Enter customer name or email</h1>
                 <div className='flex flex-col md:flex-row gap-15 md:gap-20 bg-blue-00 w-9/10  items-center pb-5'>
@@ -65,7 +64,7 @@ export default function FindTicket() {
 
                             <p className="text-lg font-light">Customer Email: <span className="font-bold">{ticket.customer_email}</span></p>
 
-                            <p className="text-lg font-light">Ticket status: <span className="font-bold">{ticket.is_scanned ? 'Ticket Scanned' : 'NotScanned'}</span></p>
+                            <p className="text-lg font-light">Ticket status: <span className="font-bold">{ticket.is_scanned ? 'Ticket Scanned' : 'Not Scanned'}</span></p>
 
                             <p className="text-lg font-light">Ticket Type: <span className="font-bold">{ticket.type}</span></p>
                             <p className="font-light text-lg">
