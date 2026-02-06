@@ -53,6 +53,7 @@ app.use(express.static('public'));
 
 // ROUTES 
 
+// IMPORTANT: when testing locally add the api prifxe
 app.use('/staff', staffRoutes);
 app.use('/admin', adminRoutes);
 
