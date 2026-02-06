@@ -114,6 +114,7 @@ export default function Verify() {
                     'Authorization': `Bearer ${session.access_token}`,
                     'Content-Type': 'application/json'
                 }})
+                
                 if(response.data.message === 'SUCCESS'){
                     navigate('/success')
                 };

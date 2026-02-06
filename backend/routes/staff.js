@@ -83,14 +83,13 @@ router.post('/scan-tickets', async (req, res) => {
         if(error) {
             console.log('error when updating ticket status in db, ', error);
         }
+         res.status(200).json({message: 'SUCCESS'})
     
  
     } catch (error) {
         console.log('error when checking ticket status in the database', error);
         
     }
-
-    res.status(200).json({message: 'SUCCESS'})
     });
     
    
