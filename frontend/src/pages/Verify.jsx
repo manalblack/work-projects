@@ -117,14 +117,11 @@ export default function Verify() {
                 }, {headers: {
                     'Authorization': `Bearer ${session.access_token}`,
                     'Content-Type': 'application/json'
-                }})
-<<<<<<< HEAD
-=======
-                console.log(response);
->>>>>>> 0b54835b6560564748b26f00155d1edf1c456d6a
+                }
+                console.log(response)
                 
                 if(response.data.message === 'SUCCESS'){
-                    // navigate('/success')
+                    navigate('/success')
                 };
 
                 console.log(response);
