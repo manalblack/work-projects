@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 export default function Verify() {
 
 
-    const [isLoggedStaff, setIsLoggedStaff] = useState(false);
+    // const [isLoggedStaff, setIsLoggedStaff] = useState(false);
     const [ticketStatus, setTicketStatus] = useState(true)
     const [isScanned, setIsScanned] = useState(false);
     const [verifyTicket, setVerifyTicket] = useState(false);
@@ -111,14 +111,23 @@ export default function Verify() {
             }
 
             try {
-                  const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
+                const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
                     ticketId: ticketId,
                     bouncerId: passKey
                 }, {headers: {
                     'Authorization': `Bearer ${session.access_token}`,
                     'Content-Type': 'application/json'
                 }});
-                
+
+                // const response = await axios.post(`http://localhost:3001/api/staff/scan-tickets`, {
+                //     ticketId: ticketId,
+                //     bouncerId: passKey
+                // }, {headers: {
+                //     'Authorization': `Bearer ${session.access_token}`,
+                //     'Content-Type': 'application/json'
+                // }});
+
+
                 console.log(response)
                 
                 
@@ -131,7 +140,7 @@ export default function Verify() {
             } catch (error) {
                 console.log('error when checking ticket status', error);
                 toast.error('Connection failed.Please try again');
-                window.location.reload();
+                // window.location.reload();
             };
     }
         

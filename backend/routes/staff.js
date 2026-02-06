@@ -79,6 +79,7 @@ router.post('/scan-tickets', async (req, res) => {
             is_scanned: true,
             scanned_at: todaysDate
         }).eq('id', ticketId).eq('is_scanned', false).select();
+        
 
         if(error) {
             console.log('error when updating ticket status in db, ', error);
