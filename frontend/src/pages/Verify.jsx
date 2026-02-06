@@ -132,6 +132,7 @@ export default function Verify() {
                 
                 
                 if(response.data.message === 'SUCCESS'){
+                    setVerifyTicket(false);
                     navigate('/success')
                 };
 
