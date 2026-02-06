@@ -87,6 +87,7 @@ router.post('/scan-tickets', async (req, res) => {
               message: 'could not connect to the database please try again'
             })
         }
+         res.status(200).json({message: 'SUCCESS'})
     
  
     } catch (error) {
@@ -95,9 +96,12 @@ router.post('/scan-tickets', async (req, res) => {
         window.location.reload();
         
     }
+<<<<<<< HEAD
+=======
 
     res.status(200).json({message: 'SUCCESS'})
 
+>>>>>>> 0b54835b6560564748b26f00155d1edf1c456d6a
     });
     
    
