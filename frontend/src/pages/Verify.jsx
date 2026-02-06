@@ -119,6 +119,7 @@ export default function Verify() {
                     'Content-Type': 'application/json'
                 }})
                 
+                
                 if(response.data.message === 'SUCCESS'){
                     navigate('/success')
                 };
