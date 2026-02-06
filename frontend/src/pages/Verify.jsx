@@ -117,7 +117,8 @@ export default function Verify() {
                 }, {headers: {
                     'Authorization': `Bearer ${session.access_token}`,
                     'Content-Type': 'application/json'
-                }
+                }});
+                
                 console.log(response)
                 
                 
