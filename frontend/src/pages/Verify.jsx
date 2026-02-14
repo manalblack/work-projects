@@ -21,7 +21,8 @@ export default function Verify() {
     const [isScanned, setIsScanned] = useState(false);
     const [verifyTicket, setVerifyTicket] = useState(false);
     const [scanningTime, setScanningTime] = useState(null)
-    const [eventName, setEventName] = useState('')
+    const [eventName, setEventName] = useState('');
+    const [allScannedTickets, setAllScannedTickets] = useState([]);
 
     const { ticketId } = useParams();
     const [searchParams] = useSearchParams();
@@ -78,6 +79,7 @@ export default function Verify() {
                     setTicketStatus(false);
                 } else if(data.is_scanned === true) {
                    setIsScanned(true);
+                   
                 }
 
                 setTicketStatus(false);
