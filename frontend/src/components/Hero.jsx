@@ -18,7 +18,8 @@ export default function Hero(){
     const [aboutModal, setAboutModal] = useState(false);
     const [buyTicket, setBuyTicket] = useState(false);
     const [aboutPay, setAboutPay] = useState(false);
-    const [ongoingEvent, setOngoingEvent] = useState([])
+    const [ongoingEvent, setOngoingEvent] = useState([]);
+    const [eventPassed, setEventPassed] = useState(false);
     
 
     const aboutEventModal = () => {
@@ -34,6 +35,7 @@ export default function Hero(){
     }
 
     useEffect(() => {
+        const todaysDate = new Date();
         try {
             const fetchCurrentEvent = async () => {
                 const {data, error} = await supabase.from('events').select('*').eq('current_event', true)
@@ -42,8 +44,19 @@ export default function Hero(){
                     console.error('error fetching current event', error)
                 }
 
+                // check event date 
+                const eventDate = new Date(data[0].date);
+                todaysDate.setHours(0, 0, 0, 0);
+
+                if(eventDate < todaysDate) {
+                    console.log('event passed');
+                    setEventPassed(true);
+                }
+
                 setOngoingEvent(data[0])
                 console.log(data[0])
+                console.log(eventDate);
+                
                 
             }
 
@@ -66,13 +79,17 @@ export default function Hero(){
                 whileInView={{opacity: 1, y: 0}}
                 transition={{ duration: 1, ease: "easeOut" }}
                 viewport={{amount: 0.2 }}
-             className="bg-red-0 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
+             className="bg-red-00 w-full md:w-9/10 h-auto flex flex-col justify-center items-center p-2 md:p-6 gap-10">
 
-                <div className="relative w-full md:w-9/10 group rounded-xl">
+                <div className="relative w-full md:w-9/10 group rounded-xl ">
                     <img src={ongoingEvent.image} alt="" className="w-full rounded-sm shadow-lg h-90 md:h-150"/>
+                
                     <MiniOverlay>
+                        
                         <div className="bg-black/40 text-white absolute bottom-0 left-0 w-full h-full md:h-90 flex flex-row justify-between gap-4 pt-7 md:pt-0">
+                        
                             <div className="w-5/6 flex flex-col items-start gap-3 md:gap-5 bg-gray-4 h-60 p-1 mt-20 md:mt-25 pt-8 md:pt-0 bg-green-00">
+                            
                                <h2 className="md:text-4xl font-bold text-lg">
                                     {ongoingEvent.title}
                                 </h2> 
@@ -90,10 +107,11 @@ export default function Hero(){
                            
                             </div>
                             <div className="bg-blu300 h-40 md:h-50 w-40 md:w-60 flex flex-col justify-center items-center gap-5 md:gap-10 mt-40 md:mt-25">
+                                {eventPassed && <span className="bg-white text-red-500 px-3 py-2 text-lg font-bold rounded-sm">Passed !</span>}
                                 <LightBtn onPress={aboutEventModal}>
                                     About Event
                                 </LightBtn>
-                                <LightPurpleBtn onPress={buyTicketModal}>
+                                <LightPurpleBtn disableBtn={eventPassed} onPress={buyTicketModal}>
                                     Buy Ticket
                                 </LightPurpleBtn>
                             </div>

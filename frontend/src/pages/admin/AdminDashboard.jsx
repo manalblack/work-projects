@@ -15,19 +15,18 @@ import { supabase } from "../../supabaseConnection";
 export default function AdminDashboard() {
 
     const [addEventModal, setAddEventModal] = useState(false);
-    // const [eventDate, setEventDate] = useState(new Date());
-    const [ongoingEvent, setOngoingEvent] = useState(false);
-
     const [allEvents, setAllEvents] = useState([])
     const [loading, setLoading] = useState(true);
-    const [currentEvent, setCurrentEvent] = useState([]);
+    // const [currentEvent, setCurrentEvent] = useState([]);
     const [soldOut, setSoldOut] = useState(false);
+    const [eventPassed, setEventPassed] = useState(false);
 
     const API_URL = import.meta.env.VITE_API_URL;
 
     // fetching all events from database
     useEffect(() => {
         // setLoading(true);
+        const todaysDate = new Date();
 
         try {
             const fetchEvents = async () => {
@@ -38,8 +37,25 @@ export default function AdminDashboard() {
                 setAllEvents(response.data);
                 // set the current event logic
 
-               const ongoingEvent = response.data.filter(event => event.current_event === true) || [];
-               setCurrentEvent(ongoingEvent[0])
+            //    const ongoingEvent = response.data.filter(event => event.current_event === true) || [];
+            //    setCurrentEvent(ongoingEvent[0]);
+            const ongoingEvent = response.data.find(event => event.current_event === true);
+            
+
+            // check if the current event is passed or not
+
+            // if(ongoingEvent[0]) {
+            //     const eventDate = new Date(ongoingEvent[0].event_date);
+            //     todaysDate.setHours(0, 0, 0, 0);
+
+            //     if(eventDate < todaysDate) {
+            //         setEventPassed(true);
+            //     }
+            // }
+            
+
+               console.log(ongoingEvent);
+               
                 
                 //  Find the sold out / finished event
                 
@@ -56,6 +72,17 @@ export default function AdminDashboard() {
                 setLoading(false)
             }
 
+            // Cleanup Current event id date passed
+            const cleanupCurrentEvent = async () => {
+                const {data, error} = await supabase.rpc('update_expired_events')
+
+                if(error)  {
+                    console.log('rpc function error', error);
+                }
+                console.log('rpc function data', data);
+            }
+
+            cleanupCurrentEvent();
             fetchEvents();
 
         } catch (error) {
@@ -68,6 +95,13 @@ export default function AdminDashboard() {
 
     const handelOngoingBox = async (eventId) => {
 
+        console.log(eventId);
+        
+        const updatedEvents = allEvents.map((ev) => ({
+            ...ev,
+            current_event: ev.id === eventId // True for the one clicked, false for others
+        }));
+
         try {
             const { error } = await supabase.rpc('set_single_current_event', { target_id: eventId });
 
@@ -76,19 +110,17 @@ export default function AdminDashboard() {
                     console.log(error);
                     
                 }
-            
-
-                const updatedEvents = allEvents.map((ev) => ({
-                    ...ev,
-                    is_current: ev.id === eventId // True for the one clicked, false for others
-                }));
-
                 setAllEvents(updatedEvents);
         } catch (error) {
             console.log('error when updating current event: ', error);
             
         }
     }
+
+
+
+     const ongoingEvent = allEvents.find(event => event.current_event === true);
+            
 
 
    if(loading) {
@@ -102,8 +134,8 @@ export default function AdminDashboard() {
             {/* wrapper */}
             <div className="h-screen w-full bg-lightPurple flex flex-col gap-3">
 
-                <nav className="bg-lightPurple p-2 flex justify-center items-center shadow-md">
-                    <div className="flex flex-row justify-center items-center gap-10 md:justify-between bg-green-00 md:w-3/4 md: pt-4">
+                <nav className="bg-lightPurple p-2  flex justify-center items-center shadow-md">
+                    <div className="flex flex-row justify-center items-center gap-10 md:justify-between bg-green-00 md:w-3/4 md: pt-4 md:pb-2">
                         <button
                         className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in shadow-md">
                            <Link to='/admin/add-events'>
@@ -134,58 +166,59 @@ export default function AdminDashboard() {
                 </nav>
                 {/* parent component */}
                 <div className="bg-lightPurple flex flex-col justify-center items-center gap-6 md:gap-10">
-                    <h2 className="text-2xl text-gray-900 md:text-4xl">
+                    <h2 className="text-2xl text-gray-900 md:text-4xl font-bold">
                         Current Event 
                        
                     </h2>
 
-                   {currentEvent && 
-                     <div className="bg-darkPurple flex md:flex-w flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center"> 
+                   {ongoingEvent && 
+                     <div className="bg-darkPurple flex md:flex-row flex-col gap-8 w-9/10  md:w-3/4 p-3 rounded-sm items-center"> 
                      {/* <IoEllipsisVerticalCircle className="size-8 ml-auto text-white md:mr-auto self-start"/> */}
-                        <div className="md:w-5/6 flex flex-col gap-2 justify-center items-center md:gap-15 md:h-full bg-red-30">
+                        <div className="md:w-5/6 flex flex-col gap-2 justify-center items-center md:gap-8 md:h-full bg-red-30">
                             {/* <div className="bg-green-200 w-full flex md:mr-auto items-start">
                                 <IoEllipsisVerticalCircle className="size-8 ml-auto text-white md:mr-auto"/>
                             </div> */}
-                            <img src={currentEvent.image} alt="" className="rounded-sm shadow-md w-9/10"/>
+                            <img src={ongoingEvent.image} alt="" className="rounded-sm shadow-md w-9/11 md:h-110"/>
                             <h3 className="text-white text-2xl">
-                                Title: {currentEvent.title}
+                                Title: {ongoingEvent.title}
                             </h3>
-                            {currentEvent.total_tickets <= 0 && 
+                             {eventPassed && <span className="bg-white text-red-500 px-5 text-lg font-bold rounded-sm">Passed !</span>}
+                            {ongoingEvent.total_tickets <= 0 && 
                                 <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold uppercase">
                                     Sold Out / Finished
                                 </span>}
                         </div>
                         {/* 2nd container */}
-                        <div className="md:w-3/4 flex flex-col gap-3 justify-center items-center bg-green-00">
+                        <div className="md:w-3/4 flex flex-col gap-3 justify-center items-center bg-green-00 md:gap-6">
                            
-                            <p className="text-white leading-7 "> Description: {currentEvent.description}
+                            <p className="text-white leading-7 text-lg md:text-center"> Description: {ongoingEvent.description}
                             </p>
                             {/* Price / ticket count container */}
                             <div className="bg-white/70 flex flex-row justify-between p-2 rounded-sm shadow-lg ">
                                 <div className="flex flex-col gap-2">
-                                    <span className="font-bold">Vip Price: {currentEvent.vip_price}</span> 
+                                    <span className="font-bold">Vip Price: {ongoingEvent.vip_price}</span> 
                                     <span className="font-bold">
-                                        Regular price: {currentEvent.regular_price}</span> 
+                                        Regular price: {ongoingEvent.regular_price}</span> 
                                 </div>
 
                                 <div className="flex flex-col gap-2 ">
                                     <span className="font-bold">
-                                        Remaining Tickets: {currentEvent.total_tickets}
+                                        Remaining Tickets: {ongoingEvent.total_tickets}
                                     </span>
                                     <span className="font-bold md:ml-5">
-                                        Sold Tickets: {currentEvent.sold_tickets}
+                                        Sold Tickets: {ongoingEvent.sold_tickets}
                                     </span>
                                 </div>       
                             </div>
                             <div className="bg-white/70 flex flex-row justify-between p-2 rounded-sm shadow-md">
                                 <span className="w-1/2 font-bold">
-                                    Location: {currentEvent.location}
+                                    Location: {ongoingEvent.location}
                                 </span>
                                 <div className="flex flex-col">
                                     <span className="font-bold">
-                                        Time: {currentEvent.time}
+                                        Time: {ongoingEvent.time}
                                     </span>
-                                    <span className="font-bold">Date:     {currentEvent.date}</span>
+                                    <span className="font-bold">Date:     {ongoingEvent.event_date}</span>
                                 </div>
                             </div>
 
@@ -237,7 +270,7 @@ export default function AdminDashboard() {
 
                                         <div className="flex flex-row gap-2">
                                             <label htmlFor="">Ongoing</label>
-                                            <input type="checkbox" checked={event.current_event && soldOut} onChange={()=> handelOngoingBox(event.id)} disabled={event.current_event && soldOut}  className="h-5 w-5"/>
+                                            <input type="radio" checked={event.current_event} name='current-event-selection' onChange={()=> handelOngoingBox(event.id)}  className="h-5 w-5"/>
                                         </div>
                                     </div>
 
@@ -249,7 +282,7 @@ export default function AdminDashboard() {
                                         location: {event.location}
                                     </span>
                                     <span className="font-semibold">
-                                        Date: {event.date}
+                                        Date: {event.event_date}
                                     </span>
                                 </div>
                             </div>
