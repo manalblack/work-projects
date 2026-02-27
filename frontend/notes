@@ -35,3 +35,44 @@ payment response object [
     status: "SUCCESS"
     transactionReference: "MNFY|35|20260103032551|000749"
 ]
+
+
+
+
+powershell test 
+
+$url = "http://localhost:3001/api/webhooks/monnify"
+$totalRequests = 50
+
+Write-Host "Firing 50 requests with cart arrays. Watch PM2!" -ForegroundColor Cyan
+
+for ($i=1; $i -le $totalRequests; $i++) {
+    Start-Job -ScriptBlock {
+        param($u, $id)
+        # Defining the nested structure: Object -> Object -> Array of Objects
+        $payload = @{
+            eventType = "SUCCESSFUL_TRANSACTION"
+            eventData = @{
+                paymentReference = "REF-$id"
+                customer = @{ email = "user$id@example.com" }
+                # This is your array of objects
+                cart = @(
+                    @{ id = "TICKET-01"; type = "Regular"; price = 5000; qty = 1 },
+                    @{ id = "VIP-02"; type = "VIP"; price = 10000; qty = 1 }
+                )
+            }
+        }
+        
+        # -Depth 5 ensures the cart array and its objects are converted correctly
+        $jsonBody = $payload | ConvertTo-Json -Depth 5
+        
+        try {
+            Invoke-RestMethod -Uri $u -Method Post -Body $jsonBody -ContentType "application/json"
+        } catch {
+            return "Request $id failed"
+        }
+    } -ArgumentList $url, $i | Out-Null
+}
+
+Get-Job | Wait-Job | Receive-Job
+Remove-Job *

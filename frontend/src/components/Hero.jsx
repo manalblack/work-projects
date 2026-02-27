@@ -39,13 +39,14 @@ export default function Hero(){
         try {
             const fetchCurrentEvent = async () => {
                 const {data, error} = await supabase.from('events').select('*').eq('current_event', true)
-
+                console.log(data);
+                
                 if(error){
                     console.error('error fetching current event', error)
                 }
 
                 // check event date 
-                const eventDate = new Date(data[0].date);
+                const eventDate = new Date(data[0].event_date);
                 todaysDate.setHours(0, 0, 0, 0);
 
                 if(eventDate < todaysDate) {

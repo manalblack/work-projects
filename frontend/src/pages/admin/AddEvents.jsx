@@ -71,11 +71,10 @@ export default function AddEvents () {
        setEventTime(formattedTime);
         
         try {
-            // upload image to a storage bucket first before adding to database table
+            // upload image to a storage bucket first before adding to database table, We can't save an image file directly into a table
             const fileName = `eventImage-${imageFile.name}`
 
-            const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile);
-
+            const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile)
             if(error) throw error;
             // Get the public url to save to table
             const {data: uploadedImage} = supabase.storage.from('events_images').getPublicUrl(fileName);
@@ -89,11 +88,15 @@ export default function AddEvents () {
                 vipPrice: eventData.vipPrice,
                 regularPrice: eventData.regularPrice,
                 time: formattedTime,
-                date: formattedDate,
+                event_date: formattedDate,
                 image: uploadedImage.publicUrl,
             }
 
-            const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+            // const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+
+            const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
+
+
             console.log(response);
             if(response.data.message === 'SUCCESS') {
                 toast.success("event added to database", {
@@ -102,6 +105,16 @@ export default function AddEvents () {
                 });
                 setLoading(false);
             }
+
+            setEventData({
+                eventTitle: '',
+                eventDescription: '',
+                eventLocation: '',
+                totalTickets: 0,
+                vipPrice: 0,
+                regularPrice: 0
+            })
+            setImagePreview(null)
 
         } catch (error) {
             console.error('err when trying to add event to db', error);
@@ -187,7 +200,7 @@ export default function AddEvents () {
                     <h3 className='text-2xl text-center font-bold'>Ticket Preview</h3>
                    <div className="flex flex-col justify-center items-center w-9/10 bg-darkPurple p-2 rounded-sm shadow-md">
                         <div className="">
-                            {imageFile && <img src={imagePreview} alt='Preview' className='rounded-sm'/>}
+                            {imageFile && <img src={imagePreview} alt='Preview ticket image' className='rounded-sm'/>}
                         </div>
                         <div className="text-white bg-green-6 w-full  flex flex-col gap-3">
                             <h2 className="text-xl font-bold">{eventData.eventTitle}</h2>

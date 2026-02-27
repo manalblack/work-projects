@@ -3,21 +3,21 @@ import cors from 'cors'
 import crypto from 'crypto'
 import dotenv from 'dotenv'
 import QRCode from 'qrcode'
-import PDFDocument from 'pdfkit'
+import PDFDocument from 'pdfkit';
 import { supabase } from './databaseConnection.js';
-import { Resend } from 'resend'
+
 import staffRoutes from  './routes/staff.js'
 import adminRoutes from './routes/adminRoutes.js'
 import fs from 'fs';
 import {dirname, join} from 'path';
 import { fileURLToPath } from 'url'
+import { Worker } from 'worker_threads';
+import path from 'path';
+import { PassThrough } from 'stream'
+
+//  TESTING WORKER THREADS
 
 
-/*
-
-    TEST THE STAFF VERIFICATION LOGIC, FOR EXAMPLE IF TH NETWORK LAGS WHAT SHOULD HAPPEN?
-
-*/
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,7 +34,7 @@ const app = express();
 
 
 // Resend setup
-const resend = new Resend(process.env.RESEND_KEY)
+
 
 // middleware setp
 const corsOptions = {
@@ -46,16 +46,23 @@ const corsOptions = {
         credentials: true
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
+
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'));
 
 
+
+
 // ROUTES 
 
 // IMPORTANT: when testing locally add the api prifxe
-app.use('/staff', staffRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/staff', staffRoutes);
+app.use('/api/admin', adminRoutes);
+
+
+
+
 
 
 function verifyMonnifySignature (req, res, next) {
@@ -74,6 +81,7 @@ function verifyMonnifySignature (req, res, next) {
     // compare the hash with the signature
     if(hash === sign) {
         next();
+
     } else {
         console.error('Security Alert, invalid signature');
         return res.status(401).send('invalid Signature');
@@ -81,18 +89,19 @@ function verifyMonnifySignature (req, res, next) {
     }
 }
 
-// this function is working test against the db and it updates the sold tickets count
-async function updateDb(eventId) {
+// this function is working, test against the db and it updates the sold tickets count
+// async function updateDb(eventId) {
 
-    const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
-        target_event_id: eventId
-    })
+//     const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
+//         target_event_id: eventId
+//     })
 
-    if(rpcError) {
-        console.log('updating db failed', rpcError);
+//     if(rpcError) {
+//         console.log('updating db failed', rpcError);
     
-    }
-}
+//     }
+// }
+
 
 async function generatePdfTicket({customerName, ticketId, verifyUrl, type, eventName, imageBuffer}) {
 
@@ -125,47 +134,6 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     doc.on('data', (chunk) => chunks.push(chunk));
     doc.on('end', () => resolve(Buffer.concat(chunks)))
 
-    // doc.on('end', async () => {
-    //     const finalPdfBuffer = Buffer.concat(chunks);   
-
-    //     // sending to supabse storage bucket
-    //     const {data: uploadedData, error: uploadError} = await supabase.storage.from('tickets_qr_codes').upload(`ticket_${ticketId}.pdf`, finalPdfBuffer, {
-    //         contentType: 'application/pdf',
-    //         upsert: true
-    //     })
-
-    //     if(uploadError) return uploadError;
-
-    //     // fetching the pdf url to store it in the tickets table 
-    //     const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`)
-    //     updateDb(eventId)
-
-    //     console.log('error when fetching the url', urlError)
-
-    //     const {error: insertToTableError} = await supabase.from('tickets').insert([{
-    //         id: ticketId,
-    //         customer_email: customerEmail,
-    //         customer_name: customerName,
-    //         paymentRef: paymentRef,
-    //         type: type,
-    //         ticket_qr: urlData.publicUrl,
-    //         is_scanned: false,
-    //         event_name: eventName,
-    //         event_id: eventId,
-    //     }]);
-
-    //     if(insertToTableError) {
-    //         console.log('ticket was not saved to database', insertToTableError);
-    //     }
-
-    //     // const { error: countError } = await supabase.rpc('increment_sold_count', { 
-    //     //     target_event_id: eventId 
-    //     // });
-
-    //     // if(countError) console.log('could not update count', countError);
-    // })
-
-
     // 1 background image
     const imagePath = join(__dirname, './public/event-sample.jpeg');
 
@@ -178,12 +146,6 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     // 2 Overlay 
     doc.save().rect(0,0, doc.page.width, doc.page.height).fillColor('#000000').fillOpacity(0.4).fill().restore();
 
-    // Header Text
-    // doc.fillColor(isVip ? 'white' : 'white').fontSize(20).text(`${type.toUpperCase()} PASS`, 0, 15, {align: 'center'})
-
-    // doc.fillColor(isVip? 'white': 'white').fontSize(16).text(`Holder: ${customerName}`, 0, 75, {align: 'center'})
-
-    // doc.fillColor(isVip? 'white': 'white').fontSize(16).text(`Event Name: ${eventName}`, 10, 100, {align: 'center'})
 
     const rowTop = 100;       // Vertical position of both cards
     const cardGap = 11;       // Space between the two cards
@@ -201,19 +163,13 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     const startX = (doc.page.width - totalWidth) / 2;
     const rowY = (doc.page.height - leftCardHeight) / 2;
 
-    // right square qr box
-    // doc.save()
-    //    .roundedRect(startX + leftCardWidth + cardGap, rowY, rightCardSize, leftCardHeight, 10) // Same height as left card for symmetry
-    //    .fillColor('white').fillOpacity(1).fill()
-    //    .fill();
-
      doc.image(qrBuffer, rightCardX, 110, {width: qrSize - 20})
 
     // Ticket info section/ left side 
-        doc.save()
-            .rect(leftCardX, rowTop, leftCardWidth, leftCardHeight, 10)
-            .fillColor('white').fillOpacity(0.9).fill()
-            .restore();
+    doc.save()
+        .rect(leftCardX, rowTop, leftCardWidth, leftCardHeight, 10)
+        .fillColor('white').fillOpacity(0.9).fill()
+        .restore();
     
 
         // light gray color: '#1a1a1a'
@@ -228,167 +184,87 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
 
         doc.fillColor(ticketType).fontSize(10).text(`${type.toUpperCase()} TICKET`, leftCardX + 170, rowTop + 10).fillColor(ticketType);
          
-    // The qr code image
-
-    // const qrSize = 150
-    // const pageWidth = doc.page.width;
-    // const pageHeight = doc.page.height;
-    // const centerX = (pageWidth - qrSize) / 2;
-    // const gap = 20;
-
-    // const centerY = 100 + 30 + gap;
-    // doc.image(qrBuffer, rightCardX + 15, rowTop+ 25, {width: qrSize - 20})
-    
-    // Ticket ID for manual backup
+   
 
     doc.fontSize(15).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
 
     doc.end();
   })
-    // doc.text('This is your ticket');
-    // doc.image(qrBuffer);
-    // doc.end();
-    // console.log('ticket pdf file saved to database')
-
 }
 
-async function createImageBuffer(url) {
-    const response = await fetch(url);
-    if(!response.ok) throw new Error('Failed to fetch image, ', response.statusText);
-    const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer)
-} 
+
 
 
 /*SAVE THE PAYMENT REF TO THE DB  */
-async function createTicket(eventData){
-    const cartSummery = eventData.metaData.cart_summery;
-    // the parsed cart is an array of objects, each object contains one ticket.
-    const cart = JSON.parse(cartSummery);
 
 
-    const customerName = eventData.metaData.customer_name;
-    const customerEmail = eventData.metaData.customer_email;
-    const paymentRef = eventData.paymentReference;
-
-    const attachments = [];
-    for(const item of cart) {
-        const type = item.type;
-        const quantity = item.qty;
-        const itemId = item.eventId;
-        const eventName = item.title;
-        const image = item.image;
-        console.log('--- start the ticket generation process ---');
-        // creating an event image buffer
-       const imageBuffer = await createImageBuffer(image);
-
-        // let ticketId;
-        for(let i = 0; i < quantity; i++) {
-            const ticketId = crypto.randomUUID();
-
-            const siteUrl = process.env.SITE_URL;
-            
-            const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`;
-            // const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
-             // {customerName, ticketId, verifyUrl, type, eventName}
-            const pdfBuffer = await generatePdfTicket({
-                customerName: customerName,
-                ticketId: ticketId,
-                verifyUrl: verUrl,
-                type: type,
-                eventName: eventName,
-                imageBuffer: imageBuffer
-            });
-
-
-            const {data: uploadedData, error: uploadError} = await supabase.storage.from('tickets_qr_codes').upload(`ticket_${ticketId}.pdf`, pdfBuffer, {
-            contentType: 'application/pdf',
-            upsert: true
-        })
-
-        if(uploadError) return uploadError;
-
-        // fetching the pdf url to store it in the tickets table 
-        const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`);
-
-
-        updateDb(itemId)
-
-        console.log('error when fetching the url', urlError)
-
-        const {error: insertToTableError} = await supabase.from('tickets').insert([{
-            id: ticketId,
-            customer_email: customerEmail,
-            customer_name: customerName,
-            paymentRef: paymentRef,
-            type: type,
-            ticket_qr: urlData.publicUrl,
-            is_scanned: false,
-            event_name: eventName,
-            event_id: itemId,
-        }]);
-
-        if(insertToTableError) {
-            console.log('ticket was not saved to database', insertToTableError);
-            }
-
-            attachments.push({
-                filename: `ticket_${eventName}.pdf`,
-                content: pdfBuffer
-            })
-
-            console.log(`creating ${type} Ticket #${i + 1} with: Ticket_Id:${itemId}`);
-        };
-           
-
-            // const finalPdfBuffer = Buffer.concat(chunks);   
-
-        
-    };
-
-    
-
-    const {data: resendData, error} = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: 'green.engil13@gmail.com',
-        subject: 'Hello from Resend!',
-        html: '<p>This email was sent using Resend!, see your ticket</p>',
-        attachments: attachments
-    });
-
-        if(error) {
-            return console.log('error sending email', error);
-        };
-        // RESEND IS NOT WORKING FIX IT
-};
-
+// app.get('/webhook/monnify', (req, res) => {
+//     res.send("The tunnel is working! Now send a POST request via Monnify or Postman.");
+// });
 
 // this rote is working and the ticket is being saved to db in storage and the tickets table. BUG: THIS ROUTE IS NOT RETURNING ANYTHING fix it before you try to do anything else
 app.post('/webhook/monnify', (req, res) => {
-    const { eventData } = req.body;
-    // the line below send a response immediately yo monnify
-    res.status(200).send("Webhook received by Express")
+     const { eventData } = req.body;
 
-    console.log('METADATA');
-    console.log(eventData.metaData);
+    res.status(200).send("Webhook received by Express")
+    // the line below send a response immediately yo monnify
+    const sign = req.headers['x-monnify-signature'] || req.headers['monnify-signature']
+   
 
     const cartSummery = eventData.metaData.cart_summery;
-    // the parsed cart is an array of objects, each object contains one ticket.
+
     const parsedCart = JSON.parse(cartSummery);
 
-    console.log('parsed cart from metadata', parsedCart);
-    
-   
-    // looking for the monnify signature header
-    const sign = req.headers['x-monnify-signature'] || req.headers['monnify-signature']
-    
+    if (!sign) {
+        console.log('No signature found');
+        return res.status(400).send("Missing Signature");
+    }
 
     if(eventData.paymentStatus === 'PAID' && sign) {
+        verifyMonnifySignature(req, res, () => {        
+        console.log('METADATA');
+        console.log(eventData.metaData);
 
-        verifyMonnifySignature(req, res, () => {
-            createTicket(eventData);
+            try {
+
+                // const cartSummery = eventData.metaData.cart_summery;
+                // the parsed cart is an array of objects, each object contains one ticket.
+                
+
+                console.log('parsed cart from metadata', parsedCart);
+
+
+
+                const worker = new Worker(path.join(__dirname, 'pdfWorker.js'), {
+                    workerData: {
+                        eventData
+                    }
+                });
+
+                worker.on('message', (result) => {
+                console.log('✅ Ticket Process Finished:', result);
+                // Since the worker did the DB insert, we can just respond to Monnify here
+                });
+
+                worker.on('error', (err) => {
+                    console.error('❌ Worker Process Error:', err);
+                    res.status(500).send("error"); // Tell Monnify it failed
+                });
+                            
+            } catch (error) {
+                console.log('webhook error: ', error);
+                
+            }
+
         });
 
+
+    // looking for the monnify signature header
+   
+    
+
+   
+       
         // debugging logs
         console.log(`signature found: ${sign}`);   
         console.log('event data object')
@@ -396,6 +272,7 @@ app.post('/webhook/monnify', (req, res) => {
     } else {
         console.log('nothing found in header');
     }
+    
 
     
 })
@@ -405,7 +282,7 @@ app.post('/webhook/monnify', (req, res) => {
 
 // 
 // When testing locally add the api prefix before the route name
-app.post('/check-tickets-quantity', async (req, res) => {
+app.post('/api/check-tickets-quantity', async (req, res) => {
 
     const {eventId} = req.body;
 
@@ -418,7 +295,7 @@ app.post('/check-tickets-quantity', async (req, res) => {
         if(error) console.log('error when checking ticket quantity', error);
     
     /* This var is the gatekeeper to prevent overselling tickets */
-        const isAvailable = data.sold_tickets < data.total_tickets;
+        const isAvailable = data.sold_tickets >= 0;
 
         return res.status(200).json({isAvailable});
 
