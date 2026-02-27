@@ -295,7 +295,19 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
         if(error) console.log('error when checking ticket quantity', error);
     
     /* This var is the gatekeeper to prevent overselling tickets */
-        const isAvailable = data.sold_tickets >= 0;
+        let isAvailable;
+        if (data.total_tickets === 0) {
+            console.log('sold out');
+            isAvailable = false;
+        } else {
+            console.log('ava');
+            isAvailable = true;
+        }
+
+        console.log('isAvaliable var');
+        console.log(isAvailable);
+        
+        
 
         return res.status(200).json({isAvailable});
 

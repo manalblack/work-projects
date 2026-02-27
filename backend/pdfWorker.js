@@ -8,7 +8,7 @@ import { PassThrough } from 'stream';
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 import { Resend } from 'resend'
-
+import sharp from 'sharp';
 
 // FIX THIS FILE ASAP FUCK!!
 
@@ -59,7 +59,8 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     // break point
 
     const doc = new PDFDocument({size: [420, 420],
-        margins: {top:0, left:0, right:0, bottom:0}
+        margins: {top:0, left:0, right:0, bottom:0},
+        compress: true
     });
     
     // Increase the internal buffer size slightly for stability
@@ -86,10 +87,15 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
 
     // Adding event image as the ticket background 
     doc.image(imagePath, 0, 0, {
-        // TESTING with local image
         width: doc.page.width,
         height: doc.page.height
     });
+
+    // testing pdf size without background image !!!
+//     doc.rect(0, 0, doc.page.width, doc.page.height)
+//    .fillColor('#f3f4f6')
+//    .fill();
+
 
     // 2 Overlay 
     doc.save().rect(0,0, doc.page.width, doc.page.height).fillColor('#000000').fillOpacity(0.4).fill().restore();
@@ -152,8 +158,16 @@ async function createImageBuffer(url) {
     const response = await fetch(url);
     if(!response.ok) throw new Error('Failed to fetch image, ', response.statusText);
     const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer)
-} 
+
+    const inputBuffer = Buffer.from(arrayBuffer);
+
+    return await sharp(inputBuffer). resize(420, 420, { 
+            fit: 'cover',      // Ensures it fills the ticket area
+            position: 'center' 
+        })
+        .jpeg({ quality: 60 }) // 60% quality looks great but uses much less RAM
+        .toBuffer();
+}
 
 
 
@@ -171,7 +185,9 @@ async function createTicket(){
     const paymentRef = workerData.eventData.paymentReference;
 
     const attachments = [];
+    let imageBuffer;
 
+    let ticketsHtmlList;
     for(const item of cart) {
         const type = item.type;
         const quantity = item.qty;
@@ -180,10 +196,10 @@ async function createTicket(){
         const image = item.image;
         console.log('--- start the ticket generation process ---');
         // creating an event image buffer
-       let imageBuffer = await createImageBuffer(image);
+       imageBuffer = await createImageBuffer(image);
 
         // let ticketId;
-        let ticketsHtmlList;
+        
         for(let i = 0; i < quantity; i++) {
             const ticketId = crypto.randomUUID();
 
@@ -214,7 +230,7 @@ async function createTicket(){
 
         // Cleanup attempt
         pdfStream.destroy();        
-        imageBuffer = null;
+        imageBuffer = null; 
 
         console.log('PDF STREAM');
         console.log(pdfStream);
@@ -262,23 +278,36 @@ async function createTicket(){
             // Assume 'ticketUrls' is an array like: 
             // ["https://.../ticket1.pdf", "https://.../ticket2.pdf"]
 
-            ticketsHtmlList = attachments.map((url, index) => {
-                return `
-                    <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                        <p style="margin: 0 0 10px 0; font-weight: bold;">Ticket #${index + 1}</p>
-                        <a href="${url.content}" 
-                        style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
-                        Download PDF
-                        </a>
-                    </div>
-                `;
-            }).join(''); // join('') turns the array into one long string
+           
 
             
 
             console.log(`creating ${type} Ticket #${i + 1} with: Ticket_Id:${itemId}`);
-            };
-            const {data: resendData, error} = await resend.emails.send({
+            // clearing the image buffer
+    
+        };
+
+        imageBuffer = null;
+        
+        if (global.gc) {
+            global.gc(); 
+        }
+        
+    }
+
+    ticketsHtmlList = attachments.map((url, index) => {
+        return `
+            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <p style="margin: 0 0 10px 0; font-weight: bold;">Ticket #${index + 1}</p>
+                <a href="${url.content}" 
+                style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                Download PDF
+                </a>
+            </div>
+        `;
+    }).join(''); // join('') turns the array into one long string
+
+     const {data: resendData, error} = await resend.emails.send({
             from: 'onboarding@resend.dev',
             to: 'green.engil13@gmail.com',
             subject: 'Hello from Resend!',
@@ -293,15 +322,12 @@ async function createTicket(){
                 </p>
             </div>`,
         });
-
+        attachments.length = 0;
         if(error) {
             return console.log('error sending email', error);
         };
-    }
 
-        // clearing the image buffer
-        imageBuffer = null;
-
+        
         const used = process.memoryUsage().heapUsed / 1024 / 1024;
         console.log(`📊 Memory usage: ${Math.round(used * 100) / 100} MB`);
 
@@ -311,7 +337,10 @@ async function createTicket(){
 
         console.log(`Memory after ticket: ${Math.round(process.memoryUsage().rss / 1024 / 1024)} MB`);
 
+        console.log("🧹 Cleanup complete.");
+
         parentPort.postMessage({status: 'success'})
+
     } catch (error) {
         parentPort.postMessage({status: 'error', message: error.message})
     }
