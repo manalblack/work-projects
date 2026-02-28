@@ -92,9 +92,9 @@ export default function AddEvents () {
                 image: uploadedImage.publicUrl,
             }
 
-            // const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+            const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
 
-            const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
+            // const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
 
 
             console.log(response);
