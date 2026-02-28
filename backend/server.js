@@ -45,8 +45,8 @@ app.use(express.static('public'));
 
 // ROUTES 
 // IMPORTANT: when testing locally add the api prefix, BUT remove it before deployment
-app.use('/api/staff', staffRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/staff', staffRoutes);
+app.use('/admin', adminRoutes);
 
 
 function verifyMonnifySignature (req, res, next) {
@@ -140,7 +140,7 @@ app.post('/webhook/monnify', (req, res) => {
 
 
 // When testing locally add the api prefix before the route name
-app.post('/api/check-tickets-quantity', async (req, res) => {
+app.post('/check-tickets-quantity', async (req, res) => {
 
     console.log('Checking tickets quantity');
     
