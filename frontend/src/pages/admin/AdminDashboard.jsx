@@ -269,7 +269,7 @@ export default function AdminDashboard() {
                                         </div>
 
                                         <div className="flex flex-row gap-2">
-                                            <label htmlFor="">Ongoing</label>
+                                            <label htmlFor="">Ongoing </label>
                                             <input type="radio" checked={event.current_event} name='current-event-selection' onChange={()=> handelOngoingBox(event.id)}  className="h-5 w-5"/>
                                         </div>
                                     </div>

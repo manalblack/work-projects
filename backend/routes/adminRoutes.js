@@ -36,7 +36,7 @@ router.post('/add-events', async (req, res) => {
         description: description,
         location: location,
         time: time,
-        date: date,
+        event_date: date,
         image: image,
         total_tickets: totalTickets,
         vip_price: vipPrice,
