@@ -11,7 +11,7 @@ import { Worker } from 'worker_threads';
 import path from 'path';
 
 
-
+//  COMMIT THE LAST CHANGES AND MERGE AND UPDATE DROPLET
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -157,6 +157,7 @@ app.post('/check-tickets-quantity', async (req, res) => {
             isAvailable = false;
         } else {
             console.log('ava');
+            isAvailable = true;
         }
 
         return res.status(200).json({isAvailable});
