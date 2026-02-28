@@ -37,8 +37,6 @@ async function updateDb(eventId) {
 
 async function generatePdfTicket({customerName, ticketId, verifyUrl, type, eventName, imageBuffer}) {
 
-    console.log('📄 Starting PDF generation for:', workerData);
-
  
     // creating a unique design for each ticket
     const isVip = type === 'vip';
@@ -55,9 +53,6 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
 
     const ticketType = isVip ? '#fbbf24' : '#2563eb';
 
-
-    // break point
-
     const doc = new PDFDocument({size: [420, 420],
         margins: {top:0, left:0, right:0, bottom:0},
         compress: true
@@ -66,21 +61,6 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     // Increase the internal buffer size slightly for stability
     const stream = new PassThrough({ highWaterMark: 64 * 1024 });
     doc.pipe(stream);
-    // doc.on('data', (chunk) => {
-    // // Send each small piece of the PDF to the main thread
-    // parentPort.postMessage({ type: 'DATA', chunk });
-    // });
-    //     doc.on('end', () => {
-    //     // Tell the main thread we are finished
-    //     parentPort.postMessage({ type: 'END' });
-    // });
-
-
-    
-    // The line below could be the reason for the massive heap size
-    // let chunks = [];
-    // doc.on('data', (chunk) => chunks.push(chunk));
-    // doc.on('end', () => resolve(Buffer.concat(chunks)))
 
     // 1 background image
     const imagePath = join(__dirname, './public/event-sample.jpeg');
@@ -172,7 +152,6 @@ async function createImageBuffer(url) {
 
 
 async function createTicket(){
-    console.log(workerData);
     
     try {
         const cartSummery = workerData.eventData.metaData.cart_summery;
@@ -198,7 +177,7 @@ async function createTicket(){
         // creating an event image buffer
        imageBuffer = await createImageBuffer(image);
 
-        // let ticketId;
+        
         
         for(let i = 0; i < quantity; i++) {
             const ticketId = crypto.randomUUID();
@@ -208,7 +187,6 @@ async function createTicket(){
             const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`;
 
             // const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
-             // {customerName, ticketId, verifyUrl, type, eventName}
             let pdfStream = await generatePdfTicket({
                 customerName: customerName,
                 ticketId: ticketId,
@@ -232,8 +210,6 @@ async function createTicket(){
         pdfStream.destroy();        
         imageBuffer = null; 
 
-        console.log('PDF STREAM');
-        console.log(pdfStream);
         
 
         // PUBLIC URL IS BROKEN 2/27
@@ -269,21 +245,9 @@ async function createTicket(){
 
             
 
-            console.log('URL DATA');
-            console.log(urlData);
+            // Updating the sold tickets column in the database
             updateDb(itemId)
             
-            
-
-            // Assume 'ticketUrls' is an array like: 
-            // ["https://.../ticket1.pdf", "https://.../ticket2.pdf"]
-
-           
-
-            
-
-            console.log(`creating ${type} Ticket #${i + 1} with: Ticket_Id:${itemId}`);
-            // clearing the image buffer
     
         };
 
@@ -322,22 +286,24 @@ async function createTicket(){
                 </p>
             </div>`,
         });
+
+        // Clearing the array after sending the email 
         attachments.length = 0;
         if(error) {
             return console.log('error sending email', error);
         };
 
         
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`📊 Memory usage: ${Math.round(used * 100) / 100} MB`);
+        // const used = process.memoryUsage().heapUsed / 1024 / 1024;
+        // console.log(`📊 Memory usage: ${Math.round(used * 100) / 100} MB`);
 
-        if (used > 18) {
-            console.warn("⚠️ WARNING: Approaching 21MB RAM limit!");
-        }   
+        // if (used > 18) {
+        //     console.warn("⚠️ WARNING: Approaching 21MB RAM limit!");
+        // }   
 
-        console.log(`Memory after ticket: ${Math.round(process.memoryUsage().rss / 1024 / 1024)} MB`);
+        // console.log(`Memory after ticket: ${Math.round(process.memoryUsage().rss / 1024 / 1024)} MB`);
 
-        console.log("🧹 Cleanup complete.");
+        // console.log("🧹 Cleanup complete.");
 
         parentPort.postMessage({status: 'success'})
 
@@ -345,8 +311,6 @@ async function createTicket(){
         parentPort.postMessage({status: 'error', message: error.message})
     }
 
-    // const finalPdfBuffer = Buffer.concat(chunks); 
-        // RESEND IS NOT WORKING FIX IT
 }
 
 // Start the worker 

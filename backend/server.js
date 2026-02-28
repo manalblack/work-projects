@@ -2,20 +2,15 @@ import express from 'express'
 import cors from 'cors'
 import crypto from 'crypto'
 import dotenv from 'dotenv'
-import QRCode from 'qrcode'
-import PDFDocument from 'pdfkit';
 import { supabase } from './databaseConnection.js';
-
 import staffRoutes from  './routes/staff.js'
 import adminRoutes from './routes/adminRoutes.js'
-import fs from 'fs';
-import {dirname, join} from 'path';
+import {dirname} from 'path';
 import { fileURLToPath } from 'url'
 import { Worker } from 'worker_threads';
 import path from 'path';
-import { PassThrough } from 'stream'
 
-//  TESTING WORKER THREADS
+
 
 
 
@@ -33,9 +28,6 @@ const app = express();
 // });
 
 
-// Resend setup
-
-
 // middleware setp
 const corsOptions = {
     origin: [
@@ -51,18 +43,10 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'));
 
-
-
-
 // ROUTES 
-
-// IMPORTANT: when testing locally add the api prifxe
+// IMPORTANT: when testing locally add the api prefix, BUT remove it before deployment
 app.use('/api/staff', staffRoutes);
 app.use('/api/admin', adminRoutes);
-
-
-
-
 
 
 function verifyMonnifySignature (req, res, next) {
@@ -89,120 +73,8 @@ function verifyMonnifySignature (req, res, next) {
     }
 }
 
-// this function is working, test against the db and it updates the sold tickets count
-// async function updateDb(eventId) {
 
-//     const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
-//         target_event_id: eventId
-//     })
-
-//     if(rpcError) {
-//         console.log('updating db failed', rpcError);
-    
-//     }
-// }
-
-
-async function generatePdfTicket({customerName, ticketId, verifyUrl, type, eventName, imageBuffer}) {
-
-  return new Promise(async (resolve, reject) => {
-      // creating a unique design for each ticket
-
-    const isVip = type === 'vip';
-    const themeColor = isVip ? '#D4AF37' : '#2E5BFF';
-    const secondaryColor = isVip ? '#000000' : '#FFFFFF';
-
-    const qrBuffer = await QRCode.toBuffer(verifyUrl, {
-        color: {
-            dark: isVip ? '#000000' : '#000000',
-            light: '#FFFFFF' 
-        },
-        width: 200,
-    });
-
-    const ticketType = isVip ? '#fbbf24' : '#2563eb';
-
-
-    // break point
-
-    const doc = new PDFDocument({size: [420, 420],
-        margins: {top:0, left:0, right:0, bottom:0}
-    });
-
-    let chunks = [];
-
-    doc.on('data', (chunk) => chunks.push(chunk));
-    doc.on('end', () => resolve(Buffer.concat(chunks)))
-
-    // 1 background image
-    const imagePath = join(__dirname, './public/event-sample.jpeg');
-
-    // Adding event image as the ticket background 
-    doc.image(imageBuffer, 0, 0, {
-        width: doc.page.width,
-        height: doc.page.height
-    });
-
-    // 2 Overlay 
-    doc.save().rect(0,0, doc.page.width, doc.page.height).fillColor('#000000').fillOpacity(0.4).fill().restore();
-
-
-    const rowTop = 100;       // Vertical position of both cards
-    const cardGap = 11;       // Space between the two cards
-    
-    const leftCardX = 20;
-    const leftCardWidth = 260;
-    const leftCardHeight = 120;
-
-    const rightCardX = leftCardX + leftCardWidth + cardGap;
-    const rightCardSize = 130; // Square
-    const qrSize = 120
-
-    // Trying to center the two sections
-    const totalWidth = leftCardWidth + cardGap + rightCardSize
-    const startX = (doc.page.width - totalWidth) / 2;
-    const rowY = (doc.page.height - leftCardHeight) / 2;
-
-     doc.image(qrBuffer, rightCardX, 110, {width: qrSize - 20})
-
-    // Ticket info section/ left side 
-    doc.save()
-        .rect(leftCardX, rowTop, leftCardWidth, leftCardHeight, 10)
-        .fillColor('white').fillOpacity(0.9).fill()
-        .restore();
-    
-
-        // light gray color: '#1a1a1a'
-       // Left Card Text
-        doc.fillColor('#1a1a1a').font('Helvetica-Bold').fontSize(16)
-        .text(eventName, leftCardX + 20, rowTop + 20);
-        
-        doc.fontSize(12).font('Helvetica').fillColor('#444444')
-        .text(`Holder: ${customerName}`, leftCardX + 20, rowTop + 100)
-        .text(`Date: jan 12`, leftCardX + 20, rowTop + 50)
-        .text(`Location: 123 event center, kano`, leftCardX + 20, rowTop + 75)
-
-        doc.fillColor(ticketType).fontSize(10).text(`${type.toUpperCase()} TICKET`, leftCardX + 170, rowTop + 10).fillColor(ticketType);
-         
-   
-
-    doc.fontSize(15).fillColor('gray').text(`ID: ${ticketId}`, 0, 340, {align: 'center'})
-
-    doc.end();
-  })
-}
-
-
-
-
-/*SAVE THE PAYMENT REF TO THE DB  */
-
-
-// app.get('/webhook/monnify', (req, res) => {
-//     res.send("The tunnel is working! Now send a POST request via Monnify or Postman.");
-// });
-
-// this rote is working and the ticket is being saved to db in storage and the tickets table. BUG: THIS ROUTE IS NOT RETURNING ANYTHING fix it before you try to do anything else
+// TODO: ADD THE OPAY CHECKOUT GATE
 app.post('/webhook/monnify', (req, res) => {
      const { eventData } = req.body;
 
@@ -257,18 +129,7 @@ app.post('/webhook/monnify', (req, res) => {
             }
 
         });
-
-
-    // looking for the monnify signature header
    
-    
-
-   
-       
-        // debugging logs
-        console.log(`signature found: ${sign}`);   
-        console.log('event data object')
-        console.log(eventData);
     } else {
         console.log('nothing found in header');
     }
@@ -277,19 +138,15 @@ app.post('/webhook/monnify', (req, res) => {
     
 })
 
-// file:///C:/Users/king/Downloads/ticket_e03537c0-1af9-4bfc-a3fb-cec082827ed6.pdf
 
-
-// 
 // When testing locally add the api prefix before the route name
 app.post('/api/check-tickets-quantity', async (req, res) => {
 
+    console.log('Checking tickets quantity');
+    
     const {eventId} = req.body;
 
    try {
-        console.log(eventId);
-
-    
         const {data, error} = await supabase.from('events').select('total_tickets, sold_tickets').eq('id', eventId).single();
 
         if(error) console.log('error when checking ticket quantity', error);
@@ -297,17 +154,10 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
     /* This var is the gatekeeper to prevent overselling tickets */
         let isAvailable;
         if (data.total_tickets === 0) {
-            console.log('sold out');
             isAvailable = false;
         } else {
             console.log('ava');
-            isAvailable = true;
         }
-
-        console.log('isAvaliable var');
-        console.log(isAvailable);
-        
-        
 
         return res.status(200).json({isAvailable});
 

@@ -57,6 +57,28 @@ export default function EventCard() {
     }
     
 
+    function formatSimpleTime(timeString) {
+    // Split the string into hours and minutes
+    // Works for both "19:30" and "12:00:00"
+        let [hours, minutes] = timeString.split(':');
+        
+        hours = parseInt(hours);
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        // Convert 24h to 12h
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        
+        return `${hours}:${minutes} ${ampm}`;
+    }
+
+    // Tests
+    console.log(formatSimpleTime("19:30"));    // "7:30 PM"
+    console.log(formatSimpleTime("12:00:00")); // "12:00 PM"
+    console.log(formatSimpleTime("09:15"));    // "9:15 AM"
+
+
+
     return(
        <>
         {allEvents.map((event) => (
@@ -83,9 +105,9 @@ export default function EventCard() {
                                 Remaining tickets: {event.total_tickets}
                             </span> */}
                             <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
-                                {event.date}, {event.time}
+                                {event.date}, {formatSimpleTime(event.time)}
                                 <br />
-                                Venue: 1234 Event center
+                                Venue: {event.location}
                             </span>
                             
                         </div>

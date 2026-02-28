@@ -88,7 +88,7 @@ export default function AddEvents () {
                 vipPrice: eventData.vipPrice,
                 regularPrice: eventData.regularPrice,
                 time: formattedTime,
-                event_date: formattedDate,
+                date: formattedDate,
                 image: uploadedImage.publicUrl,
             }
 
