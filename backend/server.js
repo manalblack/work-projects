@@ -140,7 +140,7 @@ app.post('/webhook/monnify', (req, res) => {
 
 
 // When testing locally add the api prefix before the route name
-app.post('/check-tickets-quantity', async (req, res) => {
+app.post('/api/check-tickets-quantity', async (req, res) => {
 
     console.log('Checking tickets quantity');
     

@@ -103,7 +103,7 @@ export default function Hero(){
                                 <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-2 text-sm md:text-xl ">
                                 {ongoingEvent.date}, {ongoingEvent.time}
                                 <br />
-                                Venue: 1234 Event center
+                                Venue: {ongoingEvent.location}
                             </span>
                            
                             </div>

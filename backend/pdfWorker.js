@@ -35,7 +35,7 @@ async function updateDb(eventId) {
     }
 }
 
-async function generatePdfTicket({customerName, ticketId, verifyUrl, type, eventName, imageBuffer}) {
+async function generatePdfTicket({customerName, ticketId, verifyUrl, type, eventName, imageBuffer, address, date}) {
 
  
     // creating a unique design for each ticket
@@ -66,7 +66,7 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     const imagePath = join(__dirname, './public/event-sample.jpeg');
 
     // Adding event image as the ticket background 
-    doc.image(imagePath, 0, 0, {
+    doc.image(imageBuffer, 0, 0, {
         width: doc.page.width,
         height: doc.page.height
     });
@@ -113,8 +113,11 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
         
         doc.fontSize(12).font('Helvetica').fillColor('#444444')
         .text(`Holder: ${customerName}`, leftCardX + 20, rowTop + 100)
-        .text(`Date: jan 12`, leftCardX + 20, rowTop + 50)
-        .text(`Location: 123 event center, kano`, leftCardX + 20, rowTop + 75)
+        .text(`Date: ${date}`, leftCardX + 20, rowTop + 40)
+        .text(`Location: ${address}`, leftCardX + 20, rowTop + 60, {
+            width: 200,
+            lineGap: 2,
+        })
 
         doc.fillColor(ticketType).fontSize(10).text(`${type.toUpperCase()} TICKET`, leftCardX + 170, rowTop + 10).fillColor(ticketType);
          
@@ -141,12 +144,16 @@ async function createImageBuffer(url) {
 
     const inputBuffer = Buffer.from(arrayBuffer);
 
-    return await sharp(inputBuffer). resize(420, 420, { 
+    // sharp.cache(false);
+
+    const processedBuffer = await sharp(inputBuffer). resize(420, 420, { 
             fit: 'cover',      // Ensures it fills the ticket area
             position: 'center' 
         })
         .jpeg({ quality: 60 }) // 60% quality looks great but uses much less RAM
         .toBuffer();
+
+        return processedBuffer;
 }
 
 
@@ -163,21 +170,25 @@ async function createTicket(){
     const customerEmail = workerData.eventData.metaData.customer_email;
     const paymentRef = workerData.eventData.paymentReference;
 
+
     const attachments = [];
-    let imageBuffer;
 
     let ticketsHtmlList;
+
     for(const item of cart) {
+
         const type = item.type;
         const quantity = item.qty;
         const itemId = item.eventId;
         const eventName = item.title;
         const image = item.image;
+        const address = item.address;
+        const date = item.date;
         console.log('--- start the ticket generation process ---');
         // creating an event image buffer
-       imageBuffer = await createImageBuffer(image);
+       let imageBuffer = await createImageBuffer(image);
 
-        
+
         
         for(let i = 0; i < quantity; i++) {
             const ticketId = crypto.randomUUID();
@@ -187,13 +198,16 @@ async function createTicket(){
             const verUrl = `${siteUrl}/verify/${ticketId}?type=${type}`;
 
             // const verUrl = `https://ticket-hub-xwhv.onrender.com/verify/${ticketId}?type=${type}`
+
             let pdfStream = await generatePdfTicket({
                 customerName: customerName,
                 ticketId: ticketId,
                 verifyUrl: verUrl,
                 type: type,
                 eventName: eventName,
-                imageBuffer: imageBuffer
+                imageBuffer: imageBuffer,
+                address: address,
+                date: date
             });
 
 
@@ -207,8 +221,7 @@ async function createTicket(){
         if(uploadError) return uploadError;
 
         // Cleanup attempt
-        pdfStream.destroy();        
-        imageBuffer = null; 
+        pdfStream.destroy();    
 
         
 
@@ -252,7 +265,6 @@ async function createTicket(){
         };
 
         imageBuffer = null;
-        
         if (global.gc) {
             global.gc(); 
         }

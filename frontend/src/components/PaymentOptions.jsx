@@ -34,9 +34,9 @@ export default function PaymentOptions({eventData}) {
          const checkTicket = async () => {
 
             // UNCOMMENT BEFORE UPDATING  DROPLET
-            const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}); 
+            // const response = await axios.post(`${apiUrl}/check-tickets-quantity`, {eventId: eventData.id}); 
 
-            // const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id});
+            const response = await axios.post('http://localhost:3001/api/check-tickets-quantity', {eventId: eventData.id});
 
 
             setTicketsAvailability(response.data.isAvailable);
@@ -84,8 +84,11 @@ export default function PaymentOptions({eventData}) {
             vipPrice: eventData.vip_price,
             regularPrice: eventData.regular_price,
             qty: 1,
-            image: eventData.image
+            image: eventData.image,
+            address: eventData.location,
+            date: eventData.event_date,
             }
+
             currentTicket.push(newTicket)
 
             sessionStorage.setItem('temp_ticket', JSON.stringify(currentTicket))

@@ -35,8 +35,8 @@ export default function Checkout(){
 
         setSelectedEvent([]);
 
-        toast.success("Payment Received! we sent the Ticket to Your email.", {
-        duration: 6000,
+        toast.success("Payment Received! Wait 5 minutes, while we create your ticket, and send it to your email!!.", {
+        duration: 8000,
         });
 
         navigate('/')
@@ -106,7 +106,8 @@ export default function Checkout(){
                     vipPrice: event.vip.price,
                     regularPrice: event.regular.price,
                     qty: 1, 
-                    image: event.img
+                    image: event.img,
+                    date: selectedEvent.date
                 };
                 updatedStorage = [...currentTicket, newTicket];
             } else {
@@ -150,7 +151,8 @@ export default function Checkout(){
         id: item.eventId,
         img: item.image,
         vip: { qty: 0, price: item.vipPrice },
-        regular: { qty: 0, price: item.regularPrice }
+        regular: { qty: 0, price: item.regularPrice },
+        date: item.date
         };
     }
 
@@ -210,8 +212,6 @@ export default function Checkout(){
         } else {
             payWithMonnify();
         }
-
-        // payWithMonnify();
     }
 
 
