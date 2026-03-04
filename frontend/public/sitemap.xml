@@ -8,6 +8,8 @@
   <url>
     <loc>https://troveista.com/events</loc>
     <lastmod>2026-02-14</lastmod>
-    <priority>0.8</priority>
+    <priority>1.0</priority>
   </url>
 </urlset>
+
+<!-- INSTALL npm install react-helmet-async, REFER TO GEMINI FOR THE REST OF THE THINGS TO DO -->

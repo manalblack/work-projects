@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
+    "axios": "^1.13.6",
     "body-parser": "^2.2.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

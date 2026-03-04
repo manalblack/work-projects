@@ -98,6 +98,6 @@ router.post('/create-ticket', async (req, res) => {
 
     console.log(ticketInfo.eventId);
     
-})
+});
 
 export default router;

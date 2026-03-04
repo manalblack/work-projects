@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
+import {HelmetProvider} from 'react-helmet-async'
 // import CustomerTicket from './pages/admin/CustomerTicket';
 
 
@@ -29,7 +30,8 @@ function App() {
   return (
     <>
       <Toaster position='top-center' reverseOrder={false}/>
-      <BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
         <Suspense fallback={<div>Loading...</div>}>
         
         <Routes>
@@ -61,6 +63,7 @@ function App() {
         </Routes>
         </Suspense>
       </BrowserRouter>
+      </HelmetProvider>
     </>
   )
 }
