@@ -9,6 +9,7 @@ import {dirname} from 'path';
 import { fileURLToPath } from 'url'
 import { Worker } from 'worker_threads';
 import path from 'path';
+import axios from 'axios';
 
 
 //  COMMIT THE LAST CHANGES AND MERGE AND UPDATE DROPLET
@@ -26,6 +27,11 @@ const app = express();
 //   console.log("HEADERS RECEIVED:", JSON.stringify(req.headers, null, 2));
 //   next();
 // });
+
+// OPAY DETAILS
+const MERCHANT_ID = process.env.OPAY_MERCHANT_ID;
+
+const PUBLIC_KEY= process.env.OPAY_PUBLIC_KEY
 
 
 // middleware setp
@@ -74,7 +80,33 @@ function verifyMonnifySignature (req, res, next) {
 }
 
 
-// TODO: ADD THE OPAY CHECKOUT GATE
+// BUG: this function is not working, and the checkout ui is not processing ny payments fix it
+function verifyOpaySignature(req, res, next) {
+    // the signature we receive from opay's webhook
+    const sign = req.body.sha521;
+    
+    // first guard / gate
+    if(!sign) {
+        // return res.status(400).send('No signature found ')
+        console.log('no match found');
+        
+    }
+
+    const SECRET_KEY = process.env.OPAY_SECRET_KEY;
+
+    const dataToHash = JSON.stringify(req.body.payload);
+
+    const computedHash = crypto.createHmac('sha512', SECRET_KEY).update(dataToHash).digest('hex')
+
+    if(computedHash === sign) {
+        next();
+        // res.status(200)
+    };
+
+}
+
+
+
 app.post('/webhook/monnify', (req, res) => {
      const { eventData } = req.body;
 
@@ -138,6 +170,75 @@ app.post('/webhook/monnify', (req, res) => {
     
 })
 
+
+
+// TESTING WITH OPAY checkout system
+app.post('/api/checkout/opay', async (req, res) => {
+    // send the amount and the rest of the details in the req.body
+    const {amount, email, ticketType, reference, product} = req.body;
+    // this might be used
+    const ticketReference = `TIX-${Date.now()}`
+
+    console.log(req.body);
+    
+
+    const payload = {
+    amount: amount, // Integer (e.g., 1000 for 1000 NGN)
+    currency: "NGN",
+    country: "NG",
+    reference: reference,
+    returnUrl: "http://localhost:5173/",
+    callbackUrl: "https://3w9cnvpn-3001.uks1.devtunnels.ms/webhook/opay", // This is where QR is triggered
+    userEmail: email,
+    productDesc: `Ticket for ${ticketType}`,
+    product:product
+  };
+
+  try {
+    // using axios to send the http request
+    const response = await axios.post('https://testapi.opaycheckout.com/api/v1/international/cashier/create', payload, 
+        {
+        headers: {
+          'Authorization': `Bearer ${PUBLIC_KEY}`,
+          'MerchantId': MERCHANT_ID,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    res.status(200).json(response.data);
+    
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to initialize OPay" });
+  }
+
+
+});
+
+
+app.post('/webhook/opay', (req,res) => {
+    const data = req.body;
+
+    res.status(200).json({code: '00000', message: 'SUCCESS'});
+
+    console.log('opay payload');
+    console.log(req.headers);
+    
+    console.log(req.body);
+
+    console.log('opay headers');
+    console.log(req.body.sha512);
+
+    verifyOpaySignature(req, res, () => {
+        console.log('sign verified');
+        console.log('START GENERATING TICKETS');  
+
+       
+    })
+
+    
+});
 
 // When testing locally add the api prefix before the route name
 app.post('/api/check-tickets-quantity', async (req, res) => {

@@ -7,7 +7,8 @@ import Modal from "../components/Modal";
 import PaymentOptions from "../components/PaymentOptions";
 import Footer from '../components/Footer'
 import { supabase } from "../supabaseConnection";
-import Loading from '../components/Loading'
+import Loading from '../components/Loading';
+import { Helmet } from "react-helmet-async";
 
 
 export default function Events() {
@@ -64,7 +65,10 @@ export default function Events() {
     return(
        <>
         <Navbar />
-
+        <Helmet>
+            <title>About Us | Troveista</title>
+            <link rel="canonical" href="https://troveista.com/events" />
+        </Helmet>
         <div className="w-full bg-lightPurple flex flex-col gap-5 md:mt-10">
               
            <div className="mt-14 pt-5 grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 w-full md:px-2 bg-green-00 p-2">

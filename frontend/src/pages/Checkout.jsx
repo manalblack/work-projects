@@ -6,8 +6,9 @@ import { TiMinus, TiPlus } from "react-icons/ti";
 import Header from '../components/Header'
 import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
+import axios from 'axios'
 
-
+// TODO: add a loading state for the opay checkout page
 
 
 export default function Checkout(){
@@ -199,6 +200,54 @@ export default function Checkout(){
         })
            
     } 
+
+    // TESTING OPAY API KEEP TESTING HERE AND IN THE SERVER FILE AS WELL
+
+    const opayCashier = async () => {
+
+        const opayData = {
+            "amount": {
+                "currency": "NGN",
+                "total": total.toString()
+            },
+            // "callbackUrl": "https://3w9cnvpn-3001.uks1.devtunnels.ms/webhook/opay",
+            "cancelUrl": "http://localhost:5173/checkout",
+            "country": "NG",
+            "customerVisitSource": 'IOS',
+            "expireAt":300,
+            "product":{
+                "description":"Event ticket",
+                "name":"Tickets",
+            },
+            "reference": `Ticket-${Date.now()}`,
+            "returnUrl": "http://localhost:5173",
+            "userInfo":{
+                    "userEmail": formData.email,
+                    "userId": "6212990",
+                    "userMobile": formData.phoneNumber,
+                    "userName": formData.fullName
+            }
+        };
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/checkout/opay', opayData)
+
+            const opayResponse = response.data.data;
+
+            const paymentGate = opayResponse.cashierUrl
+
+            console.log(response);
+            
+            
+            if(response.status === 200) {
+                window.location.href = paymentGate
+            }
+
+        } catch (error) {
+            console.log('error when processing payment to opay: ', error);
+        }
+
+    }
     
     
     const handelFormSubmission = (e) => {
@@ -210,7 +259,8 @@ export default function Checkout(){
             });
             return;
         } else {
-            payWithMonnify();
+            // payWithMonnify();
+            opayCashier();
         }
     }
 
