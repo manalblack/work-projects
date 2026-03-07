@@ -45,7 +45,13 @@ const corsOptions = {
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+// app.use(express.json({
+//     verify: (req, res, buf) => {
+//         req.rawBody = buf.toString();
+//     }
+// }));
+
 app.use(express.json())
 app.use(express.static('public'));
 
@@ -80,10 +86,14 @@ function verifyMonnifySignature (req, res, next) {
 }
 
 
-// BUG: this function is not working, and the checkout ui is not processing ny payments fix it
+// BUG: this function is not working, and the checkout ui is not processing any payments fix it, refer to backend convo with gemini
 function verifyOpaySignature(req, res, next) {
     // the signature we receive from opay's webhook
-    const sign = req.body.sha521;
+    const sign = req.body.sha512;
+    const payload = req.body.payload;
+    // console.log('request body');
+    // console.log(req)
+
     
     // first guard / gate
     if(!sign) {
@@ -94,7 +104,7 @@ function verifyOpaySignature(req, res, next) {
 
     const SECRET_KEY = process.env.OPAY_SECRET_KEY;
 
-    const dataToHash = JSON.stringify(req.body.payload);
+    const dataToHash = JSON.stringify(payload);
 
     const computedHash = crypto.createHmac('sha512', SECRET_KEY).update(dataToHash).digest('hex')
 
@@ -103,7 +113,7 @@ function verifyOpaySignature(req, res, next) {
         // res.status(200)
     };
 
-}
+};
 
 
 
@@ -179,7 +189,7 @@ app.post('/api/checkout/opay', async (req, res) => {
     // this might be used
     const ticketReference = `TIX-${Date.now()}`
 
-    console.log(req.body);
+    // console.log(req.body);
     
 
     const payload = {
@@ -230,11 +240,10 @@ app.post('/webhook/opay', (req,res) => {
     console.log('opay headers');
     console.log(req.body.sha512);
 
+
     verifyOpaySignature(req, res, () => {
         console.log('sign verified');
         console.log('START GENERATING TICKETS');  
-
-       
     })
 
     

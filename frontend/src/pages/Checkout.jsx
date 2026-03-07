@@ -72,9 +72,9 @@ export default function Checkout(){
         "cart_summery": JSON.stringify(storageItems),
         "summery": JSON.stringify(storageSummery),
         "total_amount": storageItems.reduce((total, item) => total + (item.price * item.qty), 0),
-        "customer_name": formData.fullName,
-        "customer_email": formData.email,
-        "customer_phone": formData.phoneNumber
+        // "customer_name": formData.fullName,
+        // "customer_email": formData.email,
+        // "customer_phone": formData.phoneNumber
     }
     
 
@@ -205,6 +205,8 @@ export default function Checkout(){
 
     const opayCashier = async () => {
 
+        console.log('opay cashier function start')
+
         const opayData = {
             "amount": {
                 "currency": "NGN",
@@ -222,11 +224,12 @@ export default function Checkout(){
             "reference": `Ticket-${Date.now()}`,
             "returnUrl": "http://localhost:5173",
             "userInfo":{
-                    "userEmail": formData.email,
-                    "userId": "6212990",
-                    "userMobile": formData.phoneNumber,
-                    "userName": formData.fullName
-            }
+                "userEmail": formData.email,
+                "userId": "6212990",
+                "userMobile": formData.phoneNumber,
+                "userName": formData.fullName
+            },
+            "metaData": metadata
         };
 
         try {
