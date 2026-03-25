@@ -158,14 +158,35 @@ async function createImageBuffer(url) {
 
 
 
+// TODO: CONSTRUCT the data and send it to the pdf function 
+
 async function createTicket(){
+
+    const cartString = workerData.cartItems;
+
+    console.log('worker data');
+    console.log(workerData.cartItems.cart_summery);
+    // console.log(workerData.cartItems.paymentRef);
+    const cart = JSON.parse(workerData.cartItems.cart_summery);
+    console.log('parse cart and user info');
+    console.log(cart);
+    console.log(cartString.customer_email);
+    console.log(cartString.customer_name);
     
+    
+
     try {
         
-    const cartSummery = workerData.eventData.metaData.cart_summery;
+    const cartSummery = workerData;
     // the parsed cart is an array of objects, each object contains one ticket.
-    const cart = JSON.parse(cartSummery);
 
+    
+
+    console.log('cart worker summary');
+
+    console.log(cart);
+    
+    
 
     const customerName = workerData.eventData.metaData.customer_name;
     const customerEmail = workerData.eventData.metaData.customer_email;
@@ -318,6 +339,9 @@ async function createTicket(){
         // console.log("🧹 Cleanup complete.");
 
         parentPort.postMessage({status: 'success'})
+
+        console.log('ticket created and added to database');
+        
 
     } catch (error) {
         parentPort.postMessage({status: 'error', message: error.message})

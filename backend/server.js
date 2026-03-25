@@ -14,6 +14,9 @@ import axios from 'axios';
 
 //  COMMIT THE LAST CHANGES AND MERGE AND UPDATE DROPLET
 
+// testing table schema 
+// id, created_at, type, ticket_qr, is_scanned, customer_email, paymentRef, scanned_at, event_id, customer_name, event_name
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,6 +64,31 @@ app.use('/staff', staffRoutes);
 app.use('/admin', adminRoutes);
 
 
+function createTestTicket(req, res) {
+
+    const ref = req.body.payload.reference;
+    const cart = req.ticketData;
+
+    console.log('create test ticket function');
+    console.log(cart);
+
+    try {
+
+        cart.isProcessed = true;
+        console.log(cart);
+        
+    } catch (error) {
+        cart.isProcessed = false;
+        console.log(error);
+        
+    }
+    
+    
+};
+
+
+
+
 function verifyMonnifySignature (req, res, next) {
 
     const sign = req.headers['x-monnify-signature'] || req.headers['monnify-signature']
@@ -86,32 +114,81 @@ function verifyMonnifySignature (req, res, next) {
 }
 
 
-// BUG: this function is not working, and the checkout ui is not processing any payments fix it, refer to backend convo with gemini
+// 1. Helper function to sort object keys alphabetically
+const sortObject = (obj) => {
+    if (obj === null || typeof obj !== 'object') return obj;
+    if (Array.isArray(obj)) return obj.map(sortObject);
+    
+    return Object.keys(obj)
+        .sort()
+        .reduce((result, key) => {
+            result[key] = sortObject(obj[key]);
+            return result;
+        }, {});
+};
+
 function verifyOpaySignature(req, res, next) {
     // the signature we receive from opay's webhook
     const sign = req.body.sha512;
     const payload = req.body.payload;
-    // console.log('request body');
-    // console.log(req)
-
-    
-    // first guard / gate
-    if(!sign) {
-        // return res.status(400).send('No signature found ')
-        console.log('no match found');
-        
-    }
-
     const SECRET_KEY = process.env.OPAY_SECRET_KEY;
 
-    const dataToHash = JSON.stringify(payload);
+    // first guard / gate
+    if(!sign || !payload) {
+        console.log('missing payload or sign not found');
+        // return res.status(400).send('Missing data');
+    } 
+   
+    
 
-    const computedHash = crypto.createHmac('sha512', SECRET_KEY).update(dataToHash).digest('hex')
+    const amount = payload.amount;
+    const currency = payload.currency;
+    const reference = payload.reference;
+    const refunded = payload.refunded ? "t" : "f"; // PHP: $refunded?"t":"f"
+    const status = payload.status;
+    const timestamp = payload.timestamp;
+    const token = payload.token;
+    const transactionId = payload.transactionId;
+
+    const body = req.body;
+    console.log('cart from map object');
+    const cartData = webhookCache.get(body.payload.reference)
+    console.log(cartData);
+
+    // duplicate prevention 1
+    if(!cartData) {
+        return res.status(200).send('Already processed')
+    };
+
+    if(cartData.isProcessed) {
+        console.log('duplicate webhook detected');
+        return res.status(200).send("OK")
+    };
+
+
+    req.ticketData = cartData;
+
+    // opay does not accept json strings, so we construct it based on wht they did in the docs
+    const authJson = `{Amount:"${amount}",Currency:"${currency}",Reference:"${reference}",Refunded:${refunded},Status:"${status}",Timestamp:"${timestamp}",Token:"${token}",TransactionID:"${transactionId}"}`;
+   
+
+    // const test1 = crypto.createHmac('sha512', SECRET_KEY)
+    //     .update(testingStr)
+    //     .digest('hex');
+
+    const computedHash =  crypto.createHmac('sha3-512', SECRET_KEY).update(authJson).digest('hex');
+
 
     if(computedHash === sign) {
+        console.log('match found');
         next();
-        // res.status(200)
-    };
+    } else {
+        console.log('match not found !!');
+        console.log("My Constructed String:", authJson);
+        console.log("My Hash:", computedHash);
+        console.log("Their Sig:", sign)
+        // return res.status(401).send('invalid Signature')
+    }
 
 };
 
@@ -181,28 +258,41 @@ app.post('/webhook/monnify', (req, res) => {
 })
 
 
+const webhookCache = new Map();
 
 // TESTING WITH OPAY checkout system
 app.post('/api/checkout/opay', async (req, res) => {
     // send the amount and the rest of the details in the req.body
-    const {amount, email, ticketType, reference, product} = req.body;
+    const {amount, email, ticketType, reference, product, ticketData} = req.body;
     // this might be used
     const ticketReference = `TIX-${Date.now()}`
 
+    const productObj = req.body.product;
+
+    webhookCache.set(ticketReference, productObj);
+
+    console.log('checkout endpoint');
+    console.log('product object');
+    
+    console.log(productObj);
     // console.log(req.body);
     
+    // delete the cache after 1 hour to save memory !!
+    setTimeout(() => webhookCache.delete(ticketReference), 60 * 60 * 1000);
+
 
     const payload = {
     amount: amount, // Integer (e.g., 1000 for 1000 NGN)
     currency: "NGN",
     country: "NG",
-    reference: reference,
+    reference: ticketReference,
     returnUrl: "http://localhost:5173/",
     callbackUrl: "https://3w9cnvpn-3001.uks1.devtunnels.ms/webhook/opay", // This is where QR is triggered
     userEmail: email,
     productDesc: `Ticket for ${ticketType}`,
-    product:product
-  };
+    product: product,
+    // ticketData: ticketData
+  }; 
 
   try {
     // using axios to send the http request
@@ -228,26 +318,68 @@ app.post('/api/checkout/opay', async (req, res) => {
 
 
 app.post('/webhook/opay', (req,res) => {
-    const data = req.body;
+
 
     res.status(200).json({code: '00000', message: 'SUCCESS'});
 
     console.log('opay payload');
-    console.log(req.headers);
+    console.log(req.headers);  
     
     console.log(req.body);
-
     console.log('opay headers');
-    console.log(req.body.sha512);
 
+    const paymentRef = req.body.payload.reference;
+    // console.log(req.body.sha512);
 
-    verifyOpaySignature(req, res, () => {
-        console.log('sign verified');
-        console.log('START GENERATING TICKETS');  
-    })
+    // const body = req.body;
+    // console.log('cart from map object');
+    // const cartData = webhookCache.get(body.payload.reference)
+    // console.log(cartData);
 
+    // const cartSummery = eventData.metaData.cart_summery;
+
+    // const parsedCart = JSON.parse(cartSummery);
+
+    if(req.body.payload.status === "SUCCESS") {
+        console.log('payment done');
+        verifyOpaySignature(req, res, () => {
+            console.log('webhook verify function');
+            const cartItems = req.ticketData;
+            console.log(req.ticketData);
+
+             try {
+
+                // const cartSummery = eventData.metaData.cart_summery;
+                // the parsed cart is an array of objects, each object contains one ticket.
+                
+                const worker = new Worker(path.join(__dirname, 'pdfWorker2.js'), {
+                    workerData: {
+                        cartItems,
+                        paymentRef
+                    }
+                });
+
+                worker.on('message', (result) => {
+                console.log('✅ Ticket Process Finished:', result);
+                // Since the worker did the DB insert, we can just respond to Monnify here
+                });
+
+                worker.on('error', (err) => {
+                    console.error('❌ Worker Process Error:', err);
+                    res.status(500).send("error");
+                });
+                            
+            } catch (error) {
+                console.log('opay webhook error: ', error);
+                
+            }
+
+        })
+        
+    };
     
 });
+
 
 // When testing locally add the api prefix before the route name
 app.post('/api/check-tickets-quantity', async (req, res) => {
@@ -274,7 +406,7 @@ app.post('/api/check-tickets-quantity', async (req, res) => {
 
    } catch (error) {
     
-   }
+   };
 })
 
 app.get('/api/test', (req, res) => {
