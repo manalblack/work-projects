@@ -72,11 +72,14 @@ export default function Checkout(){
         "cart_summery": JSON.stringify(storageItems),
         "summery": JSON.stringify(storageSummery),
         "total_amount": storageItems.reduce((total, item) => total + (item.price * item.qty), 0),
+        "description":"Event ticket",
+        "name":"Tickets",
         "customer_name": formData.fullName,
         "customer_email": formData.email,
         "customer_phone": formData.phoneNumber
     }
-    
+
+    // const metadataString = Buffer.from(JSON.stringify(metadata)).toString('base64') 
 
     const updateQuantity = (type, event, operator) => {
 
@@ -205,6 +208,8 @@ export default function Checkout(){
 
     const opayCashier = async () => {
 
+        console.log('opay cashier function start')
+
         const opayData = {
             "amount": {
                 "currency": "NGN",
@@ -215,28 +220,29 @@ export default function Checkout(){
             "country": "NG",
             "customerVisitSource": 'IOS',
             "expireAt":300,
-            "product":{
-                "description":"Event ticket",
-                "name":"Tickets",
-            },
+            "product": metadata,
             "reference": `Ticket-${Date.now()}`,
             "returnUrl": "http://localhost:5173",
             "userInfo":{
-                    "userEmail": formData.email,
-                    "userId": "6212990",
-                    "userMobile": formData.phoneNumber,
-                    "userName": formData.fullName
-            }
+                "userEmail": formData.email,
+                "userId": "6212990",
+                "userMobile": formData.phoneNumber,
+                "userName": formData.fullName,
+                "ticketData": metadata
+            },
+            
         };
 
         try {
-            const response = await axios.post('http://localhost:3001/api/checkout/opay', opayData)
+            const response = await axios.post('http://localhost:3001/api/checkout/opay', opayData);
+
+            console.log(response);
 
             const opayResponse = response.data.data;
 
-            const paymentGate = opayResponse.cashierUrl
+            const paymentGate = opayResponse.cashierUrl;
 
-            console.log(response);
+            
             
             
             if(response.status === 200) {

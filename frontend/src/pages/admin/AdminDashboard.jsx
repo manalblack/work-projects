@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 
 
 
-     const ongoingEvent = allEvents.find(event => event.current_event === true);
+    const ongoingEvent = allEvents.find(event => event.current_event === true);
             
 
 
@@ -136,6 +136,9 @@ export default function AdminDashboard() {
 
                 <nav className="bg-lightPurple p-2  flex justify-center items-center shadow-md">
                     <div className="flex flex-row justify-center items-center gap-10 md:justify-between bg-green-00 md:w-3/4 md: pt-4 md:pb-2">
+                        <span>
+                            <Link to='/testing-dash'>Testing dash</Link>
+                        </span>
                         <button
                         className="bg-white px-3 py-1 font-bold rounded-2xl active:scale-85 hover:bg-darkPurple hover:text-white transition-all duration-300 ease-in shadow-md">
                            <Link to='/admin/add-events'>

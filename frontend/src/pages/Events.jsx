@@ -66,7 +66,7 @@ export default function Events() {
        <>
         <Navbar />
         <Helmet>
-            <title>About Us | Troveista</title>
+            <title>Events | Troveista</title>
             <link rel="canonical" href="https://troveista.com/events" />
         </Helmet>
         <div className="w-full bg-lightPurple flex flex-col gap-5 md:mt-10">

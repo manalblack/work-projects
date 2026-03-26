@@ -93,4 +93,22 @@ cart received in createTicket function
 
 https://ticket-hub-xwhv.onrender.com/verify/c0ab00c1-1995-4c65-9b31-7422d860c3e7?type=regular
 
-http://localhost:5173/verify/286b3fa4-cafa-4671-baaa-3ff047022247?type=vip
+http://localhost:5173/verify/286b3fa4-cafa-4671-baaa-3ff047022247?type=vip\
+
+
+
+
+cartItems: {
+    cart_summery: '[{"eventId":"41446b84-e713-4cbc-9a5d-e14a5029cbcb","title":"Lagos Summer Jam 2026","type":"vip","price":4000,"vipPrice":4000,"regularPrice":2000,"qty":4,"image":"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80","address":"Landmark Beach, VI","date":"2026-01-15"},{"eventId":"41446b84-e713-4cbc-9a5d-e14a5029cbcb","title":"Lagos Summer Jam 2026","type":"regular","price":2000,"vipPrice":4000,"regularPrice":2000,"qty":1,"image":"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80"}]',
+    
+    summery: '[{"ticket_id":"41446b84-e713-4cbc-9a5d-e14a5029cbcb","type":"vip","quantity":4},{"ticket_id":"41446b84-e713-4cbc-9a5d-e14a5029cbcb","type":"regular","quantity":1}]',   
+
+    total_amount: 18000,
+    description: 'Event ticket',
+    name: 'Tickets',
+    customer_name: 'test1',
+    customer_email: 'test1@gmail.com',
+    customer_phone: '12345'
+  },
+  paymentRef: 'TIX-1773107833764'
+}

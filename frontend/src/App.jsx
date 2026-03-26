@@ -22,7 +22,11 @@ const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
 const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'));
-const StaffFindTicket = lazy(() => import('./pages/StaffFindTicket'))
+const StaffFindTicket = lazy(() => import('./pages/StaffFindTicket'));
+
+// testing
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 function App() {
 
@@ -41,6 +45,9 @@ function App() {
           <Route path='/events' element={<Events /> } />
           <Route path='/cart' element={<Cart />} />
 
+          {/* move to admin routes after clients approve */}
+         
+
           {/* staff routes */}
           <Route path='/staff-setup' element={<Staff />}/>
           <Route path='/verify/:ticketId' element={<Verify />}/>
@@ -52,6 +59,7 @@ function App() {
           <Route path='/admin-login' element={<AdminLogin />}/>
           {/* Admin routes / setup */}
           <Route element={<AdminProtectedRoute />}>
+            <Route path='/testing-dash' element={<Dashboard />}/>
             <Route path='/admin/dashboard' element={<AdminDashboard />}/>
             <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
             <Route path='/admin/add-events' element={<AddEvents />} />
