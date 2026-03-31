@@ -65,12 +65,12 @@ export default function AddEventArea() {
                 // upload image to a storage bucket first before adding to database table, We can't save an image file directly into a table
                 const fileName = `eventImage-${imageFile.name}`
     
-                // const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile)
-                // if(error) throw error;
+                const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile)
+                if(error) throw error;
 
                 // Get the public url to save to table
                 
-                // const {data: uploadedImage} = supabase.storage.from('events_images').getPublicUrl(fileName);
+                const {data: uploadedImage} = supabase.storage.from('events_images').getPublicUrl(fileName);
                 
     
                 const newEvent = {
@@ -82,7 +82,7 @@ export default function AddEventArea() {
                     regularPrice: eventData.regularPrice,
                     time: formattedTime,
                     date: formattedDate,
-                    // image: uploadedImage.publicUrl,
+                    image: uploadedImage.publicUrl,
                 }
 
                 console.log(newEvent);
@@ -90,26 +90,26 @@ export default function AddEventArea() {
     
                 // const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
     
-                // const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
+                const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
     
     
-                // console.log(response);
-                // if(response.data.message === 'SUCCESS') {
-                //     toast.success("event added to database", {
-                //     duration: 6000,
-                //     position: 'top-center',
-                //     });
-                //     setLoading(false);
-                // }
+                console.log(response);
+                if(response.data.message === 'SUCCESS') {
+                    toast.success("event added to database", {
+                    duration: 6000,
+                    position: 'top-center',
+                    });
+                    setLoading(false);
+                }
     
-                // setEventData({
-                //     eventTitle: '',
-                //     eventDescription: '',
-                //     eventLocation: '',
-                //     totalTickets: 0,
-                //     vipPrice: 0,
-                //     regularPrice: 0
-                // })
+                setEventData({
+                    eventTitle: '',
+                    eventDescription: '',
+                    eventLocation: '',
+                    totalTickets: 0,
+                    vipPrice: 0,
+                    regularPrice: 0
+                })
                 setImagePreview(null)
     
             } catch (error) {
@@ -131,42 +131,45 @@ export default function AddEventArea() {
     // center the containers
 
     return (
-        <div className="bg-red-400 p-2 flex lg:flex-row flex-col justify-center items-center gap-20">
+        <div className="bg-red-0 p-2 flex lg:flex-row flex-col justify-center items-center gap-20">
 
-            <div className="bg-blue-200 w-1/2 h-auto p-2 rounded-sm">
+            <div className="bg-blue-200 md:w-1/2 w-full h-auto p- rounded-sm">
                 <form action="" className="w-full flex justify-center items-center">
-                {/* This div si the inputs parent remove the background color*/}
-                    <div className="w-9/10 flex pt- flex-col gap-7 justify-center items-center p-1 h- bg-red-0 min-h-0 flex-1 pb-2 bg-darkPu rounded-sm">
+                {/* This div is the inputs parent, remove the background color*/}
+                    <div className="w-9/10 flex pt- flex-col gap-7 justify-center items-center p-1 h- bg-red-0 min-h-0 flex-1 pb-2 bg-gray-40 rounded-sm">
                         <input type="text"  placeholder="title" name="eventTitle" value={eventData.eventTitle} onChange={handelFormChange}
-                        className="bg-white w-9/11 px-2 py-2 rounded-sm mt-5 shadow-md"/>
+                        className="bg-white w-9/11 px-2 py-2 rounded-sm mt-5 shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
                         <textarea placeholder="Description" name='eventDescription' value={eventData.eventDescription} onChange={handelFormChange}
-                        className="w-9/10 bg-white px-2 py-2 h-30 rounded-sm shrink-0 resize-none shadow-md"/>
+                        className="w-9/10 bg-white px-2 py-2 h-30 rounded-sm shrink-0 resize-none shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
 
-                         <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 max-w-sm bg-blue-00">
                             <label className="font-bold text-white">Choose Date & Time</label>
-                            <DatePicker selected={eventDate} onChange={(e) => setEventDate(e)}  showTimeSelect withPortal dateFormat="Pp"  className="bg-white px-2 rounded-sm shadow-md"/>
+                            <DatePicker selected={eventDate} onChange={(e) => setEventDate(e)}  
+                            showTimeSelect withPortal dateFormat="Pp"
+                            className="bg-white px-2 rounded-sm shadow-md w-60"/>
                         </div>
 
                         <input type="text" placeholder="Location" name='eventLocation' value={eventData.eventLocation} onChange={handelFormChange}
-                        className="bg-white px-2 py-1 rounded-sm shadow-md" />
+                        className="bg-white px-2 py-1 rounded-sm shadow-md w-9/10 transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
 
                         <label htmlFor="" className="text-white font-bold text-xl">Select image</label>
                         <input type="file" accept='image/*' onChange={handelImageFile} required
-                        className="bg-white w-3/4 px-2 shadow-md"/>
+                        className="bg-white w-3/4 px-2 shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
+
                         <label className="text-white font-bold text-xl">Total Tickets</label>
                         <input type="number" name="totalTickets" value={eventData.totalTickets === 0? '': eventData.totalTickets} onChange={handelFormChange}
-                         className="bg-white w-1/2 px-2 rounded-sm py-1" placeholder="Total Tickets"/>
+                         className="bg-white w-1/2 px-2 rounded-sm py-1 transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50" placeholder="Total Tickets"/>
 
-                        <div className="bg-ghostWhite flex flex-col gap-2 items-center p-2 rounded-sm shadow-md">
+                        <div className="bg-ghostWhite md:w-9/10 w-9/10 flex flex-col gap-2 items-center p-2  rounded-sm shadow-md">
                             <label htmlFor="">Tickets Prices</label>
 
                             <label htmlFor="vipPrice" className="font-light">Vip Price</label>
                             <input type="number" name="vipPrice" value={eventData.vipPrice === 0 ? '' : eventData.vipPrice} onChange={handelFormChange}
-                            placeholder="Vip" className="bg-blue-100 w-1/2 px-1 rounded-sm shadow-md"/>
+                            placeholder="Vip" className="bg-blue-100 w-1/2 px-1 rounded-sm shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
 
                             <label htmlFor="regularPrice" className="font-light">Regular price</label>
                             <input type="number" name="regularPrice"
-                            placeholder="Regular" value={eventData.regularPrice === 0 ? '' : eventData.regularPrice} onChange={handelFormChange}  className="bg-blue-100 w-1/2 px-1 rounded.sm shadow-lg rounded-sm shadow-md"/>
+                            placeholder="Regular" value={eventData.regularPrice === 0 ? '' : eventData.regularPrice} onChange={handelFormChange}  className="bg-blue-100 w-1/2 px-1 rounded.sm shadow-lg rounded-sm transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
                         </div>
 
                         <button onClick={addEventToDb}
@@ -184,7 +187,7 @@ export default function AddEventArea() {
             </h3>
 
             
-            <div className="pb-5 w-1/2 flex flex-col justify-center items-center">
+            <div className="pb-5 md:w-1/2 flex flex-col justify-center items-center">
                 <h3 className='text-2xl text-center font-bold'>Ticket Preview</h3>
                     <div className="flex flex-col justify-center items-center w-9/10 bg-darkPurple p-2 rounded-sm shadow-md">
                         <div className="">

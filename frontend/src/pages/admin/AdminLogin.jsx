@@ -43,7 +43,7 @@ export default function AdminLogin() {
             if(error) {
                 alert('Login failed: ' + error.message);
             } else{
-                navigate('/admin/dashboard')
+                navigate('/admin/testing-dash/main')
             }
             setLoading(false)
 
