@@ -3,6 +3,11 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
 import {HelmetProvider} from 'react-helmet-async'
+import MainDash from './pages/admin/features/MainDash';
+import AddEventArea from './pages/admin/features/AddEventArea';
+import CreateTicketArea from './pages/admin/features/CreateTicketArea';
+import EditEventArea from './pages/admin/features/EditEventArea';
+import FindTicketArea from './pages/admin/features/FindTicketArea';
 // import CustomerTicket from './pages/admin/CustomerTicket';
 
 
@@ -59,11 +64,17 @@ function App() {
           <Route path='/admin-login' element={<AdminLogin />}/>
           {/* Admin routes / setup */}
           <Route element={<AdminProtectedRoute />}>
-            <Route path='/testing-dash' element={<Dashboard />}/>
-            <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+            <Route path='/admin/dashboard' element={<Dashboard />}>
+              <Route path='main' element={<MainDash />}/>
+              <Route path='Add-events' element={<AddEventArea />}/>
+              <Route path='create-tickets' element={<CreateTicketArea />} />
+              <Route path='edit-event' element={<EditEventArea />}/>
+              <Route path='find-ticket' element={<FindTicketArea />}/>
+            </Route>
+            {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>
             <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
             <Route path='/admin/add-events' element={<AddEvents />} />
-            <Route path='/admin/create-ticket' element={<CreateTicket />}/>
+            <Route path='/admin/create-ticket' element={<CreateTicket />}/> */}
           </Route>
 
           

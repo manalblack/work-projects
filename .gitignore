@@ -3,5 +3,6 @@
 .env.local
 .env.production
 notes
+node_modules/
 # Ignore backend specific ones if they have different names
 backend/.env
