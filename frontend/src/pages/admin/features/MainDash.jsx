@@ -12,8 +12,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
     1- make sure every api endpoint is changed to the deployed version
     2- test everything, 
     3- handover to client is tomorrow
-
-
 */
 
 export default function MainDash() {
