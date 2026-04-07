@@ -3,11 +3,11 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
 import {HelmetProvider} from 'react-helmet-async'
-import MainDash from './pages/admin/features/MainDash';
-import AddEventArea from './pages/admin/features/AddEventArea';
-import CreateTicketArea from './pages/admin/features/CreateTicketArea';
-import EditEventArea from './pages/admin/features/EditEventArea';
-import FindTicketArea from './pages/admin/features/FindTicketArea';
+// import MainDash from './pages/admin/features/MainDash';
+// import AddEventArea from './pages/admin/features/AddEventArea';
+// import CreateTicketArea from './pages/admin/features/CreateTicketArea';
+// import EditEventArea from './pages/admin/features/EditEventArea';
+// import FindTicketArea from './pages/admin/features/FindTicketArea';
 // import CustomerTicket from './pages/admin/CustomerTicket';
 
 
@@ -21,17 +21,22 @@ const StaffSuccessfulLogin = lazy(() => import('./pages/StaffSuccessfulLogin'));
 const Success = lazy(() => import('./pages/Success'));
 
 // Admin pages
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
-const CustomerTicket = lazy(() => import('./pages/admin/FindTicket'));
-const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
-const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
+// const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+// const CustomerTicket = lazy(() => import('./pages/admin/FindTicket'));
+// const AddEvents = lazy(() => import('./pages/admin/AddEvents'))
+// const CreateTicket = lazy(() => import('./pages/admin/CreateTicket'));
+
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'));
 const StaffFindTicket = lazy(() => import('./pages/StaffFindTicket'));
 
-// testing
-
+// New admin dashboard with nested routes for each feature
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const MainDash = lazy(() => import('./pages/admin/features/MainDash'));
+const AddEventArea = lazy(() => import('./pages/admin/features/AddEventArea'));
+const CreateTicketArea = lazy(() => import('./pages/admin/features/CreateTicketArea'));
+const EditEventArea = lazy(() => import('./pages/admin/features/EditEventArea'));
+const FindTicketArea = lazy(() => import('./pages/admin/features/FindTicketArea'));
 
 function App() {
 

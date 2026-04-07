@@ -212,7 +212,6 @@ router.delete('/delete-event/:eventId', async (req, res) => {
         .eq('id', eventId)
         .single();
 
-        
         // delete the event from the table
         const { error: dbError } = await supabase
         .from('events')
