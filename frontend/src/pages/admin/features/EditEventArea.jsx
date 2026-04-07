@@ -11,6 +11,10 @@ import Modal from "../../../components/Modal";
 import Overlay from "../../../components/Overlay";
 import {motion, AnimatePresence} from 'motion/react'
 import imageCompression from 'browser-image-compression';
+import toast from "react-hot-toast";
+
+
+// keep testing 
 
 
 
@@ -222,6 +226,7 @@ export default function EditEventArea() {
             setLoadingUpdate(false);
             
             console.log('event updated !!!!');
+            toast.success('Event updated successfully!')
             
         } catch (error) {
             console.log('error when trying to update event data', error);
@@ -247,7 +252,7 @@ export default function EditEventArea() {
             const response = await axios.delete(`${API_URL}/admin/delete-event/${eventId}`);
 
             console.log(response);
-            if(response.data.message === 'Delete') {
+            if(response.status === 200) {
                 setFormData({
                     eventTitle: '',
                     eventDescription: '',
@@ -262,6 +267,8 @@ export default function EditEventArea() {
             }
             setConfirmDelete(false)
             setLoadingDelete(false);
+
+            toast.success('Event deleted successfully!')
             
         } catch (error) {
             console.log('error when deleting event', error);
