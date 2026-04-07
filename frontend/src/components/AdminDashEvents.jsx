@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { supabase } from "../supabaseConnection";
-
+import ScannedTicketsModal from "../pages/admin/features/ScannedTicketsModal";
 
 export default function AdminDashEvents({allEvents, setAllEvents, id, image, title, description, date, location, time, regular_price, vip_price, current_event}){
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [scannedTicketsModal, setScannedTickModal] = useState(false);
 
 
+    // TODO: fix this function....
      const handelOngoingBox = async (eventId) => {
 
         console.log(eventId);
@@ -31,13 +33,20 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
         }
     }
 
+    const openScannedTicketsModal = (eventId) => {
+        setScannedTickModal(true)
+        // setEventId(eventId)
+    }
+
+    
+
 
     return (
         <div className="w-full md:w-9/10 px-5">
             <div key={id}
-                 className="h-auto w-full lg:w bg-ghostWhite shadow-md flex flex-col items-center p-2 gap-6 md:gap-8 lg:gap-4 rounded-sm">
+                className="h-auto w-full lg:w bg-ghostWhite shadow-md flex flex-col items-center p-2 gap-6 md:gap-8 lg:gap-4 rounded-sm">
                 <div className="w-full bgwhite/50 rounded-sm aspect-video flex justify-center items-center">
-                    <img src={image} alt="placeholder image" className="rounded-sm lg:h- h-60"/>
+                    <img src={image} alt="placeholder image" className="rounded-sm lg:h- h-60 shadow-md"/>
                 </div>
 
                 <div className="text-white bg-green-6 flex flex-col gap-3">
@@ -90,7 +99,14 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
                     </div>
 
                 </div>
+                <button onClick={() => openScannedTicketsModal(id)}
+                    className="px-2 py-1 bg-blue-200 text-white font-bold rounded-md shadow-md active:scale-85 hover:bg-blue-300 transition-all duration-300 ease-in-out">
+                    get scanned tickets
+                </button>
             </div> 
+            {scannedTicketsModal && 
+                <ScannedTicketsModal eventId={id} isOpen={scannedTicketsModal} setScannedTickets={setScannedTickModal}/>
+            }
         </div>
 
     )

@@ -21,16 +21,7 @@ export default function Dashboard() {
     const isMobile = useMediaQuery("(max-width: 768px)");
     const [activeTab, setActiveTab] = useState('Main Area');
 
-    // change this to using Navlink and outlet
-    const renderMainContent = () => {
-        switch (activeTab) {
-            case 'Main Area': return <MainDash />;
-            case 'Add Event': return <AddEventArea />;
-            case 'Create Ticket': return <CreateTicketArea />;
-            case 'Edit Event': return <EditEventArea />;
-            case 'Find Ticket': return <FindTicketArea />;
-        }
-    };
+  
 
     const tabs = [
         {to: 'main', icon: IoHomeOutline, label: 'Main'},
@@ -92,7 +83,8 @@ export default function Dashboard() {
                     <nav className='flex flex-col gap-8 p-1'>
                         {tabs.map(({to, icon: Icon, label}) => (
                             <NavLink key={label} to={to} className={({isActive}) => isActive ? 'active-nav-item' : 'nav-item'}>
-                                <div data-tooltip-id="sidebar-tooltip"
+                                <div onClick={() => setIsOpen(false)}
+                                data-tooltip-id="sidebar-tooltip"
                                 data-tooltip-content={isOpen ? '' : label}
                                 className='groupe sidebar-link-item'>
                                     <span className={`flex flex-row ${isOpen ? 'justify-between' : 'justify-center items-center'} px-1.5 py-2 rounded-md hover:bg-blue-300 hover:text-white hover:shadow-md active:scale-85 transition-all duration-300 ease-in-out`}>
@@ -110,7 +102,7 @@ export default function Dashboard() {
 
             {/* main content area and navbar */}
             <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
-                <nav className='bg-ghostWhite md:p-3 p-2 flex justify-between shadow-md'>
+                <nav className='bg-ghostWhite md:p-3 p-2 flex justify-between items-center shadow-md'>
                     <div className='flex md:gap-5 gap-10 '>
                         <button onClick={() => 
                         setIsOpen(!isOpen)}
@@ -122,7 +114,7 @@ export default function Dashboard() {
                 </button>
                  <button onClick={() => setIsOpen(true)}
                     className='bg-blue-300 text-white p-0.2 rounded-md md:hidden flex'>
-                        <IoMenu className='size-6'/>
+                        <IoMenu className='size-8'/>
                     </button>
 
                     <header className='text-sm hidden md:text-lg font-bold'>
@@ -131,9 +123,9 @@ export default function Dashboard() {
                 </div>
                    
                     <div className='bg-gray-0'>
-                        <Link>
+                        <Link to='/' target='_blank' className='flex justify-end items-center gap-1 p-2'>
                             <span
-                             className='flex md:gap-3 gap-1 justify-center items-center text-sm p-1 rounded-md active:bg-blue-300 hover:bg-blue-300 hover:text-white transition-all duration-300 ease-in-out '>
+                             className='flex md:gap-3 gap-1 justify-center items-center text-md p-1 rounded-md active:bg-blue-300 hover:bg-blue-300 hover:text-white transition-all duration-300 ease-in-out '>
                                 Main Site
                                 <FaArrowUpRightFromSquare />
                             </span>

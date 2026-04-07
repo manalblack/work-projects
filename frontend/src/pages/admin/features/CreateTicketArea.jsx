@@ -105,7 +105,7 @@ export default function CreateTicketArea() {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(pdfUrl);
         toast.success('Link copied to clipboard')
-    }
+    };
 
 
     if (loading) {
@@ -162,7 +162,8 @@ export default function CreateTicketArea() {
                 <div className="relative w-full aspect-video sm:aspect-square md:aspect-video p-3">
                     <iframe src={pdfUrl} frameborder="0" className="absolute top-0 left-0 w-full h-full rounded-md"/>
                 </div>
-                <a href={pdfUrl} download className="bg-blue-300 px-2 py-1 rounded-xl font-bold active:scale-85 hover:bg-blue-200 text-white transition-all duration-300 ease-in-out">
+                {/* make this open the ticket in a new window */}
+                <a href={pdfUrl}  download className="bg-blue-300 px-2 py-1 rounded-xl font-bold active:scale-85 hover:bg-blue-200 text-white transition-all duration-300 ease-in-out">
                     Download ticket pdf
                 </a>
             </div>

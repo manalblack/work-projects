@@ -64,18 +64,17 @@ function App() {
           <Route path='/admin-login' element={<AdminLogin />}/>
           {/* Admin routes / setup */}
           <Route element={<AdminProtectedRoute />}>
-            <Route path='/testing-dash' element={<Dashboard />}>
-
+            <Route path='/admin/dashboard' element={<Dashboard />}>
               <Route path='main' element={<MainDash />}/>
               <Route path='Add-events' element={<AddEventArea />}/>
               <Route path='create-tickets' element={<CreateTicketArea />} />
               <Route path='edit-event' element={<EditEventArea />}/>
               <Route path='find-ticket' element={<FindTicketArea />}/>
             </Route>
-            <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+            {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>
             <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
             <Route path='/admin/add-events' element={<AddEvents />} />
-            <Route path='/admin/create-ticket' element={<CreateTicket />}/>
+            <Route path='/admin/create-ticket' element={<CreateTicket />}/> */}
           </Route>
 
           

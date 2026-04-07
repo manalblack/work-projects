@@ -59,7 +59,10 @@ app.use(express.json())
 app.use(express.static('public'));
 
 // ROUTES 
-// IMPORTANT: when testing locally add the api prefix, BUT remove it before deployment
+
+/* IMPORTANT: when testing locally add the api prefix, 
+BUT remove it before deployment */
+
 app.use('/staff', staffRoutes);
 app.use('/admin', adminRoutes);
 
@@ -85,7 +88,6 @@ function createTestTicket(req, res) {
     
     
 };
-
 
 
 
@@ -195,7 +197,7 @@ function verifyOpaySignature(req, res, next) {
 
 
 app.post('/webhook/monnify', (req, res) => {
-     const { eventData } = req.body;
+    const { eventData } = req.body;
 
     res.status(200).send("Webhook received by Express")
     // the line below send a response immediately yo monnify

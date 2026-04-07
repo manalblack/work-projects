@@ -8,6 +8,11 @@ import axios from "axios";
 import { supabase } from "../../../supabaseConnection";
 import PriceContainer from "../../../components/PriceContainer";
 import toast from "react-hot-toast";
+import MiniLoading from "../../../components/admin-components/MiniLoading";
+import imageCompression from 'browser-image-compression';
+
+
+
 
 export default function AddEventArea() {
 
@@ -39,16 +44,20 @@ export default function AddEventArea() {
 
     const handelImageFile = (e) => {
         const selectedFile = e.target.files[0];
+        
         if(selectedFile) {
+          
             setImageFile(selectedFile);
             setImagePreview(URL.createObjectURL(selectedFile));
+
         }
         // setImageFile(URL.createObjectURL(e.target.files[0]));
     }
     
-    //    TEST this function
+        // Kinda working, keep testing it
         const addEventToDb = async (e) => {
             e.preventDefault();
+
             setLoading(true);
     
            const formattedDate = eventDate.toISOString().split('T')[0];
@@ -64,6 +73,8 @@ export default function AddEventArea() {
             try {
                 // upload image to a storage bucket first before adding to database table, We can't save an image file directly into a table
                 const fileName = `eventImage-${imageFile.name}`
+                
+                
     
                 const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile)
                 if(error) throw error;
@@ -88,9 +99,9 @@ export default function AddEventArea() {
                 console.log(newEvent);
                 
     
-                // const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+                const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
     
-                const response = await axios.post('http://localhost:3001/api/admin/add-events', newEvent);
+                // const response = await axios.post('http://localhost:3001/admin/add-events', newEvent);
     
     
                 console.log(response);
@@ -129,6 +140,11 @@ export default function AddEventArea() {
         };
 
     // center the containers
+
+    if(loading) {
+        return <MiniLoading />
+    }
+
 
     return (
         <div className="bg-red-0 p-2 flex lg:flex-row flex-col justify-center items-center gap-20">

@@ -2,7 +2,7 @@
 
 
 
-export default function Input({label, type, error, name, value, onChange, className = "", placeholder = "", icon: Icon}) {
+export default function Input({label, type, error, name, value, onChange, className = "", placeholder, icon: Icon}) {
 
 
     return(
@@ -16,7 +16,7 @@ export default function Input({label, type, error, name, value, onChange, classN
                <div className="flex justify-center items-center relative w-full">
 
                     {/* 3. The Input - Styled for your Ghost White Dashboard */}
-                <input value={value} onChange={onChange} type={type} name={name}
+                <input value={value} onChange={onChange} type={type} name={name} placeholder={placeholder}
                     className={`
                         px-2 py-1.5 w-9/10 rounded-md border transition-all outline-none shadow-md
                         ${Icon ? 'pl-10' : 'pl-4'}
