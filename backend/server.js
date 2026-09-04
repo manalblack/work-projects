@@ -63,8 +63,8 @@ app.use(express.static('public'));
 /* IMPORTANT: when testing locally add the api prefix, 
 BUT remove it before deployment */
 
-app.use('/staff', staffRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/staff', staffRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 function createTestTicket(req, res) {
@@ -417,6 +417,5 @@ app.get('/api/test', (req, res) => {
 
 
 app.listen(3001, () => {
-    console.log('server running on port 3001');
-    
+    console.log('server running on port 3001'); 
 });

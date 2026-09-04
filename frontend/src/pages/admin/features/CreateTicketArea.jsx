@@ -101,6 +101,35 @@ export default function CreateTicketArea() {
         console.log(newTicket);
     }
 
+    const handleDirectDownload = async (url) => {
+        if (!url) return;
+
+        try {
+        // toast.info('Starting download...', { duration: 3000 });
+
+        // Fetch the file as a Blob object
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create a temporary hidden <a> element to trigger download
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `Ticket-${Date.now()}.pdf`; // Sets the default file name
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up memory and remove node
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+
+        toast.success('Download completed!');
+        } catch (error) {
+        console.error('Download failed:', error);
+        toast.error('Failed to download ticket PDF');
+        }
+    };
+
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(pdfUrl);
@@ -162,10 +191,17 @@ export default function CreateTicketArea() {
                 <div className="relative w-full aspect-video sm:aspect-square md:aspect-video p-3">
                     <iframe src={pdfUrl} frameborder="0" className="absolute top-0 left-0 w-full h-full rounded-md"/>
                 </div>
+
                 {/* make this open the ticket in a new window */}
-                <a href={pdfUrl}  download className="bg-blue-300 px-2 py-1 rounded-xl font-bold active:scale-85 hover:bg-blue-200 text-white transition-all duration-300 ease-in-out">
+                {/* <a href={pdfUrl}  download className="bg-blue-300 px-2 py-1 rounded-xl font-bold active:scale-85 hover:bg-blue-200 text-white transition-all duration-300 ease-in-out">
                     Download ticket pdf
-                </a>
+                </a> */}
+                <button
+                    type="button"
+                    onClick={() => handleDirectDownload(pdfUrl)}
+                    className="bg-blue-300 font-bold text-white px-3 py-1 rounded-xl active:scale-85 hover:bg-blue-200 transition-all duration-300 ease-in-out">
+                    Download Ticket
+                </button>
             </div>
             }
        </div>

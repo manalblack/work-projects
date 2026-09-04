@@ -2,6 +2,9 @@ import {motion, AnimatePresence} from 'motion/react'
 import { useState } from 'react';
 import { CiSquarePlus } from "react-icons/ci";
 import { IoTicketOutline, IoSearch,  IoHomeOutline, IoMenu, IoCloseSharp  } from "react-icons/io5";
+
+import { Ticket, Tickets, House, CalendarPlus2, FilePen, Search } from 'lucide-react';
+
 import { FaArrowUpRightFromSquare} from "react-icons/fa6";
 import { Link, Outlet, NavLink } from 'react-router-dom';
 import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
@@ -24,11 +27,13 @@ export default function Dashboard() {
   
 
     const tabs = [
-        {to: 'main', icon: IoHomeOutline, label: 'Main'},
-        {to: 'add-events', icon: CiSquarePlus, label: 'Add Event'},
-        {to: 'create-tickets', icon: IoTicketOutline, label: 'Create Ticket'},
-        {to: 'edit-event', icon: FaRegEdit, label: 'Edit event'},
-        {to: 'find-ticket', icon: IoSearch, label: 'Find ticket'}
+        {to: 'main', icon: House, label: 'Main'},
+        {to: 'add-events', icon: CalendarPlus2, label: 'Add Event'},
+        {to: 'create-ticket', icon: Ticket, label: 'Create Ticket'},
+         {to: 'create-tickets', icon: Tickets, label: 'Bulk Tickets'},
+        {to: 'edit-event', icon: FilePen, label: 'Edit event'},
+        {to: 'find-ticket', icon: Search, label: 'Find ticket'},
+       
     ]
 
     const sidebarVariants = {
@@ -68,7 +73,7 @@ export default function Dashboard() {
             animate={isOpen ? "open" : 'closed'}
             // transition={sidebarTransition}
             variants={sidebarVariants}
-            className={`bg-ghostWhite z-99 shadow-[4px_0_10px_rgba(0,0,0,0.05)] md:relative flex flex-col md:gap-10 p-1 fixed shrink-0 top-0 left-0 h-full md:translate-x-0 md:opacity-100 `}>
+            className={`bg-ghostWhite z-99 shadow-[4px_0_10px_rgba(0,0,0,0.05)] md:relative flex flex-col md:gap- p-1 fixed shrink-0 top-0 left-0 h-full md:translate-x-0 md:opacity-100 `}>
 
                 <button className='absolute cursor-pointer top-4 md:hidden flex right-4 bg-blue-300 text-white rounded-md active:scale-85 transition-all duration-300 ease-in-out'>
                     <IoCloseSharp className='size-7 '/>
@@ -87,8 +92,8 @@ export default function Dashboard() {
                                 data-tooltip-id="sidebar-tooltip"
                                 data-tooltip-content={isOpen ? '' : label}
                                 className='groupe sidebar-link-item'>
-                                    <span className={`flex flex-row ${isOpen ? 'justify-between' : 'justify-center items-center'} px-1.5 py-2 rounded-md hover:bg-blue-300 hover:text-white hover:shadow-md active:scale-85 transition-all duration-300 ease-in-out`}>
-                                            <Icon className={`${isOpen ? 'size-6': 'size-8'}`}/>
+                                    <span className={`flex flex-row ${isOpen ? 'justify-between' : 'justify-center items-center'} px-1 py-1 rounded-sm bg-pink-00 text-gray-700 hover:bg-blue-300 hover:text-white hover:shadow-md active:scale-85 transition-all duration-300 ease-in-out`}>
+                                            <Icon className={`${isOpen ? 'size-5': 'size-7'}`}/>
                                             <span className={`${isOpen ? 'flex' : 'hidden'} text-lg`}> 
                                                 {label} 
                                             </span>
@@ -108,9 +113,9 @@ export default function Dashboard() {
                         setIsOpen(!isOpen)}
                  className='bg-red-00 hidden md:flex'>
                     {isOpen ? <GoSidebarExpand  
-                    className='size-6'/>  
+                    className='size-6 text-gray-700'/>  
                     : <GoSidebarCollapse 
-                    className='size-6'/>}
+                    className='size-6 text-gray-700'/>}
                 </button>
                  <button onClick={() => setIsOpen(true)}
                     className='bg-blue-300 text-white p-0.2 rounded-md md:hidden flex'>

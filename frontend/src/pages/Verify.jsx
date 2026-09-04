@@ -65,13 +65,16 @@ export default function Verify() {
         // query the database to check the is_scanned and scanned_at columns 
          const checkTicketStatus = async () => {
             try {
-                const {data, error} = await supabase.from('tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
+                const {data, error} = await supabase.from('testing_tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
 
                 if(error) {
                     console.log('error checking ticket status in the db', error);
                 }
 
-                setScanningTime(data.scanned_at);
+                if(data.scanned_at) {
+                    setScanningTime(data.scanned_at);
+                }
+
                 setEventName(data.event_name);
                 // checking ticket validity
                 
@@ -172,7 +175,7 @@ export default function Verify() {
                     </p>
                     
                 </div>) : (
-                    <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-600 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>
+                    <div className={`h-screen w-full p-4 ${isVip ? 'bg-gray-500 text-yellow-400' : 'bg-white text-blue-800' } flex flex-col items-center justify-center gap-12`}>
                         <div className=" flex flex-col gap-15 md:w-3/4 w-full h-130 p-3 justify-center items-center shadow-xl">
                             <h1 className='text-4xl font-extrabold'>Verify Ticket</h1>
                             <h3 className=" text-2xl">Event Name: {eventName}</h3>

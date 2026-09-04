@@ -29,61 +29,63 @@ export default function MainDash() {
 
 
     useEffect(() => {
-            try {
-                const fetchEvents = async () => {
-                    // change this link to ngrok 
-                    const response = await axios.get(`${API_URL}/admin/all-events`);
+        try {
+            const fetchEvents = async () => {
+                // change this link to ngrok 
+                const response = await axios.get(`${API_URL}/admin/all-events`);
 
-                    
-                    setAllEvents(response.data);
-                    const ongoingEvent = response.data.find(event => event.current_event === true);
-    
-                   console.log(ongoingEvent);
-                    // local testing
-                    //  const scannedTicketsResponse = await axios.get(`http://localhost:3001/admin/scanned-tickets/${ongoingEvent.id}`);
-
-                    // Hosted endpoint
-                    const scannedTicketsResponse = await axios.get(`${API_URL}/admin/scanned-tickets/${ongoingEvent.id}`);
-
-                   const NumberOfScannedTickets = scannedTicketsResponse.data.ticketsData;
-
-                   setScannedTicketsCount(NumberOfScannedTickets.length)
-                   console.log(NumberOfScannedTickets);
-                   
-                    
-                    //  Find the sold out / finished event
-                    
-                    if(response.data.length > 0) {
-                        const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
-    
-                        const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
-                        console.log(eventStatus);
-                        setSoldOut(eventStatus);
-                   
-                    } else {
-                        setSoldOut(null)
-                    }
-                    setLoading(false)
-
-                }
-    
-                // Cleanup Current event id date passed
-                const cleanupCurrentEvent = async () => {
-                    const {data, error} = await supabase.rpc('update_expired_events')
-    
-                    if(error)  {
-                        console.log('rpc function error', error);
-                    }
-                    console.log('rpc function data', data);
-                }
-    
-                cleanupCurrentEvent();
-                fetchEvents();
-    
-            } catch (error) {
-                console.error('error when fetching events', error)
                 
+                setAllEvents(response.data);
+                const ongoingEvent = response.data.find(event => event.current_event === true);
+
+                console.log(ongoingEvent);
+                // local testing
+                //  const scannedTicketsResponse = await axios.get(`http://localhost:3001/admin/scanned-tickets/${ongoingEvent.id}`);
+
+                // Hosted endpoint
+                const scannedTicketsResponse = await axios.get(`${API_URL}/admin/scanned-tickets/${ongoingEvent.id}`);
+
+                const NumberOfScannedTickets = scannedTicketsResponse.data.ticketsData;
+
+                setScannedTicketsCount(NumberOfScannedTickets.length)
+                console.log(NumberOfScannedTickets);
+                
+                
+                //  Find the sold out / finished event
+                
+                if(response.data.length > 0) {
+                    const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
+
+                    const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
+                    console.log(eventStatus);
+                    setSoldOut(eventStatus);
+                
+                } else {
+                    setSoldOut(null)
+                }
+
+                setLoading(false);
             }
+
+            // THIS FUNCTION IS DELETED FROM SUPABASE FIX IT THEN ADD IT
+            // Cleanup Current event id date passed
+            // const cleanupCurrentEvent = async () => {
+            //     const {data, error} = await supabase.rpc('update_expired_events')
+
+            //     if(error)  {
+            //         console.log('rpc function error', error);
+            //     }
+            //     console.log('rpc function data', data);
+            // }
+
+            // cleanupCurrentEvent();
+            fetchEvents();
+            
+
+        } catch (error) {
+            console.error('error when fetching events', error)
+            
+        }
         }, [])
 
     
@@ -91,7 +93,6 @@ export default function MainDash() {
         setScannedTickModal(true)
         setEventId(eventId)
     }
-
 
 
     const ongoingEvent = allEvents.find(event => event.current_event === true);
