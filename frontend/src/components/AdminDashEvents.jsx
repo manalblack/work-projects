@@ -10,7 +10,6 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
 
     // TODO: fix this function....
      const handelOngoingBox = async (eventId) => {
-
         console.log(eventId);
         
         const updatedEvents = allEvents.map((ev) => ({

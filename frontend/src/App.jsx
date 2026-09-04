@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
 import {HelmetProvider} from 'react-helmet-async'
+import CreateTicketsArea from './pages/admin/features/CreateTicketsArea';
 // import MainDash from './pages/admin/features/MainDash';
 // import AddEventArea from './pages/admin/features/AddEventArea';
 // import CreateTicketArea from './pages/admin/features/CreateTicketArea';
@@ -72,7 +73,8 @@ function App() {
             <Route path='/admin/dashboard' element={<Dashboard />}>
               <Route path='main' element={<MainDash />}/>
               <Route path='Add-events' element={<AddEventArea />}/>
-              <Route path='create-tickets' element={<CreateTicketArea />} />
+              <Route path='create-ticket' element={<CreateTicketArea />} />
+              <Route path='create-tickets' element={<CreateTicketsArea />} />
               <Route path='edit-event' element={<EditEventArea />}/>
               <Route path='find-ticket' element={<FindTicketArea />}/>
             </Route>
