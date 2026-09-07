@@ -27,66 +27,59 @@ export default function MainDash() {
 
     const API_URL = import.meta.env.VITE_API_URL;
 
+    // console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+    // console.log("Full Request URL:", `${import.meta.env.VITE_API_URL}/admin/all-events`);
+
 
     useEffect(() => {
-        try {
-            const fetchEvents = async () => {
-                // change this link to ngrok 
-                const response = await axios.get(`${API_URL}/admin/all-events`);
 
-                
-                setAllEvents(response.data);
-                const ongoingEvent = response.data.find(event => event.current_event === true);
 
-                console.log(ongoingEvent);
-                // local testing
-                //  const scannedTicketsResponse = await axios.get(`http://localhost:3001/admin/scanned-tickets/${ongoingEvent.id}`);
+        const fetchEvents = async () => {
+            try{
 
-                // Hosted endpoint
-                const scannedTicketsResponse = await axios.get(`${API_URL}/admin/scanned-tickets/${ongoingEvent.id}`);
+            // change this link to ngrok 
+            const response = await axios.get(`${API_URL}/admin/all-events`);
 
-                const NumberOfScannedTickets = scannedTicketsResponse.data.ticketsData;
+            
+            setAllEvents(response.data);
+            const ongoingEvent = response.data.find(event => event.current_event === true);
 
-                setScannedTicketsCount(NumberOfScannedTickets.length)
-                console.log(NumberOfScannedTickets);
+            console.log(ongoingEvent);
+            // local testing
+            //  const scannedTicketsResponse = await axios.get(`http://localhost:3001/admin/scanned-tickets/${ongoingEvent.id}`);
+
+            // Hosted endpoint
+            const scannedTicketsResponse = await axios.get(`${API_URL}/admin/scanned-tickets/${ongoingEvent.id}`);
+
+            const NumberOfScannedTickets = scannedTicketsResponse.data.ticketsData;
+
+            setScannedTicketsCount(NumberOfScannedTickets.length)
+            console.log(NumberOfScannedTickets);
                 
                 
                 //  Find the sold out / finished event
                 
-                if(response.data.length > 0) {
-                    const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
+            if(response.data.length > 0) {
+                const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
 
-                    const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
-                    console.log(eventStatus);
-                    setSoldOut(eventStatus);
-                
-                } else {
-                    setSoldOut(null)
-                }
-
-                setLoading(false);
+                const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
+                console.log(eventStatus);
+                setSoldOut(eventStatus);
+            
+            } else {
+                setSoldOut(null)
             }
 
-            // THIS FUNCTION IS DELETED FROM SUPABASE FIX IT THEN ADD IT
-            // Cleanup Current event id date passed
-            // const cleanupCurrentEvent = async () => {
-            //     const {data, error} = await supabase.rpc('update_expired_events')
+            setLoading(false);
 
-            //     if(error)  {
-            //         console.log('rpc function error', error);
-            //     }
-            //     console.log('rpc function data', data);
-            // }
+            }catch(error) {
 
-            // cleanupCurrentEvent();
-            fetchEvents();
-            
-
-        } catch (error) {
-            console.error('error when fetching events', error)
-            
+                console.error('error when fetching events', error)
+            }
         }
-        }, [])
+           
+        fetchEvents();
+    }, [])
 
     
     const openScannedTicketsModal = (eventId) => {
