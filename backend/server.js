@@ -55,16 +55,30 @@ app.use(cors(corsOptions));
 //     }
 // }));
 
+// Respond 200 OK to all browser preflight checks
+// app.options('*', cors());
+
 app.use(express.json())
 app.use(express.static('public'));
 
 // ROUTES 
+app.use('/staff', staffRoutes);
+app.use('/admin', adminRoutes);
+
 
 /* IMPORTANT: when testing locally add the api prefix, 
 BUT remove it before deployment */
 
-app.use('/api/staff', staffRoutes);
-app.use('/api/admin', adminRoutes);
+// Add this right before your routes in server.js
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
+
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 
 function createTestTicket(req, res) {
@@ -416,6 +430,8 @@ app.get('/api/test', (req, res) => {
 })
 
 
-app.listen(3001, () => {
-    console.log('server running on port 3001'); 
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`server running on port ${PORT}`); 
 });

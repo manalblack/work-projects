@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/all-events', async (req, res) => {
     
+    console.log('fetching all events')
+
     try {
         const {data, error} = await supabase.from('events').select('*');
 
@@ -100,62 +102,63 @@ router.post('/create-ticket', async (req, res) => {
 });
 
 // Create bulk tickets route
-router.post('/create-bulk-tickets', async (req, res) => {
-  try {
-    const { bulkInfo } = req.body;
+// router.post('/create-bulk-tickets', async (req, res) => {
 
-    // 1. Validation
-    if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
-      return res.status(400).json({
-        success: false,
-        message: 'Missing required fields: eventId and groupName are required.'
-      });
-    }
+//   try {
+//     const { bulkInfo } = req.body;
 
-    const quantity = parseInt(bulkInfo.quantity, 10);
-    if (isNaN(quantity) || quantity < 1 || quantity > 100) {
-      return res.status(400).json({
-        success: false,
-        message: 'Quantity must be a valid number between 1 and 100.'
-      });
-    }
+//     // 1. Validation
+//     if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Missing required fields: eventId and groupName are required.'
+//       });
+//     }
 
-    // 2. Fetch event data directly in the route (ensures accurate event details)
-    const { data: eventData, error: eventError } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', bulkInfo.eventId)
-      .single();
+//     const quantity = parseInt(bulkInfo.quantity, 10);
+//     if (isNaN(quantity) || quantity < 1 || quantity > 100) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Quantity must be a valid number between 1 and 100.'
+//       });
+//     }
 
-    if (eventError || !eventData) {
-      return res.status(404).json({
-        success: false,
-        message: 'Selected event could not be found.'
-      });
-    }
+//     // 2. Fetch event data directly in the route (ensures accurate event details)
+//     const { data: eventData, error: eventError } = await supabase
+//       .from('events')
+//       .select('*')
+//       .eq('id', bulkInfo.eventId)
+//       .single();
 
-    // 3. Call service to process bulk ticket PDFs and DB entries
-    const tickets = await createBulkTickets({
-      eventData,
-      bulkInfo
-    });
+//     if (eventError || !eventData) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Selected event could not be found.'
+//       });
+//     }
 
-    // 4. Return generated list for client-side preview/downloads
-    return res.status(201).json({
-      success: true,
-      message: `${tickets.length} tickets created successfully.`,
-      tickets // Array of { name, pdfUrl }
-    });
+//     // 3. Call service to process bulk ticket PDFs and DB entries
+//     const tickets = await createBulkTickets({
+//       eventData,
+//       bulkInfo
+//     });
 
-  } catch (error) {
-    console.error('Error generating bulk tickets:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to generate bulk tickets.',
-      error: error.message
-    });
-  }
-});
+//     // 4. Return generated list for client-side preview/downloads
+//     return res.status(201).json({
+//       success: true,
+//       message: `${tickets.length} tickets created successfully.`,
+//       tickets // Array of { name, pdfUrl }
+//     });
+
+//   } catch (error) {
+//     console.error('Error generating bulk tickets:', error);
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Failed to generate bulk tickets.',
+//       error: error.message
+//     });
+//   }
+// });
 
 
 router.get('/scanned-tickets/:eventId', async (req, res) => {
@@ -256,8 +259,6 @@ router.patch('/edit-event/:eventId', async (req, res) => {
     
    }
 
-
-
 })
 
 router.delete('/delete-event/:eventId', async (req, res) => {
@@ -299,6 +300,5 @@ router.delete('/delete-event/:eventId', async (req, res) => {
     
 
 })
-
 
 export default router;
