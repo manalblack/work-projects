@@ -2,6 +2,8 @@ import QRCode from 'qrcode';
 import PDFDocument from 'pdfkit';
 import { supabase } from '../databaseConnection.js';
 
+
+
 const siteUrl = process.env.SITE_URL;
 
 console.log('BULK SERVICE IS WORKING ......');
@@ -118,12 +120,12 @@ async function createBulkTickets({ eventData, bulkInfo }) {
 
     // 2. Upload individual PDF to Supabase Storage
     const fileName = `ticket_${ticketId}.pdf`;
-    await supabase.storage.from('testing').upload(fileName, pdfBuffer, {
+    await supabase.storage.from('tickets_qr_codes').upload(fileName, pdfBuffer, {
       contentType: 'application/pdf',
       upsert: true
     });
 
-    const { data: urlData } = supabase.storage.from('testing').getPublicUrl(fileName);
+    const { data: urlData } = supabase.storage.from('tickets_qr_codes').getPublicUrl(fileName);
     const pdfUrl = urlData.publicUrl;
 
     // 3. Prepare Database Object
@@ -147,7 +149,7 @@ async function createBulkTickets({ eventData, bulkInfo }) {
   }
 
   // Batch Database Insert
-  await supabase.from('testing_tickets').insert(databaseEntries);
+  await supabase.from('tickets').insert(databaseEntries);
 
   // Increment event sales count
   for (let i = 0; i < quantity; i++) {

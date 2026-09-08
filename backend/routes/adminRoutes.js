@@ -101,6 +101,7 @@ router.post('/create-ticket', async (req, res) => {
     
 });
 
+
 // Create bulk tickets route/ multiple tickets at once
 router.post('/create-bulk-tickets', async (req, res) => {
 
@@ -159,6 +160,7 @@ router.post('/create-bulk-tickets', async (req, res) => {
     });
   }
 });
+
 
 
 router.get('/scanned-tickets/:eventId', async (req, res) => {

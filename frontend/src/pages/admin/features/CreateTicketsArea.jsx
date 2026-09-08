@@ -6,8 +6,6 @@ import MiniLoading from '../../../components/admin-components/MiniLoading'
 
 export default function CreateTicketsArea() {
 
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const [events, setEvents] = useState([]);
   const [bulkData, setBulkData] = useState({
     eventId: '',
@@ -19,6 +17,9 @@ export default function CreateTicketsArea() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedTickets, setGeneratedTickets] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
 
   useEffect(() => {
     const fetchEvents = async () => {
