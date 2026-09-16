@@ -1,66 +1,138 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Ticket, Info, X, Clock, Users, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Calendar, MapPin, Ticket, Info, X, Clock, Users, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 
-// Sample Event Data
 const FEATURED_EVENTS = [
   {
     id: 'evt-1',
-    title: 'West Africa Tech & Innovation Summit',
-    category: 'Summit',
-    date: 'Oct 24 - 26, 2026',
-    time: '09:00 AM WAT',
-    location: 'Lagos, Nigeria',
-    venue: 'Eko Convention Centre',
+    title: {
+      en: 'West Africa Tech & Innovation Summit',
+      ar: 'قمة غرب إفريقيا للتكنولوجيا والابتكار'
+    },
+    category: {
+      en: 'Summit',
+      ar: 'قمة'
+    },
+    date: {
+      en: 'Oct 24 - 26, 2026',
+      ar: '24 - 26 أكتوبر 2026'
+    },
+    time: {
+      en: '09:00 AM WAT',
+      ar: '09:00 صباحًا بتوقيت غرب إفريقيا'
+    },
+    location: {
+      en: 'Lagos, Nigeria',
+      ar: 'لاغوس، نيجيريا'
+    },
+    venue: {
+      en: 'Eko Convention Centre',
+      ar: 'مركز إيكو للمؤتمرات'
+    },
     price: '$250',
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-    description: 'Join over 1,200 tech pioneers, investors, and policymakers for a 3-day summit exploring AI infrastructure, fintech, and digital economy growth across West Africa.',
-    speakers: ['Amina Bello (Tech Africa)', 'David Okafor (FinPulse)', 'Sarah Jenkins (Global Ventures)'],
+    description: {
+      en: 'Join over 1,200 tech pioneers, investors, and policymakers for a 3-day summit exploring AI infrastructure, fintech, and digital economy growth across West Africa.',
+      ar: 'انضم إلى أكثر من 1,200 من رواد التكنولوجيا والستثمرين وصناع القرار في قمة تستمر 3 أيام لاستكشاف البنية التحتية للذكاء الاصطناعي، والتكنولوجيا المالية، ونمو الاقتصاد الرقمي في غرب إفريقيا.'
+    },
+    speakers: [
+      { en: 'Amina Bello (Tech Africa)', ar: 'أمينة بيلو (تيك إفريقيا)' },
+      { en: 'David Okafor (FinPulse)', ar: 'ديفيد أوكافور (فين بالس)' },
+      { en: 'Sarah Jenkins (Global Ventures)', ar: 'سارة جينكينز (جلوبال فينتشرز)' }
+    ]
   },
   {
     id: 'evt-2',
-    title: 'Obudu Mountain Eco Sanctuary Retreat',
-    category: 'Luxury Escape',
-    date: 'Nov 12 - 15, 2026',
-    time: 'All Day Event',
-    location: 'Cross River, Nigeria',
-    venue: 'Obudu Mountain Resort',
+    title: {
+      en: 'Obudu Mountain Eco Sanctuary Retreat',
+      ar: 'ملاذ محمية جبل أوبودو البيئية'
+    },
+    category: {
+      en: 'Luxury Escape',
+      ar: 'عطلة فاخرة'
+    },
+    date: {
+      en: 'Nov 12 - 15, 2026',
+      ar: '12 - 15 نوفمبر 2026'
+    },
+    time: {
+      en: 'All Day Event',
+      ar: 'حدث على مدار اليوم'
+    },
+    location: {
+      en: 'Cross River, Nigeria',
+      ar: 'كروس ريفر، نيجيريا'
+    },
+    venue: {
+      en: 'Obudu Mountain Resort',
+      ar: 'منتجع جبل أوبودو'
+    },
     price: '$1,200',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-    description: 'An ultra-bespoke retreat combining executive networking, wellness workshops, and guided mountain expeditions designed for C-suite leaders and sovereign founders.',
-    highlights: ['Private Helicopter Transfer', 'Executive Wellness Sessions', 'Guided Cloud Canopy Tour'],
+    description: {
+      en: 'An ultra-bespoke retreat combining executive networking, wellness workshops, and guided mountain expeditions designed for C-suite leaders and sovereign founders.',
+      ar: 'ملاذ فاخر مصمم خصيصًا يجمع بين التواصل التنفيذي، وورش العمل الصحية، والرحلات الجبلية الموجهة المصممة لكبار التنفيذيين والمؤسسين.'
+    },
+    highlights: [
+      { en: 'Private Helicopter Transfer', ar: 'نقل خاص بالطائرة المروحية' },
+      { en: 'Executive Wellness Sessions', ar: 'جلسات صحية تنفيذية' },
+      { en: 'Guided Cloud Canopy Tour', ar: 'جولة موجهة فوق السحاب' }
+    ]
   },
   {
     id: 'evt-3',
-    title: 'Pan-African Sovereign Investment Gala',
-    category: 'Gala',
-    date: 'Dec 05, 2026',
-    time: '06:30 PM WAT',
-    location: 'Abuja, Nigeria',
-    venue: 'Transcorp Hilton Grand Ballroom',
+    title: {
+      en: 'Pan-African Sovereign Investment Gala',
+      ar: 'حفل الاستثمار السيادي لعموم إفريقيا'
+    },
+    category: {
+      en: 'Gala',
+      ar: 'حفل فاخر'
+    },
+    date: {
+      en: 'Dec 05, 2026',
+      ar: '05 ديسمبر 2026'
+    },
+    time: {
+      en: '06:30 PM WAT',
+      ar: '06:30 مساءً بتوقيت غرب إفريقيا'
+    },
+    location: {
+      en: 'Abuja, Nigeria',
+      ar: 'أبوجا، نيجيريا'
+    },
+    venue: {
+      en: 'Transcorp Hilton Grand Ballroom',
+      ar: 'قاعة ترانسكورب هيلتون الكبرى'
+    },
     price: '$550',
     image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
-    description: 'An exclusive black-tie gala recognizing outstanding infrastructure projects and private equity achievements across the continent.',
-    highlights: ['Keynote Address by Industry Leaders', '4-Course Gourmet Dinner', 'Private VIP Lounge Access'],
-  },
+    description: {
+      en: 'An exclusive black-tie gala recognizing outstanding infrastructure projects and private equity achievements across the continent.',
+      ar: 'حفل رسمي فاخر لتكريم مشاريع البنية التحتية المتميزة وإنجازات الملكية الخاصة في جميع أنحاء القارة.'
+    },
+    highlights: [
+      { en: 'Keynote Address by Industry Leaders', ar: 'كلمة رئيسية من قادة القطاع' },
+      { en: '4-Course Gourmet Dinner', ar: 'عشاء فاخر مكون من 4 أطباق' },
+      { en: 'Private VIP Lounge Access', ar: 'دخول حصري لصالة كبار الشخصيات' }
+    ]
+  }
 ];
-
-
-
 
 export default function FeaturedEvents({ isRtl = false }) {
   const [activeModal, setActiveModal] = useState(null); // { type: 'about' | 'book', event: Object }
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  const langKey = isRtl ? 'ar' : 'en';
 
   const fadeIn = {
     hidden: { opacity: 0, y: 12 },
     visible: { 
-        opacity: 1, 
-        y: 0, 
-        transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] } 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] } 
     }
-};
+  };
 
   const openModal = (type, event) => {
     setBookingSuccess(false);
@@ -73,17 +145,17 @@ export default function FeaturedEvents({ isRtl = false }) {
   };
 
   return (
-    <section className="w-full bg-neutral-50/50 py-12 sm:py-16 lg:py-24 border-t border-neutral-200/60">
+    <section className="w-full bg-neutral-50/50 py-12 sm:py-16 lg:py-24 border-t border-neutral-200/60" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4">
           <div>
-            {/* <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0ea5e9]">
-              {isRtl ? 'فعاليات مختارة' : 'Handpicked Experiences'}
-            </span> */}
             <motion.div 
               variants={fadeIn} 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
               className="inline-flex items-center gap-2 rounded-full mb-5 bg-white border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
             >
               <span className="flex h-2 w-2 relative shrink-0">
@@ -123,13 +195,13 @@ export default function FeaturedEvents({ isRtl = false }) {
                 <div className="relative h-48 w-full overflow-hidden bg-neutral-100">
                   <img 
                     src={evt.image} 
-                    alt={evt.title}
+                    alt={evt.title[langKey]}
                     className="w-full h-full object-cover" 
                   />
-                  <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-neutral-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
-                    {evt.category}
+                  <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-neutral-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                    {evt.category[langKey]}
                   </span>
-                  <span className="absolute top-3 right-3 bg-neutral-900/90 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute top-3 end-3 bg-neutral-900/90 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm">
                     {evt.price}
                   </span>
                 </div>
@@ -139,20 +211,20 @@ export default function FeaturedEvents({ isRtl = false }) {
                   <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-3">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-[#0ea5e9]" />
-                      {evt.date}
+                      {evt.date[langKey]}
                     </span>
                     <span className="flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-[#10b981]" />
-                      {evt.location}
+                      {evt.location[langKey]}
                     </span>
                   </div>
 
                   <h3 className="text-lg font-bold text-neutral-900 line-clamp-2 leading-snug mb-2">
-                    {evt.title}
+                    {evt.title[langKey]}
                   </h3>
 
                   <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed">
-                    {evt.description}
+                    {evt.description[langKey]}
                   </p>
                 </div>
               </div>
@@ -197,7 +269,7 @@ export default function FeaturedEvents({ isRtl = false }) {
       {/* Dynamic Pop-up Modal */}
       <AnimatePresence>
         {activeModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -232,16 +304,16 @@ export default function FeaturedEvents({ isRtl = false }) {
               <div className="p-6 overflow-y-auto space-y-5">
                 <div>
                   <h3 className="text-xl font-bold text-neutral-900 leading-snug">
-                    {activeModal.event.title}
+                    {activeModal.event.title[langKey]}
                   </h3>
                   <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-semibold text-neutral-500">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5 text-[#0ea5e9]" />
-                      {activeModal.event.date}
+                      {activeModal.event.date[langKey]}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5 text-neutral-400" />
-                      {activeModal.event.time}
+                      {activeModal.event.time[langKey]}
                     </span>
                   </div>
                 </div>
@@ -255,7 +327,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                         {isRtl ? 'الموقع والمكان' : 'Venue & Location'}
                       </div>
                       <p className="text-sm font-semibold text-neutral-900">
-                        {activeModal.event.venue}, {activeModal.event.location}
+                        {activeModal.event.venue[langKey]}, {activeModal.event.location[langKey]}
                       </p>
                     </div>
 
@@ -264,7 +336,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                         {isRtl ? 'عن التجربة' : 'Overview'}
                       </h4>
                       <p className="text-sm text-neutral-600 leading-relaxed">
-                        {activeModal.event.description}
+                        {activeModal.event.description[langKey]}
                       </p>
                     </div>
 
@@ -277,7 +349,23 @@ export default function FeaturedEvents({ isRtl = false }) {
                           {activeModal.event.speakers.map((sp, idx) => (
                             <li key={idx} className="flex items-center gap-2 text-sm text-neutral-700 font-medium">
                               <Users className="w-4 h-4 text-[#0ea5e9]" />
-                              {sp}
+                              {sp[langKey]}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {activeModal.event.highlights && (
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                          {isRtl ? 'أبرز مميزات الفعالية' : 'Event Highlights'}
+                        </h4>
+                        <ul className="space-y-1.5">
+                          {activeModal.event.highlights.map((hl, idx) => (
+                            <li key={idx} className="flex items-center gap-2 text-sm text-neutral-700 font-medium">
+                              <Sparkles className="w-4 h-4 text-[#10b981]" />
+                              {hl[langKey]}
                             </li>
                           ))}
                         </ul>
@@ -317,7 +405,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                           <input 
                             required
                             type="text" 
-                            placeholder="e.g. Alexander Vance"
+                            placeholder={isRtl ? 'مثال: أحمد علي' : 'e.g. Alexander Vance'}
                             className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/50"
                           />
                         </div>
@@ -347,7 +435,7 @@ export default function FeaturedEvents({ isRtl = false }) {
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50/50 text-right">
+              <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50/50 text-end">
                 <button
                   onClick={closeModal}
                   className="px-4 py-2 text-xs font-bold text-neutral-500 hover:text-neutral-800 transition-colors"
