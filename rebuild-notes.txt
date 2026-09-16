@@ -1,0 +1,8 @@
+
+
+Client Requests
+
+1- Keep the UI / UX as simple as possible
+2- Easy navigation throughout the application is a must.
+3- Keep the home page hero section brief but informative
+4- start working on the ui

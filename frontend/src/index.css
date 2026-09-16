@@ -26,7 +26,7 @@
 
 @layer base{
   body {
-  background-color: #cd99d9;
+  /* background-color: #cd99d9; */
   font-family: var(--font-poppins);
 }
 }
