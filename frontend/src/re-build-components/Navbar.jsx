@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, User, Menu, X } from 'lucide-react';
+import {Link} from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
 
-export default function Navbar({ isRtl, toggleLanguage }) {
+export default function Navbar({ toggleLanguage }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { isRtl } = useLanguage();
 
   return (
     <motion.header 
@@ -31,9 +35,11 @@ export default function Navbar({ isRtl, toggleLanguage }) {
           <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
             {isRtl ? 'المؤسس' : 'Founder'}
           </a>
-          <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
-            {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
-          </a>
+         <Link to="/tours-and-services">
+           <span className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
+             {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
+           </span>
+         </Link>
           <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
             {isRtl ? 'الفعاليات' : 'Events'}
           </a>
@@ -107,13 +113,11 @@ export default function Navbar({ isRtl, toggleLanguage }) {
               >
                 {isRtl ? 'المؤسس' : 'Founder'}
               </a>
-              <a 
-                href="#" 
-                onClick={() => setIsOpen(false)}
-                className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
-              >
-                {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
-              </a>
+              <Link to="/tours-and-services" onClick={() => setIsOpen(false)}>
+                <span className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
+                  {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
+                </span>
+              </Link>
               <a 
                 href="#" 
                 onClick={() => setIsOpen(false)}

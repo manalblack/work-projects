@@ -4,12 +4,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
 import {HelmetProvider} from 'react-helmet-async'
 import CreateTicketsArea from './pages/admin/features/CreateTicketsArea';
-// import MainDash from './pages/admin/features/MainDash';
-// import AddEventArea from './pages/admin/features/AddEventArea';
-// import CreateTicketArea from './pages/admin/features/CreateTicketArea';
-// import EditEventArea from './pages/admin/features/EditEventArea';
-// import FindTicketArea from './pages/admin/features/FindTicketArea';
-// import CustomerTicket from './pages/admin/CustomerTicket';
+import { LanguageProvider } from './hooks/useLanguage';
+
+// new pages
+
+const ToursAndServices = lazy(() => import('./pages/ToursAndServices'));
 
 
 const Home = lazy(() => import('./pages/Home'));
@@ -46,49 +45,52 @@ function App() {
     <>
       <Toaster position='top-center' reverseOrder={false}/>
       <HelmetProvider>
-        <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
-        
-        <Routes>
-          {/* public routes */}
-          <Route path='/' element={<Home />}/>
-          <Route path='/checkout' element={<Checkout />}/>
-          <Route path='/events' element={<Events /> } />
-          <Route path='/cart' element={<Cart />} />
+        <LanguageProvider>
+          <BrowserRouter>
+            <Suspense fallback={<div>Loading...</div>}>
+            
+            <Routes>
+              {/* public routes */}
+              <Route path='/' element={<Home />}/>
+              <Route path='/tours-and-services' element={<ToursAndServices />}/>
+              <Route path='/checkout' element={<Checkout />}/>
+              <Route path='/events' element={<Events /> } />
+              <Route path='/cart' element={<Cart />} />
 
-          {/* move to admin routes after clients approve */}
-         
+              {/* move to admin routes after clients approve */}
+            
 
-          {/* staff routes */}
-          <Route path='/staff-setup' element={<Staff />}/>
-          <Route path='/verify/:ticketId' element={<Verify />}/>
-          <Route path='/successful-login' element={<StaffSuccessfulLogin
-          />}/>
-          <Route path='/success' element={<Success />}/>
-          <Route path='/staff-find-ticket' element={<StaffFindTicket />}/>
+              {/* staff routes */}
+              <Route path='/staff-setup' element={<Staff />}/>
+              <Route path='/verify/:ticketId' element={<Verify />}/>
+              <Route path='/successful-login' element={<StaffSuccessfulLogin
+              />}/>
+              <Route path='/success' element={<Success />}/>
+              <Route path='/staff-find-ticket' element={<StaffFindTicket />}/>
 
-          <Route path='/admin-login' element={<AdminLogin />}/>
-          {/* Admin routes / setup */}
-          <Route element={<AdminProtectedRoute />}>
-            <Route path='/admin/dashboard' element={<Dashboard />}>
-              <Route path='main' element={<MainDash />}/>
-              <Route path='Add-events' element={<AddEventArea />}/>
-              <Route path='create-ticket' element={<CreateTicketArea />} />
-              <Route path='create-tickets' element={<CreateTicketsArea />} />
-              <Route path='edit-event' element={<EditEventArea />}/>
-              <Route path='find-ticket' element={<FindTicketArea />}/>
-            </Route>
-            {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>
-            <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
-            <Route path='/admin/add-events' element={<AddEvents />} />
-            <Route path='/admin/create-ticket' element={<CreateTicket />}/> */}
-          </Route>
+              <Route path='/admin-login' element={<AdminLogin />}/>
+              {/* Admin routes / setup */}
+              <Route element={<AdminProtectedRoute />}>
+                <Route path='/admin/dashboard' element={<Dashboard />}>
+                  <Route path='main' element={<MainDash />}/>
+                  <Route path='Add-events' element={<AddEventArea />}/>
+                  <Route path='create-ticket' element={<CreateTicketArea />} />
+                  <Route path='create-tickets' element={<CreateTicketsArea />} />
+                  <Route path='edit-event' element={<EditEventArea />}/>
+                  <Route path='find-ticket' element={<FindTicketArea />}/>
+                </Route>
+                {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+                <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>
+                <Route path='/admin/add-events' element={<AddEvents />} />
+                <Route path='/admin/create-ticket' element={<CreateTicket />}/> */}
+              </Route>
 
-          
-          
-        </Routes>
-        </Suspense>
-      </BrowserRouter>
+              
+              
+            </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </LanguageProvider>
       </HelmetProvider>
     </>
   )

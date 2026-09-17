@@ -61,7 +61,9 @@ const hoverCard = {
 };
 
 export default function Home({ lang = 'en' }) {
+
   const [currentLang, setCurrentLang] = useState(lang);
+  
   const isRtl = currentLang === 'ar';
 
   const toggleLanguage = (newLang) => {

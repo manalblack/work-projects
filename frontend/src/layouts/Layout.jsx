@@ -3,6 +3,7 @@ import { Compass, Globe, Menu, X } from 'lucide-react';
 // import Footer from './Footer';
 import Navbar from '../re-build-components/Navbar';
 import Footer from '../re-build-components/Footer'
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function Layout({ 
   children, 
