@@ -220,19 +220,19 @@ export default function TourismServices({ isRtl = false }) {
             </span> */}
             <motion.div 
                 variants={fadeIn} 
-                className="inline-flex items-center gap-2 rounded-full mb-5 bg-white border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full">
+                className="inline-flex items-center gap-2 rounded-full mb-5 bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full">
                 <span className="flex h-2 w-2 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
                 </span>
-                <span className="text-[11px] sm:text-[12px] font-bold text-neutral-800 tracking-wide leading-tight truncate sm:whitespace-normal">
+                <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
                     {isRtl ? 'باقات وخدمات الوجهات' : 'Destination Packages & Services'}
                 </span>
             </motion.div>
-            <h2 className="mt-2 text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">
+            <h2 className="mt-2 text-2xl sm:text-4xl font-extrabold text-gold tracking-tight">
               {isRtl ? 'رحلات استكشافية وسياحة مخصصة' : 'Curated Expeditions & Bespoke Tourism'}
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed">
+            <p className="mt-3 text-sm sm:text-base text-forestGreen leading-relaxed">
               {isRtl 
                 ? 'استكشف باقات جولات مصممة بعناية تجمع بين الثقافة، المنتجعات الفاخرة، وحماية الحياة البرية في جميع أنحاء غرب إفريقيا.'
                 : 'Explore carefully crafted tour packages designed around culture, luxury retreats, and wildlife conservation across Western Africa.'
@@ -244,7 +244,7 @@ export default function TourismServices({ isRtl = false }) {
           <button
             type="button"
             onClick={handleNavigateToTours}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold text-xs shadow-md transition-all shrink-0 cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs shadow-md border border-forestGreen transition-all shrink-0 cursor-pointer"
           >
             <span>{isRtl ? 'عرض جميع الجولات والخدمات' : 'Explore All Tours & Services'}</span>
             {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
@@ -254,10 +254,10 @@ export default function TourismServices({ isRtl = false }) {
        
 
         {/* Value Services Ribbon */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-3xl bg-neutral-50 border border-neutral-200/60">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-3xl bg-neutral-50 border border-gold/60">
           {SERVICES_SUMMARY.map((srv, idx) => (
             <div key={idx} className="flex items-start gap-4">
-              <div className="p-2.5 rounded-2xl bg-white border border-neutral-200/80 text-[#0ea5e9] shadow-sm shrink-0">
+              <div className="p-2.5 rounded-2xl bg-white border border-neutral-200/80 text-gold shadow-sm shrink-0">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -275,7 +275,7 @@ export default function TourismServices({ isRtl = false }) {
               key={pkg.id}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
+              className="bg-white rounded-xl border border-neutral-200/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
             >
               <div>
                 {/* Media Header */}
@@ -287,7 +287,7 @@ export default function TourismServices({ isRtl = false }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
                   
-                  <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-white/90 backdrop-blur-md text-neutral-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
+                  <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
                     {pkg.category[langKey]}
                   </span>
 
@@ -305,11 +305,11 @@ export default function TourismServices({ isRtl = false }) {
                 <div className="p-6">
                   <div className="flex items-center gap-4 text-xs font-semibold text-neutral-500 mb-2">
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-[#0ea5e9]" />
+                      <Clock className="w-3.5 h-3.5 text-gold" />
                       {pkg.duration[langKey]}
                     </span>
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                      <MapPin className="w-3.5 h-3.5 text-gold" />
                       {pkg.location[langKey]}
                     </span>
                   </div>
@@ -342,7 +342,7 @@ export default function TourismServices({ isRtl = false }) {
                 <button
                   type="button"
                   onClick={() => handleOpenModal(pkg)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-neutral-900 hover:bg-[#0ea5e9] text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
                 >
                   <span>{isRtl ? 'حجز / الاستفسار عن الباقة' : 'Book / Enquire Package'}</span>
                   {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
@@ -353,12 +353,12 @@ export default function TourismServices({ isRtl = false }) {
         </div>
 
         {/* Global CTA Banner with Redirect Button */}
-        <div className="mt-16 p-8 rounded-3xl bg-neutral-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="mt-16 p-8 rounded-3xl bg-neutral-50 border border-gold/60 text flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-1 text-center md:text-right">
-            <h3 className="text-xl font-bold">
+            <h3 className="text-xl font-bold text-gold">
               {isRtl ? 'هل تريد استكشاف المزيد من الخيارات؟' : 'Looking for More Destinations & Services?'}
             </h3>
-            <p className="text-xs text-neutral-400 max-w-lg">
+            <p className="text-xs text-forestGreen max-w-lg">
               {isRtl 
                 ? 'تصفح الكتالوج الكامل لجولاتنا الفاخرة، والخدمات الخاصة، والرحلات الاستكشافية.'
                 : 'Browse our full catalog of luxury tour packages, corporate retreats, and bespoke travel services.'
@@ -369,10 +369,10 @@ export default function TourismServices({ isRtl = false }) {
           <button
             type="button"
             onClick={handleNavigateToTours}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-neutral-900 hover:bg-neutral-100 font-bold text-xs transition-all shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs shrink-0 cursor-pointer transition-all duration-300 ease-in-out shadow-md border border-forestGreen"
           >
             <span>{isRtl ? 'الانتقال لصفحة الجولات والخدمات' : 'Go to Tours & Services Page'}</span>
-            <ExternalLink className="w-4 h-4 text-[#0ea5e9]" />
+            <ExternalLink className="w-4 h-4 text-gold" />
           </button>
         </div>
 

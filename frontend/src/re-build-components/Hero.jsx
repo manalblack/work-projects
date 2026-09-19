@@ -5,7 +5,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#faf8ff] to-[#faf8ff] pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
       {/* Background Soft Glows */}
-      <div className="absolute -left-24 top-0 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-[#0ea5e9]/10 blur-3xl pointer-events-none" />
+      <div className="absolute -left-24 top-0 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-forestGreen/10 blur-3xl pointer-events-none" />
       <div className="absolute right-0 top-1/4 h-[320px] w-[320px] sm:h-[480px] sm:w-[480px] rounded-full bg-[#10b981]/10 blur-3xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
@@ -21,13 +21,13 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Catchphrase / Brand Tagline Badge */}
             <motion.div 
               variants={fadeIn} 
-              className="inline-flex items-center gap-2 rounded-full bg-white border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
+              className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
             >
               <span className="flex h-2 w-2 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
               </span>
-              <span className="text-[11px] sm:text-[12px] font-bold text-neutral-800 tracking-wide leading-tight truncate sm:whitespace-normal">
+              <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
                 {isRtl 
                   ? 'تروفيستا: حيث تلتقي الرحلات الاستثنائية بالمناسبات الفاخرة' 
                   : 'Troviesta: Where Extraordinary Escapes Meet Unforgettable Occasions'}
@@ -37,7 +37,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Main Headline */}
             <motion.h1 
               variants={fadeIn} 
-              className="mt-4 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-neutral-950 tracking-tight leading-[1.15] sm:leading-[1.1]"
+              className="mt-4 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gold tracking-tight leading-[1.15] sm:leading-[1.1]"
             >
               {isRtl ? (
                 <>وجهات استثنائية.<br />مناسبات لا تُنسى.</>
@@ -49,7 +49,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Subtitle */}
             <motion.p 
               variants={fadeIn} 
-              className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base lg:text-lg text-neutral-600 leading-relaxed"
+              className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base lg:text-lg text-forestGreen leading-relaxed"
             >
               {isRtl 
                 ? 'ابتكار تجارب السفر الفاخر والقمم الدولية بأسلوب مخصص وأعلى درجات الخصوصية.' 
@@ -62,7 +62,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
               className="mt-6 sm:mt-8 w-full max-w-xl rounded-2xl bg-white p-2 sm:p-2.5 shadow-lg border border-neutral-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
             >
               <div className="flex items-center gap-2.5 px-3 py-2 w-full">
-                <Compass className="w-5 h-5 text-[#0ea5e9] shrink-0" />
+                <Compass className="w-5 h-5 text-gold shrink-0" />
                 <input 
                   type="text"
                   placeholder={isRtl ? 'أدخل الوجهة أو نوع الفعالية...' : 'Where to next or event type?'}
@@ -74,7 +74,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href="#" 
-                className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 rounded-xl bg-[#0ea5e9] px-5 py-3 text-sm text-white font-semibold shadow-md hover:bg-[#0284c7] transition-all text-center"
+                className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 rounded-full bg-forestGreen px-5 py-3 text-sm text-white font-semibold shadow-md hover:bg-white hover:text-forestGreen border border-forestGreen transition-all text-center"
               >
                 <span>{isRtl ? 'استكشف الآن' : 'Explore Now'}</span>
                 <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
@@ -84,12 +84,12 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Responsive Trust Indicators */}
             <motion.div variants={fadeIn} className="mt-5 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-semibold text-neutral-500">
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#10b981] shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-gold shrink-0" />
                 {isRtl ? 'خدمة كونسيرج 24/7' : '24/7 Dedicated Concierge'}
               </span>
               <span className="hidden sm:inline">•</span>
               <span className="flex items-center gap-1.5">
-                <Star className="w-4 h-4 text-[#0ea5e9] fill-current shrink-0" />
+                <Star className="w-4 h-4 text-gold fill-current shrink-0" />
                 {isRtl ? '+500 رحلة مخصصة' : '500+ Curated Journeys'}
               </span>
             </motion.div>
@@ -113,7 +113,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 
                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5">
                   <div className="rounded-xl bg-white/90 p-3 sm:p-3.5 backdrop-blur-md shadow-md border border-white/50">
-                    <p className="text-[10px] sm:text-xs font-bold text-[#0ea5e9] uppercase tracking-wider">
+                    <p className="text-[10px] sm:text-xs font-bold text-gold uppercase tracking-wider">
                       {isRtl ? 'وجهة مميزة' : 'Featured Sanctuary'}
                     </p>
                     <p className="font-bold text-neutral-950 text-sm sm:text-base mt-0.5">

@@ -4,10 +4,21 @@ import { Globe, User, Menu, X } from 'lucide-react';
 import {Link} from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 
-export default function Navbar({ toggleLanguage }) {
+
+/*  TODOS:
+  The navbar needs to show a light background color on the based on the current page
+  The mobile Menu is not functional and the ui needs some work
+
+*/
+
+
+
+export default function Navbar({ toggleLanguage, isRtl }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isRtl } = useLanguage();
+  // const { isRtl } = useLanguage();
+
+
 
   return (
     <motion.header 
@@ -29,23 +40,28 @@ export default function Navbar({ toggleLanguage }) {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
-          <a href="#" aria-current="page" className="transition-colors bg-neutral-100 text-neutral-950 font-bold rounded-full px-4 py-2 text-[14px]">
+          <Link to="/">
             {isRtl ? 'الرئيسية' : 'Home'}
-          </a>
+          </Link>
+          
           <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
             {isRtl ? 'المؤسس' : 'Founder'}
           </a>
+
          <Link to="/tours-and-services">
            <span className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
              {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
            </span>
+
          </Link>
           <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
             {isRtl ? 'الفعاليات' : 'Events'}
           </a>
+
           <a href="#" className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
             {isRtl ? 'الأخبار والرؤى' : 'News & Insights'}
           </a>
+
         </nav>
 
         {/* Right Action Items */}
@@ -57,17 +73,18 @@ export default function Navbar({ toggleLanguage }) {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-white border border-neutral-200 hover:border-neutral-300 text-neutral-800 text-[12px] font-semibold transition-all shadow-sm cursor-pointer" 
             title="Switch Language"
           >
-            <Globe className="w-4 h-4 text-neutral-500" />
+            <Globe className="w-4 h-4 text-gold" />
             <span className={!isRtl ? "font-bold text-neutral-900" : "text-neutral-500 hover:text-neutral-800 transition-colors font-medium"}>EN</span>
             <span className="text-neutral-300">|</span>
             <span className={isRtl ? "font-bold text-neutral-900" : "text-neutral-500 hover:text-neutral-800 transition-colors font-medium"}>العربية</span>
           </motion.button>
 
+          {/* thi should redirect to the contact page */}
           <motion.a 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.96 }}
             href="#" 
-            className="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#0ea5e9] text-white font-semibold text-[14px] hover:bg-[#0284c7] transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+            className="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-forestGreen text-white font-semibold text-[14px] hover:bg-white hover:text-forestGreen shadow-md transition-all duration-300 ease-in-out border border-forestGreen"
           >
             {isRtl ? 'احجز الآن' : 'Inquire Now'}
           </motion.a>
@@ -80,7 +97,7 @@ export default function Navbar({ toggleLanguage }) {
           <button 
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-full text-neutral-700 hover:bg-neutral-100 transition-colors focus:outline-none"
+            className="lg:hidden p-2 rounded-full text-forestGreen hover:bg-neutral-100 focus:outline-none transition-colors duration-200 ease-in-out"
             aria-label="Toggle Navigation Menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -99,13 +116,9 @@ export default function Navbar({ toggleLanguage }) {
             className="lg:hidden overflow-hidden bg-white/95 border-t border-neutral-100 px-5 py-4 shadow-lg"
           >
             <nav className="flex flex-col gap-3">
-              <a 
-                href="#" 
-                onClick={() => setIsOpen(false)}
-                className="bg-neutral-100 text-neutral-950 font-bold rounded-xl px-4 py-2.5 text-[15px] transition-colors"
-              >
+              <Link to="/">
                 {isRtl ? 'الرئيسية' : 'Home'}
-              </a>
+              </Link>
               <a 
                 href="#" 
                 onClick={() => setIsOpen(false)}

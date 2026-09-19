@@ -9,6 +9,16 @@
   --color-darkBg: #1a131b;
   --color-ghostWhite: #f8f8ff;
   --font-poppins: "Poppins", sans-serif, system-ui;
+
+  /* Rebuild colors. The first var is the color from the pdf file */
+  /* --color-forestGreen: #0B1D14; */
+
+
+  /* --color-forestGreen: #2E5940; */
+
+  --color-forestGreen: #1F4A34;
+
+  --color-gold: #A27C10;
 }
 
 @utility scrollbar-hide {

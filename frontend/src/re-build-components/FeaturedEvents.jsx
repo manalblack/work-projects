@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Ticket, Info, X, Clock, Users, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import {Link} from 'react-router-dom';
 
 const FEATURED_EVENTS = [
   {
@@ -156,28 +157,28 @@ export default function FeaturedEvents({ isRtl = false }) {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full mb-5 bg-white border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
+              className="inline-flex items-center gap-2 rounded-full mb-5 bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
             >
               <span className="flex h-2 w-2 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
               </span>
-              <span className="text-[11px] sm:text-[12px] font-bold text-neutral-800 tracking-wide leading-tight truncate sm:whitespace-normal">
+              <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
                 {isRtl ? 'فعاليات مختارة' : 'Handpicked Experiences'}
               </span>
             </motion.div>
 
-            <h2 className="mt-1 text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">
+            <h2 className="mt-1 text-2xl sm:text-4xl font-extrabold text-gold tracking-tight">
               {isRtl ? 'الفعاليات القادمة المميزة' : 'Featured Events'}
             </h2>
           </div>
 
           <a 
             href="#events"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#0ea5e9] hover:text-[#0284c7] transition-colors self-start md:self-auto"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-forestGreen px-3 py-1 rounded-full transition-colors self-start md:self-auto"
           >
             <span>{isRtl ? 'عرض جميع الفعاليات' : 'View All Events'}</span>
-            <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
+            <ArrowRight className={`w-4 h-4 text-gold ${isRtl ? 'rotate-180' : ''}`} />
           </a>
         </div>
 
@@ -188,7 +189,7 @@ export default function FeaturedEvents({ isRtl = false }) {
               key={evt.id}
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-2xl overflow-hidden border border-neutral-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              className="bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
               {/* Card Media */}
               <div>
@@ -198,10 +199,10 @@ export default function FeaturedEvents({ isRtl = false }) {
                     alt={evt.title[langKey]}
                     className="w-full h-full object-cover" 
                   />
-                  <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-neutral-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
                     {evt.category[langKey]}
                   </span>
-                  <span className="absolute top-3 end-3 bg-neutral-900/90 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute top-3 end-3 bg-forestGreen backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm">
                     {evt.price}
                   </span>
                 </div>
@@ -210,11 +211,11 @@ export default function FeaturedEvents({ isRtl = false }) {
                 <div className="p-5 sm:p-6">
                   <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-3">
                     <span className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-[#0ea5e9]" />
+                      <Calendar className="w-3.5 h-3.5 text-gold" />
                       {evt.date[langKey]}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#10b981]" />
+                      <MapPin className="w-3.5 h-3.5 text-gold" />
                       {evt.location[langKey]}
                     </span>
                   </div>
@@ -234,18 +235,18 @@ export default function FeaturedEvents({ isRtl = false }) {
                 <button
                   type="button"
                   onClick={() => openModal('about', evt)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-neutral-200 hover:border-neutral-300 bg-white text-neutral-800 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full border border-neutral-200 hover:border-forestGreen bg-white text-neutral-800 text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ease-in-out"
                 >
-                  <Info className="w-4 h-4 text-neutral-500" />
+                  <Info className="w-4 h-4 text-gold" />
                   <span>{isRtl ? 'عن الفعالية' : 'About Event'}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => openModal('book', evt)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#0ea5e9] hover:bg-[#0284c7] text-white text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out"
                 >
-                  <Ticket className="w-4 h-4" />
+                  <Ticket className="w-4 h-4 text-gold" />
                   <span>{isRtl ? 'احجز تذكرة' : 'Book Ticket'}</span>
                 </button>
               </div>
@@ -255,13 +256,15 @@ export default function FeaturedEvents({ isRtl = false }) {
 
         {/* View All Events Bottom CTA (Mobile friendly) */}
         <div className="mt-8 text-center md:hidden">
-          <a
-            href="#events"
-            className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white border border-neutral-200 text-neutral-900 font-semibold text-sm shadow-sm"
+
+          {/* Redirect to the events page */}
+          <Link
+            // to="/events"
+            className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-forestGreen border border-forestGreen text-white hover:bg-white hover:text-forestGreen font-semibold text-sm shadow-sm transition-all duration-300 ease-in-out"
           >
             <span>{isRtl ? 'استكشف كل الفعاليات' : 'Explore All Events'}</span>
-            <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
-          </a>
+            <ArrowRight className={`w-4 h-4 text-gold ${isRtl ? 'rotate-180' : ''}`} />
+          </Link>
         </div>
 
       </div>

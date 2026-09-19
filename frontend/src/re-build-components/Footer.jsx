@@ -54,27 +54,27 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
           {/* Brand Info (2 Columns on Large Screens) */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="inline-flex items-center gap-2 text-white font-extrabold text-xl tracking-tight">
-              <div className="p-2 rounded-xl bg-[#0ea5e9] text-white">
+              <div className="p-2 rounded-xl bg-gold">
                 <Compass className="w-5 h-5" />
               </div>
               <span>Destination Tour</span>
             </Link>
             
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm text-forestGreen leading-relaxed max-w-sm">
               {FOOTER_CONTENT.about[langKey]}
             </p>
 
             {/* Language Switcher Button in Footer */}
-            {onToggleLanguage && (
+            {/* {onToggleLanguage && (
               <button
                 type="button"
                 onClick={onToggleLanguage}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-xs font-bold text-neutral-300 hover:text-white hover:border-neutral-700 transition-all cursor-pointer mt-2"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-forestGreen border border-forestGreen text-xs font-bold text-neutral-300 hover:text-white hover:border-neutral-700 transition-all cursor-pointer mt-2"
               >
                 <Globe className="w-4 h-4 text-[#0ea5e9]" />
                 <span>{isRtl ? 'English' : 'العربية'}</span>
               </button>
-            )}
+            )} */}
           </div>
 
           {/* Column 1: Navigation Links */}
@@ -87,7 +87,7 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
                 <li key={idx}>
                   <Link 
                     to={link.path} 
-                    className="hover:text-[#0ea5e9] transition-colors inline-flex items-center gap-1 group"
+                    className="hover:text-gold transition-colors inline-flex items-center gap-1 group"
                   >
                     <span>{link.label[langKey]}</span>
                     <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -105,7 +105,7 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
             <ul className="space-y-2.5 text-xs font-medium">
               {SERVICES_LINKS.map((item, idx) => (
                 <li key={idx}>
-                  <span className="hover:text-neutral-200 transition-colors">
+                  <span className="hover:text-forestGreen transition-colors">
                     {item.label[langKey]}
                   </span>
                 </li>
@@ -120,15 +120,15 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
             </h4>
             <ul className="space-y-3 text-xs font-medium">
               <li className="flex items-center gap-2.5">
-                <MapPin className="w-4 h-4 text-[#0ea5e9] shrink-0" />
-                <span>Lagos & Cross River, Nigeria</span>
+                <MapPin className="w-4 h-4 text-gold shrink-0" />
+                <span>Kano, Nigeria</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#0ea5e9] shrink-0" />
+                <Phone className="w-4 h-4 text-gold shrink-0" />
                 <span>+234 (0) 800 123 4567</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#0ea5e9] shrink-0" />
+                <Mail className="w-4 h-4 text-gold shrink-0" />
                 <span>concierge@destinationtour.com</span>
               </li>
             </ul>
