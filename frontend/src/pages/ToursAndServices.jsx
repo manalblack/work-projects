@@ -172,13 +172,21 @@ const EXPEDITIONS = [
   }
 ];
 
-export default function ToursAndServices({ isRtl = false }) {
+
+
+export default function ToursAndServices({langKey = 'en'}) {
   const [activeCorridor, setActiveCorridor] = useState('all');
   const [dossierModal, setDossierModal] = useState(null);
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
+  const [currentLang, setCurrentLang] = useState(langKey);
 
-  const langKey = isRtl ? 'ar' : 'en';
+  const isRtl = currentLang === 'ar';
 
+   const toggleLanguage = (newLang) => {
+    setCurrentLang(newLang);
+  };
+
+  
   const filteredExpeditions = activeCorridor === 'all'
     ? EXPEDITIONS
     : EXPEDITIONS.filter((exp) => exp.corridor === activeCorridor);
@@ -191,13 +199,14 @@ export default function ToursAndServices({ isRtl = false }) {
     }, 5000);
   };
 
-  return (
-    <Layout>
 
-        <div className="bg-[#FAF8FF] text-[#0F172A] antialiased selection:bg-sky-100 selection:text-sky-900" dir={isRtl ? 'rtl' : 'ltr'}>
+  return (
+    <Layout activeRoute='/' isRtl={isRtl} onToggleLanguage={toggleLanguage}>
+
+      <section className="bg-black pt-10 text-[#0F172A] antialiase" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* 1. HERO SECTION */}
-      <section className="relative bg-gradient-to-b from-blue-50/50 via-[#FAF8FF] to-[#FAF8FF] border-b border-slate-200/60 overflow-hidden py-16 lg:py-24">
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-black">
         <div className="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(circle_at_80%_20%,rgba(14,165,233,0.18),transparent_45%),radial-gradient(circle_at_15%_75%,rgba(0,108,73,0.12),transparent_45%)]" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -205,24 +214,24 @@ export default function ToursAndServices({ isRtl = false }) {
             
             {/* Hero Text */}
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 border border-sky-300/40 text-[#006591] font-bold text-xs uppercase tracking-widest mb-6">
-                <span className="w-2 h-2 rounded-full bg-[#0ea5e9] animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forestGreen border border-white text-white font-bold text-xs uppercase tracking-widest mb-6">
+                <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
                 <span>{isRtl ? 'رحلات تروفيستا والاستجمام السيادي' : 'TROVIESTA EXPEDITIONS & SOVEREIGN LEISURE'}</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gold tracking-tight leading-[1.1]">
                 {isRtl ? (
-                  <>استكشافات نيجيرية فاخرة و<span className="font-serif italic font-normal text-[#006591]">رحلات سيادية</span></>
+                  <>استكشافات نيجيرية فاخرة و<span className="font-serif italic font-normal text-white">رحلات سيادية</span></>
                 ) : (
-                  <>Bespoke Nigerian Expeditions & <span className="font-serif italic font-normal text-[#006591]">Sovereign Journeys</span></>
+                  <>Bespoke Nigerian Expeditions & <span className="font-serif italic font-normal text-white">Sovereign Journeys</span></>
                 )}
               </h1>
 
-              <p className="font-serif text-xl sm:text-2xl text-slate-700 italic font-normal mt-4">
+              <p className="font-serif text-xl sm:text-2xl text-gold italic font-normal mt-4">
                 {isRtl ? 'هندسة نيجيريا غير المكتشفة' : 'The Architecture of Uncharted Nigeria'}
               </p>
 
-              <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+              <p className="mt-4 text-base sm:text-lg text-white leading-relaxed max-w-2xl font-normal">
                 {isRtl 
                   ? 'تتجاوز تروفيستا الرحلات التجارية التقليدية — حيث نصمم تجارب فاخرة وخاصة وآمنة عبر أجمل النظم البيئية في نيجيريا مع كونسيرج مخصص، وتسهيلات طيران دبلوماسية، وفرق حماية مقربة موثوقة.'
                   : 'Troviesta transcends standardized commercial travel — architecting secure, private-charter, ultra-luxury immersions across Nigeria’s most spectacular ecosystems with dedicated concierges, diplomatic airfield clearances, and vetted close-protection details.'}
@@ -231,42 +240,42 @@ export default function ToursAndServices({ isRtl = false }) {
               {/* Quick Capability Badges */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 mt-8 border-t border-slate-200/80">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-sky-50 border border-sky-200 text-[#0ea5e9] flex items-center justify-center shrink-0">
-                    <Plane className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
+                    <Plane className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
                       {isRtl ? 'طيران خاص' : 'Private Aviation'}
                     </h4>
-                    <p className="text-[12px] text-slate-500">
+                    <p className="text-[12px] text-slate-300">
                       {isRtl ? 'طائرات ومراكز طيران' : 'AgustaWestland & Jet Hubs'}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 text-[#006c49] flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
                       {isRtl ? 'سرية مضمونة' : 'Guaranteed Discretion'}
                     </h4>
-                    <p className="text-[12px] text-slate-500">
+                    <p className="text-[12px] text-slate-300">
                       {isRtl ? 'اتفاقيات عدم إفصاح ثنائية' : 'Bilateral NDAs Enforced'}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
-                    <Award className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
+                    <Award className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
                       {isRtl ? 'وصول سيادي' : 'Sovereign Access'}
                     </h4>
-                    <p className="text-[12px] text-slate-500">
+                    <p className="text-[12px] text-slate-300">
                       {isRtl ? 'حجز فيلات خاصة حصرية' : 'Off-Market Villa Buyouts'}
                     </p>
                   </div>
@@ -305,18 +314,18 @@ export default function ToursAndServices({ isRtl = false }) {
       </section>
 
       {/* 2. EXPEDITIONS CATALOG & FILTER BAR */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full" id="expeditions-catalog">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full bg-black" id="expeditions-catalog">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#006591]">
+            <span className="text-xs font-bold uppercase tracking-widest text-white">
               {isRtl ? 'الممرات والرحلات الاستكشافية المنسقة' : 'CURATED CORRIDORS & EXPEDITIONS'}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-1">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gold tracking-tight mt-1">
               {isRtl ? 'مسارات نيجيرية مصممة خصيصًا' : 'Handcrafted Nigerian Itineraries'}
             </h2>
-            <p className="text-sm text-slate-600 max-w-xl mt-2 leading-relaxed">
+            <p className="text-sm text-white max-w-xl mt-2 leading-relaxed">
               {isRtl 
                 ? 'يتم إدارة كل مسار كإنتاج فريد ومخصص — يجمع بين طيران المستأجر الخاص، والمحميات الطبيعية المحمية، وفرق الطهي الخاصة المتميزة.' 
                 : 'Every itinerary is managed as an unrepeatable bespoke production — combining civil aviation charters, protected nature reserves, and Michelin-tier private culinary brigades.'}
@@ -326,9 +335,9 @@ export default function ToursAndServices({ isRtl = false }) {
 
         {/* Region Filter */}
         <div className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm mb-12">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center justify-between">
+          <div className="text-xs font-bold uppercase tracking-wider text-forestGreen mb-3 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Compass className="w-4 h-4 text-[#006591]" />
+              <Compass className="w-4 h-4 text-gold" />
               <span>{isRtl ? 'التصفية حسب الممر السيادي النيجيري' : 'Filter by Nigerian Sovereign Corridor'}</span>
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
@@ -353,7 +362,7 @@ export default function ToursAndServices({ isRtl = false }) {
                   onClick={() => setActiveCorridor(filter.key)}
                   className={`px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all flex items-center gap-2 border ${
                     isActive
-                      ? 'bg-slate-900 text-white border-transparent shadow-sm'
+                      ? 'bg-forestGreen text-white border-transparent shadow-sm'
                       : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200/80'
                   }`}
                 >
@@ -373,7 +382,7 @@ export default function ToursAndServices({ isRtl = false }) {
           {filteredExpeditions.map((exp) => (
             <div 
               key={exp.id}
-              className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 <div className="relative w-full h-64 overflow-hidden bg-slate-900">
@@ -385,15 +394,15 @@ export default function ToursAndServices({ isRtl = false }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                   
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="px-3 py-1 rounded-full bg-white backdrop-blur-md text-forestGreen font-bold text-xs shadow-sm flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-gold" />
                       {exp.corridorName[langKey]}
                     </span>
                   </div>
 
                   <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
                     <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
-                      <PlaneTakeoff className="w-3.5 h-3.5 text-[#0ea5e9]" />
+                      <PlaneTakeoff className="w-3.5 h-3.5 text-gold" />
                       {exp.tag[langKey]}
                     </span>
                     <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm">
@@ -404,11 +413,11 @@ export default function ToursAndServices({ isRtl = false }) {
 
                 <div className="p-6">
                   <div className="flex items-center justify-between text-xs text-slate-500 mb-2 font-semibold">
-                    <span className="text-[#006591] uppercase tracking-wider">{exp.subTitle[langKey]}</span>
+                    <span className="text-forestGreen uppercase tracking-wider">{exp.subTitle[langKey]}</span>
                     <span>{isRtl ? 'ملاذ خاص' : 'Private Enclave'}</span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#006591] transition-colors leading-snug font-serif">
+                  <h3 className="text-xl font-bold text-gold group-hover:text-gol/80 transition-colors leading-snug font-serif">
                     {exp.title[langKey]}
                   </h3>
 
@@ -419,7 +428,7 @@ export default function ToursAndServices({ isRtl = false }) {
                   <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
                     {exp.features.map((feat, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-[#006c49] shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-gold shrink-0" />
                         <span>{feat[langKey]}</span>
                       </div>
                     ))}
@@ -430,7 +439,7 @@ export default function ToursAndServices({ isRtl = false }) {
               <div className="p-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                 <div>
                   <span className="text-[11px] uppercase tracking-wider text-slate-400 block font-semibold">
-                    {isRtl ? 'الاستثمار' : 'Investment'}
+                    {isRtl ? 'التكلفة' : 'Cost'}
                   </span>
                   <span className="font-extrabold text-lg text-slate-900">
                     {isRtl ? `ابتداءً من ${exp.price}` : `From ${exp.price}`}
@@ -441,7 +450,7 @@ export default function ToursAndServices({ isRtl = false }) {
                 <div className="flex items-center gap-2">
                   <a
                     href="#inquiry-consultation"
-                    className="px-5 py-2.5 rounded-full bg-[#0ea5e9] hover:bg-[#006591] text-white font-bold text-xs tracking-wide transition-all shadow-sm"
+                    className="px-5 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-xs tracking-wide transition-all duration-300 border border-forestGreen shadow-sm"
                   >
                     {isRtl ? 'استفسر الآن' : 'Inquire'}
                   </a>
@@ -449,9 +458,9 @@ export default function ToursAndServices({ isRtl = false }) {
                     type="button"
                     onClick={() => setDossierModal(exp)}
                     className="p-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200"
-                    title={isRtl ? 'عرض ملف المسار' : 'View Itinerary Dossier'}
+                    title={isRtl ? 'عرض ملف المسار' : 'View Itinerary'}
                   >
-                    <FileText className="w-4 h-4" />
+                    <FileText className="w-4 h-4 text-gold" />
                   </button>
                 </div>
               </div>
@@ -462,22 +471,22 @@ export default function ToursAndServices({ isRtl = false }) {
       </section>
 
       {/* 3. CONSULTATION & INQUIRY FORM */}
-      <section className="bg-slate-900 text-white py-16 lg:py-24 border-t border-slate-800" id="inquiry-consultation">
+      <section className="bg-black text-white py-16 lg:py-24 border-t border-slate" id="inquiry-consultation">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* Left Column: Info */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-900/60 border border-sky-500/30 text-sky-400 font-bold text-xs uppercase tracking-wider">
-                <Headphones className="w-4 h-4" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forestGreen border border-white text-white font-bold text-xs uppercase tracking-wider">
+                <Headphones className="w-4 h-4 text-gold" />
                 <span>{isRtl ? 'مكتب الكونسيرج الخاص' : 'PRIVATE CONCIERGE DESK'}</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-serif">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-serif text-gold">
                 {isRtl ? 'ابتدئ رحلتك الاستكشافية المخصصة' : 'Initiate Your Bespoke Expedition'}
               </h2>
 
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              <p className="text-white text-sm sm:text-base leading-relaxed">
                 {isRtl 
                   ? 'يتولى قسم الاستكشافات في تروفيستا تصميم وتنفيذ الرحلات للوفود الدبلوماسية، والعائلات، والباحثين عن الاستجمام السيادي بكل سرية ودقة.' 
                   : 'Troviesta Expeditions division designs and executes tailored travel protocols for diplomatic delegations, sovereign families, and private collectors with utmost confidentiality.'}
@@ -485,7 +494,7 @@ export default function ToursAndServices({ isRtl = false }) {
 
               <div className="space-y-4 pt-4 border-t border-slate-800">
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-[#0ea5e9] shrink-0 mt-0.5" />
+                  <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-sm font-bold text-white">
                       {isRtl ? 'بروتوكول السرية التامة' : 'Strict Confidentiality Protocol'}
@@ -497,7 +506,7 @@ export default function ToursAndServices({ isRtl = false }) {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Plane className="w-5 h-5 text-[#0ea5e9] shrink-0 mt-0.5" />
+                  <Plane className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-sm font-bold text-white">
                       {isRtl ? 'تراخيص الطيران والدبلوماسية' : 'Diplomatic Aviation Clearances'}
@@ -511,7 +520,7 @@ export default function ToursAndServices({ isRtl = false }) {
             </div>
 
             {/* Right Column: Form */}
-            <div className="lg:col-span-7 bg-slate-800/80 p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl">
+            <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-md border border-gold shadow-2xl">
               {inquirySubmitted ? (
                 <div className="text-center py-12 space-y-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
@@ -529,37 +538,39 @@ export default function ToursAndServices({ isRtl = false }) {
               ) : (
                 <form onSubmit={handleInquirySubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    {/* Full Name */}
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'الاسم الكامل' : 'Full Name'}
                       </label>
                       <input 
                         required
                         type="text" 
                         placeholder={isRtl ? 'مثال: عبد الله المنصور' : 'e.g. Lord Alexander Vance'}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#0ea5e9]"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#0ea5e9]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'البريد الإلكتروني' : 'Official Email Address'}
                       </label>
                       <input 
                         required
                         type="email" 
                         placeholder="vance@office.com"
-                        className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#0ea5e9]"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400   text-sm focus:outline-none focus:border-[#0ea5e9]"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'الممر أو الفعالية المطلوبة' : 'Preferred Sovereign Corridor'}
                       </label>
-                      <select className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#0ea5e9]">
+                      <select className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen text-sm focus:outline-none focus:border-forestGreen">
                         <option value="obudu">{isRtl ? 'مرتفعات أوبودو السحابية' : 'Obudu Mountain Cloud Forest'}</option>
                         <option value="epe">{isRtl ? 'بحيرة إيبي وفيلات الكاتاماران' : 'Epe Mangrove & Catamaran Villa'}</option>
                         <option value="yankari">{isRtl ? 'سفاري يانكاري وينابيع ويكي' : 'Yankari Savanna & Wikki Springs'}</option>
@@ -568,7 +579,7 @@ export default function ToursAndServices({ isRtl = false }) {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'عدد الضيوف المتوقع' : 'Estimated Guest Count'}
                       </label>
                       <input 
@@ -576,27 +587,27 @@ export default function ToursAndServices({ isRtl = false }) {
                         min="1" 
                         max="30"
                         defaultValue="4"
-                        className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-[#0ea5e9]"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen text-sm focus:outline-none focus:border-forestGreen"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                       {isRtl ? 'متطلبات خاصة أو ترتيبات أمنية' : 'Special Security or Dietary Directives'}
                     </label>
                     <textarea 
                       rows="3"
                       placeholder={isRtl ? 'أدخل أي متطلبات خاصة بالطيران أو الأمن أو الوجبات...' : 'Specify helicopter landing preferences, close-protection level, or private chef directives...'}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#0ea5e9]"
+                      className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder:text-sm focus:outline-none focus:border-forestGreen"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-xl bg-[#0ea5e9] hover:bg-[#006591] text-white font-bold text-sm tracking-wide transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer mt-2"
+                    className="w-full py-4 rounded-full border border-forestGreen bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-sm tracking-wide transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer mt-2"
                   >
-                    <span>{isRtl ? 'إرسال الطلب إلى مكتب الكونسيرج' : 'Submit Direct Concierge Dispatch'}</span>
+                    <span>{isRtl ? 'إرسال الطلب' : 'Submit Request'}</span>
                     <Send className="w-4 h-4" />
                   </button>
                 </form>
@@ -626,8 +637,8 @@ export default function ToursAndServices({ isRtl = false }) {
               transition={{ duration: 0.2 }}
               className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-100 max-h-[90vh] flex flex-col"
             >
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#006591]">
+              <div className="px-6 py-4 border-b border-forestGreen flex items-center justify-between bg-white">
+                <span className="text-xs font-bold uppercase tracking-wider text-gold">
                   {isRtl ? 'ملف المسار الاستكشافي' : 'Expedition Itinerary Dossier'}
                 </span>
                 <button
@@ -640,11 +651,11 @@ export default function ToursAndServices({ isRtl = false }) {
               </div>
 
               <div className="p-6 overflow-y-auto space-y-4">
-                <h3 className="text-xl font-bold text-slate-900 font-serif leading-snug">
+                <h3 className="text-xl font-bold text-gold font-serif leading-snug">
                   {dossierModal.title[langKey]}
                 </h3>
 
-                <p className="text-xs font-bold text-[#0ea5e9] uppercase tracking-wider">
+                <p className="text-xs font-bold text-forestGreen uppercase tracking-wider">
                   {dossierModal.corridorName[langKey]}
                 </p>
 
@@ -659,7 +670,7 @@ export default function ToursAndServices({ isRtl = false }) {
                   <ul className="space-y-1.5">
                     {dossierModal.features.map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                        <CheckCircle2 className="w-4 h-4 text-[#006c49] shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-gold shrink-0" />
                         {feat[langKey]}
                       </li>
                     ))}
@@ -679,7 +690,7 @@ export default function ToursAndServices({ isRtl = false }) {
                   <a
                     href="#inquiry-consultation"
                     onClick={() => setDossierModal(null)}
-                    className="px-6 py-2.5 rounded-full bg-[#0ea5e9] hover:bg-[#006591] text-white font-bold text-xs tracking-wide transition-all shadow-sm"
+                    className="px-6 py-2.5 rounded-full bg-forestGreen border border-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-xs tracking-wide transition-all shadow-sm"
                   >
                     {isRtl ? 'استفسر الآن' : 'Request Official Dossier'}
                   </a>
@@ -690,7 +701,7 @@ export default function ToursAndServices({ isRtl = false }) {
         )}
       </AnimatePresence>
 
-    </div>
+      </section>
 
     </Layout>
   );
