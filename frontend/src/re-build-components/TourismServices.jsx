@@ -208,7 +208,7 @@ export default function TourismServices({ isRtl = false }) {
   };
 
   return (
-    <section className="w-full bg-white py-12 sm:py-16 lg:py-24 border-t border-neutral-100" dir={isRtl ? 'rtl' : 'ltr'}>
+    <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-100" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         
       {/* Section Header + Redirect Button Header */}
@@ -232,7 +232,7 @@ export default function TourismServices({ isRtl = false }) {
             <h2 className="mt-2 text-2xl sm:text-4xl font-extrabold text-gold tracking-tight">
               {isRtl ? 'رحلات استكشافية وسياحة مخصصة' : 'Curated Expeditions & Bespoke Tourism'}
             </h2>
-            <p className="mt-3 text-sm sm:text-base text-forestGreen leading-relaxed">
+            <p className="mt-3 text-sm sm:text-base text-white leading-relaxed">
               {isRtl 
                 ? 'استكشف باقات جولات مصممة بعناية تجمع بين الثقافة، المنتجعات الفاخرة، وحماية الحياة البرية في جميع أنحاء غرب إفريقيا.'
                 : 'Explore carefully crafted tour packages designed around culture, luxury retreats, and wildlife conservation across Western Africa.'

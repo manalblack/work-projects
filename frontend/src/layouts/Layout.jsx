@@ -19,11 +19,12 @@ export default function Layout({
   const isRtl = externalIsRtl !== undefined ? externalIsRtl : internalIsRtl;
   const toggleLanguage = externalToggleLanguage || (() => setInternalIsRtl((prev) => !prev));
 
+  
   const langKey = isRtl ? 'ar' : 'en';
 
   return (
     <div 
-      className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-[#0ea5e9] selection:text-white"
+      className="min-h-screen flex flex-col bg- text-neutral-900 font-sans selection:bg-[#0ea5e9] selection:text-white"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
         <Navbar isRtl={isRtl} toggleLanguage={toggleLanguage} />

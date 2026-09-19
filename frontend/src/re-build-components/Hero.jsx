@@ -3,7 +3,8 @@ import { Compass, ArrowRight, ShieldCheck, Star } from 'lucide-react';
 
 export default function Hero({ isRtl, fadeIn, staggerContainer }) {
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#faf8ff] to-[#faf8ff] pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
+    // <section className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#faf8ff] to-[#faf8ff] pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
+     <section className="relative w-full overflow-hidden bg-black pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
       {/* Background Soft Glows */}
       <div className="absolute -left-24 top-0 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-forestGreen/10 blur-3xl pointer-events-none" />
       <div className="absolute right-0 top-1/4 h-[320px] w-[320px] sm:h-[480px] sm:w-[480px] rounded-full bg-[#10b981]/10 blur-3xl pointer-events-none" />
@@ -49,7 +50,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Subtitle */}
             <motion.p 
               variants={fadeIn} 
-              className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base lg:text-lg text-forestGreen leading-relaxed"
+              className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base lg:text-lg text-white leading-relaxed"
             >
               {isRtl 
                 ? 'ابتكار تجارب السفر الفاخر والقمم الدولية بأسلوب مخصص وأعلى درجات الخصوصية.' 

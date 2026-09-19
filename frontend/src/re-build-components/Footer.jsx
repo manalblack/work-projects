@@ -43,7 +43,7 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
 
   return (
     <footer 
-      className="w-full bg-white/90 text-neutral-400 border-t border-neutral-800/80 pt-16 pb-12"
+      className="w-full bg-black text-neutral-400 border-t border-neutral-800/80 pt-16 pb-12"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
@@ -60,7 +60,7 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
               <span>Destination Tour</span>
             </Link>
             
-            <p className="text-xs sm:text-sm text-forestGreen leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm text-white leading-relaxed max-w-sm">
               {FOOTER_CONTENT.about[langKey]}
             </p>
 

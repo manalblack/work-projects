@@ -120,6 +120,8 @@ const FEATURED_EVENTS = [
   }
 ];
 
+// original background : bg-neutral-50/50
+
 export default function FeaturedEvents({ isRtl = false }) {
   const [activeModal, setActiveModal] = useState(null); // { type: 'about' | 'book', event: Object }
   const [bookingSuccess, setBookingSuccess] = useState(false);
@@ -146,7 +148,7 @@ export default function FeaturedEvents({ isRtl = false }) {
   };
 
   return (
-    <section className="w-full bg-neutral-50/50 py-12 sm:py-16 lg:py-24 border-t border-neutral-200/60" dir={isRtl ? 'rtl' : 'ltr'}>
+    <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-200/60" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header Section */}

@@ -6,7 +6,7 @@
   --color-darkPurple: #2e2237;
   --color-mediumPurple: #212529;
   --color-lightPurple: #cd99d9;
-  --color-darkBg: #1a131b;
+  --color-darkBg: #111827;
   --color-ghostWhite: #f8f8ff;
   --font-poppins: "Poppins", sans-serif, system-ui;
 
@@ -17,6 +17,7 @@
   /* --color-forestGreen: #2E5940; */
 
   --color-forestGreen: #1F4A34;
+
 
   --color-gold: #A27C10;
 }
@@ -36,7 +37,7 @@
 
 @layer base{
   body {
-  /* background-color: #cd99d9; */
+  /* background-color: #111827; */
   font-family: var(--font-poppins);
 }
 }
