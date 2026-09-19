@@ -148,7 +148,7 @@ export default function FeaturedEvents({ isRtl = false }) {
   };
 
   return (
-    <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-200/60" dir={isRtl ? 'rtl' : 'ltr'}>
+    <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-100/10" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         
         {/* Header Section */}

@@ -37,7 +37,7 @@
 
 @layer base{
   body {
-  /* background-color: #111827; */
+  background-color:  #111827;
   font-family: var(--font-poppins);
 }
 }

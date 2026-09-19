@@ -53,6 +53,7 @@ function App() {
               {/* public routes */}
               <Route path='/' element={<Home />}/>
               <Route path='/tours-and-services' element={<ToursAndServices />}/>
+              
               <Route path='/checkout' element={<Checkout />}/>
               <Route path='/events' element={<Events /> } />
               <Route path='/cart' element={<Cart />} />

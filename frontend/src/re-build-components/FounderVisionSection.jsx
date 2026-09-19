@@ -32,7 +32,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
 
   return (
     <section 
-      className="w-full bg-forestGreen text-white py-12 sm:py-16 lg:py-24 overflow-hidden border-t border-forestGreen/30" 
+      className="w-full bg-white/90 text-white py-12 sm:py-16 lg:py-24 overflow-hidden border-t border-forestGreen/30" 
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
@@ -45,7 +45,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
           transition={{ duration: 0.5 }}
           className="max-w-3xl mb-12 sm:mb-16"
         >
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-1.5 mb-2">
+          <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-1.5 mb-2">
             <Compass className="w-4 h-4 text-gold" />
             {isRtl ? 'قيادتنا ورؤيتنا' : 'Our Leadership & Vision'}
           </span>
@@ -55,7 +55,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
               : 'Meet Our Founder & The Vision Behind Our Journey'
             }
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-neutral-400 leading-relaxed">
+          <p className="mt-3 text-sm sm:text-base text-neutral-500 leading-relaxed">
             {isRtl 
               ? 'نحن مدفوعون بالالتزام بالتميز، وحفظ الثقافة، وإنشاء تجارب سفر لا تُنسى في جميع أنحاء المنطقة.'
               : 'Driven by a commitment to excellence, cultural preservation, and creating unforgettable travel experiences across the region.'
@@ -109,7 +109,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
             className="lg:col-span-7 space-y-6"
           >
             {/* Tag Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-white text-xs font-bold">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-forestGreen text-xs font-bold">
               <Sparkles className="w-3.5 h-3.5 text-gold" />
               <span>{isRtl ? 'رسالة المؤسس' : "Founder's Message"}</span>
             </div>
@@ -117,13 +117,13 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
             {/* Founder Quote Card */}
             <div className="p-6 rounded-2xl bg-gold/30 border border-gold/60 relative">
               <Quote className="w-8 h-8 text-forestGreen absolute top-4 right-4" />
-              <p className="text-sm sm:text-base text-neutral-200 italic leading-relaxed relative z-10">
+              <p className="text-sm sm:text-base text-neutral-700 italic leading-relaxed relative z-10">
                 "{FOUNDER_DATA.quote[langKey]}"
               </p>
             </div>
 
             {/* Mission Overview */}
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-neutral-500 leading-relaxed">
               {FOUNDER_DATA.bioSummary[langKey]}
             </p>
 

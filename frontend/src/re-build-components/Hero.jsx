@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
 import { Compass, ArrowRight, ShieldCheck, Star } from 'lucide-react';
 
+
+// Testing dark background with the client
+
 export default function Hero({ isRtl, fadeIn, staggerContainer }) {
   return (
     // <section className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#faf8ff] to-[#faf8ff] pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
-     <section className="relative w-full overflow-hidden bg-black pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-20 lg:pb-28">
+    <section className="relative w-full overflow-hidden bg-black pt-6 pb-10 sm:pt-12 sm:pb-16 lg:pt-25 lg:pb-28">
       {/* Background Soft Glows */}
-      <div className="absolute -left-24 top-0 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-forestGreen/10 blur-3xl pointer-events-none" />
+      <div className="absolute -left-24 top-0 h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
       <div className="absolute right-0 top-1/4 h-[320px] w-[320px] sm:h-[480px] sm:w-[480px] rounded-full bg-[#10b981]/10 blur-3xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
@@ -22,7 +25,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Catchphrase / Brand Tagline Badge */}
             <motion.div 
               variants={fadeIn} 
-              className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
+              className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
             >
               <span className="flex h-2 w-2 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
@@ -60,14 +63,14 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Responsive Search & Call to Action Bar */}
             <motion.div 
               variants={fadeIn} 
-              className="mt-6 sm:mt-8 w-full max-w-xl rounded-2xl bg-gold/50 p-2 sm:p-2.5 shadow-lg border border-gold flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
+              className="mt-6 sm:mt-8 w-full max-w-xl rounded-2xl bg-white p-2 sm:p-2.5 shadow-lg border border-white flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
             >
               <div className="flex items-center gap-2.5 px-3 py-2 w-full">
                 <Compass className="w-5 h-5 text-gold shrink-0" />
                 <input 
                   type="text"
                   placeholder={isRtl ? 'أدخل الوجهة أو نوع الفعالية...' : 'Where to next or event type?'}
-                  className="w-full bg-transparent text-sm text-white placeholder:text-neutral-400 focus:outline-none font-medium"
+                  className="w-full bg-transparent text-sm text-forestGreen placeholder:text-neutral-400 focus:outline-none font-medium"
                 />
               </div>
 
@@ -104,7 +107,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             className="relative lg:col-span-5 mt-2 lg:mt-0"
           >
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-              <div className="relative z-10 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl lg:shadow-2xl border-2 sm:border-4 border-gold/60">
+              <div className="relative z-10 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl lg:shadow-2xl border-2 sm:border-4 border-white">
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmebbR3etZJ7iNRlDopkXkNzgPG7wHCQGFLcv9uaX5mQCWknRXcfouWJBhxMUE1leUwvv91YMP5b6fhS862EpTgL5peOzt7_tbmUozSmxro7KsJHNc-04SCMD5cuGj3b3by0LbqCSX3ExOifRuVRfiFFcYfhD-hlMRZpD1EMVAn_Tm9BYQtXfFPPVJiV5DNwWJ_18gLtnsUQMubE7qkn2Quspcj99YJP1KQPTmMGg915g7O-XuXwoCOg" 
                   alt="Troviesta luxury destination" 

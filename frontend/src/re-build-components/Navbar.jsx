@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, User, Menu, X } from 'lucide-react';
-import {Link} from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 import { useLanguage } from '../hooks/useLanguage';
 
 
@@ -9,6 +9,13 @@ import { useLanguage } from '../hooks/useLanguage';
   The navbar needs to show a light background color on the based on the current page
   The mobile Menu is not functional and the ui needs some work
 
+
+  الرئيسية 
+  المؤسس
+  السياحة والخدمات
+  الفعاليات
+  الأخبار والرؤى
+  احجز الآن
 */
 
 
@@ -18,6 +25,13 @@ export default function Navbar({ toggleLanguage, isRtl }) {
 
   // const { isRtl } = useLanguage();
 
+  const navItems = [
+    { path: '/', label: { en: 'Home', ar: 'الرئيسية' } },
+    { path: '/tours-and-services', label: { en: 'Tours & Services', ar: 'الرحلات والخدمات' } },
+    { path: '/services', label: { en: 'Services', ar: 'الخدمات' } },
+    { path: '/contact', label: { en: 'Contact', ar: 'اتصل بنا' } },
+  ];
+
 
 
   return (
@@ -25,7 +39,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-neutral-200/80 shadow-[0_1px_10px_rgba(0,0,0,0.03)]"
+      className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-xl shadow-[0_1px_10px_rgba(0,0,0,0.03)]"
     >
       <div className="h-20 max-w-7xl mx-auto px-5 lg:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -39,7 +53,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
+        {/* <nav className="hidden lg:flex items-center gap-6 xl:gap-7">
           <Link to="/">
             {isRtl ? 'الرئيسية' : 'Home'}
           </Link>
@@ -62,6 +76,24 @@ export default function Navbar({ toggleLanguage, isRtl }) {
             {isRtl ? 'الأخبار والرؤى' : 'News & Insights'}
           </a>
 
+        </nav> */}
+
+        <nav className="hidden md:flex items-center gap-5 p-2">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `px-4 py-2 rounded-2xl text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-forestGreen/90 text-white shadow-sm' // Active background color (gray-900)
+                    : 'text-slate-800 hover:bg-slate-100/40 hover:text-slate-900' // Inactive state
+                }`
+              }
+            >
+              {item.label[isRtl ? 'ar' : 'en']}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Right Action Items */}
@@ -97,7 +129,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
           <button 
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-full text-forestGreen hover:bg-neutral-100 focus:outline-none transition-colors duration-200 ease-in-out"
+            className="lg:hidden p-2 rounded-full text-forestGreen hover:bg-gold/20 focus:outline-none transition-colors duration-200 ease-in-out"
             aria-label="Toggle Navigation Menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -113,7 +145,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="lg:hidden overflow-hidden bg-white/95 border-t border-neutral-100 px-5 py-4 shadow-lg"
+            className="lg:hidden overflow-hidden bg-white/50 px-5 py-4 backdrop-blur-xl shadow-[0_1px_10px_rgba(0,0,0,0.03)]"
           >
             <nav className="flex flex-col gap-3">
               <Link to="/">
@@ -149,7 +181,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
               <a 
                 href="#" 
                 onClick={() => setIsOpen(false)}
-                className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-[#0ea5e9] text-white font-semibold text-[15px] hover:bg-[#0284c7] transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+                className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
               >
                 {isRtl ? 'احجز الآن' : 'Inquire Now'}
               </a>
