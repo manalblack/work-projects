@@ -60,14 +60,14 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             {/* Responsive Search & Call to Action Bar */}
             <motion.div 
               variants={fadeIn} 
-              className="mt-6 sm:mt-8 w-full max-w-xl rounded-2xl bg-white p-2 sm:p-2.5 shadow-lg border border-neutral-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
+              className="mt-6 sm:mt-8 w-full max-w-xl rounded-2xl bg-gold/50 p-2 sm:p-2.5 shadow-lg border border-gold flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
             >
               <div className="flex items-center gap-2.5 px-3 py-2 w-full">
                 <Compass className="w-5 h-5 text-gold shrink-0" />
                 <input 
                   type="text"
                   placeholder={isRtl ? 'أدخل الوجهة أو نوع الفعالية...' : 'Where to next or event type?'}
-                  className="w-full bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none font-medium"
+                  className="w-full bg-transparent text-sm text-white placeholder:text-neutral-400 focus:outline-none font-medium"
                 />
               </div>
 
@@ -104,7 +104,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             className="relative lg:col-span-5 mt-2 lg:mt-0"
           >
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-              <div className="relative z-10 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl lg:shadow-2xl border-2 sm:border-4 border-white">
+              <div className="relative z-10 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl lg:shadow-2xl border-2 sm:border-4 border-gold/60">
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmebbR3etZJ7iNRlDopkXkNzgPG7wHCQGFLcv9uaX5mQCWknRXcfouWJBhxMUE1leUwvv91YMP5b6fhS862EpTgL5peOzt7_tbmUozSmxro7KsJHNc-04SCMD5cuGj3b3by0LbqCSX3ExOifRuVRfiFFcYfhD-hlMRZpD1EMVAn_Tm9BYQtXfFPPVJiV5DNwWJ_18gLtnsUQMubE7qkn2Quspcj99YJP1KQPTmMGg915g7O-XuXwoCOg" 
                   alt="Troviesta luxury destination" 
@@ -113,8 +113,8 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-transparent" />
                 
                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5">
-                  <div className="rounded-xl bg-white/90 p-3 sm:p-3.5 backdrop-blur-md shadow-md border border-white/50">
-                    <p className="text-[10px] sm:text-xs font-bold text-gold uppercase tracking-wider">
+                  <div className="rounded-xl bg-gold/30 p-3 sm:p-3.5 backdrop-blur-md shadow-md border border-gold/60">
+                    <p className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider">
                       {isRtl ? 'وجهة مميزة' : 'Featured Sanctuary'}
                     </p>
                     <p className="font-bold text-neutral-950 text-sm sm:text-base mt-0.5">

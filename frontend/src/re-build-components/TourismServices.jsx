@@ -220,13 +220,13 @@ export default function TourismServices({ isRtl = false }) {
             </span> */}
             <motion.div 
                 variants={fadeIn} 
-                className="inline-flex items-center gap-2 rounded-full mb-5 bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full">
+                className="inline-flex items-center gap-2 rounded-full mb-5 bg-forestGreen border border-gold/80 px-3.5 py-1.5 shadow-sm max-w-full">
                 <span className="flex h-2 w-2 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
                 </span>
                 <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
-                    {isRtl ? 'باقات وخدمات الوجهات' : 'Destination Packages & Services'}
+                  {isRtl ? 'باقات وخدمات الوجهات' : 'Destination Packages & Services'}
                 </span>
             </motion.div>
             <h2 className="mt-2 text-2xl sm:text-4xl font-extrabold text-gold tracking-tight">
@@ -254,28 +254,28 @@ export default function TourismServices({ isRtl = false }) {
        
 
         {/* Value Services Ribbon */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-3xl bg-neutral-50 border border-gold/60">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-3xl bg-gold/40 border border-gold/60">
           {SERVICES_SUMMARY.map((srv, idx) => (
             <div key={idx} className="flex items-start gap-4">
               <div className="p-2.5 rounded-2xl bg-white border border-neutral-200/80 text-gold shadow-sm shrink-0">
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-5 h-5 text-forestGreen" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-neutral-900">{srv.title[langKey]}</h3>
-                <p className="mt-1 text-xs text-neutral-600 leading-relaxed">{srv.desc[langKey]}</p>
+                <h3 className="text-sm font-bold text-gold">{srv.title[langKey]}</h3>
+                <p className="mt-1 text-xs text-neutral-400 leading-relaxed">{srv.desc[langKey]}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Tour Packages Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
           {TOUR_PACKAGES.map((pkg) => (
             <motion.div
               key={pkg.id}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-xl border border-neutral-200/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
+              className="bg-gold/70 rounded-xl border border-gold/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
             >
               <div>
                 {/* Media Header */}
@@ -287,7 +287,7 @@ export default function TourismServices({ isRtl = false }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
                   
-                  <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
+                  <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-forestGreen/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
                     {pkg.category[langKey]}
                   </span>
 
@@ -304,12 +304,12 @@ export default function TourismServices({ isRtl = false }) {
                 {/* Package Info */}
                 <div className="p-6">
                   <div className="flex items-center gap-4 text-xs font-semibold text-neutral-500 mb-2">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-gold" />
+                    <span className="flex items-center gap-1 text-white">
+                      <Clock className="w-3.5 h-3.5 text-forestGreen" />
                       {pkg.duration[langKey]}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-gold" />
+                    <span className="flex items-center gap-1 text-white">
+                      <MapPin className="w-3.5 h-3.5 text-forestGreen" />
                       {pkg.location[langKey]}
                     </span>
                   </div>
@@ -318,17 +318,17 @@ export default function TourismServices({ isRtl = false }) {
                     {pkg.title[langKey]}
                   </h3>
 
-                  <p className="text-xs text-neutral-600 leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-xs text-neutral-200 leading-relaxed line-clamp-2 mb-4">
                     {pkg.overview[langKey]}
                   </p>
 
                   {/* Highlights checklist */}
                   <div className="space-y-2 pt-2 border-t border-neutral-100">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-white">
                       {isRtl ? 'محتويات الباقة' : 'Package Inclusions'}
                     </span>
                     {pkg.inclusions[langKey].slice(0, 2).map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-neutral-700 font-medium">
+                      <div key={idx} className="flex items-center gap-2 text-xs text-neutral-900 font-medium">
                         <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                         <span className="truncate">{item}</span>
                       </div>
