@@ -6,10 +6,11 @@ import {HelmetProvider} from 'react-helmet-async'
 import CreateTicketsArea from './pages/admin/features/CreateTicketsArea';
 import { LanguageProvider } from './hooks/useLanguage';
 
-// new pages
+// new pages / Rebuilt
 
 const ToursAndServices = lazy(() => import('./pages/ToursAndServices'));
-
+const Founder = lazy(() => import('./pages/Founder'));
+const Contact = lazy(() => import('./pages/Contact'))
 
 const Home = lazy(() => import('./pages/Home'));
 const Cart = lazy(() => import('./pages/Cart'));
@@ -53,7 +54,9 @@ function App() {
               {/* public routes */}
               <Route path='/' element={<Home />}/>
               <Route path='/tours-and-services' element={<ToursAndServices />}/>
-              
+              <Route path='/founder' element={<Founder />}/>
+              <Route path='/contact' element={<Contact />} />
+
               <Route path='/checkout' element={<Checkout />}/>
               <Route path='/events' element={<Events /> } />
               <Route path='/cart' element={<Cart />} />

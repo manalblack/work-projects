@@ -2,6 +2,15 @@
 
 Client Requests
 
+[
+    SPECIAL REQUESTS FROM CLIENT:
+
+    Speed up the ui design the client wants to start Announcements with the website
+    disable all the buttons and make them 
+    make all the buttons redirect to the contact page
+
+]
+
 1- Keep the UI / UX as simple as possible
 2- Easy navigation throughout the application is a must.
 3- Keep the home page hero section brief but informative
