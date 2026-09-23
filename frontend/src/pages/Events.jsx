@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../layouts/Layout';
+import { CircleCheck } from 'lucide-react';
 
 /*
 
@@ -19,7 +20,7 @@ const EVENTS_DATA = {
       accessType: 'By Invitation & Sovereign Pass',
       description: 'Focusing on sovereign logistics corridors, agricultural supply chain syndications, and clean energy pacts between GCC conglomerates and ECOWAS enterprise champions.',
       region: 'saudi',
-      regionName: 'Riyadh, Saudi Arabia',
+      regionName: 'Riyadh, KSA',
       flag: '🇸🇦',
       timeline: 'upcoming',
       date: 'April 10–12, 2026',
@@ -39,7 +40,7 @@ const EVENTS_DATA = {
       accessType: 'Chamber of Commerce',
       description: 'Staged inside an ephemeral oceanfront pavilion, anchoring sovereign carbon offset markets, green bonds, and port logistics across developing coastal megacities.',
       region: 'nigeria',
-      regionName: 'Lagos (Eko Atlantic), Nigeria',
+      regionName: 'Lagos, Nigeria',
       flag: '🇳🇬',
       timeline: 'upcoming',
       date: 'May 18–20, 2026',
@@ -59,14 +60,14 @@ const EVENTS_DATA = {
       accessType: 'Curated Philanthropy',
       description: 'An atmospheric ceremonial banquet staged amidst restored Najdi mudbrick citadels, featuring live Bedouin oud quartets, custom olfactory scenting, and historic preservation pledges.',
       region: 'saudi',
-      regionName: 'Diriyah, Saudi Arabia',
+      regionName: 'Kano, Nigeria',
       flag: '🇸🇦',
       timeline: 'past',
       date: 'Conducted Jan 2025',
       capacity: '180 Benefactor Patrons',
-      statusText: 'Completed Retrospective',
+      statusText: 'Completed',
       statusColor: 'bg-slate-100 text-slate-700 border-slate-300',
-      statusIcon: 'check_circle',
+      statusIcon: <CircleCheck />,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCbAbg1ca2y9v5NBN4A8MOy6RlZFn8WCjesCfb3iSeDDUBJSRp3fB9Ey46vR87N7rD0K2nFZIQkk6y9jeRrzXFBQtQwMbIE-NDfD5nhZIiVPnxIJHysvBKhCvJdpSz2bk6BeKtUD_RZC3_jOEZeOvOtNXfSLNugVo4ujZ0fNofTfSI1FAFuoq7it-xxfGlWZj5mYikXv4bcBNszIUiXKxDEL93i7wPwCIjeHtBML4dieUZRG4b3f0Oug',
       actionText: 'View Retrospective Chronicle →',
       secondaryActionText: 'Review Archival Film & Gallery',
@@ -79,14 +80,14 @@ const EVENTS_DATA = {
       accessType: 'Diplomatic Protocol',
       description: 'Chartered helicopter transfers, mountain canopy security cordons, and intimate diplomatic fireside sessions that mediated landmark transnational trade concessions.',
       region: 'nigeria',
-      regionName: 'Abuja & Obudu Plateau, Nigeria',
+      regionName: 'Abuja, Nigeria',
       flag: '🇳🇬',
       timeline: 'past',
       date: 'Conducted Nov 2024',
       capacity: '85 Cabinet Envoys',
-      statusText: 'Completed Retrospective',
+      statusText: 'Completed',
       statusColor: 'bg-slate-100 text-slate-700 border-slate-300',
-      statusIcon: 'check_circle',
+      statusIcon: <CircleCheck />,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC0FfR2Av9SlVjCx3MDrgHTUyhM54uUdnSIDVWmF-F1GFrMJ35_UcDp4TXz8PhqhT0o_tNCWrAhOGLFe_tc8jOv7BKZISkTOc6pWCjtIEGE-GMjLEqhSP6_YStOoGEir3kotptXZQafcB6rEJ0kqNERz3iro4oqKfyhbQRe_aDC_ZkSzcvelD8URLijeEHqXyOb6IKBnQ7gIg54_u2ck3gKgMvED9phiz6eHS7j7hyRDa4jxW_vxvy16A',
       actionText: 'View Retrospective Chronicle →',
       secondaryActionText: 'Review Archival Film & Gallery',
@@ -101,7 +102,7 @@ const EVENTS_DATA = {
       accessType: 'بدعوة خاصة وتصريح سيادي',
       description: 'التركيز على الممرات اللوجستية السيادية، وتكتلات سلاسل الإمداد الزراعية، واتفاقيات الطاقة النظيفة بين تكتلات دول مجلس التعاون الخليجي ورواد الأعمال في إيكواس.',
       region: 'saudi',
-      regionName: 'الرياض، المملكة العربية السعودية',
+      regionName: 'الرياض، السعودية',
       flag: '🇸🇦',
       timeline: 'upcoming',
       date: '١٠ - ١٢ أبريل ٢٠٢٦',
@@ -121,7 +122,7 @@ const EVENTS_DATA = {
       accessType: 'غرفة التجارة',
       description: 'يقام داخل جناح ساحلي مؤقت، لترسيخ أسواق تعويض الكربون السيادية، والسندات الخضراء، واللوجستيات البحرية عبر المدن الساحلية الكبرى.',
       region: 'nigeria',
-      regionName: 'لاغوس (إيكو أتلانتيك)، نيجيريا',
+      regionName: 'لاغوس، نيجيريا',
       flag: '🇳🇬',
       timeline: 'upcoming',
       date: '١٨ - ٢٠ مايو ٢٠٢٦',
@@ -141,7 +142,7 @@ const EVENTS_DATA = {
       accessType: 'مبادرة خيرية منسقة',
       description: 'مأدبة احتفالية وسط قلاع الطين النجدي المرممة، تتميز بعروض العود البدوية الحية، والعطور المخصصة، وتعهدة الحفظ التاريخي.',
       region: 'saudi',
-      regionName: 'الدرعية، المملكة العربية السعودية',
+      regionName: 'الدرعية, السعودية',
       flag: '🇸🇦',
       timeline: 'past',
       date: 'أقيم في يناير ٢٠٢٥',
@@ -161,7 +162,7 @@ const EVENTS_DATA = {
       accessType: 'بروتوكول دبلوماسي',
       description: 'تنقلات بمروحيات خاصة، وحراسة أمنية جبلية، وجلسات دبلوماسية رفيعة المستوى توسطت في تسهيلات تجارية عابرة للحدود.',
       region: 'nigeria',
-      regionName: 'أبوجا وهضبة أوبودو، نيجيريا',
+      regionName: 'أبوجا، نيجيريا',
       flag: '🇳🇬',
       timeline: 'past',
       date: 'أقيم في نوفمبر ٢٠٢٤',
@@ -337,14 +338,14 @@ export default function EventsAndCommissionPage({ lang = 'en' }) {
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
 
                         <div className="absolute top-4 start-4 flex gap-2">
-                          <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
+                          <span className="md:px-3 px-0.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
                             <span>{event.flag}</span>
                             <span>{event.regionName}</span>
                           </span>
                         </div>
 
                         <div className="absolute top-4 end-4">
-                          <span className={`px-3 py-1 rounded-full border font-bold text-[11px] shadow-sm flex items-center gap-1.5 ${event.statusColor}`}>
+                          <span className={`md:px-3 px-0.5 py-1 rounded-full border font-bold text-[11px] shadow-sm flex items-center gap-1.5 ${event.statusColor}`}>
                             {event.statusDot && <span className={`w-1.5 h-1.5 rounded-full ${event.statusDot}`}></span>}
                             {event.statusIcon && <span className="material-symbols-outlined text-[13px]">{event.statusIcon}</span>}
                             <span>{event.statusText}</span>

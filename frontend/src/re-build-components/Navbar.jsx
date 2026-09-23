@@ -152,40 +152,40 @@ export default function Navbar({ toggleLanguage, isRtl }) {
               <Link to="/">
                 {isRtl ? 'الرئيسية' : 'Home'}
               </Link>
-              <a 
-                href="#" 
+              <Link
+                to='/founder'
                 onClick={() => setIsOpen(false)}
                 className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
               >
                 {isRtl ? 'المؤسس' : 'Founder'}
-              </a>
+              </Link>
               <Link to="/tours-and-services" onClick={() => setIsOpen(false)}>
                 <span className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
                   {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
                 </span>
               </Link>
-              <a 
-                href="#" 
+              <Link
+                to='/events'
                 onClick={() => setIsOpen(false)}
                 className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
               >
                 {isRtl ? 'الفعاليات' : 'Events'}
-              </a>
-              <a 
-                href="#" 
+              </Link>
+              <Link 
+                to='/contact'
                 onClick={() => setIsOpen(false)}
                 className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
               >
-                {isRtl ? 'الأخبار والرؤى' : 'News & Insights'}
-              </a>
+                {isRtl ? 'التواصل' : 'Contact'}
+              </Link>
 
-              <a 
-                href="#" 
+              <Link
+                to='/contact'
                 onClick={() => setIsOpen(false)}
                 className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
               >
                 {isRtl ? 'احجز الآن' : 'Inquire Now'}
-              </a>
+              </Link>
             </nav>
           </motion.div>
         )}
