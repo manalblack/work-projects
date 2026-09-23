@@ -15,3 +15,17 @@ Client Requests
 2- Easy navigation throughout the application is a must.
 3- Keep the home page hero section brief but informative
 4- start working on the ui
+
+[
+    SOCIAL MEDIA AND CONTACTS:
+
+    phone number/whatsapp: 07010010044
+
+    email(needs fixing in zoho): info@troveista.com
+
+    tiktok: https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-99v1Bt5qiQ9
+
+    instagram: https://www.instagram.com/trv.ev?stkn=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr
+
+
+]

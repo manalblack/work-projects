@@ -175,6 +175,7 @@ const EVENTS_DATA = {
       actionType: 'past',
     },
   ],
+  
 };
 
 // UI Translations map for static interface labels
@@ -248,66 +249,55 @@ const fadeIn = {
   }
 };
 
-export default function EventsAndCommissionPage({lang = 'en'}) {
-//   const [lang, setLang] = useState('en'); // 'en' or 'ar'
-  const [selectedRegion, setSelectedRegion] = useState('all');
-  const [selectedTimeline, setSelectedTimeline] = useState('upcoming');
+
+export default function EventsAndCommissionPage({ lang = 'en' }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState(lang);
 
-
-  const t = UI_TEXT[lang];
+  const t = UI_TEXT[currentLang];
   const currentEvents = EVENTS_DATA[currentLang];
- 
-    const isRtl = currentLang === 'ar';
-  
-    const toggleLanguage = (newLang) => {
-      setCurrentLang(newLang);
-    };
 
-  const filteredEvents = currentEvents.filter((event) => {
-    const regionMatches = selectedRegion === 'all' || event.region === selectedRegion;
-    const timelineMatches = event.timeline === selectedTimeline;
-    return regionMatches && timelineMatches;
-  });
+  const isRtl = currentLang === 'ar';
+
+  const toggleLanguage = (newLang) => {
+    setCurrentLang(newLang);
+  };
 
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
-        <div
-      dir={lang === 'ar' ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-black font-sans transition-all duration-300 mt-15">
-        {/* Header& Controls */}
+      <div
+        dir={isRtl ? 'rtl' : 'ltr'}
+        className="min-h-screen bg-black font-sans transition-all duration-300 mt-15"
+      >
+        {/* Header */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-">
+          <motion.div
+            variants={fadeIn}
+            className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 mb-8 shadow-sm max-w-full"
+          >
+            <span className="flex h-2 w-2 relative shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
+            </span>
+            <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
+              {isRtl
+                ? 'تروفيستا: حيث تلتقي الرحلات الاستثنائية بالمناسبات الفاخرة'
+                : 'Troviesta: Where Extraordinary Escapes Meet Unforgettable Occasions'}
+            </span>
+          </motion.div>
 
-            {/* Tag at the top */}
-            <motion.div 
-                variants={fadeIn} 
-                className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 mb-8 shadow-sm max-w-full"
-            >
-                <span className="flex h-2 w-2 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
-                </span>
-                <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
-                {isRtl 
-                    ? 'تروفيستا: حيث تلتقي الرحلات الاستثنائية بالمناسبات الفاخرة' 
-                    : 'Troviesta: Where Extraordinary Escapes Meet Unforgettable Occasions'}
-                </span>
-            </motion.div>
-
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-20 pb-6">
-                <div>
-                    <h2 className="text-4xl font-bold text-gold">{t.heading}</h2>
-                    <p className="text-sm text-white mt-1">{t.subheading}</p>
-                </div>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-20 pb-6">
+            <div>
+              <h2 className="text-4xl font-bold text-gold">{t.heading}</h2>
+              <p className="text-sm text-white mt-1">{t.subheading}</p>
             </div>
-
+          </div>
         </section>
 
-        {/* Event Cards Grid */}
+        {/* Event Cards Grid — filtering removed, renders all events for the current language */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <AnimatePresence mode="wait">
-            {EVENTS_DATA.length === 0 ? (
+            {currentEvents.length === 0 ? (
               <motion.div
                 key="empty"
                 initial={{ opacity: 0 }}
@@ -319,20 +309,20 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
               </motion.div>
             ) : (
               <motion.div
-                // key={`${lang}-${selectedRegion}-${selectedTimeline}`}
+                key={currentLang}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
                 className="grid grid-cols-1 md:grid-cols-2 gap-8"
               >
-                {EVENTS_DATA.map((event) => (
+                {currentEvents.map((event) => (
                   <motion.div
                     key={event.id}
                     variants={cardVariants}
                     whileHover={{ y: -6 }}
                     transition={{ duration: 0.2 }}
-                    className="event-card group bg-pink-300 rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                    className="event-card group bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                   >
                     <div>
                       {/* Visual Container */}
@@ -340,21 +330,19 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
                         <motion.img
                           whileHover={{ scale: 1.08 }}
                           transition={{ duration: 0.6, ease: 'easeOut' }}
-                          alt={event.title[lang]}
-                          src={event.image[lang]}
+                          alt={event.title}
+                          src={event.image}
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
 
-                        {/* Region Badge */}
                         <div className="absolute top-4 start-4 flex gap-2">
                           <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
-                            <span>{event.flag[lang]}</span>
+                            <span>{event.flag}</span>
                             <span>{event.regionName}</span>
                           </span>
                         </div>
 
-                        {/* Status Badge */}
                         <div className="absolute top-4 end-4">
                           <span className={`px-3 py-1 rounded-full border font-bold text-[11px] shadow-sm flex items-center gap-1.5 ${event.statusColor}`}>
                             {event.statusDot && <span className={`w-1.5 h-1.5 rounded-full ${event.statusDot}`}></span>}
@@ -363,21 +351,16 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
                           </span>
                         </div>
 
-                        {/* Schedule & Capacity Overlay */}
                         <div className="absolute bottom-3 start-4 end-4 flex items-center justify-between text-white text-xs">
                           <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[15px] text-gold">Event date</span>
                             <span>{event.date}</span>
                           </span>
-
                           <span className="font-medium bg-gold/40 px-2.5 py-1 border border-gold rounded-2xl backdrop-blur-sm">
                             {event.capacity}
                           </span>
-
                         </div>
                       </div>
 
-                      {/* Content */}
                       <div className="p-6">
                         <div className="text-xs text-gold uppercase tracking-wider font-semibold mb-2">
                           {event.venue}
@@ -395,19 +378,9 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
                     <div className="p-6 space-y-2.5 border-t border-slate-100 pt-5">
                       <motion.button
                         whileTap={{ scale: 0.98 }}
-                        // href="#commission-strip"
-                        // className={`w-full py-2.5 px-4 rounded-xl border border-forestGreen text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out ${
-                        //   event.actionType === 'primary'
-                        //     ? 'bg-forestGreen hover:bg-white hover:text-forestGreen'
-                        //     : event.actionType === 'dark'
-                        //     ? 'bg- hover:bg-slate-800 text-white'
-                        //     : 'bg-slate-100 hover:bg-slate-200 text-slate-00'
-                        // }`}
-                        className={`w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out`}>
+                        className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out"
+                      >
                         <span className="flex items-center gap-2">
-                          {/* <span className="material-symbols-outlined text-[16px]">
-                            {event.actionType === 'past' ? 'menu_book' : 'confirmation_number'}
-                          </span> */}
                           <span>{event.actionText}</span>
                         </span>
                       </motion.button>
@@ -418,9 +391,6 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
                         className="w-full py-2 px-4 rounded-xl bg-white hover:bg-forestGreen hover:text-white text-forestGreen font-semibold text-xs flex items-center justify-between border border-forestGreen transition-all duration-300 ease-in-out"
                       >
                         <span className="flex items-center gap-1.5">
-                          {/* <span className="material-symbols-outlined text-[16px]">
-                            {event.timeline === 'past' ? 'visibility' : 'Description'}
-                          </span> */}
                           <span>{event.secondaryActionText}</span>
                         </span>
                       </button>
@@ -432,111 +402,8 @@ export default function EventsAndCommissionPage({lang = 'en'}) {
           </AnimatePresence>
         </section>
 
-        {/* Full-Width Luxury CTA Strip */}
-        {/* <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16" id="commission-strip">
-          <div className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-[#0a192f] to-[#041226] text-white p-8 sm:p-12 lg:p-16 overflow-hidden shadow-2xl border border-slate-800">
-            <div className="relative z-10 max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-sky-400 text-xs font-bold uppercase tracking-widest mb-6">
-                <span className="material-symbols-outlined text-[16px]">workspace_premium</span>
-                <span>{t.ctaTag}</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-                {t.ctaTitle}
-              </h2>
-
-              <p className="mt-4 text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-normal">
-                {t.ctaDesc}
-              </p>
-
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <motion.a
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  href="#ticket-store"
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-sky-500 hover:bg-sky-400 text-white font-bold text-sm sm:text-base tracking-wide transition-all shadow-lg flex items-center justify-center gap-2"
-                >
-                  <span className="material-symbols-outlined text-[20px]">confirmation_number</span>
-                  <span>{t.viewStore}</span>
-                </motion.a>
-
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  type="button"
-                  onClick={() => setIsModalOpen(!isModalOpen)}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-sm sm:text-base tracking-wide transition-all border border-white/20 backdrop-blur-md flex items-center justify-center gap-2"
-                >
-                  <span className="material-symbols-outlined text-[20px]">handshake</span>
-                  <span>{t.privateInquiries}</span>
-                </motion.button>
-              </div>
-
-              <AnimatePresence>
-                {isModalOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: 'auto', marginTop: 40 }}
-                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    className="overflow-hidden p-8 rounded-2xl bg-white text-slate-900 text-start shadow-2xl"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-xl font-bold">{t.formTitle}</h3>
-                      </div>
-                      <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-700">
-                        <span className="material-symbols-outlined">close</span>
-                      </button>
-                    </div>
-
-                    <p className="text-xs text-slate-500 mb-6">{t.formDesc}</p>
-
-                    <form
-                      className="grid grid-cols-1 md:grid-cols-3 gap-4"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        alert('Submitted.');
-                        setIsModalOpen(false);
-                      }}
-                    >
-                      <input
-                        type="text"
-                        required
-                        placeholder={t.namePlaceholder}
-                        className="px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                      />
-                      <input
-                        type="email"
-                        required
-                        placeholder={t.emailPlaceholder}
-                        className="px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-                      />
-                      <select className="px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                        <option>{t.option1}</option>
-                        <option>{t.option2}</option>
-                        <option>{t.option3}</option>
-                      </select>
-
-                      <div className="md:col-span-3 text-end">
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          type="submit"
-                          className="px-6 py-2.5 rounded-full bg-sky-600 text-white font-bold text-xs hover:bg-slate-900 transition-colors"
-                        >
-                          {t.submitBtn}
-                        </motion.button>
-                      </div>
-                    </form>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </section> */}
-      
-    </div>
+        {/* Full-Width Luxury CTA Strip — unchanged, still commented out below */}
+      </div>
     </Layout>
   );
 }

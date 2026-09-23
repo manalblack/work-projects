@@ -182,7 +182,7 @@ export default function ToursAndServices({langKey = 'en'}) {
 
   const isRtl = currentLang === 'ar';
 
-   const toggleLanguage = (newLang) => {
+  const toggleLanguage = (newLang) => {
     setCurrentLang(newLang);
   };
 
