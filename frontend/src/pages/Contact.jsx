@@ -297,7 +297,7 @@ export default function ContactDispatchPage({ lang = 'en' }) {
 
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
-        <div dir={isRtl ? 'rtl' : 'ltr'} className="bg-black font-sans antialiased selection:bg-sky-100 selection:text-sky-900 transition-all duration-300">
+        <div dir={isRtl ? 'rtl' : 'ltr'} className="bg-black font-sans antialiased selection:bg-sky-100 transition-all duration-300">
       
       {/* MAIN CONTENT AREA */}
             <main className="pt-[90px]">
@@ -371,9 +371,9 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                     </div>
                 </section>
                 
-                <section className='m-auto flex bg-pink-00 lg:flex-row flex-col gap-9 md:justify-between lg:w-5xl justify-center items-center pb-10 mt-10'>
+                <section className='m-auto flex bg-pink-00 lg:flex-row flex-col gap-9 md:justify-between lg:w-3xl justify-center items-center pb-10 mt-10'>
                     <form action=""
-                        className='bg-white rounded-xl p-2 w-md h-140'>
+                        className='bg-white rounded-xl p-2 w-80 lg:w-md h-140'>
                         <motion.div 
                             variants={fadeIn} 
                             className="inline-flex items-center m-5 gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
@@ -398,7 +398,7 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                                     : 'Full name'}
                                 </label>
                                 <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 w-90 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
+                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
                            </div>
 
                             <div className='flex flex-col gap-3'>
@@ -408,7 +408,7 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                                     : 'Email'}
                                 </label>
                                 <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 w-90 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
+                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
                            </div>
 
                              <div className='flex flex-col gap-3'>
@@ -418,7 +418,7 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                                     : 'Phone number'}
                                 </label>
                                 <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 w-90 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
+                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
                            </div>
                            <div className='flex flex-col gap-3'>
                                 <label htmlFor="" className='font-bold text-forestGreen text-lg'>
@@ -427,10 +427,10 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                                     : 'Message'}
                                 </label>
                                 <textarea name="" id=""
-                                    className='outline outline-gold w-sm px-3 py-3' />
+                                    className='outline outline-gold md:w-sm w-70 px-3 py-3' />
                            </div>
 
-                           <button className="text-[25px] sm:text-[17px] rounded-full shadow-md px-5 py-1 w- font-bold text-white bg-forestGreen tracking-wide leading-tight truncate sm:whitespace-normal border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
+                           <button className="text-[20px] sm:text-[17px] rounded-full shadow-md px-5 py-1 w- font-bold text-white bg-forestGreen tracking-wide leading-tight truncate sm:whitespace-normal border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
                                 {/* {isRtl 
                                 ? 'ارسل' 
                                 : 'Send'} */}
@@ -444,9 +444,33 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                         </div>
                     </form>
 
-                    <div className='bg-white h-60 p-2 rounded-xl'>
-                        contact us through our 
-                        social media channels
+                    {/* TODO: Add the social links from the notes file */}
+                    <div className='flex flex-col bg-white lg:h-70 rounded-md'>
+                        <motion.div 
+                            variants={fadeIn} 
+                            className="inline-flex items-center m-5 gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
+                            >
+                            <span className="flex h-2 w-2 relative shrink-0">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
+                            </span>
+                            <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
+                                {isRtl 
+                                ? 'تواصل معانا عبر الايميل' 
+                                : 'Our Social Media'}
+                            </span>
+                        </motion.div>
+                        <div className='flex flex-row lg:flex-col justify-between items-center lg:h-45 h-20 w-50 p-2 rounded-md'>
+                            <a target='_blank'  className=''>
+                                <FaInstagram className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            </a>
+                            <a target='_blank'  className=''>
+                                <FaTiktok className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            </a>
+                            <a target='_blank'  className=''>
+                                <FaWhatsapp className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            </a>
+                        </div>
                     </div>
                 </section>      
             </main>
