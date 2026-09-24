@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Compass, Clock, Check, ArrowRight, ArrowLeft, X, Users, Star, Send, ShieldCheck, Sparkles, ExternalLink } from 'lucide-react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 
 // Sample Tour Packages Data with Bilingual Support
 const TOUR_PACKAGES = [
@@ -244,17 +244,20 @@ export default function TourismServices({ isRtl = false }) {
           <button
             type="button"
             onClick={handleNavigateToTours}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs shadow-md border border-forestGreen transition-all shrink-0 cursor-pointer"
+            className="px-6 py-3.5 rounded-full bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs shadow-md border border-forestGreen shrink-0 cursor-pointer transition-all duration-300 ease-in-out"
           >
-            <span>{isRtl ? 'عرض جميع الجولات والخدمات' : 'Explore All Tours & Services'}</span>
-            {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+            <Link to='/tours-and-services' 
+              className='inline-flex items-center justify-center gap-2'>
+              <span>{isRtl ? 'عرض جميع الجولات والخدمات' : 'Explore All Tours & Services'}</span>
+              {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+            </Link>
           </button>
         </div>
 
        
 
         {/* Value Services Ribbon */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-3xl bg-white border border-gold/60">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 p-6 sm:p-8 rounded-xl bg-white border border-gold/60">
           {SERVICES_SUMMARY.map((srv, idx) => (
             <div key={idx} className="flex items-start gap-4">
               <div className="p-2.5 rounded-2xl bg-white border border-neutral-200/80 text-gold shadow-sm shrink-0">
@@ -273,8 +276,8 @@ export default function TourismServices({ isRtl = false }) {
           {TOUR_PACKAGES.map((pkg) => (
             <motion.div
               key={pkg.id}
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.2 }}
+              whileHover={{ y: -3 }}
+              transition={{ duration: 0.1 }}
               className="bg-white rounded-xl border border-white/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
             >
               <div>
@@ -341,11 +344,13 @@ export default function TourismServices({ isRtl = false }) {
               <div className="p-6 pt-0">
                 <button
                   type="button"
-                  onClick={() => handleOpenModal(pkg)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
+                  // onClick={() => handleOpenModal(pkg)}
+                  className="w-full px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
                 >
-                  <span>{isRtl ? 'حجز / الاستفسار عن الباقة' : 'Book / Enquire Package'}</span>
-                  {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                 <Link to='/contact'  className='inline-flex items-center justify-center gap-2'>
+                    <span>{isRtl ? 'حجز / الاستفسار عن الباقة' : 'Book / Enquire Package'}</span>
+                    {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                 </Link>
                 </button>
               </div>
             </motion.div>
@@ -353,7 +358,7 @@ export default function TourismServices({ isRtl = false }) {
         </div>
 
         {/* Global CTA Banner with Redirect Button */}
-        <div className="mt-16 p-8 rounded-3xl bg-neutral-50 border border-gold/60 text flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="mt-16 p-8 rounded-xl bg-neutral-50 border border-gold/60 text flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-1 text-center md:text-right">
             <h3 className="text-xl font-bold text-gold">
               {isRtl ? 'هل تريد استكشاف المزيد من الخيارات؟' : 'Looking for More Destinations & Services?'}

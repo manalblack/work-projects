@@ -132,7 +132,7 @@ export default function Founder({lang = 'en'}) {
       setCurrentLang(newLang);
     };
 
-  const t = content[lang];
+  const t = content[currentLang];
 
 
   const fadeInUp = {

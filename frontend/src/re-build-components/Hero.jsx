@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Compass, ArrowRight, ShieldCheck, Star } from 'lucide-react';
-
+import {Link} from 'react-router-dom';
 
 // Testing dark background with the client
 
@@ -74,15 +74,15 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 />
               </div>
 
-              <motion.a 
+              <Link 
+                to='/tours-and-services'
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                href="#" 
+                whileTap={{ scale: 0.98 }} 
                 className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 rounded-full bg-forestGreen px-5 py-3 text-sm text-white font-semibold shadow-md hover:bg-white hover:text-forestGreen border border-forestGreen transition-all text-center"
               >
                 <span>{isRtl ? 'استكشف الآن' : 'Explore Now'}</span>
                 <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
-              </motion.a>
+              </Link>
             </motion.div>
 
             {/* Responsive Trust Indicators */}

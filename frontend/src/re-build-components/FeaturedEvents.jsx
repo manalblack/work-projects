@@ -175,13 +175,12 @@ export default function FeaturedEvents({ isRtl = false }) {
             </h2>
           </div>
 
-          <a 
-            href="#events"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-forestGreen px-3 py-1 rounded-full transition-colors self-start md:self-auto"
-          >
+          <Link
+            to='/events'
+            className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-forestGreen px-3 py-1 rounded-full hover:bg-white hover:text-forestGreen border border-forestGreen self-start md:self-auto transition-all duration-300 ease-in-out">
             <span>{isRtl ? 'عرض جميع الفعاليات' : 'View All Events'}</span>
             <ArrowRight className={`w-4 h-4 text-gold ${isRtl ? 'rotate-180' : ''}`} />
-          </a>
+          </Link>
         </div>
 
         {/* Events Grid */}
@@ -246,10 +245,10 @@ export default function FeaturedEvents({ isRtl = false }) {
                 <button
                   type="button"
                   onClick={() => openModal('book', evt)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out"
-                >
-                  <Ticket className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? 'احجز تذكرة' : 'Book Ticket'}</span>
+                  className="inline-flex items-center justify-center gap-2 md:px-3 px-2 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out">
+
+                    <Ticket className="w-4 h-4 text-gold" />
+                    <span>{isRtl ? 'احجز تذكرة' : 'Book Ticket'}</span>
                 </button>
               </div>
             </motion.div>
@@ -290,17 +289,16 @@ export default function FeaturedEvents({ isRtl = false }) {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 10 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-neutral-100 max-h-[90vh] flex flex-col"
+              className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden z-10 border border-neutral-100 max-h-[90vh] flex flex-col"
             >
               {/* Modal Header */}
               <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0ea5e9]">
+                <span className="text-xs font-bold uppercase tracking-wider text-gold">
                   {activeModal.type === 'about' ? (isRtl ? 'تفاصيل الفعالية' : 'Event Details') : (isRtl ? 'حجز التذاكر' : 'Ticket Reservation')}
                 </span>
                 <button
                   onClick={closeModal}
-                  className="p-1.5 rounded-full text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
-                >
+                  className="p-1.5 rounded-full text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -308,16 +306,16 @@ export default function FeaturedEvents({ isRtl = false }) {
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-5">
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 leading-snug">
+                  <h3 className="text-xl font-bold text-forestGreen leading-snug">
                     {activeModal.event.title[langKey]}
                   </h3>
                   <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-semibold text-neutral-500">
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-[#0ea5e9]" />
+                      <Calendar className="w-3.5 h-3.5 text-gold" />
                       {activeModal.event.date[langKey]}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                      <Clock className="w-3.5 h-3.5 text-gold" />
                       {activeModal.event.time[langKey]}
                     </span>
                   </div>
@@ -327,17 +325,17 @@ export default function FeaturedEvents({ isRtl = false }) {
                 {activeModal.type === 'about' && (
                   <div className="space-y-4">
                     <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
-                      <div className="flex items-center gap-2 text-xs font-bold text-neutral-700 uppercase">
-                        <MapPin className="w-4 h-4 text-[#10b981]" />
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <MapPin className="w-4 h-4 text-gold" />
                         {isRtl ? 'الموقع والمكان' : 'Venue & Location'}
                       </div>
-                      <p className="text-sm font-semibold text-neutral-900">
+                      <p className="text-sm font-semibold text-forestGreen">
                         {activeModal.event.venue[langKey]}, {activeModal.event.location[langKey]}
                       </p>
                     </div>
 
                     <div>
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-1">
                         {isRtl ? 'عن التجربة' : 'Overview'}
                       </h4>
                       <p className="text-sm text-neutral-600 leading-relaxed">
@@ -347,13 +345,13 @@ export default function FeaturedEvents({ isRtl = false }) {
 
                     {activeModal.event.speakers && (
                       <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-2">
                           {isRtl ? 'المتحدثون البارزون' : 'Featured Speakers'}
                         </h4>
                         <ul className="space-y-1.5">
                           {activeModal.event.speakers.map((sp, idx) => (
-                            <li key={idx} className="flex items-center gap-2 text-sm text-neutral-700 font-medium">
-                              <Users className="w-4 h-4 text-[#0ea5e9]" />
+                            <li key={idx} className="flex items-center gap-2 text-sm text-forestGreen font-medium">
+                              <Users className="w-4 h-4 text-gold" />
                               {sp[langKey]}
                             </li>
                           ))}
@@ -398,12 +396,12 @@ export default function FeaturedEvents({ isRtl = false }) {
                       </div>
                     ) : (
                       <form onSubmit={(e) => { e.preventDefault(); setBookingSuccess(true); }} className="space-y-4">
-                        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#0ea5e9]/10 text-[#0ea5e9] border border-[#0ea5e9]/20">
+                        <div className="flex items-center justify-between p-3.5 rounded-xl bg-gold/80 text-white border border-gold/20">
                           <span className="text-xs font-bold">{isRtl ? 'سعر التذكرة' : 'Ticket Price'}</span>
                           <span className="text-lg font-extrabold">{activeModal.event.price}</span>
                         </div>
 
-                        <div>
+                        {/* <div>
                           <label className="block text-xs font-bold text-neutral-700 uppercase mb-1">
                             {isRtl ? 'الاسم الكامل' : 'Full Name'}
                           </label>
@@ -411,11 +409,11 @@ export default function FeaturedEvents({ isRtl = false }) {
                             required
                             type="text" 
                             placeholder={isRtl ? 'مثال: أحمد علي' : 'e.g. Alexander Vance'}
-                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/50"
+                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold"
                           />
-                        </div>
+                        </div> */}
 
-                        <div>
+                        {/* <div>
                           <label className="block text-xs font-bold text-neutral-700 uppercase mb-1">
                             {isRtl ? 'البريد الإلكتروني' : 'Email Address'}
                           </label>
@@ -423,15 +421,17 @@ export default function FeaturedEvents({ isRtl = false }) {
                             required
                             type="email" 
                             placeholder="alexander@company.com"
-                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/50"
+                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold"
                           />
-                        </div>
+                        </div> */}
 
                         <button
                           type="submit"
-                          className="w-full py-3.5 rounded-xl bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold text-sm transition-all shadow-md mt-2"
+                          className="w-full py-3.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold border border-forestGreen text-sm shadow-md mt-2 transition-all duration-300 ease-in-out"
                         >
-                          {isRtl ? 'تأكيد الحجز' : 'Confirm Pass Reservation'}
+                          <Link>
+                            {isRtl ? 'تأكيد الحجز' : 'Confirm Reservation'}
+                          </Link>
                         </button>
                       </form>
                     )}

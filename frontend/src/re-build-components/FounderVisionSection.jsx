@@ -132,7 +132,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
               <button
                 type="button"
                 onClick={handleNavigateToFounder}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-forestGreen font-bold text-xs sm:text-sm shadow-lg transition-all cursor-pointer group"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-forestGreen text-white hover:bg-white hover:text-forestGreen border border-forestGreen font-bold text-xs sm:text-sm shadow-lg cursor-pointer group transition-all duration-300 ease-in-out"
               >
                 <span>
                   {isRtl ? 'اقرأ القصة الكاملة للمؤسس' : 'Read Full Founder Story'}

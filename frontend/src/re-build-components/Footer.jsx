@@ -28,7 +28,9 @@ const NAV_LINKS = [
   { path: '/', label: { en: 'Home', ar: 'الرئيسية' } },
   { path: '/tours-and-services', label: { en: 'Tours & Services', ar: 'الجولات والخدمات' } },
   { path: '/founder', label: { en: 'About Founder', ar: 'عن المؤسس' } },
+  { path: '/events', label: { en: 'Events', ar: 'الفعاليات' } },
   { path: '/contact', label: { en: 'Contact', ar: 'اتصل بنا' } },
+  
 ];
 
 const SERVICES_LINKS = [
@@ -97,6 +99,7 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
             </ul>
           </div>
 
+          {/* PENDING TEXT FROM FOUNDER */}
           {/* Column 2: Services */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">
@@ -125,11 +128,11 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-gold shrink-0" />
-                <span>+234 (0) 800 123 4567</span>
+                <span>+234 (0) 7010 010 044</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-gold shrink-0" />
-                <span>concierge@destinationtour.com</span>
+                <span>info@troveista.com</span>
               </li>
             </ul>
           </div>

@@ -5,7 +5,7 @@ import { CircleCheck } from 'lucide-react';
 
 /*
 
-    Change the button text and make it all redirect to the contact page
+  Change the button text and make it all redirect to the contact page
 
 */
 
@@ -376,23 +376,21 @@ export default function EventsAndCommissionPage({ lang = 'en' }) {
                     </div>
 
                     {/* Actions */}
-                    <div className="p-6 space-y-2.5 border-t border-slate-100 pt-5">
+                    <div className="p-6 space-y-2.5 border-t bg-pink-00 border-slate-100 pt-5">
                       <motion.button
                         whileTap={{ scale: 0.98 }}
-                        className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out"
-                      >
+                        className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out">
                         <span className="flex items-center gap-2">
-                          <span>{event.actionText}</span>
+                          <span>About event</span>
                         </span>
                       </motion.button>
 
                       <button
                         type="button"
                         onClick={() => alert(event.secondaryActionText)}
-                        className="w-full py-2 px-4 rounded-xl bg-white hover:bg-forestGreen hover:text-white text-forestGreen font-semibold text-xs flex items-center justify-between border border-forestGreen transition-all duration-300 ease-in-out"
-                      >
+                        className="w-full py-2 px-4 rounded-xl bg-white hover:bg-forestGreen hover:text-white text-forestGreen font-semibold text-xs flex items-center justify-between border border-forestGreen transition-all duration-300 ease-in-out">
                         <span className="flex items-center gap-1.5">
-                          <span>{event.secondaryActionText}</span>
+                          <span>Book tickets</span>
                         </span>
                       </button>
                     </div>

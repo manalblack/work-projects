@@ -24,9 +24,11 @@ import {
   Calendar,
   User,
   PlaneTakeoff,
-  Sparkles
+  Sparkles,
+  Link
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
+import { Link as NavLink } from 'react-router-dom';
 
 
 const EXPEDITIONS = [
@@ -448,12 +450,12 @@ export default function ToursAndServices({langKey = 'en'}) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <a
-                    href="#inquiry-consultation"
-                    className="px-5 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-xs tracking-wide transition-all duration-300 border border-forestGreen shadow-sm"
+                  <NavLink
+                    to='/contact'
+                    className="px-5 py-2.5 rounded-full bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs tracking-wide transition-all duration-300 border border-forestGreen shadow-md"
                   >
                     {isRtl ? 'استفسر الآن' : 'Inquire'}
-                  </a>
+                  </NavLink>
                   <button
                     type="button"
                     onClick={() => setDossierModal(exp)}
@@ -469,6 +471,8 @@ export default function ToursAndServices({langKey = 'en'}) {
         </div>
 
       </section>
+
+      {/* TODO: Add client email / fix zoho issues */}
 
       {/* 3. CONSULTATION & INQUIRY FORM */}
       <section className="bg-black text-white py-16 lg:py-24 border-t border-slate" id="inquiry-consultation">

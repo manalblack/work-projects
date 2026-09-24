@@ -371,9 +371,9 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                     </div>
                 </section>
                 
-                <section className='m-auto flex bg-pink-00 lg:flex-row flex-col gap-9 md:justify-between lg:w-3xl justify-center items-center pb-10 mt-10'>
+                <section className='m-auto flex bg-pink-00 md:flex-row flex-col gap-9 md:justify-between md:w-3xl justify-center items-center pb-10 mt-10'>
                     <form action=""
-                        className='bg-white rounded-xl p-2 w-80 lg:w-md h-140'>
+                        className='bg-white rounded-xl p-2 w-80 md:w-md h-140'>
                         <motion.div 
                             variants={fadeIn} 
                             className="inline-flex items-center m-5 gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
@@ -427,10 +427,10 @@ export default function ContactDispatchPage({ lang = 'en' }) {
                                     : 'Message'}
                                 </label>
                                 <textarea name="" id=""
-                                    className='outline outline-gold md:w-sm w-70 px-3 py-3' />
+                                  className='outline outline-gold md:w-sm w-70 h-25 px-3 py-3' />
                            </div>
 
-                           <button className="text-[20px] sm:text-[17px] rounded-full shadow-md px-5 py-1 w- font-bold text-white bg-forestGreen tracking-wide leading-tight truncate sm:whitespace-normal border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
+                           <button className="text-[15px] sm:text-[17px] rounded-full shadow-md px-5 py-1 w- font-bold text-white bg-forestGreen tracking-wide leading-tight truncate sm:whitespace-normal border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
                                 {/* {isRtl 
                                 ? 'ارسل' 
                                 : 'Send'} */}
