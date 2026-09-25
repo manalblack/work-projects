@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../layouts/Layout';
 import { CircleCheck, Link } from 'lucide-react';
 import {Link as NavLink} from 'react-router-dom'
+import { useLanguage } from '../hooks/LanguageContext';
 
 /*
 
@@ -252,18 +253,21 @@ const fadeIn = {
 };
 
 
-export default function EventsAndCommissionPage({ lang = 'en' }) {
+export default function EventsAndCommissionPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState(lang);
+  // const [currentLang, setCurrentLang] = useState(lang);
 
-  const t = UI_TEXT[currentLang];
-  const currentEvents = EVENTS_DATA[currentLang];
 
-  const isRtl = currentLang === 'ar';
+  const { lang, toggleLanguage, isRtl } = useLanguage();
 
-  const toggleLanguage = (newLang) => {
-    setCurrentLang(newLang);
-  };
+  const t = UI_TEXT[lang];
+  const currentEvents = EVENTS_DATA[lang];
+
+  // const isRtl = currentLang === 'ar';
+
+  // const toggleLanguage = (newLang) => {
+  //   setCurrentLang(newLang);
+  // };
 
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
@@ -311,7 +315,7 @@ export default function EventsAndCommissionPage({ lang = 'en' }) {
               </motion.div>
             ) : (
               <motion.div
-                key={currentLang}
+                key={lang}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"

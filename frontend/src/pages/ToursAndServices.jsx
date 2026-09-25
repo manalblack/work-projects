@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
 import { Link as NavLink } from 'react-router-dom';
-
+import { useLanguage } from '../hooks/LanguageContext';
 
 const EXPEDITIONS = [
   {
@@ -176,17 +176,19 @@ const EXPEDITIONS = [
 
 
 
-export default function ToursAndServices({langKey = 'en'}) {
+export default function ToursAndServices() {
   const [activeCorridor, setActiveCorridor] = useState('all');
   const [dossierModal, setDossierModal] = useState(null);
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
-  const [currentLang, setCurrentLang] = useState(langKey);
+  // const [currentLang, setCurrentLang] = useState(langKey);
 
-  const isRtl = currentLang === 'ar';
+  // const isRtl = currentLang === 'ar';
 
-  const toggleLanguage = (newLang) => {
-    setCurrentLang(newLang);
-  };
+  // const toggleLanguage = (newLang) => {
+  //   setCurrentLang(newLang);
+  // };
+
+  const { lang, toggleLanguage, isRtl } = useLanguage();
 
   
   const filteredExpeditions = activeCorridor === 'all'
@@ -390,7 +392,7 @@ export default function ToursAndServices({langKey = 'en'}) {
                 <div className="relative w-full h-64 overflow-hidden bg-slate-900">
                   <img 
                     src={exp.image} 
-                    alt={exp.title[langKey]} 
+                    alt={exp.title[lang]} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
@@ -398,40 +400,40 @@ export default function ToursAndServices({langKey = 'en'}) {
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 rounded-full bg-white backdrop-blur-md text-forestGreen font-bold text-xs shadow-sm flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-gold" />
-                      {exp.corridorName[langKey]}
+                      {exp.corridorName[lang]}
                     </span>
                   </div>
 
                   <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
                     <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
                       <PlaneTakeoff className="w-3.5 h-3.5 text-gold" />
-                      {exp.tag[langKey]}
+                      {exp.tag[lang]}
                     </span>
                     <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm">
-                      {exp.capacity[langKey]}
+                      {exp.capacity[lang]}
                     </span>
                   </div>
                 </div>
 
                 <div className="p-6">
                   <div className="flex items-center justify-between text-xs text-slate-500 mb-2 font-semibold">
-                    <span className="text-forestGreen uppercase tracking-wider">{exp.subTitle[langKey]}</span>
+                    <span className="text-forestGreen uppercase tracking-wider">{exp.subTitle[lang]}</span>
                     <span>{isRtl ? 'ملاذ خاص' : 'Private Enclave'}</span>
                   </div>
 
                   <h3 className="text-xl font-bold text-gold group-hover:text-gol/80 transition-colors leading-snug font-serif">
-                    {exp.title[langKey]}
+                    {exp.title[lang]}
                   </h3>
 
                   <p className="mt-3 text-slate-600 text-sm leading-relaxed">
-                    {exp.description[langKey]}
+                    {exp.description[lang]}
                   </p>
 
                   <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
                     {exp.features.map((feat, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
                         <CheckCircle2 className="w-4 h-4 text-gold shrink-0" />
-                        <span>{feat[langKey]}</span>
+                        <span>{feat[lang]}</span>
                       </div>
                     ))}
                   </div>

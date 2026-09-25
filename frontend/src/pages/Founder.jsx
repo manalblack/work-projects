@@ -10,6 +10,7 @@ import {
   Globe 
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
+import { useLanguage } from '../hooks/LanguageContext';
 
 const content = {
   en: {
@@ -119,20 +120,22 @@ const content = {
 
 
 
-export default function Founder({lang = 'en'}) {
+export default function Founder() {
 
   // const [lang, setLang] = useState('EN');
   // const isArabic = lang === 'AR';
 
-  const [currentLang, setCurrentLang] = useState(lang);
+  // const [currentLang, setCurrentLang] = useState(lang);
     
-    const isRtl = currentLang === 'ar';
+  //   const isRtl = currentLang === 'ar';
   
-    const toggleLanguage = (newLang) => {
-      setCurrentLang(newLang);
-    };
+  //   const toggleLanguage = (newLang) => {
+  //     setCurrentLang(newLang);
+  //   };
 
-  const t = content[currentLang];
+  const { lang, toggleLanguage, isRtl } = useLanguage();
+
+  const t = content[lang];
 
 
   const fadeInUp = {

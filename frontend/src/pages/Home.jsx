@@ -31,6 +31,7 @@ import FeaturedEvents from '../re-build-components/FeaturedEvents';
 import TourismServices from '../re-build-components/TourismServices';
 import FounderVisionSection from '../re-build-components/FounderVisionSection';
 import Layout from '../layouts/Layout';
+import { useLanguage } from '../hooks/LanguageContext';
 
 // Animation Variants
 const fadeIn = {
@@ -60,15 +61,19 @@ const hoverCard = {
   }
 };
 
-export default function Home({ lang = 'en' }) {
+export default function Home() {
 
-  const [currentLang, setCurrentLang] = useState(lang);
+  // const [currentLang, setCurrentLang] = useState(lang);
   
-  const isRtl = currentLang === 'ar';
+  // const isRtl = currentLang === 'ar';
 
-  const toggleLanguage = (newLang) => {
-    setCurrentLang(newLang);
-  };
+  // const toggleLanguage = (newLang) => {
+  //   setCurrentLang(newLang);
+  // };
+
+  const { lang, toggleLanguage, isRtl } = useLanguage();
+
+  
 
   const schemaData = {
     '@context': 'https://schema.org',
@@ -79,7 +84,7 @@ export default function Home({ lang = 'en' }) {
       : 'Bespoke luxury travel, sovereign retreats, and monumental summits across Nigeria and Africa.',
     'url': 'https://trtravelevents.com',
     'areaServed': 'Worldwide',
-    'inLanguage': currentLang
+    'inLanguage': lang
   };
 
   return (
@@ -87,7 +92,7 @@ export default function Home({ lang = 'en' }) {
 
     {/* the element below is for SEO */}
       <Helmet>
-        <html lang={currentLang} dir={isRtl ? 'rtl' : 'ltr'} />
+        <html lang={lang} dir={isRtl ? 'rtl' : 'ltr'} />
         <title>
           {isRtl 
             ? 'تي آر للسياحة والفعاليات | رحلات فاخرة ومؤتمرات عالمية' 
@@ -101,7 +106,7 @@ export default function Home({ lang = 'en' }) {
               : 'Pioneering travel, sovereign retreats, and monumental summits across Nigeria, and elite hubs with unrivaled discretion.'
           } 
         />
-        <link rel="canonical" href={`https://trtravelevents.com/${currentLang}`} />
+        <link rel="canonical" href={`https://trtravelevents.com/${lang}`} />
       </Helmet>
 
       <script type="application/ld+json">

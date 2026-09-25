@@ -4,18 +4,21 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {Toaster} from 'react-hot-toast';
 import {HelmetProvider} from 'react-helmet-async'
 import CreateTicketsArea from './pages/admin/features/CreateTicketsArea';
-import { LanguageProvider } from './hooks/useLanguage';
+import { LanguageProvider } from './hooks/LanguageContext';
+import ScrollToTop from './re-build-components/ScrollToTop';
+
 
 // new pages / Rebuilt
 
 const ToursAndServices = lazy(() => import('./pages/ToursAndServices'));
 const Founder = lazy(() => import('./pages/Founder'));
 const Contact = lazy(() => import('./pages/Contact'))
-
 const Home = lazy(() => import('./pages/Home'));
+const Events = lazy(() => import('./pages/Events'));
+
+
 const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
-const Events = lazy(() => import('./pages/Events'));
 const Staff = lazy(() => import('./pages/Staff'));
 const Verify = lazy(() => import('./pages/Verify'));    
 const StaffSuccessfulLogin = lazy(() => import('./pages/StaffSuccessfulLogin'));   
@@ -39,15 +42,19 @@ const CreateTicketArea = lazy(() => import('./pages/admin/features/CreateTicketA
 const EditEventArea = lazy(() => import('./pages/admin/features/EditEventArea'));
 const FindTicketArea = lazy(() => import('./pages/admin/features/FindTicketArea'));
 
+
+
+
 function App() {
-
-
+  
   return (
     <>
       <Toaster position='top-center' reverseOrder={false}/>
       <HelmetProvider>
         <LanguageProvider>
           <BrowserRouter>
+          <ScrollToTop />
+          
             <Suspense fallback={<div>Loading...</div>}>
          
             <Routes>

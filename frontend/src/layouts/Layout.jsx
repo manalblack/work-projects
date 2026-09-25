@@ -3,24 +3,26 @@ import { Compass, Globe, Menu, X } from 'lucide-react';
 // import Footer from './Footer';
 import Navbar from '../re-build-components/Navbar';
 import Footer from '../re-build-components/Footer'
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage } from '../hooks/LanguageContext';
 
 export default function Layout({ 
   children, 
-  isRtl: externalIsRtl, 
-  onToggleLanguage: externalToggleLanguage,
-  activeRoute = '/' 
+  // isRtl: externalIsRtl, 
+  // onToggleLanguage: externalToggleLanguage,
+  activeRoute = '/', 
 }) {
   // Internal fallback state if language state isn't managed by a global parent
-  const [internalIsRtl, setInternalIsRtl] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // const [internalIsRtl, setInternalIsRtl] = useState(false);
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { lang, toggleLanguage, isRtl } = useLanguage();
 
   // Use props if provided, otherwise fall back to internal state
-  const isRtl = externalIsRtl !== undefined ? externalIsRtl : internalIsRtl;
-  const toggleLanguage = externalToggleLanguage || (() => setInternalIsRtl((prev) => !prev));
+  // const isRtl = externalIsRtl !== undefined ? externalIsRtl : internalIsRtl;
+  // const toggleLanguage = externalToggleLanguage || (() => setInternalIsRtl((prev) => !prev));
 
   
-  const langKey = isRtl ? 'ar' : 'en';
+  // const lang = isRtl ? 'ar' : 'en';
 
   return (
     <div 

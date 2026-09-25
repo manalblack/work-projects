@@ -19,7 +19,7 @@ import {
 import Layout from '../layouts/Layout';
 import { FaTiktok, FaInstagram } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
-
+import { useLanguage } from '../hooks/LanguageContext';
 
 // --- Translations Data ---
 const translations = {
@@ -261,22 +261,24 @@ const translations = {
   },
 };
 
-export default function ContactDispatchPage({ lang = 'en' }) {
-  const [currentLang, setCurrentLang] = useState(lang);
+export default function ContactDispatchPage() {
+  // const [currentLang, setCurrentLang] = useState(lang);
   const [activeClassification, setActiveClassification] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const t = translations[currentLang];
-  const isRtl = currentLang === 'ar';
+  const { lang, toggleLanguage, isRtl } = useLanguage();
+
+  const t = translations[lang];
+  // const isRtl = currentLang === 'ar';
 
   const handleDispatch = (e) => {
     e.preventDefault();
     setIsModalOpen(true);
   };
 
-    const toggleLanguage = (newLang) => {
-        setCurrentLang(newLang);
-    };
+    // const toggleLanguage = (newLang) => {
+    //   setCurrentLang(newLang);
+    // };
 
     const fadeIn = {
     hidden: { opacity: 0, y: 12 },

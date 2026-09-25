@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, User, Menu, X } from 'lucide-react';
 import {Link, NavLink} from 'react-router-dom';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage } from '../hooks/LanguageContext';
 
 
 /*  TODOS:
@@ -18,6 +18,11 @@ import { useLanguage } from '../hooks/useLanguage';
   احجز الآن
 */
 
+
+/*
+  Working on this today: make the language state managed using context and localstorage
+  Starting with the home page
+*/
 
 
 export default function Navbar({ toggleLanguage, isRtl }) {
@@ -139,57 +144,78 @@ export default function Navbar({ toggleLanguage, isRtl }) {
       </div>
 
       {/* Mobile Animated Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="lg:hidden overflow-hidden bg-white/50 px-5 py-4 backdrop-blur-xl shadow-[0_1px_10px_rgba(0,0,0,0.03)]"
-          >
-            <nav className="flex flex-col gap-3">
-              <Link to="/">
-                {isRtl ? 'الرئيسية' : 'Home'}
-              </Link>
-              <Link
-                to='/founder'
+      
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              {/* Animated Overlay Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
                 onClick={() => setIsOpen(false)}
-                className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
-              >
-                {isRtl ? 'المؤسس' : 'Founder'}
-              </Link>
-              <Link to="/tours-and-services" onClick={() => setIsOpen(false)}>
-                <span className="text-neutral-600 hover:text-neutral-950 font-medium text-[14px] transition-colors">
-                  {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
-                </span>
-              </Link>
-              <Link
-                to='/events'
-                onClick={() => setIsOpen(false)}
-                className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
-              >
-                {isRtl ? 'الفعاليات' : 'Events'}
-              </Link>
-              <Link 
-                to='/contact'
-                onClick={() => setIsOpen(false)}
-                className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
-              >
-                {isRtl ? 'التواصل' : 'Contact'}
-              </Link>
+                className="fixed inset-0 h-full top-50 bg-black/40 backdrop-blur-xs z-40 lg:hidden"
+                aria-hidden="true"
+              />
 
-              <Link
-                to='/contact'
-                onClick={() => setIsOpen(false)}
-                className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+              {/* Animated Dropdown Panel */}
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                className="relative z-50 lg:hidden overflow-hidden bg-white/95 px-5 py-4 backdrop-blur-xl shadow-lg border-b border-neutral-100"
               >
-                {isRtl ? 'احجز الآن' : 'Inquire Now'}
-              </Link>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <nav className="flex flex-col gap-3">
+                  <Link 
+                    to="/" 
+                    onClick={() => setIsOpen(false)}
+                    className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
+                  >
+                    {isRtl ? 'الرئيسية' : 'Home'}
+                  </Link>
+                  <Link
+                    to="/founder"
+                    onClick={() => setIsOpen(false)}
+                    className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
+                  >
+                    {isRtl ? 'المؤسس' : 'Founder'}
+                  </Link>
+                  <Link 
+                    to="/tours-and-services" 
+                    onClick={() => setIsOpen(false)}
+                    className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
+                  >
+                    {isRtl ? 'السياحة والخدمات' : 'Tourism & Services'}
+                  </Link>
+                  <Link
+                    to="/events"
+                    onClick={() => setIsOpen(false)}
+                    className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
+                  >
+                    {isRtl ? 'الفعاليات' : 'Events'}
+                  </Link>
+                  <Link 
+                    to="/contact"
+                    onClick={() => setIsOpen(false)}
+                    className="text-neutral-600 hover:text-neutral-950 font-medium px-4 py-2 text-[15px] transition-colors"
+                  >
+                    {isRtl ? 'التواصل' : 'Contact'}
+                  </Link>
+
+                  <Link
+                    to="/contact"
+                    onClick={() => setIsOpen(false)}
+                    className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+                  >
+                    {isRtl ? 'احجز الآن' : 'Inquire Now'}
+                  </Link>
+                </nav>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
     </motion.header>
   );
 }
