@@ -4,14 +4,14 @@ import { UserCheck, ArrowRight, ArrowLeft, Quote, Compass, Sparkles } from 'luci
 
 const FOUNDER_DATA = {
   name: {
-    en: 'John Doe',
-    ar: 'جون دو'
+    en: 'Yaser abakar (Yas one)',
+    ar: 'ياسر ابكر (ياس ون)'
   },
   role: {
     en: 'Founder & Managing Director',
     ar: 'المؤسس والمدير التنفيذي'
   },
-  image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+  image: '/founder-orange.jpeg',
   quote: {
     en: 'We believe travel should be more than just visiting a place—it should transform how you see the world while preserving the communities and nature that make it extraordinary.',
     ar: 'نؤمن بأن السفر يجب أن يكون أكثر من مجرد زيارة مكان—بل ينبغي أن يغير طريقة رؤيتك للعالم مع الحفاظ على المجتمعات والطبيعة التي تجعله استثنائياً.'
@@ -78,13 +78,13 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
               {/* Background Glow */}
               {/* <div className="absolute -inset-1.5 bg-gradient-to-r from-[#0ea5e9] to-emerald-500 rounded-3xl blur-md opacity-30" /> */}
 
-              <div className="relative rounded-xl overflow-hidden border border-gold/80 bg-neutral-950 aspect-[4/5] shadow-2xl">
+              <div className="relative rounded-xl overflow-hidden border border-gold/80 bg-neutral- aspect-[4/5] shadow-2xl">
                 <img
                   src={FOUNDER_DATA.image}
                   alt={FOUNDER_DATA.name[langKey]}
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" />
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" /> */}
                 
                 {/* Overlay Badge */}
                 <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-neutral-900/90 backdrop-blur-md border border-neutral-800">

@@ -18,16 +18,17 @@ const content = {
     edition: "VOL. IV — 2025",
     cities: ["Lagos", "Abuja", "Dubai", "Zurich"],
     roleBadge: "Curator & Diplomatic Envoy",
-    founderNameFirst: "Tariq",
-    founderNameLast: "Al-Rahman",
-    title: "Founder & Principal Visionary, Troviesta & TR Group",
+    founderNameFirst: "Yaser",
+    founderNameLast: "Abakar (Yas one)",
+    title: "Founder & Social media influencer, Troviesta",
     heroDescription: "Architecting sovereign journeys across Nigeria — ",
-    heroHighlight: "where deep cultural heritage meets absolute discretion.",
+    heroHighlight: "where deep cultural heritage meets amazing adventures.",
     stats: [
       { val: "15+", label: "Years Protocol" },
       { val: "28", label: "Corridors" },
       { val: "340+", label: "Summits" }
     ],
+    description: 'Yasser Abkar (Yas One) is the CEO and Founder of Troveista, an officially registered Nigerian company specializing in organizing entertainment events alongside offering distinguished tourism programs as a tour guide. Beyond that, Yasser is an active content creator on YouTube, TikTok, and Snapchat, with a following of over 400,000. He combines his expertise in content marketing, event management, and tourism guidance to deliver innovative marketing and entertainment solutions for companies, brands, and visitors alike.',
     dossierLabel: "Dossier 01",
     location: "DIFC, Dubai",
     badgeTitle: "Diplomatic Protocol",
@@ -68,16 +69,17 @@ const content = {
     edition: "المجلد الرابع — ٢٠٢٥",
     cities: ["لاغوس", "أبوجا", "دبي", "زوريخ"],
     roleBadge: "قيّم ومبعوث دبلماسي",
-    founderNameFirst: "طارق",
-    founderNameLast: "الرحمان",
-    title: "المؤسس والرائد الرؤيوي، تروفيستا ومجموعة TR",
+    founderNameFirst: "ياسر",
+    founderNameLast: "ابكر (ياس ون)",
+    title: "المؤسس وشخصية سوشيل ميديا، تروفيستا",
     heroDescription: "هندسة رحلات سيادية عبر نيجيريا — ",
-    heroHighlight: "حيث يلتقي التراث الثقافي بالسرية المطلقة.",
+    heroHighlight: "حيث يلتقي التراث الثقافي بالمغامرات الرائعة.",
     stats: [
       { val: "+١٥", label: "عاماً في البروتوكول" },
       { val: "٢٨", label: "ممر ثنائي" },
       { val: "+٣٤٠", label: "قمة سيادية" }
     ],
+    description: 'ياسر أبكر ( ياس ون )  هو الرئيس التنفيذي والمؤسس لشركة Troveista، شركة نيجيرية مسجلة رسمياً متخصصة في تنظيم الفعاليات الترفيهية إلى جانب تقديم برامج سياحية مميزة كمرشد سياحي. إلى جانب ذلك، ياسر منشئ محتوى نشط عبر يوتيوب وتيك توك وسناب شات بقاعدة متابعين تتجاوز 400 ألف متابع. يجمع بين خبرته في التسويق بالمحتوى وإدارة الفعاليات والإرشاد السياحي لتقديم حلول تسويقية وترفيهية مبتكرة للشركات والعلامات التجارية والزوّار على حد سواء',
     dossierLabel: "الملف ٠١",
     location: "مركز دبي المالي العالمي",
     badgeTitle: "البروتوكول الدبلوماسي",
@@ -222,9 +224,9 @@ export default function Founder() {
                 className="relative overflow-hidden rounded border-4 border-white shadow-xl bg-slate-900 group"
               >
                 <img
-                  alt="Tariq Al-Rahman"
-                  className="w-full h-[360px] sm:h-[400px] object-cover object-center grayscale contrast-105 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtj91lOzdWXdAkHWHYkENGdW0yFNZ3dx-SYMMfuJ1x2I5XsPCW6GUJH66fdk6Ns_EsJcSHd1_srbAdtsRqPe7USWGmbDhomBFvEP8zBvc6Ctte5zeI7kAe2pDsMA4oZvv__ssIZUpNqXNuqd6ZWLKWfrWuv6ULs7OpiLhjRbTtqE7PS7L8jSVnjzZsqEnm1o5l9FUY9tmgNOFi6geVBfhoboTx-yDuv6ZllLNIdOH7_Dp_TqpO3i-Puw"
+                  alt="Yaser Abakar"
+                  className="w-full md:h-[380px] h-[500px] object-cover object-center grayscale contrast-105 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
+                  src="/founder-reading.jpeg"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white flex justify-between items-end">
                   <div>
@@ -253,11 +255,13 @@ export default function Founder() {
 
               <div className="space-y-4 text-sm text-editorial-slate leading-relaxed">
                 <div>
-                  <h3 className="text-xs uppercase font-bold text-gold tracking-wider mb-1">{t.part1Header}</h3>
-                  <p className='text-white'>{t.part1P1}</p>
+                  <h3 className="text-xs uppercase font-bold text-gold tracking-wider mb-1">
+                    {isRtl ? 'الوصف' : 'Description'}
+                  </h3>
+                  <p className='text-white'>{t.description}</p>
                 </div>
 
-                <div>
+                {/* <div>
                   <h3 className="text-xs uppercase font-bold text-gold tracking-wider mb-1">{t.part2Header}</h3>
                   <p className='text-white'>{t.part2P1}</p>
                 </div>
@@ -265,7 +269,7 @@ export default function Founder() {
                 <div>
                   <h3 className="text-xs uppercase font-bold text-gold tracking-wider mb-1">{t.part3Header}</h3>
                   <p className='text-white'>{t.part3P1}</p>
-                </div>
+                </div> */}
               </div>
 
               {/* Compact Axiom Quote */}

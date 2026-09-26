@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Users, Award, ExternalLink, X, ArrowRight, ArrowLeft, Tag } from 'lucide-react';
 
+
 // Sample Past Events Data
 const PAST_EVENTS = [
   {
@@ -98,6 +99,7 @@ const PAST_EVENTS = [
     }
   }
 ];
+
 
 export default function PreviousEventsSection({ isRtl = false }) {
   const [selectedYear, setSelectedYear] = useState('All');

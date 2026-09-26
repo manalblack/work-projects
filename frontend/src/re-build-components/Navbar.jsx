@@ -155,7 +155,7 @@ export default function Navbar({ toggleLanguage, isRtl }) {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => setIsOpen(false)}
-                className="fixed inset-0 h-full top-50 bg-black/40 backdrop-blur-xs z-40 lg:hidden"
+                className="fixed inset-0 h-screen top-50 bg-black/40 backdrop-blur-xs z-40 lg:hidden"
                 aria-hidden="true"
               />
 
