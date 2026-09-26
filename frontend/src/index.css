@@ -1,6 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=El+Messiri:wght@400..700&display=swap');
+
 @import "tailwindcss";
 @import 'tailwind-scrollbar-hide/v4';
+
+
 
 @theme {
   --color-darkPurple: #2e2237;
@@ -8,7 +11,7 @@
   --color-lightPurple: #cd99d9;
   --color-darkBg: #111827;
   --color-ghostWhite: #f8f8ff;
-  --font-poppins: "Poppins", sans-serif, system-ui;
+  /* --font-poppins: "Poppins", sans-serif, system-ui; */
 
   /* Rebuild colors. The first var is the color from the pdf file */
   /* --color-forestGreen: #0B1D14; */
@@ -35,12 +38,19 @@
   }
 }
 
-@layer base{
+
+body {
+  background-color:  #111827;
+  font-family: "El Messiri", sans-serif;
+}
+
+
+/* @layer base{
   body {
   background-color:  #111827;
-  font-family: var(--font-poppins);
+  font-family: "Cairo", sans-serif;;
 }
-}
+} */
 
 
 /* Adjust individual day sizes so they scale down on small screens */

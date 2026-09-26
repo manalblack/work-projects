@@ -24,13 +24,13 @@ const content = {
     heroDescription: "Architecting sovereign journeys across Nigeria — ",
     heroHighlight: "where deep cultural heritage meets amazing adventures.",
     stats: [
-      { val: "15+", label: "Years Protocol" },
-      { val: "28", label: "Corridors" },
+      { val: "400K+", label: "Followers across platforms" },
+      // { val: "28", label: "Corridors" },
       { val: "340+", label: "Summits" }
     ],
     description: 'Yasser Abkar (Yas One) is the CEO and Founder of Troveista, an officially registered Nigerian company specializing in organizing entertainment events alongside offering distinguished tourism programs as a tour guide. Beyond that, Yasser is an active content creator on YouTube, TikTok, and Snapchat, with a following of over 400,000. He combines his expertise in content marketing, event management, and tourism guidance to deliver innovative marketing and entertainment solutions for companies, brands, and visitors alike.',
-    dossierLabel: "Dossier 01",
-    location: "DIFC, Dubai",
+    // dossierLabel: "Dossier 01",
+    // location: "DIFC, Dubai",
     badgeTitle: "Diplomatic Protocol",
     badgeSub: "Bilateral Verified",
     sectionTitle: "Narrative & Philosophy",
@@ -41,12 +41,12 @@ const content = {
     axiomQuote: "“True luxury is never loud. It is the effortless alignment of sovereign discretion and human connection.”",
     part3Header: "III. The Architecture",
     part3P1: "Troviesta executes irreproducible itineraries: opening private aviation corridors, orchestrating full-island buyouts in the Arabian Gulf, and stewarding bilateral economic symposiums within restricted monuments.",
-    publicRecordTag: "Record & Insights",
+    publicRecordTag: "Record & Partnerships",
     press: [
-      { outlet: "Forbes Africa", title: "\"Architecting West Africa-GCC Luxury Corridors\"", date: "2024" },
-      { outlet: "Condé Nast", title: "\"Inside Troviesta's Private Enclaves\"", date: "Middle East" },
-      { outlet: "FT", title: "\"Emerging Bilateral Wealth & Bespoke Travel\"", date: "Global" },
-      { outlet: "Bloomberg", title: "\"High-Net-Worth Tourism as Trade Engine\"", date: "Dialogue" }
+      { outlet: "Samado Juice", title: "\"Marketing\"", date: "2024", image: '/samado-juice.jpeg' },
+      { outlet: "Morocan Taste Cafe", title: "\"Filming and Directing\"", date: "Middle East", image: '/morc-cafe.jpeg' },
+      { outlet: "Big West", title: "\"marketing\"", date: "Global", image: '/big-west.jpeg' },
+      { outlet: "B.K.EST & Rtm Logistics", title: "\"Strategic Partnership\"", date: "Dialogue", image: 'bk-est.jpeg' }
     ],
     keynotes: [
       { tag: "Keynote", title: "World Sovereign Tourism Forum • Geneva", sub: "\"Evolution of Quiet Luxury & State Protocols\"" },
@@ -92,12 +92,12 @@ const content = {
     axiomQuote: "“الفخامة الحقيقية ليست صاخبة أبداً. إنها التناغم السلس بين السرية السيادية والتواصل الإنساني.”",
     part3Header: "٣. هندسة التجارب",
     part3P1: "تنفذ تروفيستا مسارات فريدة: فتح ممرات طيران خاصة، حجز جزر بالكامل في الخليج العربي، وتنظيم قمم اقتصادية ثنائية داخل معالم تاريخية مغلقة.",
-    publicRecordTag: "السجل والرؤى",
+    publicRecordTag: "السجل والشراكات",
     press: [
-      { outlet: "فوربس إفريقيا", title: "\"هندسة الممرات الفاخرة بين غرب إفريقيا والخليج\"", date: "٢٠٢٤" },
-      { outlet: "كوندي ناست", title: "\"داخل الملاذات الخاصة لتروفيستا\"", date: "الشرق الأوسط" },
-      { outlet: "فاينانشال تايمز", title: "\"الثروات الناشئة والسفر المخصص\"", date: "عالمي" },
-      { outlet: "بلومبرغ", title: "\"السياحة الفاخرة كمحرك للتجارة\"", date: "حوار تنفيذي" }
+      { outlet: "عصير صمدو", title: "\"تسويق بالمحتوى\"", date: "٢٠٢٤", image: '/samado-juice.jpeg'},
+      { outlet: "المذاق المغربي كافيه", title: "\"تصوير و مونتاج\"", date: "الشرق الأوسط", image: '/morc-cafe.jpeg' },
+      { outlet: "بيج ويست", title: "\"تسويق\"", date: "عالمي", image: '/big-west.jpeg' },
+      { outlet: "بي.كي.است", title: "\"شراكة استراتيجية\"", date: "حوار تنفيذي", image:'/bk-est.jpeg' }
     ],
     keynotes: [
       { tag: "متحدث", title: "المنتدى العالمي للسياحة السيادية • جنيف", sub: "\"تطور الفخامة الهادئة والبروتوكولات الحكومية\"" },
@@ -119,7 +119,14 @@ const content = {
 
 // Animation Variants
 
+/*
+  morc taste: filming and dercting
+  big west: Marketing
+  bk.est & rtm logistics: stratigic partnership, 
+  samado: marketing / or marketing content
 
+
+*/
 
 
 export default function Founder() {
@@ -160,7 +167,7 @@ export default function Founder() {
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
       <div 
-      className={`min-h-screen w-full bg-black mt-15 font-sans text-editorial-dark antialiased`}
+      className={`min-h-screen w-full bg-black mt-15 text-editorial-dark`}
     >
       {/* HEADER BAR & LANG SWITCHER */}
 
@@ -188,7 +195,7 @@ export default function Founder() {
                 {t.roleBadge}
               </motion.div>
               
-              <motion.h1 variants={fadeInUp} className="font-serif text-4xl text-gold sm:text-5xl lg:text-6xl tracking-tight text-editorial-dark font-medium leading-tight">
+              <motion.h1 variants={fadeInUp} className="text-4xl text-gold sm:text-5xl lg:text-6xl tracking-tight font-medium leading-tight">
                 {t.founderNameFirst} <span className="italic font-normal text-slate-00">{t.founderNameLast}</span>
               </motion.h1>
 
@@ -196,7 +203,7 @@ export default function Founder() {
                 {t.title}
               </motion.p>
 
-              <motion.p variants={fadeInUp} className="text-gold font-serif text-lg sm:text-xl text-editorial-dark font-light leading-relaxed max-w-xl">
+              <motion.p variants={fadeInUp} className="text-gold font- text-lg sm:text-xl text-editorial-dark font-light leading-relaxed max-w-xl">
                 {t.heroDescription}
                 <span className="italic text-white font-normal">{t.heroHighlight}</span>
               </motion.p>
@@ -301,9 +308,12 @@ export default function Founder() {
                     // whileHover={{ y: -1 }}
                     whileHover={{ scale: 1.01 }}
                     transition={{ duration: 0.2 }}
-                    className="p-3 bg-white rounded-lg border border-gold text-xs shadow-sm"
-                  >
-                    <span className="font-bold text-gold block mb-0.5">{p.outlet}</span>
+                    className="p-3 bg-white rounded-lg border border-gold text-xs shadow-sm">
+                    <div className='bg-amber-00 w-1/2 flex gap-2 items-center'>
+                      <img src={p.image} alt="" 
+                      className='size-10'/>
+                      <span className="font-bold text-gold block mb-0.5">{p.outlet}</span>
+                    </div>
                     <p className="font-medium text-forestGreen text-[11px] line-clamp-2">{p.title}</p>
                   </motion.div>
                 ))}
