@@ -16,6 +16,11 @@ Client Requests
 3- Keep the home page hero section brief but informative
 4- start working on the ui
 
+5- Admin dashboard, redesign.
+6- Founder page CRUD operations on (Name, header, image and description and contact info)
+7- Tours and services page CRUD operations similar to the events functionality
+
+
 [
     SOCIAL MEDIA AND CONTACTS:
 

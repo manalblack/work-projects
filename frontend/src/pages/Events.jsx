@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout';
 import { CircleCheck, Link } from 'lucide-react';
 import {Link as NavLink} from 'react-router-dom'
 import { useLanguage } from '../hooks/LanguageContext';
+import PreviousEventsSection from '../re-build-components/PreviousEvntsSection';
 
 /*
 
@@ -408,7 +409,8 @@ export default function EventsAndCommissionPage() {
             )}
           </AnimatePresence>
         </section>
-
+        
+        <PreviousEventsSection />
         {/* Full-Width Luxury CTA Strip — unchanged, still commented out below */}
       </div>
     </Layout>
