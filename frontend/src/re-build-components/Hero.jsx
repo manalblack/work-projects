@@ -13,20 +13,28 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
 
   // Hero Featured Tour Data Object
   const heroTour = {
-    title: isRtl ? 'جولة منتجع ومحمية أوبودو الفاخرة' : 'Yankari Sanctuary',
-    startDate: isRtl ? '12 نوفمبر 2026' : 'Nov 12, 2026',
-    endDate: isRtl ? '18 نوفمبر 2026' : 'Nov 18, 2026',
-    location: isRtl ? 'ولاية كروس ريفر، نيجيريا' : 'Cross River State, Nigeria',
+    title: isRtl ? 'محمية يانكاري للحياة البرية' : 'Yankari Sanctuary',
+    startDate: isRtl ? '5 ديسمبر 2026' : 'DEC 5, 2026',
+    endDate: isRtl ? '8 ديسمبر 2026' : 'DEC 8, 2026',
+    location: isRtl ? 'ولاية باوشي ، نيجيريا' : 'Bauchi State, Nigeria',
     price: '$2,450',
+    earlyPricing: '190,000',
+    latePricing: '200,000',
+    familyPricing: '360,000',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
     description: isRtl 
-      ? 'استمتع بتجربة سياحية فاخرة ومصممة خصيصاً فوق القمم الجبلية. تشمل الجولة إقامة VIP رفيعة المستوى، ورحلات استكشافية موجهة، وجلسات استرخاء واستجمام في أحضان الطبيعة الخلابة.'
-      : 'Experience an ultra-bespoke mountain sanctuary getaway. This signature tour includes luxury VIP accommodations, private guided canopy expeditions, and executive wellness sessions amidst breathtaking landscapes.',
+      ? 'تقع محمية يانكاري للحياة البرية في ولاية باوتشي شمال شرق نيجيريا، وهي أكبر وأشهر وجهة للحياة البرية في البلاد، حيث تمتد على مساحة تبلغ نحو 2,244 كيلومترًا مربعًا. تضم المحمية الأفيال والأسود والجاموس وأفراس النهر، إلى جانب نبع "ويكي" المائي الدافئ الطبيعي الذي يُعد من أبرز مقاصد الزوار.'
+      : "Yankari Game Reserve, located in Bauchi State in northeastern Nigeria, is the country's largest and most popular wildlife destination, spanning roughly 2,244 km² of savanna. It is home to elephants, lions, buffalo, and hippos, along with the natural warm-water Wikki Spring, a favorite spot for visitors.",
     highlights: [
-      isRtl ? 'نقل خاص بالطائرة المروحية VIP' : 'VIP Private Helicopter Transfer',
-      isRtl ? 'إقامة فاخرة 5 نجوم شاملة بالكامل' : '5-Star All-Inclusive Luxury Resort',
-      isRtl ? 'جولات جبلية موجهة وبرامج استجمام' : 'Guided Mountain Expeditions & Spa',
-      isRtl ? 'لقاءات وتواصل رفيع المستوى' : 'Exclusive Executive Networking Dinners'
+      isRtl ? 'حفلة شواء و تعارف' : 'Barbecue and get-to-know-each-other field/area',
+      isRtl ? 'رحلة سفاري ' : 'Safari trip',
+      isRtl ? 'زيارة متحف يانكري ' : 'Visit to the Yankari Museum',
+      isRtl ? 'السباحة والاسترخاء في ينبوع ويكي الدافي' : 'Swimming and relaxing in the warm Wikki Spring',
+      isRtl ? 'زيارة الكهوف الجبلية ' : 'Visit to the mountain caves',
+      isRtl ? 'وجبة واحدة يومياً ' : 'One meal a day',
+      isRtl ? 'ذهاب وعودة ' : 'Round trip (transportation)',
+      isRtl ? 'غرفة مشتركة كهرباء 24 ساعة ومكيفه' : 'Shared room with 24-hour electricity and air conditioning',
+      isRtl ? 'نشاطات جماعية' : 'Group activities'
     ]
   };
 
@@ -153,12 +161,12 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                       {isRtl ? 'محمية يانكاري' : 'Yankari sanctuary'}
                     </p>
                       <div className='flex flex-row gap-3 rounded-lg bg- mt-3'>
-                        <button className='bg-white text-forestGreen font-semibold py-0.5 px-4 rounded-xl shadow-md border border-forestGreen hover:bg-forestGreen hover:text-white active:scale-85 transition-all duration-300 ease-in-out'>
+                        {/* <button className='bg-white text-forestGreen font-semibold py-0.5 px-4 rounded-xl shadow-md border border-forestGreen hover:bg-forestGreen hover:text-white active:scale-85 transition-all duration-300 ease-in-out'>
                           {isRtl ? 'سعر الرحلة' : 'Tour price'}
-                        </button>
+                        </button> */}
                         <button onClick={() => setIsModalOpen(true)}
-                         className='bg-white text-forestGreen font-semibold py-0.5 px-4 rounded-xl shadow-md border border-forestGreen hover:bg-forestGreen hover:text-white active:scale-85 transition-all duration-300 ease-in-out'>
-                          {isRtl ? 'عن الرحلة' : 'Tour Description'}
+                         className='bg-forestGreen text-white font-semibold py-0.5 px-4 rounded-full shadow-md border border-forestGreen hover:bg-white hover:text-forestGreen active:scale-85 transition-all duration-300 ease-in-out'>
+                          {isRtl ? 'تفاصيل الرحلة' : 'Tour Description'}
                         </button>
                       </div>
                   </div>
@@ -199,7 +207,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
               className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]"
             >
               {/* Header Image inside Modal */}
-              <div className="relative h-56 sm:h-64 bg-neutral-900 flex-shrink-0">
+              <div className="relative h-90 md:h-75 bg-neutral-900 flex-shrink-0">
                 <img
                   src={heroTour.image}
                   alt={heroTour.title}
@@ -218,7 +226,8 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 <div className="absolute bottom-5 left-6 right-6 text-white">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-300 mb-1">
                     <MapPin className="w-3.5 h-3.5 text-forestGreen" />
-                    <span>{heroTour.location}</span>
+                    {/*  */}
+                    {/* <span>{heroTour.location}</span> */}
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                     {heroTour.title}
@@ -232,7 +241,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-neutral-50 border border-neutral-100">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-xl bg-forestGreen/10 text-forestGreen">
-                      <Calendar className="w-5 h-5" />
+                      <Calendar className="w-5 h-5 text-gold" />
                     </div>
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
@@ -244,12 +253,30 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-neutral-200/80 pt-3 sm:pt-0 sm:pl-4">
+                  {/* pricing section */}
+                  <div className="flex items-center justify sm:jus border-t sm:border-t-0 sm:border-l border-neutral-200/80 pt-3 sm:pt-0 sm:pl-4">
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
                         {isRtl ? 'التكلفة الإجمالية' : 'Total Price'}
                       </p>
-                      <p className="text-xl font-extrabold text-forestGreen">{heroTour.price}</p>
+                      <div className='flex flex- gap-3 mt-1'>
+                        <p>{isRtl ? 'الحجز المسبق للفرد' : 'Early birds'}</p>
+                        <p className="text- font-extrabold text-forestGreen">
+                          ₦{heroTour.earlyPricing}
+                        </p>
+                      </div>
+                      <div className='flex gap-3 mt-1'>
+                        <p>{isRtl ? 'الحجز المتأخر للفرد' : 'Late booking'}</p>
+                        <p className="text- font-extrabold text-forestGreen">
+                          ₦{heroTour.latePricing}
+                        </p>
+                      </div>
+                      <div className='flex gap-3 mt-1'>
+                        <p>{isRtl ? 'عائلة / كبلز' : 'Families / Couples(3)'}</p>
+                        <p className="text- font-extrabold text-forestGreen">
+                          ₦{heroTour.familyPricing}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -288,13 +315,13 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                     {isRtl ? 'إلغاء' : 'Close'}
                   </button>
 
-                  <a
-                    href="/contact"
+                  <Link
+                    to="/contact"
                     className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-neutral-900 hover:border-neutral-900 transition-all shadow-md"
                   >
                     <span>{isRtl ? 'احجز الجولة الآن' : 'Book This Tour'}</span>
                     <ArrowIcon className="w-4 h-4" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </motion.div>
