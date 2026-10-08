@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, ArrowRight, ShieldCheck, Star, Calendar, MapPin, X, ArrowLeft, CheckCircle2, Info } from 'lucide-react';
+import { Compass, ArrowRight, ShieldCheck, Star, Calendar, MapPin, X, ArrowLeft, CheckCircle2, Info, SaudiRiyal } from 'lucide-react';
 import {Link} from 'react-router-dom';
 import { useState } from 'react';
 
@@ -11,6 +11,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
   // Hero Featured Tour Data Object
   const heroTour = {
     title: isRtl ? 'محمية يانكاري للحياة البرية' : 'Yankari Sanctuary',
@@ -18,9 +19,14 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
     endDate: isRtl ? '8 ديسمبر 2026' : 'DEC 8, 2026',
     location: isRtl ? 'ولاية باوشي ، نيجيريا' : 'Bauchi State, Nigeria',
     price: '$2,450',
-    earlyPricing: '190,000',
-    latePricing: '200,000',
-    familyPricing: '360,000',
+    earlyPricingN: '190,000',
+    latePricingN: '200,000',
+    familyPricingN: '360,000',
+    soloRoomN: '235,000',
+    earlyPricingR: '533',
+    latePricingR: '618',
+    familyPricingR: '1,005',
+    soloRoomR: '658',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
     description: isRtl 
       ? 'تقع محمية يانكاري للحياة البرية في ولاية باوتشي شمال شرق نيجيريا، وهي أكبر وأشهر وجهة للحياة البرية في البلاد، حيث تمتد على مساحة تبلغ نحو 2,244 كيلومترًا مربعًا. تضم المحمية الأفيال والأسود والجاموس وأفراس النهر، إلى جانب نبع "ويكي" المائي الدافئ الطبيعي الذي يُعد من أبرز مقاصد الزوار.'
@@ -38,6 +44,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
     ]
   };
 
+  
 
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
@@ -207,7 +214,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
               className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]"
             >
               {/* Header Image inside Modal */}
-              <div className="relative h-90 md:h-75 bg-neutral-900 flex-shrink-0">
+              <div className="relative h-80 md:h-75 bg-neutral-900 flex-shrink-0">
                 <img
                   src={heroTour.image}
                   alt={heroTour.title}
@@ -239,9 +246,10 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
               <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
                 {/* Tour Start/End Date & Pricing Card */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-neutral-50 border border-neutral-100">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-forestGreen/10 text-forestGreen">
-                      <Calendar className="w-5 h-5 text-gold" />
+
+                  <div className="flex justify-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-forestGreen/0 text-forestGreen">
+                      <Calendar className="w-5 h-5 text-gold bg" />
                     </div>
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
@@ -254,29 +262,49 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                   </div>
 
                   {/* pricing section */}
-                  <div className="flex items-center justify sm:jus border-t sm:border-t-0 sm:border-l border-neutral-200/80 pt-3 sm:pt-0 sm:pl-4">
+                  <div className="bg-amber-00 flex items-center justify sm:jus border-t sm:border-t-0 sm:border-l border-neutral-200/80 pt-3 sm:pt-0 sm:pl-4">
+
                     <div>
                       <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
                         {isRtl ? 'التكلفة الإجمالية' : 'Total Price'}
                       </p>
-                      <div className='flex flex- gap-3 mt-1'>
+                      
+                      <div className='flex flex-col gap-2 mt-1 w-[200px] bg-amber-00'>
                         <p>{isRtl ? 'الحجز المسبق للفرد' : 'Early birds'}</p>
-                        <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.earlyPricing}
-                        </p>
+
+                       <div className='flex flex-row gap-2'>
+                          {/* <p className="text- font-extrabold text-forestGreen">
+                            ₦{heroTour.earlyPricingN} ---  <span className='flex '><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span>
+                          </p> */}
+                          <span className="text- font-extrabold text-forestGreen">
+                            ₦{heroTour.earlyPricingN}
+                          </span>
+                            ---
+                          <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span>
+                       </div>
                       </div>
-                      <div className='flex gap-3 mt-1'>
+
+                      <div className='flex flex-col gap-2 mt-1'>
                         <p>{isRtl ? 'الحجز المتأخر للفرد' : 'Late booking'}</p>
                         <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.latePricing}
+                          ₦{heroTour.latePricingN} --- ${heroTour.latePricingR}
                         </p>
                       </div>
-                      <div className='flex gap-3 mt-1'>
+
+                      <div className='flex flex-col gap-1 mt-1'>
                         <p>{isRtl ? 'عائلة / كبلز' : 'Families / Couples(3)'}</p>
                         <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.familyPricing}
+                          ₦{heroTour.familyPricingN} --- ${heroTour.familyPricingR}
                         </p>
                       </div>
+
+                      <div className='flex flex-col gap-1 mt-1'>
+                        <p>{isRtl ? 'عائلة / كبلز' : 'Private room'}</p>
+                        <p className="text- font-extrabold text-forestGreen">
+                          ₦{heroTour.soloRoomN} --- ${heroTour.soloRoomR}
+                        </p>
+                      </div>
+
                     </div>
                   </div>
                 </div>
