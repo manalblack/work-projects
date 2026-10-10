@@ -2,14 +2,35 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Compass, Clock, Check, ArrowRight, ArrowLeft, X, Users, Star, Send, ShieldCheck, Sparkles, ExternalLink } from 'lucide-react';
 import {useNavigate, Link} from 'react-router-dom';
+import TourImageGalleryModal from './TourImagesModal';
+
+
+const testTourImages = [
+  {
+    url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=80",
+    caption: "Lekki Canopy Walkway & Nature Reserve"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    caption: "Coastal Beach Resort View"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+    caption: "Mountain Trail & Valley Viewpoint"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+    caption: "Safari Tour & Wildlife Excursion"
+  }
+];
 
 // Sample Tour Packages Data with Bilingual Support
 const TOUR_PACKAGES = [
   {
     id: 'pkg-1',
     title: {
-      en: 'Obudu Cloud & Eco Sanctuary Tour',
-      ar: 'جولة محمية هضبة أوبودو السحابية'
+      en: 'Yankari Sanctuary',
+      ar: 'محمية يانكاري للحياة البرية'
     },
     category: {
       en: 'Eco & Adventure',
@@ -20,33 +41,45 @@ const TOUR_PACKAGES = [
       ar: '4 أيام / 3 ليالٍ'
     },
     location: {
-      en: 'Cross River, Nigeria',
-      ar: 'كروس ريفر، نيجيريا'
+      en: 'Bauchi, Nigeria',
+      ar: 'باوشي، نيجيريا'
     },
-    price: '$850',
+    price: '',
     priceUnit: {
       en: '/ person',
       ar: '/ للشخص'
     },
     rating: '4.9',
     reviews: 28,
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+    image: 'yankari-room.png',
     overview: {
-      en: 'Experience the serene highlands of Obudu. Includes private cable car access, cloud canopy walks, and luxury lodge accommodation with full-board dining.',
-      ar: 'استمتع بهدوء مرتفعات أوبودو. تشمل الجولة ركوب التلفريك الخاص، والمشي فوق السحاب، والإقامة في منتجع فاخر مع وجبات كاملة.'
+      en: "Live an extraordinary adventure in the heart of Nigeria's natural beauty with a wildlife safari, scenic exploration, and relaxation in the warm waters of Wikki Warm Spring. A journey that blends adventure, nature, and discovery at one of Nigeria's top tourist destinations.",
+      ar: 'عِش مغامرة استثنائية في قلب الطبيعة النيجيرية مع سفاري لمشاهدة الحياة البرية، استكشاف المناظر الطبيعية، والاسترخاء في مياه Wikki Warm Spring الدافئة. رحلة تجمع بين المغامرة، الطبيعة، والاستكشاف في واحدة من أبرز الوجهات السياحية في نيجيريا.'
     },
     inclusions: {
       en: [
-        '3 Nights in Luxury Mountain Lodge',
-        'Guided Cable Car & Canopy Walks',
-        'All Meals & Executive Transfers',
-        'Private Eco Trail Guide'
+        'Transport to & from Yankari Sanctuary',
+        '1 Meal per Day',
+        'Shared Room Accommodation with 24-hour Electricity',
+        'Guided Tour of the Mountain Caves',
+        'Access to Wikki Warm Spring',
+        'Safari Vehicle',
+        'Barbecue Party',
+        'Guided Tour of the Mountain Caves',
+        'Visit to Yankari Museum',
+        'Social Activities'
       ],
       ar: [
-        'إقامة 3 ليالٍ في منتجع جبيلي فاخر',
-        'جولات التلفريك والمشي السحابي',
-        'جميع الوجبات والنقل التنفيذي',
-        'مرشد بيئي خاص'
+        'النقل من وإلى محمية يانكاري',
+        'وجبة واحدة يوميًا',
+        'غرفة مشتركة في فندق كهرباء 24 ساعة ',
+        'زيارة الكهوف الجبلية',
+        'الينبوع الدافي',
+        'سيارة سفاري',
+        'حفل شواء',
+        'زيارة الكهوف الجبلية',
+        'زيارة متحف يانكري', 
+        'نشاطات اجتماعية'
       ]
     }
   },
@@ -145,39 +178,42 @@ const TOUR_PACKAGES = [
 const SERVICES_SUMMARY = [
   {
     title: {
-      en: 'Custom Itinerary Design',
-      ar: 'تصميم برامج رحلات مخصصة'
+      en: 'Transport & Tour Activities',
+      ar: 'المواصلات والأنشطة السياحية'
     },
     desc: {
-      en: 'Tailor-made itineraries for executive retreats, private groups, and luxury solo travelers.',
-      ar: 'جولات مصممة خصيصًا للاجتماعات التنفيذية، المجموعات الخاصة، والرحلات الفاخرة.'
+      en: 'Comfortable cars and a guide with you all the way. Enjoy group activities and guided exploration on every trip.',
+      ar: 'سيارات مريحة ومرافق معك طوال الرحلة. استمتع بأنشطة جماعية وجولات استكشافية في كل رحلة.'
     }
   },
   {
     title: {
-      en: 'VIP Airport & Escort Logistics',
-      ar: 'خدمات استقبال وإسكورت لكبار الشخصيات'
+      en: 'Nature & Wildlife Tours',
+      ar: 'جولات الطبيعة والحياة البرية'
     },
     desc: {
-      en: 'Seamless ground transportation, protocol assistance, and private security detail upon request.',
-      ar: 'وسائل نقل بري سلسة، خدمات بروتوكول وحراسة خاصة عند الطلب.'
+      en: "Guided trips to Nigeria's best national parks, waterfalls, and wildlife sanctuaries.",
+      ar: 'رحلات مع مرشدين إلى أجمل المتنزهات الوطنية والشلالات ومحميات الحياة البرية في نيجيريا.'
     }
   },
   {
     title: {
-      en: 'Corporate Eco-Retreats',
-      ar: 'منتجعات بيئية للشركات'
+      en: 'Solo & Couple Packages',
+      ar: 'باقات للأفراد والعوائل'
     },
     desc: {
-      en: 'Off-site team retreats focused on wellness, leadership alignment, and immersive natural escapes.',
-      ar: 'رحلات عمل جماعية تركز على الصحة النفسية، القيادة والاسترخاء الطبيعي.'
+      en: 'Join our scheduled trips with ready-made packages for solo travelers and couples. Pick your date and book.',
+      ar: 'انضم إلى رحلاتنا ذات المواعيد المحددة مع باقات جاهزة للمسافرين الأفراد و العوائل. اختر موعدك واحجز.'
     }
-  }
+  },
 ];
 
 export default function TourismServices({ isRtl = false }) {
+
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -197,6 +233,10 @@ export default function TourismServices({ isRtl = false }) {
     setIsSubmitted(false);
     setSelectedPackage(pkg);
   };
+
+  const openTourImagesModal = () => {
+    setIsModalOpen(true);
+  }
 
   const handleCloseModal = () => {
     setSelectedPackage(null);
@@ -234,8 +274,8 @@ export default function TourismServices({ isRtl = false }) {
             </h2>
             <p className="mt-3 text-sm sm:text-base text-white leading-relaxed">
               {isRtl 
-                ? 'استكشف باقات جولات مصممة بعناية تجمع بين الثقافة، المنتجعات الفاخرة، وحماية الحياة البرية في جميع أنحاء غرب إفريقيا.'
-                : 'Explore carefully crafted tour packages designed around culture, luxury retreats, and wildlife conservation across Western Africa.'
+                ? 'استكشف باقات جولات مصممة بعناية تجمع بين الثقافة، المنتجعات الفاخرة، ومحميات الحياة البرية في جميع أنحاء نيجيريا.'
+                : 'Explore carefully crafted tour packages designed around culture, luxury retreats, and wildlife conservation across Nigeria.'
               }
             </p>
           </div>
@@ -321,6 +361,12 @@ export default function TourismServices({ isRtl = false }) {
                     {pkg.title[langKey]}
                   </h3>
 
+                  {/* This button is for testing the tour images */}
+                  <button onClick={openTourImagesModal}
+                  className="bg-gray-200">
+                    Test model
+                  </button>
+
                   <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4">
                     {pkg.overview[langKey]}
                   </p>
@@ -329,12 +375,13 @@ export default function TourismServices({ isRtl = false }) {
                   <div className="space-y-2 pt-2 border-t border-neutral-100">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-gold">
                       {isRtl ? 'محتويات الباقة' : 'Package Inclusions'}
-                    </span>
-                    {pkg.inclusions[langKey].slice(0, 2).map((item, idx) => (
+                    </span> 
+                    {pkg.inclusions[langKey].map((item, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs text-neutral-900 font-medium">
                         <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                         <span className="truncate">{item}</span>
                       </div>
+              
                     ))}
                   </div>
                 </div>
@@ -348,13 +395,13 @@ export default function TourismServices({ isRtl = false }) {
                   className="w-full px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
                 >
                  <Link to='/contact'  className='inline-flex items-center justify-center gap-2'>
-                    <span>{isRtl ? 'حجز / الاستفسار عن الباقة' : 'Book / Enquire Package'}</span>
+                    <span>{isRtl ? 'الاسعار والمزيد التفاصيل' : 'Pricing and more details'}</span>
                     {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                  </Link>
                 </button>
               </div>
             </motion.div>
-          ))}
+          ))}s
         </div>
 
         {/* Global CTA Banner with Redirect Button */}
@@ -384,6 +431,17 @@ export default function TourismServices({ isRtl = false }) {
       </div>
 
       {/* Booking / Enquiry Modal */}
+
+      {isModalOpen && (
+        <TourImageGalleryModal 
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          tourTitle='Test Tour Title'
+          images={testTourImages}
+          isRtl={false}
+        />
+      )}
+
       <AnimatePresence>
         {selectedPackage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>

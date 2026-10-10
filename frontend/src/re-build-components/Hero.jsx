@@ -23,22 +23,22 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
     latePricingN: '200,000',
     familyPricingN: '360,000',
     soloRoomN: '235,000',
-    earlyPricingR: '533',
-    latePricingR: '618',
-    familyPricingR: '1,005',
-    soloRoomR: '658',
+    earlyPricingR: '550',
+    latePricingR: '622',
+    familyPricingR: '1,020',
+    soloRoomR: '665',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
     description: isRtl 
-      ? 'تقع محمية يانكاري للحياة البرية في ولاية باوتشي شمال شرق نيجيريا، وهي أكبر وأشهر وجهة للحياة البرية في البلاد، حيث تمتد على مساحة تبلغ نحو 2,244 كيلومترًا مربعًا. تضم المحمية الأفيال والأسود والجاموس وأفراس النهر، إلى جانب نبع "ويكي" المائي الدافئ الطبيعي الذي يُعد من أبرز مقاصد الزوار.'
-      : "Yankari Game Reserve, located in Bauchi State in northeastern Nigeria, is the country's largest and most popular wildlife destination, spanning roughly 2,244 km² of savanna. It is home to elephants, lions, buffalo, and hippos, along with the natural warm-water Wikki Spring, a favorite spot for visitors.",
+      ? 'عِش مغامرة استثنائية في قلب الطبيعة النيجيرية مع سفاري لمشاهدة الحياة البرية، استكشاف المناظر الطبيعية، والاسترخاء في مياه Wikki Warm Spring الدافئة. رحلة تجمع بين المغامرة، الطبيعة، والاستكشاف في واحدة من أبرز الوجهات السياحية في نيجيريا.'
+      : "Live an extraordinary adventure in the heart of Nigeria's natural beauty with a wildlife safari, scenic exploration, and relaxation in the warm waters of Wikki Warm Spring. A journey that blends adventure, nature, and discovery at one of Nigeria's top tourist destinations.",
     highlights: [
+       isRtl ? 'ذهاب وعودة ' : 'Round trip (transportation)',
       isRtl ? 'حفلة شواء و تعارف' : 'Barbecue and get-to-know-each-other field/area',
       isRtl ? 'رحلة سفاري ' : 'Safari trip',
       isRtl ? 'زيارة متحف يانكري ' : 'Visit to the Yankari Museum',
       isRtl ? 'السباحة والاسترخاء في ينبوع ويكي الدافي' : 'Swimming and relaxing in the warm Wikki Spring',
       isRtl ? 'زيارة الكهوف الجبلية ' : 'Visit to the mountain caves',
       isRtl ? 'وجبة واحدة يومياً ' : 'One meal a day',
-      isRtl ? 'ذهاب وعودة ' : 'Round trip (transportation)',
       isRtl ? 'غرفة مشتركة كهرباء 24 ساعة ومكيفه' : 'Shared room with 24-hour electricity and air conditioning',
       isRtl ? 'نشاطات جماعية' : 'Group activities'
     ]
@@ -152,14 +152,14 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
               <div className="relative z-10 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl lg:shadow-2xl border-2 sm:border-4 border-white">
                 <img 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmebbR3etZJ7iNRlDopkXkNzgPG7wHCQGFLcv9uaX5mQCWknRXcfouWJBhxMUE1leUwvv91YMP5b6fhS862EpTgL5peOzt7_tbmUozSmxro7KsJHNc-04SCMD5cuGj3b3by0LbqCSX3ExOifRuVRfiFFcYfhD-hlMRZpD1EMVAn_Tm9BYQtXfFPPVJiV5DNwWJ_18gLtnsUQMubE7qkn2Quspcj99YJP1KQPTmMGg915g7O-XuXwoCOg" 
+                  src="yankari-cover.png" 
                   alt="Troviesta luxury destination" 
                   className="h-[480px] lg:h-[420px] w-full object-cover" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-transparent" />
                 
                 <div className="absolute flex flex-col gap-2 bg- bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5">
-                  <div className="rounded-xl bg-gold/30 p-3 sm:p-3.5 backdrop-blur-md shadow-md border border-gold/60">
+                  <div className="rounded-xl bg-gold/10 p-3 sm:p-3.5 backdrop-blur-md shadow-md border border-gold/60">
                     <p className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider">
                       {isRtl ? 'وجهة مميزة' : 'Featured Sanctuary'}
                     </p>
@@ -273,9 +273,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                         <p>{isRtl ? 'الحجز المسبق للفرد' : 'Early birds'}</p>
 
                        <div className='flex flex-row gap-2'>
-                          {/* <p className="text- font-extrabold text-forestGreen">
-                            ₦{heroTour.earlyPricingN} ---  <span className='flex '><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span>
-                          </p> */}
+                         
                           <span className="text- font-extrabold text-forestGreen">
                             ₦{heroTour.earlyPricingN}
                           </span>
@@ -285,7 +283,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                       </div>
 
                       <div className='flex flex-col gap-2 mt-1'>
-                        <p>{isRtl ? 'الحجز المتأخر للفرد' : 'Late booking'}</p>
+                        <p>{isRtl ? 'الحجز المتأخر للفرد من 10 نوفمبر' : 'Late booking from 10th NOV'}</p>
                         <p className="text- font-extrabold text-forestGreen">
                           ₦{heroTour.latePricingN} --- ${heroTour.latePricingR}
                         </p>
@@ -344,10 +342,10 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
                   </button>
 
                   <Link
-                    to="/contact"
+                    to="/tours-and-services"
                     className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-neutral-900 hover:border-neutral-900 transition-all shadow-md"
                   >
-                    <span>{isRtl ? 'احجز الجولة الآن' : 'Book This Tour'}</span>
+                    <span>{isRtl ? 'المزيد من التفاصيل' : 'More details'}</span>
                     <ArrowIcon className="w-4 h-4" />
                   </Link>
                 </div>
