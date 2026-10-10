@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Compass, Clock, Check, ArrowRight, ArrowLeft, X, Users, Star, Send, ShieldCheck, Sparkles, ExternalLink } from 'lucide-react';
 import {useNavigate, Link} from 'react-router-dom';
 import TourImageGalleryModal from './TourImagesModal';
+import TourInfoModal from './TourInfoModal';
 
 
 const testTourImages = [
@@ -24,6 +25,7 @@ const testTourImages = [
   }
 ];
 
+
 // const 
 
 // Sample Tour Packages Data with Bilingual Support
@@ -34,6 +36,7 @@ const TOUR_PACKAGES = [
       en: 'Yankari Sanctuary',
       ar: 'محمية يانكاري للحياة البرية'
     },
+    comingSoon: false,
     category: {
       en: 'Eco & Adventure',
       ar: 'بيئية ومغامرات'
@@ -91,6 +94,7 @@ const TOUR_PACKAGES = [
       en: 'Badagry Heritage & Slave Route Expedition',
       ar: 'رحلة استكشاف تراث باداغري والتاريخ'
     },
+    comingSoon: true,
     category: {
       en: 'Historical & Cultural',
       ar: 'تاريخي وثقافي'
@@ -136,6 +140,7 @@ const TOUR_PACKAGES = [
       en: 'Yankari Wildlife Safari & Warm Springs',
       ar: 'سفاري يانكاري للحيوانات والينابيع الدافئة'
     },
+    comingSoon: true,
     category: {
       en: 'Wildlife Safari',
       ar: 'سفاري وحياة برية'
@@ -221,6 +226,37 @@ export default function TourismServices({ isRtl = false }) {
 
   const langKey = isRtl ? 'ar' : 'en';
 
+   const heroTour = {
+    title: isRtl ? 'محمية يانكاري للحياة البرية' : 'Yankari Sanctuary',
+    startDate: isRtl ? '5 ديسمبر 2026' : 'DEC 5, 2026',
+    endDate: isRtl ? '8 ديسمبر 2026' : 'DEC 8, 2026',
+    location: isRtl ? 'ولاية باوشي ، نيجيريا' : 'Bauchi State, Nigeria',
+    price: '$2,450',
+    earlyPricingN: '190,000',
+    latePricingN: '220,000',
+    familyPricingN: '360,000',
+    soloRoomN: '235,000',
+    earlyPricingR: '550',
+    latePricingR: '622',
+    familyPricingR: '1,020',
+    soloRoomR: '665',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+    description: isRtl 
+      ? 'عِش مغامرة استثنائية في قلب الطبيعة النيجيرية مع سفاري لمشاهدة الحياة البرية، استكشاف المناظر الطبيعية، والاسترخاء في مياه Wikki Warm Spring الدافئة. رحلة تجمع بين المغامرة، الطبيعة، والاستكشاف في واحدة من أبرز الوجهات السياحية في نيجيريا.'
+      : "Live an extraordinary adventure in the heart of Nigeria's natural beauty with a wildlife safari, scenic exploration, and relaxation in the warm waters of Wikki Warm Spring. A journey that blends adventure, nature, and discovery at one of Nigeria's top tourist destinations.",
+    highlights: [
+       isRtl ? 'ذهاب وعودة ' : 'Round trip (transportation)',
+      isRtl ? 'حفلة شواء و تعارف' : 'Barbecue and get-to-know-each-other field/area',
+      isRtl ? 'رحلة سفاري ' : 'Safari trip',
+      isRtl ? 'زيارة متحف يانكري ' : 'Visit to the Yankari Museum',
+      isRtl ? 'السباحة والاسترخاء في ينبوع ويكي الدافي' : 'Swimming and relaxing in the warm Wikki Spring',
+      isRtl ? 'زيارة الكهوف الجبلية ' : 'Visit to the mountain caves',
+      isRtl ? 'وجبة واحدة يومياً ' : 'One meal a day',
+      isRtl ? 'غرفة مشتركة كهرباء 24 ساعة ومكيفه' : 'Shared room with 24-hour electricity and air conditioning',
+      isRtl ? 'نشاطات جماعية' : 'Group activities'
+    ]
+  };
+
 
   const fadeIn = {
     hidden: { opacity: 0, y: 12 },
@@ -248,6 +284,8 @@ export default function TourismServices({ isRtl = false }) {
   const handleNavigateToTours = () => {
     navigate('/tours-and-services'); // Update this path to match your router route
   };
+
+  
 
   return (
     <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -314,96 +352,116 @@ export default function TourismServices({ isRtl = false }) {
         </div>
 
         {/* Tour Packages Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {TOUR_PACKAGES.map((pkg) => (
             <motion.div
               key={pkg.id}
-              whileHover={{ y: -3 }}
+              whileHover={pkg.comingSoon ? {} : { y: -3 }}
               transition={{ duration: 0.1 }}
-              className="bg-white rounded-xl border border-white/80 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col justify-between"
+              className="relative bg-white rounded-xl border border-white/80 shadow-sm transition-all overflow-hidden flex flex-col justify-between"
             >
-              <div>
-                {/* Media Header */}
-                <div className="relative h-56 w-full overflow-hidden bg-neutral-100">
-                  <img 
-                    src={pkg.image} 
-                    alt={pkg.title[langKey]}
-                    className="w-full h-full object-cover" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
-                  
-                  <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-white backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
-                    {pkg.category[langKey]}
-                  </span>
+              {/* ========================================================= */}
+              {/* FULL-CARD BLUR OVERLAY FOR COMING SOON TOURS              */}
+              {/* ========================================================= */}
+              {pkg.comingSoon && (
+                <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+                  <div className="bg-neutral-900/90 border border-amber-400/40 text-amber-400 font-extrabold text-sm uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl backdrop-blur-xl">
+                    {isRtl ? 'قريباً' : 'Coming Soon'}
+                  </div>
+                  <p className="text-xs font-semibold text-neutral-300 mt-3 max-w-[200px]">
+                    {isRtl ? 'هذه الجولة ستكون متاحة قريباً' : 'This tour package will be available soon'}
+                  </p>
+                </div>
+              )}
 
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                    <span className="text-xl font-extrabold">{pkg.price} <span className="text-xs font-normal text-neutral-200">{pkg.priceUnit[langKey]}</span></span>
-                    <div className="flex items-center gap-1 bg-neutral-900/60 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-semibold">
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      <span>{pkg.rating}</span>
-                      <span className="text-neutral-400">({pkg.reviews})</span>
+              {/* ========================================================= */}
+              {/* CARD CONTENT (BLURRED OUT WHEN COMING SOON IS TRUE)       */}
+              {/* ========================================================= */}
+              <div className={`flex flex-col justify-between h-full ${pkg.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
+                <div>
+                  {/* Media Header */}
+                  <div className="relative h-56 w-full overflow-hidden bg-neutral-100">
+                    <img 
+                      src={pkg.image} 
+                      alt={pkg.title[langKey]}
+                      className="w-full h-full object-cover" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
+                    
+                    <span className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} bg-white backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm`}>
+                      {pkg.category[langKey]}
+                    </span>
+
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                      <span className="text-xl font-extrabold">
+                        {pkg.price ? (
+                          <>
+                            {pkg.price} <span className="text-xs font-normal text-neutral-200">{pkg.priceUnit[langKey]}</span>
+                          </>
+                        ) : (
+                          <span className="text-xs font-semibold text-neutral-300">
+                            {isRtl ? 'تتوفر الأسعار قريباً' : 'Price TBA'}
+                          </span>
+                        )}
+                      </span>
+                      <div className="flex items-center gap-1 bg-neutral-900/60 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-semibold">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                        <span>{pkg.rating}</span>
+                        <span className="text-neutral-400">({pkg.reviews})</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Package Info */}
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 text-xs font-semibold text-neutral-500 mb-2">
+                      <span className="flex items-center gap-1 text-slate-400">
+                        <Clock className="w-3.5 h-3.5 text-gold" />
+                        {pkg.duration[langKey]}
+                      </span>
+                      <span className="flex items-center gap-1 text-slate-400">
+                        <MapPin className="w-3.5 h-3.5 text-gold" />
+                        {pkg.location[langKey]}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-gold line-clamp-1 mb-2">
+                      {pkg.title[langKey]}
+                    </h3>
+
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4">
+                      {pkg.overview[langKey]}
+                    </p>
+
+                    {/* Highlights checklist */}
+                    <div className="space-y-2 pt-2 border-t border-neutral-100">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-gold">
+                        {isRtl ? 'محتويات الباقة' : 'Package Inclusions'}
+                      </span> 
+                      {pkg.inclusions[langKey].map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-xs text-neutral-900 font-medium">
+                          <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span className="truncate">{item}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Package Info */}
-                <div className="p-6">
-                  <div className="flex items-center gap-4 text-xs font-semibold text-neutral-500 mb-2">
-                    <span className="flex items-center gap-1 text-slate-400">
-                      <Clock className="w-3.5 h-3.5 text-gold" />
-                      {pkg.duration[langKey]}
-                    </span>
-                    <span className="flex items-center gap-1 text-slate-400">
-                      <MapPin className="w-3.5 h-3.5 text-gold" />
-                      {pkg.location[langKey]}
-                    </span>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-gold line-clamp-1 mb-2">
-                    {pkg.title[langKey]}
-                  </h3>
-
-                  {/* This button is for testing the tour images */}
-                  <button onClick={openTourImagesModal}
-                    className="bg-forestGreen text-white px-2 py-0.5 mb-2 rounded-full border border-forestGreen text-[14px] hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
-                    {isRtl ? 'الصور' : 'Images'}
+                {/* Action Button */}
+                <div className="p-6 pt-0">
+                  <button
+                    type="button"
+                    onClick={() => openTourImagesModal(pkg)}
+                    className="flex gap-5 items-center justify-center w-full px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
+                  >
+                    <span>{isRtl ? 'الاسعار والمزيد التفاصيل' : 'Pricing and more details'}</span>
+                    {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />} 
                   </button>
-
-                  <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4">
-                    {pkg.overview[langKey]}
-                  </p>
-
-                  {/* Highlights checklist */}
-                  <div className="space-y-2 pt-2 border-t border-neutral-100">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-gold">
-                      {isRtl ? 'محتويات الباقة' : 'Package Inclusions'}
-                    </span> 
-                    {pkg.inclusions[langKey].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-neutral-900 font-medium">
-                        <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <span className="truncate">{item}</span>
-                      </div>
-              
-                    ))}
-                  </div>
                 </div>
               </div>
-
-              {/* Action Button */}
-              <div className="p-6 pt-0">
-                <button
-                  type="button"
-                  // onClick={() => handleOpenModal(pkg)}
-                  className="w-full px-4 py-3 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white border border-forestGreen text-xs font-bold transition-all duration-300 ease-in-out shadow-md cursor-pointer"
-                >
-                 <Link to='/contact'  className='inline-flex items-center justify-center gap-2'>
-                    <span>{isRtl ? 'الاسعار والمزيد التفاصيل' : 'Pricing and more details'}</span>
-                    {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-                 </Link>
-                </button>
-              </div>
             </motion.div>
-          ))}s
+          ))}
         </div>
 
         {/* Global CTA Banner with Redirect Button */}
@@ -435,13 +493,18 @@ export default function TourismServices({ isRtl = false }) {
       {/* Booking / Enquiry Modal */}
 
       {isModalOpen && (
-        <TourImageGalleryModal 
+        // <TourImageGalleryModal 
+        //   isModalOpen={isModalOpen}
+        //   setIsModalOpen={setIsModalOpen}
+        //   tourTitle='Test Tour Title'
+        //   images={testTourImages}
+        //   isRtl={false} />
+
+        <TourInfoModal 
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          tourTitle='Test Tour Title'
-          images={testTourImages}
-          isRtl={false}
-        />
+          isRtl={isRtl}
+          heroTour={heroTour} />
       )}
 
       <AnimatePresence>
