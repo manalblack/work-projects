@@ -24,6 +24,8 @@ const testTourImages = [
   }
 ];
 
+// const 
+
 // Sample Tour Packages Data with Bilingual Support
 const TOUR_PACKAGES = [
   {
@@ -363,8 +365,8 @@ export default function TourismServices({ isRtl = false }) {
 
                   {/* This button is for testing the tour images */}
                   <button onClick={openTourImagesModal}
-                  className="bg-gray-200">
-                    Test model
+                    className="bg-forestGreen text-white px-2 py-0.5 mb-2 rounded-full border border-forestGreen text-[14px] hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
+                    {isRtl ? 'الصور' : 'Images'}
                   </button>
 
                   <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4">

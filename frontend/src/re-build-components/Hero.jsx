@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, ArrowRight, ShieldCheck, Star, Calendar, MapPin, X, ArrowLeft, CheckCircle2, Info, SaudiRiyal } from 'lucide-react';
 import {Link} from 'react-router-dom';
 import { useState } from 'react';
+import TourInfoModal from './TourInfoModal';
 
 // Testing dark background with the client
 
@@ -20,7 +21,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
     location: isRtl ? 'ولاية باوشي ، نيجيريا' : 'Bauchi State, Nigeria',
     price: '$2,450',
     earlyPricingN: '190,000',
-    latePricingN: '200,000',
+    latePricingN: '220,000',
     familyPricingN: '360,000',
     soloRoomN: '235,000',
     earlyPricingR: '550',
@@ -191,169 +192,15 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
       </div>
 
       {/* Models and stuff */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 text-neutral-900">
-            {/* Dark Backdrop Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-xs"
-              aria-hidden="true"
-            />
+      {isModalOpen && (
+        <TourInfoModal 
+          isRtl={isRtl}
+          heroTour={heroTour}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
 
-            {/* Pop-Out Modal Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]"
-            >
-              {/* Header Image inside Modal */}
-              <div className="relative h-80 md:h-75 bg-neutral-900 flex-shrink-0">
-                <img
-                  src={heroTour.image}
-                  alt={heroTour.title}
-                  className="w-full h-full object-cover opacity-85"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                {/* Close Button */}
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md transition-all z-20"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
-                <div className="absolute bottom-5 left-6 right-6 text-white">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-300 mb-1">
-                    <MapPin className="w-3.5 h-3.5 text-forestGreen" />
-                    {/*  */}
-                    {/* <span>{heroTour.location}</span> */}
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                    {heroTour.title}
-                  </h3>
-                </div>
-              </div>
-
-              {/* Modal Body */}
-              <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-                {/* Tour Start/End Date & Pricing Card */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-neutral-50 border border-neutral-100">
-
-                  <div className="flex justify-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-forestGreen/0 text-forestGreen">
-                      <Calendar className="w-5 h-5 text-gold bg" />
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                        {isRtl ? 'تاريخ البداية والنهاية' : 'Start & End Date'}
-                      </p>
-                      <p className="text-xs font-bold text-neutral-800">
-                        {heroTour.startDate} – {heroTour.endDate}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* pricing section */}
-                  <div className="bg-amber-00 flex items-center justify sm:jus border-t sm:border-t-0 sm:border-l border-neutral-200/80 pt-3 sm:pt-0 sm:pl-4">
-
-                    <div>
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                        {isRtl ? 'التكلفة الإجمالية' : 'Total Price'}
-                      </p>
-                      
-                      <div className='flex flex-col gap-2 mt-1 w-[200px] bg-amber-00'>
-                        <p>{isRtl ? 'الحجز المسبق للفرد' : 'Early birds'}</p>
-
-                       <div className='flex flex-row gap-2'>
-                         
-                          <span className="text- font-extrabold text-forestGreen">
-                            ₦{heroTour.earlyPricingN}
-                          </span>
-                            ---
-                          <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span>
-                       </div>
-                      </div>
-
-                      <div className='flex flex-col gap-2 mt-1'>
-                        <p>{isRtl ? 'الحجز المتأخر للفرد من 10 نوفمبر' : 'Late booking from 10th NOV'}</p>
-                        <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.latePricingN} --- ${heroTour.latePricingR}
-                        </p>
-                      </div>
-
-                      <div className='flex flex-col gap-1 mt-1'>
-                        <p>{isRtl ? 'عائلة / كبلز' : 'Families / Couples(3)'}</p>
-                        <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.familyPricingN} --- ${heroTour.familyPricingR}
-                        </p>
-                      </div>
-
-                      <div className='flex flex-col gap-1 mt-1'>
-                        <p>{isRtl ? 'عائلة / كبلز' : 'Private room'}</p>
-                        <p className="text- font-extrabold text-forestGreen">
-                          ₦{heroTour.soloRoomN} --- ${heroTour.soloRoomR}
-                        </p>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-                {/* Full Description */}
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                    {isRtl ? 'وصف الجولة' : 'Tour Description'}
-                  </h4>
-                  <p className="text-sm text-neutral-600 leading-relaxed font-normal">
-                    {heroTour.description}
-                  </p>
-                </div>
-
-                {/* Highlights List */}
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-3">
-                    {isRtl ? 'أبرز مميزات الجولة' : 'Tour Highlights'}
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {heroTour.highlights.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs font-semibold text-neutral-700">
-                        <CheckCircle2 className="w-4 h-4 text-forestGreen flex-shrink-0" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="px-5 py-3 rounded-full text-xs font-bold text-neutral-500 hover:text-neutral-900 transition-colors"
-                  >
-                    {isRtl ? 'إلغاء' : 'Close'}
-                  </button>
-
-                  <Link
-                    to="/tours-and-services"
-                    className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-neutral-900 hover:border-neutral-900 transition-all shadow-md"
-                  >
-                    <span>{isRtl ? 'المزيد من التفاصيل' : 'More details'}</span>
-                    <ArrowIcon className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
