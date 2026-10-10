@@ -127,7 +127,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                         prevImage();
                     }
                     }}
-                    className="w-full h-full object-cover cursor-grab active:cursor-grabbing"
+                    className="md:w-full w-96 h-full object-fill md:object-cover cursor-grab active:cursor-grabbing"
                 />
                 </AnimatePresence>
 
