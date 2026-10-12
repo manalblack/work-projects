@@ -7,31 +7,33 @@ const FEATURED_EVENTS = [
   {
     id: 'evt-1',
     title: {
-      en: 'West Africa Tech & Innovation Summit',
-      ar: 'قمة غرب إفريقيا للتكنولوجيا والابتكار'
+      en: 'Red Area',
+      ar: 'المنطقة الحمراء'
     },
     category: {
       en: 'Summit',
-      ar: 'قمة'
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Oct 24 - 26, 2026',
-      ar: '24 - 26 أكتوبر 2026'
+      en: 'Nov 29th 2026',
+      ar: '2026 نوفمبر 29'
     },
     time: {
-      en: '09:00 AM WAT',
-      ar: '09:00 صباحًا بتوقيت غرب إفريقيا'
+      en: '12PM to 9PM',
+      ar: '12 الى 9 مساءً'
     },
     location: {
       en: 'Lagos, Nigeria',
-      ar: 'لاغوس، نيجيريا'
+      ar: 'كادونا، نيجيريا'
     },
     venue: {
-      en: 'Eko Convention Centre',
-      ar: 'مركز إيكو للمؤتمرات'
+      en: 'Murtala Mohammad Square',
+      ar:  ' مركز مورتلا محمد'
     },
-    price: '$250',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
+    comingSoon: false,
+    regularPrice: '₦2,000',
+    vipPrice: '₦5,000',
+    image: '/red-area-event.png',
     description: {
       en: 'Join over 1,200 tech pioneers, investors, and policymakers for a 3-day summit exploring AI infrastructure, fintech, and digital economy growth across West Africa.',
       ar: 'انضم إلى أكثر من 1,200 من رواد التكنولوجيا والستثمرين وصناع القرار في قمة تستمر 3 أيام لاستكشاف البنية التحتية للذكاء الاصطناعي، والتكنولوجيا المالية، ونمو الاقتصاد الرقمي في غرب إفريقيا.'
@@ -68,6 +70,7 @@ const FEATURED_EVENTS = [
       en: 'Obudu Mountain Resort',
       ar: 'منتجع جبل أوبودو'
     },
+    comingSoon: true,
     price: '$1,200',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
     description: {
@@ -106,6 +109,7 @@ const FEATURED_EVENTS = [
       en: 'Transcorp Hilton Grand Ballroom',
       ar: 'قاعة ترانسكورب هيلتون الكبرى'
     },
+    comingSoon: true,
     price: '$550',
     image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
     description: {
@@ -188,68 +192,84 @@ export default function FeaturedEvents({ isRtl = false }) {
           {FEATURED_EVENTS.map((evt) => (
             <motion.div
               key={evt.id}
-              whileHover={{ y: -4 }}
+              whileHover={evt.comingSoon ? {} : { y: -4 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              className="relative bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
-              {/* Card Media */}
-              <div>
-                <div className="relative h-48 w-full overflow-hidden bg-neutral-100">
-                  <img 
-                    src={evt.image} 
-                    alt={evt.title[langKey]}
-                    className="w-full h-full object-cover" 
-                  />
-                  <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
-                    {evt.category[langKey]}
-                  </span>
-                  <span className="absolute top-3 end-3 bg-forestGreen backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-sm">
-                    {evt.price}
-                  </span>
+              {/* ========================================================= */}
+              {/* FULL-CARD BLUR OVERLAY FOR COMING SOON EVENTS             */}
+              {/* ========================================================= */}
+              {evt.comingSoon && (
+                <div className="absolute inset-0 z-30 bg-black/45 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+                  <div className="bg-neutral-900/90 border border-amber-400/40 text-amber-400 font-extrabold text-sm uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl backdrop-blur-xl">
+                    {isRtl ? 'قريباً' : 'Coming Soon'}
+                  </div>
+                  <p className="text-xs font-semibold text-neutral-300 mt-3 max-w-[220px]">
+                    {isRtl ? 'هذه الفعالية ستكون متاحة للحجز قريباً' : 'This event will be available for booking soon'}
+                  </p>
                 </div>
+              )}
 
-                {/* Card Body */}
-                <div className="p-5 sm:p-6">
-                  <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-3">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-gold" />
-                      {evt.date[langKey]}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-gold" />
-                      {evt.location[langKey]}
+              {/* ========================================================= */}
+              {/* CARD CONTENT (BLURRED OUT WHEN COMING SOON IS TRUE)       */}
+              {/* ========================================================= */}
+              <div className={`flex flex-col justify-between h-full ${evt.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
+                {/* Card Media */}
+                <div>
+                  <div className="relative md:h-65 h-80 w-full overflow-hidden bg-neutral-100">
+                    <img 
+                      src={evt.image} 
+                      alt={evt.title[langKey]}
+                      className="w-full h-full object-cover" 
+                    />
+                    <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                      {evt.category[langKey]}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-neutral-900 line-clamp-2 leading-snug mb-2">
-                    {evt.title[langKey]}
-                  </h3>
+                  {/* Card Body */}
+                  <div className="p-5 sm:p-6">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-3">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-gold" />
+                        {evt.date[langKey]}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-gold" />
+                        {evt.location[langKey]}
+                      </span>
+                    </div>
 
-                  <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed">
-                    {evt.description[langKey]}
-                  </p>
+                    <h3 className="text-lg font-bold text-neutral-900 line-clamp-2 leading-snug mb-2">
+                      {evt.title[langKey]}
+                    </h3>
+
+                    <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed">
+                      {evt.description[langKey]}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {/* Card Footer Actions */}
-              <div className="p-5 sm:p-6 pt-0 grid grid-cols-2 gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => openModal('about', evt)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full border border-neutral-200 hover:border-forestGreen bg-white text-neutral-800 text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ease-in-out"
-                >
-                  <Info className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? 'عن الفعالية' : 'About Event'}</span>
-                </button>
+                {/* Card Footer Actions */}
+                <div className="p-5 sm:p-6 pt-0 grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => openModal('about', evt)}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full border border-neutral-200 hover:border-forestGreen bg-white text-neutral-800 text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ease-in-out"
+                  >
+                    <Info className="w-4 h-4 text-gold" />
+                    <span>{isRtl ? 'عن الفعالية' : 'About Event'}</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => openModal('book', evt)}
-                  className="inline-flex items-center justify-center gap-2 md:px-3 px-2 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out">
-
+                  <button
+                    type="button"
+                    onClick={() => openModal('book', evt)}
+                    className="inline-flex items-center justify-center gap-2 md:px-3 px-2 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out"
+                  >
                     <Ticket className="w-4 h-4 text-gold" />
                     <span>{isRtl ? 'احجز تذكرة' : 'Book Ticket'}</span>
-                </button>
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -334,6 +354,36 @@ export default function FeaturedEvents({ isRtl = false }) {
                       </p>
                     </div>
 
+                    <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <Ticket className="w-4 h-4 text-gold" />
+                        {isRtl ? ' التذاكر و الطاولات' : 'Tickets / Stalls'}
+                      </div>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        Regular --- ₦2,000
+                      </p>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        VIP --- ₦5,000
+                      </p>
+                       <p className="text-sm font-semibold text-forestGreen">
+                        Stall --- ₦15,000
+                      </p>
+                      
+                      {/* <div>
+
+                      </div> */}
+                    </div>
+
+                    {/* <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <MapPin className="w-4 h-4 text-gold" />
+                        {isRtl ? 'الموقع والمكان' : 'Venue & Location'}
+                      </div>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        {activeModal.event.venue[langKey]}, {activeModal.event.location[langKey]}
+                      </p>
+                    </div> */}
+
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-1">
                         {isRtl ? 'عن التجربة' : 'Overview'}
@@ -395,10 +445,18 @@ export default function FeaturedEvents({ isRtl = false }) {
                         </p>
                       </div>
                     ) : (
-                      <form onSubmit={(e) => { e.preventDefault(); setBookingSuccess(true); }} className="space-y-4">
-                        <div className="flex items-center justify-between p-3.5 rounded-xl bg-gold/80 text-white border border-gold/20">
+                      <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
+                        <div className="flex  justify-between p-3.5 rounded-xl bg-gold/80 text-white border border-gold/20">
                           <span className="text-xs font-bold">{isRtl ? 'سعر التذكرة' : 'Ticket Price'}</span>
-                          <span className="text-lg font-extrabold">{activeModal.event.price}</span>
+                          <div className='flex flex-col'>
+                            <span className="text-lg font-extrabold">
+                              Regular --- {activeModal.event.regularPrice}
+                            </span>
+                            <span className="text-lg font-extrabold">
+                              VIP --- {activeModal.event.vipPrice}
+                            </span>
+                          </div>
+
                         </div>
 
                         {/* <div>
@@ -429,7 +487,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                           type="submit"
                           className="w-full py-3.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold border border-forestGreen text-sm shadow-md mt-2 transition-all duration-300 ease-in-out"
                         >
-                          <Link>
+                          <Link to='/contact'>
                             {isRtl ? 'تأكيد الحجز' : 'Confirm Reservation'}
                           </Link>
                         </button>

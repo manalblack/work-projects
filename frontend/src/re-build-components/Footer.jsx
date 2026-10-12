@@ -36,8 +36,8 @@ const NAV_LINKS = [
 const SERVICES_LINKS = [
   { label: { en: 'Eco & Adventure Tours', ar: 'رحلات بيئية ومغامرات' } },
   { label: { en: 'Historical Expeditions', ar: 'جولات تاريخية وثقافية' } },
-  { label: { en: 'VIP Logistics & Escort', ar: 'خدمات الاستقبال وكبار الشخصيات' } },
-  { label: { en: 'Corporate Eco-Retreats', ar: 'منتجعات الشركات البيئية' } },
+  // { label: { en: 'VIP Logistics & Escort', ar: 'خدمات الاستقبال وكبار الشخصيات' } },
+  // { label: { en: 'Corporate Eco-Retreats', ar: 'منتجعات الشركات البيئية' } },
 ];
 
 export default function Footer({ isRtl = false, onToggleLanguage }) {

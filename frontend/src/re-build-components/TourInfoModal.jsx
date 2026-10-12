@@ -70,7 +70,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
     };
 
     const prevImage = () => {
-    setCurrentImgIndex((prev) => (prev === 0 ? tourImages.length - 1 : prev - 1));
+        setCurrentImgIndex((prev) => (prev === 0 ? tourImages.length - 1 : prev - 1));
     };
 
     // Change this array to a more appropriate name
@@ -240,7 +240,8 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                             ₦{heroTour.earlyPricingN}
                         </span>
                             ---
-                        <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span>
+                        {/* <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.earlyPricingR}</span> */}
+                        {isRtl ? <span className="flex text- font-extrabold text-forestGreen">{heroTour.earlyPricingR}<SaudiRiyal className='size-4'/></span> : <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>}
                     </div>
                     </div>
 
@@ -255,7 +256,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                                 ₦{heroTour.latePricingN}
                             </span>
                                 ---
-                            <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>
+                            {isRtl ? <span className="flex text- font-extrabold text-forestGreen">{heroTour.latePricingR}<SaudiRiyal className='size-4'/></span> : <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>}
                         </div>
                     </div>
 
@@ -269,7 +270,8 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                                 ₦{heroTour.familyPricingN}
                             </span>
                                 ---
-                            <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.familyPricingR}</span>
+                            {/* <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.familyPricingR}</span> */}
+                            {isRtl ? <span className="flex text- font-extrabold text-forestGreen">{heroTour.familyPricingR}<SaudiRiyal className='size-4'/></span> : <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>}
                         </div>
 
                     </div>
@@ -284,7 +286,8 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                                 ₦{heroTour.soloRoomN}
                             </span>
                                 ---
-                            <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.soloRoomR}</span>
+                            {/* <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.soloRoomR}</span> */}
+                            {isRtl ? <span className="flex text- font-extrabold text-forestGreen">{heroTour.soloRoomR}<SaudiRiyal className='size-4'/></span> : <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>}
                         </div>
                     </div>
 

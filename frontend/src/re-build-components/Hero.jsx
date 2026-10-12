@@ -24,7 +24,7 @@ export default function Hero({ isRtl, fadeIn, staggerContainer }) {
     latePricingN: '220,000',
     familyPricingN: '360,000',
     soloRoomN: '235,000',
-    earlyPricingR: '550',
+    earlyPricingR: `550`,
     latePricingR: '622',
     familyPricingR: '1,020',
     soloRoomR: '665',
