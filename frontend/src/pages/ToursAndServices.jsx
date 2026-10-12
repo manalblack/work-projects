@@ -25,46 +25,55 @@ import {
   User,
   PlaneTakeoff,
   Sparkles,
-  Link
+  Link,
+  FaceGrinning,
+  TreePine
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
 import { Link as NavLink } from 'react-router-dom';
 import { useLanguage } from '../hooks/LanguageContext';
+import TourInfoModal from '../re-build-components/TourInfoModal';
+
 
 const EXPEDITIONS = [
   {
     id: 'exp-1',
     corridor: 'south-south',
     corridorName: {
-      en: 'Cross River State • 6 Days / 5 Nights',
+      en: 'Bauchi State • 4 Days / 3 Nights',
       ar: 'ولاية كروس ريفر • 6 أيام / 5 ليالٍ'
     },
     subTitle: {
-      en: 'Highland Bioclimatic Ridge',
-      ar: 'سلسلة المرتفعات البيئية المناخية'
+      en: 'Yankari Natural Sanctuary',
+      ar: 'محمية يانكاري الطبيعية'
     },
     title: {
-      en: 'Obudu Mountain Cloud Forest & Aerial Sanctuary',
-      ar: 'غابة أوبودو الجبلية السحابية والمحمية الجوية'
+      en: 'Yankari is Natural sanctuary for more than 20 different animals',
+      ar: 'يانكاري محمية طبيعية تضم أكثر من 20 نوعًا من الحيوانات'
     },
+    // description: {
+    //   en: 'Ascend above the cloud line to private Alpine-style villas. Includes bespoke botanical canopy walks, private fire pits under sub-tropical stars, and Michelin-trained chef sourcing local mountain organic produce.',
+    //   ar: 'اصعد فوق مستوى السحاب إلى فيلات خاصة على الطراز الألبي. تشمل جولات المسار الشجري النباتي المخصص، وحفر النار الخاصة تحت النجوم شبه الاستوائية، وطهاة مدربين بمستوى ميشلان يستوردون المنتجات الجبلية العضوية المحلية.'
+    // },
     description: {
-      en: 'Ascend above the cloud line to private Alpine-style villas. Includes bespoke botanical canopy walks, private fire pits under sub-tropical stars, and Michelin-trained chef sourcing local mountain organic produce.',
-      ar: 'اصعد فوق مستوى السحاب إلى فيلات خاصة على الطراز الألبي. تشمل جولات المسار الشجري النباتي المخصص، وحفر النار الخاصة تحت النجوم شبه الاستوائية، وطهاة مدربين بمستوى ميشلان يستوردون المنتجات الجبلية العضوية المحلية.'
+      en: 'Set out on guided safari game drives across Yankari\'s open savanna to spot elephants, baboons, buffalo, and antelope in their natural habitat. Then unwind in the clear, naturally warm waters of Wikki Warm Spring and explore the ancient Marshall Caves.',
+      ar: 'انطلق في رحلات سفاري بصحبة مرشدين عبر سهول السافانا المفتوحة في يانكاري لمشاهدة الأفيال والبابون والجاموس والظباء في بيئتها الطبيعية. ثم استرخِ في مياه ينابيع ويكي الدافئة الصافية، واستكشف كهوف مارشال القديمة.'
     },
     tag: {
-      en: 'Private Helicopter Transfer',
+      en: 'Visit animals in their habitat',
       ar: 'نقل خاص بالطائرة المروحية'
     },
     capacity: {
       en: 'Max 6 Guests',
       ar: '6 ضيوف كحد أقصى'
     },
-    price: '$7,200',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC0FfR2Av9SlVjCx3MDrgHTUyhM54uUdnSIDVWmF-F1GFrMJ35_UcDp4TXz8PhqhT0o_tNCWrAhOGLFe_tc8jOv7BKZISkTOc6pWCjtIEGE-GMjLEqhSP6_YStOoGEir3kotptXZQafcB6rEJ0kqNERz3iro4oqKfyhbQRe_aDC_ZkSzcvelD8URLijeEHqXyOb6IKBnQ7gIg54_u2ck3gKgMvED9phiz6eHS7j7hyRDa4jxW_vxvy16A',
+    price: '₦220,200',
+    comingSoon: false,
+    image: 'yankari-cover.png',
     features: [
-      { en: 'AgustaWestland AW139 Direct Helipad Access', ar: 'وصول مباشر إلى مهبط الطائرات العمودية' },
-      { en: 'Dedicated Close Protection Team & Attache', ar: 'فريق حماية خاصة ومرافق مخصص' },
-      { en: 'Intimate Canopy Cable Car Buyout', ar: 'حجز حصري للعربة السلكية فوق السحاب' }
+      { en: 'Round trip (transportation)', ar: "رحلة ذهاب و عودة" },
+      { en: 'Safari trip', ar: 'رحلة سفاري' },
+      { en: 'And much more activities', ar: 'و الكثير من الفعاليات' }
     ]
   },
   {
@@ -95,6 +104,7 @@ const EXPEDITIONS = [
       ar: 'حتى 8 ضيوف'
     },
     price: '$5,400',
+    comingSoon: true,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnnsnuHLXqUWP2LYLQKEhjfq8kleaWyddtdHmZfysZ2Jpme_LkeP-_wmTfA--FSU8G0MYwgLfASwkrJgsrSreDC5zxnXUbj6BdUm8TOsnMmFNgj5jsMeNpT1iUqBM_qq50XCxvi_wmwqNYu3YD12xVW2yT0ZWVVSdmNNuSqE0hbV8_Dp69mL-n68vnc0VsziLsDq2VVLx1WtiLz9RerRNnz82ZQyhqPvxmlnDwe2AiCQgqFTrBoTTmaA',
     features: [
       { en: 'Exclusive Estate Buyout with Private Beach', ar: 'حجز حصري للعقار مع شاطئ خاص' },
@@ -130,6 +140,7 @@ const EXPEDITIONS = [
       ar: 'حتى 10 ضيوف'
     },
     price: '$6,800',
+    comingSoon: true,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDIetlhJFA-4M2RmDFEIjQwtzf6xsHIGsbxo4uyWJrW3QF_LmPTEUI6mshQDbWmaXN2F9olsDAyhnLVVqvV_Ud0GEwCkGqx8OMtQV74ehPEo6H28qbXjAt7L3y71zo6-wD6pXpNOqjAHC8pB6KN5jlwGMTOcEsUhY9yL_oC7cB2kBOhAFEtYZZFassWXtaevp4OaQr9WeNWurJGorq2y917qHmTZ3d5_xr-LZvpcHmyqgHV7ctxvkHSWg',
     features: [
       { en: 'Charter Turboprop Direct Airstrip Landing', ar: 'هبوط مباشر بطائرة مروحية خاصة على المدرج' },
@@ -165,6 +176,7 @@ const EXPEDITIONS = [
       ar: 'وفود وعائلات'
     },
     price: '$6,100',
+    comingSoon: true,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDu6QlcM5y6nX_4TZhjLw-153eRLM3GfI-yPSC--dgTqR69twHivcIWVpvYhe2ducbfMyq26rAiKVGfv5vrJSzUnA8YdClAel-rcb8Ob0PNLPIkCbSuirYFbvzO4hetd54K7GJHkdNwU16bz_fOwGTsKIJduTVUpPco1lGZGKtLavtgLgtjwbDqhYajk5Lsi728hSVYxbwQNtlhdAiU3g5CCz5NjYL49Ft9W_KwlnQQ0C9LIbpu-Oy5XQ',
     features: [
       { en: 'Private Off-Market Colonial Estate Residency', ar: 'إقامة في قصر استعماري خاص غير معروض بالسوق' },
@@ -180,21 +192,53 @@ export default function ToursAndServices() {
   const [activeCorridor, setActiveCorridor] = useState('all');
   const [dossierModal, setDossierModal] = useState(null);
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
-  // const [currentLang, setCurrentLang] = useState(langKey);
-
-  // const isRtl = currentLang === 'ar';
-
-  // const toggleLanguage = (newLang) => {
-  //   setCurrentLang(newLang);
-  // };
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
+  // Use this fo phase one of the project only.
+  const heroTour = {
+    title: isRtl ? 'محمية يانكاري للحياة البرية' : 'Yankari Sanctuary',
+    startDate: isRtl ? '5 ديسمبر 2026' : 'DEC 5, 2026',
+    endDate: isRtl ? '8 ديسمبر 2026' : 'DEC 8, 2026',
+    location: isRtl ? 'ولاية باوشي ، نيجيريا' : 'Bauchi State, Nigeria',
+    price: '$2,450',
+    earlyPricingN: '190,000',
+    latePricingN: '220,000',
+    familyPricingN: '360,000',
+    soloRoomN: '235,000',
+    earlyPricingR: `550`,
+    latePricingR: '622',
+    familyPricingR: '1,020',
+    soloRoomR: '665',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+    description: isRtl 
+      ? 'عِش مغامرة استثنائية في قلب الطبيعة النيجيرية مع سفاري لمشاهدة الحياة البرية، استكشاف المناظر الطبيعية، والاسترخاء في مياه Wikki Warm Spring الدافئة. رحلة تجمع بين المغامرة، الطبيعة، والاستكشاف في واحدة من أبرز الوجهات السياحية في نيجيريا.'
+      : "Live an extraordinary adventure in the heart of Nigeria's natural beauty with a wildlife safari, scenic exploration, and relaxation in the warm waters of Wikki Warm Spring. A journey that blends adventure, nature, and discovery at one of Nigeria's top tourist destinations.",
+    highlights: [
+       isRtl ? 'ذهاب وعودة ' : 'Round trip (transportation)',
+      isRtl ? 'حفلة شواء و تعارف' : 'Barbecue and get-to-know-each-other field/area',
+      isRtl ? 'رحلة سفاري ' : 'Safari trip',
+      isRtl ? 'زيارة متحف يانكري ' : 'Visit to the Yankari Museum',
+      isRtl ? 'السباحة والاسترخاء في ينبوع ويكي الدافي' : 'Swimming and relaxing in the warm Wikki Spring',
+      isRtl ? 'زيارة الكهوف الجبلية ' : 'Visit to the mountain caves',
+      isRtl ? 'وجبة واحدة يومياً ' : 'One meal a day',
+      isRtl ? 'غرفة مشتركة كهرباء 24 ساعة ومكيفه' : 'Shared room with 24-hour electricity and air conditioning',
+      isRtl ? 'نشاطات جماعية' : 'Group activities'
+    ]
+  };
   
   const filteredExpeditions = activeCorridor === 'all'
     ? EXPEDITIONS
     : EXPEDITIONS.filter((exp) => exp.corridor === activeCorridor);
 
+
+
+    const handleInfoModal = () => {
+      setIsModalOpen(true)
+    }
+
+    // TODO: fix the zoho mail for this function to work
   const handleInquirySubmit = (e) => {
     e.preventDefault();
     setInquirySubmitted(true);
@@ -202,6 +246,8 @@ export default function ToursAndServices() {
       setInquirySubmitted(false);
     }, 5000);
   };
+
+
 
 
   return (
@@ -225,62 +271,63 @@ export default function ToursAndServices() {
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gold tracking-tight leading-[1.1]">
                 {isRtl ? (
-                  <>استكشافات نيجيرية فاخرة و<span className="font-serif italic font-normal text-white">رحلات سيادية</span></>
+                  <>جولات طبيعية و<span className="font-serif italic font-normal text-white"> فعاليات </span></>
                 ) : (
-                  <>Bespoke Nigerian Expeditions & <span className="font-serif italic font-normal text-white">Sovereign Journeys</span></>
+                  <>Nature Tours & <span className="font-serif italic font-normal text-white">Events</span></>
                 )}
               </h1>
 
               <p className="font-serif text-xl sm:text-2xl text-gold italic font-normal mt-4">
-                {isRtl ? 'هندسة نيجيريا غير المكتشفة' : 'The Architecture of Uncharted Nigeria'}
+                 {isRtl ? 'اكتشف جمال نيجيريا الطبيعي' : "Discover Nigeria's Natural Beauty"}
               </p>
 
               <p className="mt-4 text-base sm:text-lg text-white leading-relaxed max-w-2xl font-normal">
-                {isRtl 
-                  ? 'تتجاوز تروفيستا الرحلات التجارية التقليدية — حيث نصمم تجارب فاخرة وخاصة وآمنة عبر أجمل النظم البيئية في نيجيريا مع كونسيرج مخصص، وتسهيلات طيران دبلوماسية، وفرق حماية مقربة موثوقة.'
-                  : 'Troviesta transcends standardized commercial travel — architecting secure, private-charter, ultra-luxury immersions across Nigeria’s most spectacular ecosystems with dedicated concierges, diplomatic airfield clearances, and vetted close-protection details.'}
+                
+                {isRtl
+                  ? 'تنظم تروفيستا رحلات مع مرشدين إلى أجمل المتنزهات الوطنية والشلالات ومحميات الحياة البرية في نيجيريا، وتدير الفعاليات من البداية إلى النهاية. انضم إلى إحدى رحلاتنا أو دعنا نخطط فعاليتك القادمة.'
+                  : "Troviesta runs guided trips to Nigeria's best national parks, waterfalls, and wildlife sanctuaries, and plans events from start to finish. Join one of our trips or let us plan your next event."}
               </p>
 
               {/* Quick Capability Badges */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 mt-8 border-t border-slate-200/80">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
-                    <Plane className="w-5 h-5 text-gold" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                      {isRtl ? 'طيران خاص' : 'Private Aviation'}
-                    </h4>
-                    <p className="text-[12px] text-slate-300">
-                      {isRtl ? 'طائرات ومراكز طيران' : 'AgustaWestland & Jet Hubs'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
                     <ShieldCheck className="w-5 h-5 text-gold" />
                   </div>
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                      {isRtl ? 'سرية مضمونة' : 'Guaranteed Discretion'}
+                      {isRtl ? 'أمن' : 'Security'}
                     </h4>
                     <p className="text-[12px] text-slate-300">
-                      {isRtl ? 'اتفاقيات عدم إفصاح ثنائية' : 'Bilateral NDAs Enforced'}
+                      {isRtl ? 'أمن عالي في الطريق' : 'High Security along the way'}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
-                    <Award className="w-5 h-5 text-gold" />
+                    <FaceGrinning className="w-5 h-5 text-gold" />
                   </div>
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                      {isRtl ? 'وصول سيادي' : 'Sovereign Access'}
+                      {isRtl ? 'رضى %100' : '100% Staisfaction'}
                     </h4>
                     <p className="text-[12px] text-slate-300">
-                      {isRtl ? 'حجز فيلات خاصة حصرية' : 'Off-Market Villa Buyouts'}
+                      {isRtl ? 'الرضى مضمون' : 'Guranteed Satisfiction'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white border border-gold flex items-center justify-center shrink-0">
+                    <TreePine className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+                      {isRtl ? 'طبيعة' : 'Nature'}
+                    </h4>
+                    <p className="text-[12px] text-slate-300">
+                      {isRtl ? 'بيئة طبيعية' : 'Natural habitats'}
                     </p>
                   </div>
                 </div>
@@ -291,7 +338,7 @@ export default function ToursAndServices() {
             <div className="lg:col-span-5 relative">
               <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-slate-900 border-4 border-white group">
                 <img 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0FfR2Av9SlVjCx3MDrgHTUyhM54uUdnSIDVWmF-F1GFrMJ35_UcDp4TXz8PhqhT0o_tNCWrAhOGLFe_tc8jOv7BKZISkTOc6pWCjtIEGE-GMjLEqhSP6_YStOoGEir3kotptXZQafcB6rEJ0kqNERz3iro4oqKfyhbQRe_aDC_ZkSzcvelD8URLijeEHqXyOb6IKBnQ7gIg54_u2ck3gKgMvED9phiz6eHS7j7hyRDa4jxW_vxvy16A" 
+                  src="/yankari-huts.png" 
                   alt="Obudu Mountain Plateau" 
                   className="w-full h-[480px] object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
                 />
@@ -299,16 +346,16 @@ export default function ToursAndServices() {
                 <div className="absolute bottom-6 left-6 right-6 text-white">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold uppercase tracking-wider mb-2">
                     <Mountain className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>{isRtl ? 'محمية مرتفعات أوبودو الجوية' : 'Obudu Highlands Aerial Sanctuary'}</span>
+                    <span>{isRtl ? 'محمية يانكاري الطبيعية' : 'Yankari natural Sanctuary'}</span>
                   </div>
                   <h3 className="font-serif text-2xl font-normal text-white">
-                    {isRtl ? 'سلسلة مرتفعات كروس ريفر البيئية' : 'Cross River Bioclimatic Ridge'}
+                    {isRtl ? 'أكواخ داخل محمية يانكاري الطبيعية' : 'Huts inside Yankari natural sanctuary'}
                   </h3>
-                  <p className="text-xs text-slate-300 mt-1">
+                  {/* <p className="text-xs text-slate-300 mt-1">
                     {isRtl 
                       ? 'ملاذ سيادي مرتفع مع مهبط طائرات مروحية خاص وجناح بين الغابات السحابية.' 
                       : 'High-altitude sovereign enclave with private helicopter landing & cloud forest suites.'}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -330,15 +377,14 @@ export default function ToursAndServices() {
               {isRtl ? 'مسارات نيجيرية مصممة خصيصًا' : 'Handcrafted Nigerian Itineraries'}
             </h2>
             <p className="text-sm text-white max-w-xl mt-2 leading-relaxed">
-              {isRtl 
-                ? 'يتم إدارة كل مسار كإنتاج فريد ومخصص — يجمع بين طيران المستأجر الخاص، والمحميات الطبيعية المحمية، وفرق الطهي الخاصة المتميزة.' 
-                : 'Every itinerary is managed as an unrepeatable bespoke production — combining civil aviation charters, protected nature reserves, and Michelin-tier private culinary brigades.'}
+              {isRtl ? 'نخطط كل رحلة بعناية، من الاستقبال إلى العودة، مع زيارات إلى المحميات الطبيعية، وأنشطة جماعية، ووجبات محلية لذيذة.'
+              : 'We plan every trip with care, from pickup to drop-off, with visits to nature reserves, group activities, and tasty local meals.'}
             </p>
           </div>
         </div>
 
         {/* Region Filter */}
-        <div className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm mb-12">
+        {/* <div className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm mb-12">
           <div className="text-xs font-bold uppercase tracking-wider text-forestGreen mb-3 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <Compass className="w-4 h-4 text-gold" />
@@ -379,93 +425,106 @@ export default function ToursAndServices() {
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         {/* Expeditions Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {filteredExpeditions.map((exp) => (
             <div 
               key={exp.id}
-              className="bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="relative bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
-              <div>
-                <div className="relative w-full h-64 overflow-hidden bg-slate-900">
-                  <img 
-                    src={exp.image} 
-                    alt={exp.title[lang]} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full bg-white backdrop-blur-md text-forestGreen font-bold text-xs shadow-sm flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-gold" />
-                      {exp.corridorName[lang]}
-                    </span>
+              {/* ========================================================= */}
+              {/* FULL-CARD BLUR OVERLAY FOR COMING SOON EXPEDITIONS        */}
+              {/* ========================================================= */}
+              {exp.comingSoon && (
+                <div className="absolute inset-0 z-30 bg-black/45 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+                  <div className="bg-neutral-900/90 border border-amber-400/40 text-amber-400 font-extrabold text-sm uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl backdrop-blur-xl">
+                    {isRtl ? 'قريباً' : 'Coming Soon'}
                   </div>
-
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
-                    <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
-                      <PlaneTakeoff className="w-3.5 h-3.5 text-gold" />
-                      {exp.tag[lang]}
-                    </span>
-                    <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm">
-                      {exp.capacity[lang]}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center justify-between text-xs text-slate-500 mb-2 font-semibold">
-                    <span className="text-forestGreen uppercase tracking-wider">{exp.subTitle[lang]}</span>
-                    <span>{isRtl ? 'ملاذ خاص' : 'Private Enclave'}</span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-gold group-hover:text-gol/80 transition-colors leading-snug font-serif">
-                    {exp.title[lang]}
-                  </h3>
-
-                  <p className="mt-3 text-slate-600 text-sm leading-relaxed">
-                    {exp.description[lang]}
+                  <p className="text-xs font-semibold text-neutral-300 mt-3 max-w-[220px]">
+                    {isRtl ? 'هذه الرحلة ستكون متاحة قريباً' : 'This expedition route will be available soon'}
                   </p>
+                </div>
+              )}
 
-                  <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
-                    {exp.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-gold shrink-0" />
-                        <span>{feat[lang]}</span>
-                      </div>
-                    ))}
+              {/* ========================================================= */}
+              {/* CARD CONTENT (BLURRED OUT WHEN COMING SOON IS TRUE)       */}
+              {/* ========================================================= */}
+              <div className={`flex flex-col justify-between h-full ${exp.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
+                <div>
+                  <div className="relative w-full md:h-64 h-75 overflow-hidden bg-slate-900">
+                    <img 
+                      src={exp.image} 
+                      alt={exp.title[lang]} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+                    
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 rounded-full bg-white backdrop-blur-md text-forestGreen font-bold text-xs shadow-sm flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-gold" />
+                        {exp.corridorName[lang]}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
+                      <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
+                        <PlaneTakeoff className="w-3.5 h-3.5 text-gold" />
+                        {exp.tag[lang]}
+                      </span>
+                      <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm">
+                        {exp.capacity[lang]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <div className="flex items-center justify-between text-xs text-slate-500 mb-2 font-semibold">
+                      <span className="text-forestGreen uppercase tracking-wider">{exp.subTitle[lang]}</span>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gold group-hover:text-gold/80 transition-colors leading-snug font-serif">
+                      {exp.title[lang]}
+                    </h3>
+
+                    <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                      {exp.description[lang]}
+                    </p>
+
+                    <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
+                      {exp.features.map((feat, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-gold shrink-0" />
+                          <span>{feat[lang]}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                <div>
-                  <span className="text-[11px] uppercase tracking-wider text-slate-400 block font-semibold">
-                    {isRtl ? 'التكلفة' : 'Cost'}
-                  </span>
-                  <span className="font-extrabold text-lg text-slate-900">
-                    {isRtl ? `ابتداءً من ${exp.price}` : `From ${exp.price}`}
-                  </span>
-                  <span className="text-xs text-slate-500">{isRtl ? ' / ضيف' : ' / guest'}</span>
-                </div>
+                <div className="p-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] uppercase tracking-wider text-slate-400 block font-semibold">
+                      {isRtl ? 'التكلفة' : 'Cost'}
+                    </span>
+                    <span className="font-extrabold text-md text-slate-900">
+                      {isRtl ? `ابتداءً من ${exp.price}` : `From ${exp.price}`}
+                    </span>
+                    <span className="text-xs text-slate-500">{isRtl ? ' / ضيف' : ' / guest'}</span>
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <NavLink
-                    to='/contact'
-                    className="px-5 py-2.5 rounded-full bg-forestGreen text-white hover:bg-white hover:text-forestGreen font-bold text-xs tracking-wide transition-all duration-300 border border-forestGreen shadow-md"
-                  >
-                    {isRtl ? 'استفسر الآن' : 'Inquire'}
-                  </NavLink>
-                  <button
-                    type="button"
-                    onClick={() => setDossierModal(exp)}
-                    className="p-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200"
-                    title={isRtl ? 'عرض ملف المسار' : 'View Itinerary'}
-                  >
-                    <FileText className="w-4 h-4 text-gold" />
-                  </button>
+                  <div className="flex flex-col items-center gap-4">
+                    <button onClick={handleInfoModal}
+                      className='text-sm bg-forestGreen text-white px-3.5 font-semibold py-0.5 rounded-full border border-forestGreen hover:bg-white hover:text-forestGreen active:scale-85 transition-all duration-300 ease-in-out'>
+                      {isRtl ? 'التفاصيل' : 'Details'}
+                    </button>
+                    <button className='text-sm bg-forestGreen text-white px-3.5 font-semibold py-0.5 rounded-full border border-forestGreen hover:bg-white hover:text-forestGreen active:scale-85 transition-all duration-300 ease-in-out'>
+                      <NavLink>
+                          {isRtl ? 'التواصل' : 'Contact'}
+                      </NavLink>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -485,17 +544,17 @@ export default function ToursAndServices() {
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forestGreen border border-white text-white font-bold text-xs uppercase tracking-wider">
                 <Headphones className="w-4 h-4 text-gold" />
-                <span>{isRtl ? 'مكتب الكونسيرج الخاص' : 'PRIVATE CONCIERGE DESK'}</span>
+                <span>{isRtl ? 'فريق الرحلات والفعاليات' : 'TOURS & EVENTS TEAM'}</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight font-serif text-gold">
-                {isRtl ? 'ابتدئ رحلتك الاستكشافية المخصصة' : 'Initiate Your Bespoke Expedition'}
+                {isRtl ? 'خطط لرحلتك أو فعاليتك في نيجيريا' : 'Plan Your Trip or Event in Nigeria'}
               </h2>
 
               <p className="text-white text-sm sm:text-base leading-relaxed">
                 {isRtl 
-                  ? 'يتولى قسم الاستكشافات في تروفيستا تصميم وتنفيذ الرحلات للوفود الدبلوماسية، والعائلات، والباحثين عن الاستجمام السيادي بكل سرية ودقة.' 
-                  : 'Troviesta Expeditions division designs and executes tailored travel protocols for diplomatic delegations, sovereign families, and private collectors with utmost confidentiality.'}
+                  ? 'تنظم تروفيستا رحلات سياحية وفعاليات في أنحاء نيجيريا للعائلات والمجموعات والشركات. أخبرنا بما تفكر فيه، وسنتولى تخطيط التفاصيل نيابة عنك.' 
+                  : 'Troviesta organizes tours and events across Nigeria for families, groups, and companies. Tell us what you have in mind and we will plan the details for you.'}
               </p>
 
               <div className="space-y-4 pt-4 border-t border-slate-800">
@@ -503,10 +562,10 @@ export default function ToursAndServices() {
                   <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-sm font-bold text-white">
-                      {isRtl ? 'بروتوكول السرية التامة' : 'Strict Confidentiality Protocol'}
+                      {isRtl ? 'خصوصية بياناتك محفوظة' : 'Your Details Stay Private'}
                     </h4>
                     <p className="text-xs text-slate-400">
-                      {isRtl ? 'يتم توقيع اتفاقية عدم إفصاح قبل مشاركة تفاصيل المسار النهائي.' : 'Bilateral Non-Disclosure Agreements enforced prior to sharing master flight manifests.'}
+                      {isRtl ? 'نحافظ على سرية معلوماتك الشخصية وخطط سفرك.' : 'We keep your personal information and travel plans private.'}
                     </p>
                   </div>
                 </div>
@@ -515,10 +574,10 @@ export default function ToursAndServices() {
                   <Plane className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-sm font-bold text-white">
-                      {isRtl ? 'تراخيص الطيران والدبلوماسية' : 'Diplomatic Aviation Clearances'}
+                      {isRtl ? 'مساعدة في السفر والتنقل' : 'Help With Travel and Transport'}
                     </h4>
                     <p className="text-xs text-slate-400">
-                      {isRtl ? 'تسهيلات سريعة للمدارج والمطارات والتصاريح الأمنية.' : 'Expedited runway permits, tarmac transfers, and regional flight clearances.'}
+                      {isRtl ? 'نساعدك في ترتيب المواصلات والاستقبال من المطار وتصاريح دخول المحميات.' : 'We help arrange transport, airport pickup, and park entry for your trip.'}
                     </p>
                   </div>
                 </div>
@@ -533,12 +592,12 @@ export default function ToursAndServices() {
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h3 className="text-xl font-bold text-white">
-                    {isRtl ? 'تم استلام طلبك بنجاح' : 'Inquiry Received Successfully'}
+                    {isRtl ? 'تم استلام طلبك' : 'Request Received'}
                   </h3>
                   <p className="text-sm text-slate-300 max-w-md mx-auto">
                     {isRtl 
-                      ? 'سيقوم كبير مرافقي الكونسيرج بالتواصل معكم في غضون ساعتين لمعالجة تفاصيل الطلب.' 
-                      : 'Our Senior Expedition Concierge will contact you within 2 hours to review your requirements under NDA.'}
+                      ? 'شكرًا لك! سيتواصل معك فريقنا خلال ساعتين لمناقشة رحلتك أو فعاليتك.' 
+                      : 'Thank you! Our team will contact you within 2 hours to talk about your trip or event.'}
                   </p>
                 </div>
               ) : (
@@ -554,7 +613,7 @@ export default function ToursAndServices() {
                         required
                         type="text" 
                         placeholder={isRtl ? 'مثال: عبد الله المنصور' : 'e.g. Lord Alexander Vance'}
-                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400 text-sm focus:outline-none focus:border-[#0ea5e9]"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400 text-sm focus:outline-none focus:border-gold"
                       />
                     </div>
 
@@ -566,13 +625,13 @@ export default function ToursAndServices() {
                         required
                         type="email" 
                         placeholder="vance@office.com"
-                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400   text-sm focus:outline-none focus:border-[#0ea5e9]"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400   text-sm focus:outline-none focus:border-gold"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
+                    {/* <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'الممر أو الفعالية المطلوبة' : 'Preferred Sovereign Corridor'}
                       </label>
@@ -582,7 +641,7 @@ export default function ToursAndServices() {
                         <option value="yankari">{isRtl ? 'سفاري يانكاري وينابيع ويكي' : 'Yankari Savanna & Wikki Springs'}</option>
                         <option value="jos">{isRtl ? 'تلال شيري وهضبة جوس' : 'Shere Hills & Jos Plateau'}</option>
                       </select>
-                    </div>
+                    </div> */}
 
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
@@ -593,25 +652,25 @@ export default function ToursAndServices() {
                         min="1" 
                         max="30"
                         defaultValue="4"
-                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen text-sm focus:outline-none focus:border-forestGreen"
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen text-sm focus:outline-none focus:border-gold"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
-                      {isRtl ? 'متطلبات خاصة أو ترتيبات أمنية' : 'Special Security or Dietary Directives'}
+                      {isRtl ? 'طلبات خاصة' : 'Special Requests'}
                     </label>
                     <textarea 
                       rows="3"
-                      placeholder={isRtl ? 'أدخل أي متطلبات خاصة بالطيران أو الأمن أو الوجبات...' : 'Specify helicopter landing preferences, close-protection level, or private chef directives...'}
-                      className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder:text-sm focus:outline-none focus:border-forestGreen"
+                      placeholder={isRtl ? 'أخبرنا بأي احتياجات غذائية أو نوع الفعالية أو أي تفاصيل أخرى نود معرفتها...' : 'Tell us about food needs, event type, or anything else we should know...'}
+                      className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder:text-sm focus:outline-none focus:border-gold"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-full border border-forestGreen bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-sm tracking-wide transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer mt-2"
+                    className="w-full py-4 rounded-full border border-forestGreen bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-sm tracking-wide shadow-lg flex items-center justify-center gap-2 cursor-pointer mt-2 active:scale-85 transition-all duration-300 ease-in-out"
                   >
                     <span>{isRtl ? 'إرسال الطلب' : 'Submit Request'}</span>
                     <Send className="w-4 h-4" />
@@ -706,7 +765,14 @@ export default function ToursAndServices() {
           </div>
         )}
       </AnimatePresence>
-
+      
+      {isModalOpen && 
+      <TourInfoModal  
+        heroTour={heroTour}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        isRtl={isRtl} />
+      }
       </section>
 
     </Layout>
