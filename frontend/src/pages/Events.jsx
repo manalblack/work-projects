@@ -17,24 +17,25 @@ import PreviousEventsSection from '../re-build-components/PreviousEvntsSection';
 const EVENTS_DATA = {
   en: [
     {
-      id: 'gulf-africa-bilateral',
-      title: 'Gulf-Africa Bilateral Corridor Conference',
-      venue: 'King Abdullah Financial District',
+      id: 'red-area-event',
+      title: 'Red Area ',
+      venue: 'Murtala Mohammad Square',
       accessType: 'By Invitation & Sovereign Pass',
-      description: 'Focusing on sovereign logistics corridors, agricultural supply chain syndications, and clean energy pacts between GCC conglomerates and ECOWAS enterprise champions.',
-      region: 'saudi',
-      regionName: 'Riyadh, KSA',
-      flag: '🇸🇦',
+      description: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers',
+      region: 'Nigeria',
+      regionName: 'Nigeria, Kaduna',
+      flag: '🇳🇬',
       timeline: 'upcoming',
-      date: 'April 10–12, 2026',
+      date: 'NOV 29th, 2026',
       capacity: '500 Accredited Leaders',
       statusText: 'Tier 1 Tickets Available',
       statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-300',
       statusDot: 'bg-emerald-500',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAcbLF11Hl8-92_-IQS8Z1KJbGiNL0z88Mv4PyPYIJJeCW_2D7T8_2RC6okJdOjLc4W0wm1eaSbn9SdkhEF7Nfd6733GFfsMra3W5RiRQ88DTE0D2xAGrlpQ_cyw2WsLT-hFF-nnT09oeTixOkL4YGowNAgWi75ztERBpyIL4WmXlWarG2_zTPQcaduxnvs8PuIft6uNsIklTAL9FoQfrrR9wB3ctKG8eC3sPOxRtfmdPfqyUrTVvNZTw',
+      image: '/red-area-event.png',
       actionText: 'Access Ticket Store →',
       secondaryActionText: 'Event Dossier & Protocol',
       actionType: 'primary',
+      comingSoon: false,
     },
     {
       id: 'eko-atlantic-climate',
@@ -55,6 +56,7 @@ const EVENTS_DATA = {
       actionText: 'Join Official Waitlist →',
       secondaryActionText: 'Event Dossier & Protocol',
       actionType: 'dark',
+      comingSoon: true,
     },
     {
       id: 'diriyah-heritage-philanthropy',
@@ -75,6 +77,7 @@ const EVENTS_DATA = {
       actionText: 'View Retrospective Chronicle →',
       secondaryActionText: 'Review Archival Film & Gallery',
       actionType: 'past',
+      comingSoon: true,
     },
     {
       id: 'obudu-diplomatic-retreat',
@@ -95,28 +98,30 @@ const EVENTS_DATA = {
       actionText: 'View Retrospective Chronicle →',
       secondaryActionText: 'Review Archival Film & Gallery',
       actionType: 'past',
+      comingSoon: true,
     },
   ],
   ar: [
     {
-      id: 'gulf-africa-bilateral',
-      title: 'مؤتمر الممر الثنائي بين الخليج وإفريقيا',
-      venue: 'مركز الملك عبد الله المالي',
+      id: 'red-area-event',
+      title: 'المنطقة الحمراء',
+      venue: 'مركز مورتلا محمد',
       accessType: 'بدعوة خاصة وتصريح سيادي',
-      description: 'التركيز على الممرات اللوجستية السيادية، وتكتلات سلاسل الإمداد الزراعية، واتفاقيات الطاقة النظيفة بين تكتلات دول مجلس التعاون الخليجي ورواد الأعمال في إيكواس.',
-      region: 'saudi',
-      regionName: 'الرياض، السعودية',
+      description: 'يوم استثنائي مليء بالإضاءة الحمراء والموسيقى والرقص، بحضور فنانين ومؤثرين على مواقع التواصل الاجتماعي',
+      region: 'Nigeria',
+      regionName: 'كادونا, نيجيريا',
       flag: '🇸🇦',
       timeline: 'upcoming',
-      date: '١٠ - ١٢ أبريل ٢٠٢٦',
+      date: '2026 نوفمبر 29',
       capacity: '٥٠٠ قائد معتمد',
       statusText: 'تذاكر الفئة الأولى متاحة',
       statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-300',
       statusDot: 'bg-emerald-500',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAcbLF11Hl8-92_-IQS8Z1KJbGiNL0z88Mv4PyPYIJJeCW_2D7T8_2RC6okJdOjLc4W0wm1eaSbn9SdkhEF7Nfd6733GFfsMra3W5RiRQ88DTE0D2xAGrlpQ_cyw2WsLT-hFF-nnT09oeTixOkL4YGowNAgWi75ztERBpyIL4WmXlWarG2_zTPQcaduxnvs8PuIft6uNsIklTAL9FoQfrrR9wB3ctKG8eC3sPOxRtfmdPfqyUrTVvNZTw',
+      image: '/red-area-event.png',
       actionText: '← شباك التذاكر',
       secondaryActionText: 'ملف الفعالية والبروتوكول',
       actionType: 'primary',
+      comingSoon: false,
     },
     {
       id: 'eko-atlantic-climate',
@@ -137,6 +142,7 @@ const EVENTS_DATA = {
       actionText: '← الانضمام لقائمة الانتظار',
       secondaryActionText: 'ملف الفعالية والبروتوكول',
       actionType: 'dark',
+      comingSoon: true,
     },
     {
       id: 'diriyah-heritage-philanthropy',
@@ -157,6 +163,7 @@ const EVENTS_DATA = {
       actionText: '← عرض الأرشيف التاريخي',
       secondaryActionText: 'المعرض والأرشيف سينمائي',
       actionType: 'past',
+      comingSoon: true,
     },
     {
       id: 'obudu-diplomatic-retreat',
@@ -177,6 +184,7 @@ const EVENTS_DATA = {
       actionText: '← عرض الأرشيف التاريخي',
       secondaryActionText: 'المعرض والأرشيف سينمائي',
       actionType: 'past',
+      comingSoon: true,
     },
   ],
   
@@ -185,8 +193,8 @@ const EVENTS_DATA = {
 // UI Translations map for static interface labels
 const UI_TEXT = {
   en: {
-    heading: 'Sovereign Events & Gatherings',
-    subheading: 'Explore summits, bilateral forums, and private diplomatic retreats.',
+    heading: 'Events & Gatherings',
+    subheading: 'Explore events and gathering',
     allRegions: 'All Regions',
     saudi: '🇸🇦 Saudi Arabia',
     nigeria: '🇳🇬 Nigeria',
@@ -208,7 +216,7 @@ const UI_TEXT = {
     submitBtn: 'Submit Encrypted Request',
   },
   ar: {
-    heading: 'الفعاليات والمؤتمرات السيادية',
+    heading: 'الفعاليات و التجمعات',
     subheading: 'استكشف القمم، والمؤتمرات الثنائية، والملتقيات الدبلوماسية المغلقة.',
     allRegions: 'جميع المناطق',
     saudi: '🇸🇦 المملكة العربية السعودية',
@@ -262,6 +270,7 @@ export default function EventsAndCommissionPage() {
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
   const t = UI_TEXT[lang];
+
   const currentEvents = EVENTS_DATA[lang];
 
   // const isRtl = currentLang === 'ar';
@@ -327,81 +336,89 @@ export default function EventsAndCommissionPage() {
                   <motion.div
                     key={event.id}
                     variants={cardVariants}
-                    whileHover={{ y: -6 }}
+                    whileHover={event.comingSoon ? {} : { y: -6 }}
                     transition={{ duration: 0.2 }}
-                    className="event-card group bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                    className="event-card group relative bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                   >
-                    <div>
-                      {/* Visual Container */}
-                      <div className="relative w-full h-64 overflow-hidden bg-slate-900">
-                        <motion.img
-                          whileHover={{ scale: 1.08 }}
-                          transition={{ duration: 0.6, ease: 'easeOut' }}
-                          alt={event.title}
-                          src={event.image}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
-
-                        <div className="absolute top-4 start-4 flex gap-2">
-                          <span className="md:px-3 px-0.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
-                            <span>{event.flag}</span>
-                            <span>{event.regionName}</span>
-                          </span>
+                    {/* ========================================================= */}
+                    {/* FULL-CARD BLUR OVERLAY FOR COMING SOON EVENTS             */}
+                    {/* ========================================================= */}
+                    {event.comingSoon && (
+                      <div className="absolute inset-0 z-30 bg-black/45 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+                        <div className="bg-neutral-900/90 border border-amber-400/40 text-amber-400 font-extrabold text-sm uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl backdrop-blur-xl">
+                          {isRtl ? 'قريباً' : 'Coming Soon'}
                         </div>
-
-                        <div className="absolute top-4 end-4">
-                          <span className={`md:px-3 px-0.5 py-1 rounded-full border font-bold text-[11px] shadow-sm flex items-center gap-1.5 ${event.statusColor}`}>
-                            {event.statusDot && <span className={`w-1.5 h-1.5 rounded-full ${event.statusDot}`}></span>}
-                            {event.statusIcon && <span className="material-symbols-outlined text-[13px]">{event.statusIcon}</span>}
-                            <span>{event.statusText}</span>
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-3 start-4 end-4 flex items-center justify-between text-white text-xs">
-                          <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1">
-                            <span>{event.date}</span>
-                          </span>
-                          <span className="font-medium bg-gold/40 px-2.5 py-1 border border-gold rounded-2xl backdrop-blur-sm">
-                            {event.capacity}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="p-6">
-                        <div className="text-xs text-gold uppercase tracking-wider font-semibold mb-2">
-                          {event.venue}
-                        </div>
-                        <h3 className="text-xl font-bold text-forestGreen group-hover: transition-colors leading-snug">
-                          {event.title}
-                        </h3>
-                        <p className="mt-3 text-slate-400 text-sm leading-relaxed">
-                          {event.description}
+                        <p className="text-xs font-semibold text-neutral-300 mt-3 max-w-[220px]">
+                          {isRtl ? 'هذه الفعالية ستكون متاحة قريباً' : 'This event will be available soon'}
                         </p>
                       </div>
-                    </div>
+                    )}
 
-                    {/* Actions */}
-                    {/* TODO: This button should open the event description box / and translate it */}
-                    <div className="p-6 space-y-2.5 border-t bg-pink-00 border-slate-100 pt-5">
-                      <motion.button
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out">
-                        <span className="flex items-center gap-2">
-                          <span>About event</span>
-                        </span>
-                      </motion.button>
+                    {/* ========================================================= */}
+                    {/* CARD CONTENT (BLURRED OUT WHEN COMING SOON IS TRUE)       */}
+                    {/* ========================================================= */}
+                    <div className={`flex flex-col justify-between h-full ${event.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
+                      <div>
+                        {/* Visual Container */}
+                        <div className="relative w-full md:h-75 h-85 overflow-hidden bg-slate-900">
+                          <motion.img
+                            whileHover={event.comingSoon ? {} : { scale: 1.08 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            alt={event.title}
+                            src={event.image}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
 
-                      <button
-                        type="button"
-                        // onClick={() => alert(event.secondaryActionText)}
-                        className="w-full py-2 px-4 rounded-xl bg-white hover:bg-forestGreen hover:text-white text-forestGreen font-semibold text-xs flex items-center justify-between border border-forestGreen transition-all duration-300 ease-in-out">
-                        <span className="flex items-center gap-1.5">
-                          <NavLink to='/contact'>
-                            Book Tickets
-                          </NavLink>
-                        </span>
-                      </button>
+                          <div className="absolute top-4 start-4 flex gap-2">
+                            <span className="md:px-3 px-0.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
+                              <span>{event.flag}</span>
+                              <span>{event.regionName}</span>
+                            </span>
+                          </div>
+
+                          <div className="absolute bottom-3 start-4 end-4 flex items-center justify-between text-white text-xs">
+                            <span className="font-medium bg-black/40 px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1">
+                              <span>{event.date}</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="p-6">
+                          <div className="text-xs text-gold uppercase tracking-wider font-semibold mb-2">
+                            {event.venue}
+                          </div>
+                          <h3 className="text-xl font-bold text-forestGreen transition-colors leading-snug">
+                            {event.title}
+                          </h3>
+                          <p className="mt-3 text-slate-400 text-sm leading-relaxed">
+                            {event.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="p-6 space-y-2.5 border-t border-slate-100 pt-5">
+                        <motion.button
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span>{isRtl ? 'عن الفعالية' : 'About event'}</span>
+                          </span>
+                        </motion.button>
+
+                        <button
+                          type="button"
+                          className="w-full py-2 px-4 rounded-xl bg-white hover:bg-forestGreen hover:text-white text-forestGreen font-semibold text-xs flex items-center justify-between border border-forestGreen transition-all duration-300 ease-in-out cursor-pointer"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <NavLink to="/contact">
+                              {isRtl ? 'احجز تذكرة' : 'Book Tickets'}
+                            </NavLink>
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 ))}

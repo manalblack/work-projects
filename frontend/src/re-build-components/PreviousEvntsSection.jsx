@@ -26,7 +26,7 @@ const PAST_EVENTS = [
     },
     attendees: '1,500+',
     speakersCount: '45',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
+    image: '/black-lights-event1.jpeg',
     summary: {
       en: 'Explored AI integration across emerging African markets with key executive leaders and venture capitalists.',
       ar: 'استكشاف دمج الذكاء الاصطناعي في الأسواق الأفريقية الناشئة مع كبار القادة التنفيذيين المستثمرين.'
@@ -57,7 +57,7 @@ const PAST_EVENTS = [
     },
     attendees: '800+',
     speakersCount: '28',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
+    image: '/black-lights-event2.png',
     summary: {
       en: 'A high-level assembly focused on sustainable eco-resort expansion and heritage tourism investments.',
       ar: 'تجمع رفيع المستوى يركز على توسيع المنتجات البيئية المستدامة واستثمارات السياحة التراثية.'
@@ -88,7 +88,100 @@ const PAST_EVENTS = [
     },
     attendees: '650+',
     speakersCount: '20',
-    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
+    image: '/horror-zone-event.png',
+    summary: {
+      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
+      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+    },
+    keyTakeaways: {
+      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
+      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+    }
+  },
+   {
+    id: 'past-3',
+    year: '2024',
+    title: {
+      en: 'Sovereign Wealth & Infrastructure Gala',
+      ar: 'حفل الثروة السيادية والبنية التحتية'
+    },
+    category: {
+      en: 'Finance',
+      ar: 'مالية'
+    },
+    date: {
+      en: 'Dec 10, 2024',
+      ar: '10 ديسمبر 2024'
+    },
+    location: {
+      en: 'Abuja, Nigeria',
+      ar: 'أبوجا، نيجيريا'
+    },
+    attendees: '650+',
+    speakersCount: '20',
+    image: 'above-cloud-event.png',
+    summary: {
+      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
+      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+    },
+    keyTakeaways: {
+      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
+      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+    }
+  },
+   {
+    id: 'past-3',
+    year: '2024',
+    title: {
+      en: 'Sovereign Wealth & Infrastructure Gala',
+      ar: 'حفل الثروة السيادية والبنية التحتية'
+    },
+    category: {
+      en: 'Finance',
+      ar: 'مالية'
+    },
+    date: {
+      en: 'Dec 10, 2024',
+      ar: '10 ديسمبر 2024'
+    },
+    location: {
+      en: 'Abuja, Nigeria',
+      ar: 'أبوجا، نيجيريا'
+    },
+    attendees: '650+',
+    speakersCount: '20',
+    image: '/epic-day-event.png',
+    summary: {
+      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
+      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+    },
+    keyTakeaways: {
+      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
+      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+    }
+  },
+   {
+    id: 'past-3',
+    year: '2024',
+    title: {
+      en: 'Sovereign Wealth & Infrastructure Gala',
+      ar: 'حفل الثروة السيادية والبنية التحتية'
+    },
+    category: {
+      en: 'Finance',
+      ar: 'مالية'
+    },
+    date: {
+      en: 'Dec 10, 2024',
+      ar: '10 ديسمبر 2024'
+    },
+    location: {
+      en: 'Abuja, Nigeria',
+      ar: 'أبوجا، نيجيريا'
+    },
+    attendees: '650+',
+    speakersCount: '20',
+    image: '/space-event.png',
     summary: {
       en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
       ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
@@ -181,7 +274,7 @@ export default function PreviousEventsSection({ isRtl = false }) {
                 className="group flex flex-col bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-xs hover:shadow-xl transition-all duration-300"
               >
                 {/* Image Container */}
-                <div className="relative h-52 overflow-hidden bg-neutral-200">
+                <div className="relative md:h-70  overflow-hidden bg-neutral-200">
                   <img
                     src={event.image}
                     alt={event.title[isRtl ? 'ar' : 'en']}
