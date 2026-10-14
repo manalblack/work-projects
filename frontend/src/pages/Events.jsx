@@ -5,6 +5,7 @@ import { CircleCheck, Link } from 'lucide-react';
 import {Link as NavLink} from 'react-router-dom'
 import { useLanguage } from '../hooks/LanguageContext';
 import PreviousEventsSection from '../re-build-components/PreviousEvntsSection';
+import EventDetailsModal from '../re-build-components/EventDetailsModal';
 
 /*
 
@@ -190,6 +191,23 @@ const EVENTS_DATA = {
   
 };
 
+ const FEATURED_EVENT = 
+  {
+    id: 'evt-1',
+    title: 'Red Area',
+    venue: 'Murtala Mohammad Square',
+    date: 'NOV 29th, 2026',
+    flag: '🇳🇬',
+    regionName: 'Kaduna, Nigeria',
+    regularPrice: '₦2,000',
+    vipPrice: '₦5,000',
+    stallPrice: '₦15,000', // <--- Added stall price
+    image: '/red-area-event.png',
+    description: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers.',
+    comingSoon: false,
+  }
+  
+
 // UI Translations map for static interface labels
 const UI_TEXT = {
   en: {
@@ -241,23 +259,72 @@ const UI_TEXT = {
 };
 
 // Framer Motion Variants
+// const containerVariants = {
+//   hidden: { opacity: 0 },
+//   visible: { opacity: 1, transition: 1.5 },
+// };
+
+// const cardVariants = {
+//   hidden: { opacity: 0, y: 28 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+//   exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
+// };
+
+// const fadeIn = {
+//   hidden: { opacity: 0, y: 12 },
+//   visible: { 
+//     opacity: 1, 
+//     y: 0, 
+//     transition: { duration: 1, ease: [0.21, 0.47, 0.32, 0.98] } 
+//   }
+// };
+
+// Container variant with child staggering
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  visible: {
+    opacity: 1,
+    // transition: {
+    //   staggerChildren: 0.5, // Delay between each card sliding in
+    //   delayChildren: 0.5,    // Initial delay before first child starts
+    // },
+  },
 };
 
+// Individual Card / Item variant with slide-up motion
 const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { 
+    opacity: 0, 
+    y: 10 // Initial slide-up distance
+  },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] } 
+    transition: { 
+      duration: 1, 
+      ease: [0.5, 0.47, 0.32, 0.98] // Cubic bezier curve for a crisp, natural slide
+    } 
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20, 
+    transition: { duration: 0.3 } 
+  },
+};
+
+// Generic Fade & Slide-In for single sections or headers
+const fadeIn = {
+  hidden: { 
+    opacity: 0, 
+    y: 30 
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.8, 
+      ease: [0.21, 0.47, 0.32, 0.98] 
+    } 
   }
 };
 
@@ -265,7 +332,7 @@ const fadeIn = {
 export default function EventsAndCommissionPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [currentLang, setCurrentLang] = useState(lang);
-
+  const [aboutEventModal, setAboutEventModal] = useState(false)
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
@@ -273,11 +340,17 @@ export default function EventsAndCommissionPage() {
 
   const currentEvents = EVENTS_DATA[lang];
 
+ 
+
   // const isRtl = currentLang === 'ar';
 
   // const toggleLanguage = (newLang) => {
   //   setCurrentLang(newLang);
   // };
+
+  const handleAboutEventModal = () => {
+    setAboutEventModal(true)
+  }
 
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
@@ -289,6 +362,9 @@ export default function EventsAndCommissionPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-">
           <motion.div
             variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
             className="inline-flex items-center gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 mb-8 shadow-sm max-w-full"
           >
             <span className="flex h-2 w-2 relative shrink-0">
@@ -302,7 +378,7 @@ export default function EventsAndCommissionPage() {
             </span>
           </motion.div>
 
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-20 pb-6">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-border-slate-20 pb-6">
             <div>
               <h2 className="text-4xl font-bold text-gold">{t.heading}</h2>
               <p className="text-sm text-white mt-1">{t.subheading}</p>
@@ -328,8 +404,8 @@ export default function EventsAndCommissionPage() {
                 key={lang}
                 variants={containerVariants}
                 initial="hidden"
-                animate="visible"
-                exit="hidden"
+                whileInView="visible"
+                // viewport={{ once: true, amount: 0.15 }}
                 className="grid grid-cols-1 md:grid-cols-2 gap-8"
               >
                 {currentEvents.map((event) => (
@@ -337,7 +413,7 @@ export default function EventsAndCommissionPage() {
                     key={event.id}
                     variants={cardVariants}
                     whileHover={event.comingSoon ? {} : { y: -6 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.4 }}
                     className="event-card group relative bg-white rounded-xl border border-white overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                   >
                     {/* ========================================================= */}
@@ -400,7 +476,8 @@ export default function EventsAndCommissionPage() {
                       {/* Actions */}
                       <div className="p-6 space-y-2.5 border-t border-slate-100 pt-5">
                         <motion.button
-                          whileTap={{ scale: 0.98 }}
+                          // whileTap={{ scale: 0.98 }}
+                          onClick={handleAboutEventModal}
                           className="w-full py-2.5 px-4 rounded-xl border bg-white text-forestGreen border-forestGreen hover:bg-forestGreen hover:text-white font-bold text-xs tracking-wide flex items-center justify-between shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
                         >
                           <span className="flex items-center gap-2">
@@ -427,9 +504,16 @@ export default function EventsAndCommissionPage() {
           </AnimatePresence>
         </section>
         
-        <PreviousEventsSection />
+        <PreviousEventsSection isRtl={isRtl} />
         {/* Full-Width Luxury CTA Strip — unchanged, still commented out below */}
       </div>
+
+    {aboutEventModal && 
+    <EventDetailsModal 
+      event={FEATURED_EVENT}
+      isOpen={aboutEventModal}
+      onClose={() => setAboutEventModal(false)}
+      isRtl={isRtl}/>}
     </Layout>
   );
 }

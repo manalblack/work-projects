@@ -3,192 +3,202 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Users, Award, ExternalLink, X, ArrowRight, ArrowLeft, Tag } from 'lucide-react';
 
 
+/* 
+  TODO: 
+  
+  1- Create the event description modal 
+  2-change the text in the array below
+  3- change the hero image in rhe founder page
+
+
+*/
+
 // Sample Past Events Data
 const PAST_EVENTS = [
   {
     id: 'past-1',
     year: '2025',
     title: {
-      en: 'Pan-African Tech Summit 2025',
-      ar: 'قمة التكنولوجيا لعموم إفريقيا 2025'
+      en: 'Black Light 1',
+      ar: 'فعالية الأضواء السوداء'
     },
     category: {
-      en: 'Technology',
-      ar: 'تكنولوجيا'
+      en: 'Entertainment',
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Nov 14 - 16, 2025',
-      ar: '14 - 16 نوفمبر 2025'
+      en: 'FEB , 2025',
+      ar: '2025 فبراير'
     },
     location: {
-      en: 'Lagos, Nigeria',
-      ar: 'لاغوس، نيجيريا'
+      en: 'Kano, Nigeria',
+      ar: 'كانو، نيجيريا'
     },
     attendees: '1,500+',
-    speakersCount: '45',
+    // speakersCount: '45',
     image: '/black-lights-event1.jpeg',
     summary: {
-      en: 'Explored AI integration across emerging African markets with key executive leaders and venture capitalists.',
-      ar: 'استكشاف دمج الذكاء الاصطناعي في الأسواق الأفريقية الناشئة مع كبار القادة التنفيذيين المستثمرين.'
+      en: 'Step into a night where everything glows. Enjoy neon colors, glow-in-the-dark art, live music, and dancing under black lights, with great company and a lively atmosphere.',
+      ar: 'ادخل إلى ليلة يتوهج فيها كل شيء. استمتع بالألوان النيون، والفن المضيء في الظلام، والموسيقى الحية، والرقص تحت الأضواء السوداء، في أجواء مليئة بالحيوية والمرح.'
     },
     keyTakeaways: {
-      en: ['$50M+ Seed Deals Announced', '30 Startup Pitch Sessions', 'Cross-border Regulatory Workshop'],
-      ar: ['الإعلان عن صفقات تمويل بأكثر من 50 مليون دولار', '30 جلسة عرض مشاريع ناشئة', 'ورشة عمل للتنظيم عبر الحدود']
+      en: ['One night. Neon colors. Music and dancing under the black lights.'],
+      ar: ['ليلة واحدة. ألوان نيون. موسيقى ورقص تحت الأضواء السوداء.']
     }
   },
   {
     id: 'past-2',
     year: '2025',
     title: {
-      en: 'Global Hospitality & Tourism Forum',
-      ar: 'المنتدى العالمي للضيافة والسياحة'
+      en: 'Black Light 2',
+      ar:  'الأضواء السوداء 2'
     },
     category: {
-      en: 'Tourism',
-      ar: 'سياحة'
+      en: 'Entertainment',
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Aug 22 - 24, 2025',
-      ar: '22 - 24 أغسطس 2025'
+      en: 'Aug 2025',
+      ar: 'اغسطس 2025'
     },
     location: {
-      en: 'Cross River, Nigeria',
-      ar: 'كروس ريفر، نيجيريا'
+      en: 'Kano, Nigeria',
+      ar: 'كانو، نيجيريا'
     },
     attendees: '800+',
     speakersCount: '28',
     image: '/black-lights-event2.png',
     summary: {
-      en: 'A high-level assembly focused on sustainable eco-resort expansion and heritage tourism investments.',
-      ar: 'تجمع رفيع المستوى يركز على توسيع المنتجات البيئية المستدامة واستثمارات السياحة التراثية.'
+      en: 'The night everyone loved is back, bigger and brighter. Enjoy more neon colors, glowing decorations, live music, and dancing under the black lights, with new surprises along the way.',
+      ar: 'الليلة التي أحبها الجميع تعود من جديد، بشكل أكبر وأكثر إشراقًا. استمتع بمزيد من الألوان النيون، والديكورات المضيئة، والموسيقى الحية، والرقص تحت الأضواء السوداء، مع مفاجآت جديدة في انتظارك.'
     },
     keyTakeaways: {
-      en: ['Eco-Certification Accord Signed', 'VIP Sovereign Investment Panel', 'Cultural Heritage Tour'],
-      ar: ['توقيع اتفاقية الاعتماد البيئي', 'جلسة استثمار سيادي رفيعة المستوى', 'جولة التراث الثقافي']
+      en: ["Back for round two. More glow, more music, more fun."],
+      ar: ['نعود لجولة ثانية. توهج أكبر، وموسيقى أكثر، ومتعة أكثر.']
     }
   },
   {
     id: 'past-3',
     year: '2024',
     title: {
-      en: 'Sovereign Wealth & Infrastructure Gala',
-      ar: 'حفل الثروة السيادية والبنية التحتية'
+      en: 'Horror Zone',
+      ar: 'منطقة الرعب'
     },
     category: {
-      en: 'Finance',
-      ar: 'مالية'
+      en: 'Entertainment',
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Dec 10, 2024',
-      ar: '10 ديسمبر 2024'
+      en: 'MAY, 2024',
+      ar: 'مايو 2024'
     },
     location: {
-      en: 'Abuja, Nigeria',
-      ar: 'أبوجا، نيجيريا'
+      en: 'Kano, Nigeria',
+      ar: 'كانو، نيجيريا'
     },
     attendees: '650+',
     speakersCount: '20',
     image: '/horror-zone-event.png',
     summary: {
-      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
-      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+      en: 'Step into a night of fear and fun. Walk through dark rooms, meet scary characters, and enjoy spooky decorations, eerie music, and surprises around every corner, with friends who will scream with you.',
+      ar: 'ادخل إلى ليلة من الخوف والمرح. امشِ عبر غرف مظلمة، وقابل شخصيات مرعبة، واستمتع بالديكورات المخيفة والموسيقى الغامضة والمفاجآت في كل زاوية، برفقة أصدقاء يصرخون معك.'
     },
     keyTakeaways: {
-      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
-      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+      en: ['Dark rooms. Scary surprises. A night you will not forget.'],
+      ar: ['غرف مظلمة. مفاجآت مرعبة. ليلة لن تنساها']
     }
   },
    {
-    id: 'past-3',
-    year: '2024',
+    id: 'past-4',
+    year: '2026',
     title: {
-      en: 'Sovereign Wealth & Infrastructure Gala',
-      ar: 'حفل الثروة السيادية والبنية التحتية'
+      en: 'Above the cloud',
+      ar: 'فوق السحاب'
     },
     category: {
-      en: 'Finance',
-      ar: 'مالية'
+      en: 'Entertainment',
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Dec 10, 2024',
-      ar: '10 ديسمبر 2024'
+      en: 'JUN 2026',
+      ar: 'يناير 2026'
     },
     location: {
-      en: 'Abuja, Nigeria',
-      ar: 'أبوجا، نيجيريا'
+      en: 'Kano, Nigeria',
+      ar: 'كانو، نيجيريا'
     },
     attendees: '650+',
     speakersCount: '20',
     image: 'above-cloud-event.png',
     summary: {
-      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
-      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+      en: 'Step into a room that feels like the sky. Dress in white and light blue, and enjoy soft cloud decorations, good music, and a calm, elegant atmosphere with friends.',
+      ar: 'ادخل إلى قاعة تشبه السماء. ارتدِ الأبيض والأزرق الفاتح، واستمتع بديكورات السحب الناعمة، والموسيقى الجميلة، وأجواء هادئة وأنيقة برفقة أصدقائك.'
     },
     keyTakeaways: {
-      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
-      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+      en: ['White and light blue dress code. Cloud decorations. One dreamy night.'],
+      ar: ['الزي: أبيض وأزرق فاتح. ديكورات السحب. ليلة حالمة.']
     }
   },
    {
-    id: 'past-3',
+    id: 'past-5',
     year: '2024',
     title: {
-      en: 'Sovereign Wealth & Infrastructure Gala',
-      ar: 'حفل الثروة السيادية والبنية التحتية'
+      en: 'Epic Day Event',
+      ar: 'يوم أسطوري'
     },
     category: {
-      en: 'Finance',
-      ar: 'مالية'
+      en: 'Entertainment',
+      ar: 'ترفيه'
     },
     date: {
-      en: 'Dec 10, 2024',
-      ar: '10 ديسمبر 2024'
+      en: 'JUN, 2024',
+      ar: 'جون 2024'
     },
     location: {
-      en: 'Abuja, Nigeria',
-      ar: 'أبوجا، نيجيريا'
+      en: 'Kano, Nigeria',
+      ar: 'كانو، نيجيريا'
     },
     attendees: '650+',
     speakersCount: '20',
     image: '/epic-day-event.png',
     summary: {
-      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
-      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+      en: 'A full day of laughter and fun. Enjoy live stand-up comedy, exciting games, and friendly competitions, all in a lively atmosphere where everyone can relax, laugh, and make great memories.',
+      ar: 'يوم كامل من الضحك والمتعة. استمتع بعروض الكوميديا الحية، وألعاب مشوقة، ومسابقات ودية، في أجواء مليئة بالحيوية يمكن للجميع فيها الاسترخاء والضحك وصنع ذكريات رائعة.'
     },
     keyTakeaways: {
-      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
-      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+      en: ['Stand-up comedy. Fun and games. One epic day.',],
+      ar: ['ستاند اب كوميدي. مرح وألعاب. يوم أسطوري واحد.']
     }
   },
-   {
-    id: 'past-3',
+  {
+    id: 'past-6',
     year: '2024',
     title: {
-      en: 'Sovereign Wealth & Infrastructure Gala',
-      ar: 'حفل الثروة السيادية والبنية التحتية'
+      en: 'Space Day',
+      ar: 'يوم الفضاء'
     },
     category: {
-      en: 'Finance',
+      en: 'Entertainment',
       ar: 'مالية'
     },
     date: {
-      en: 'Dec 10, 2024',
+      en: 'MAY, 2024',
       ar: '10 ديسمبر 2024'
     },
     location: {
-      en: 'Abuja, Nigeria',
+      en: 'Kano, Nigeria',
       ar: 'أبوجا، نيجيريا'
     },
     attendees: '650+',
     speakersCount: '20',
     image: '/space-event.png',
     summary: {
-      en: 'Honoring outstanding private-public partnership (PPP) initiatives across sub-Saharan infrastructure projects.',
-      ar: 'تكريم مبادرات الشراكة بين القطاعين العام والخاص المتميزة في مشاريع البنية التحتية.'
+      en: 'Travel to another world without leaving the room. Enjoy a space-themed setting with glowing stars, planets, and galaxy lights, along with great music, fun activities, and a night that feels out of this world.',
+      ar: 'سافر إلى عالم آخر دون أن تغادر القاعة. استمتع بأجواء الفضاء مع النجوم المضيئة والكواكب وأضواء المجرات، إلى جانب الموسيقى الرائعة والأنشطة الممتعة وليلة تشبه عالمًا آخر.'
     },
     keyTakeaways: {
-      en: ['Awarded 12 Excellence Medals', 'Keynote by Central Bank Policy Directors', 'Closed-Door Investment Dinner'],
-      ar: ['منح 12 ميدالية تميز', 'كلمة رئيسية من مديري سياسات البنك المركزي', 'عشاء استثماري مغلق']
+      en: ['Stars, planets, and galaxy lights. One night out of this world.'],
+      ar: ['نجوم وكواكب وأضواء مجرات. ليلة من عالم آخر.']
     }
   }
 ];
@@ -205,6 +215,7 @@ export default function PreviousEventsSection({ isRtl = false }) {
     : PAST_EVENTS.filter(event => event.year === selectedYear);
 
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
+  
 
   return (
     <section className="py-20 bg-black overflow-hidden">
@@ -274,7 +285,7 @@ export default function PreviousEventsSection({ isRtl = false }) {
                 className="group flex flex-col bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-xs hover:shadow-xl transition-all duration-300"
               >
                 {/* Image Container */}
-                <div className="relative md:h-70  overflow-hidden bg-neutral-200">
+                <div className="relative md:h-70 h-120 overflow-hidden bg-neutral-200">
                   <img
                     src={event.image}
                     alt={event.title[isRtl ? 'ar' : 'en']}
@@ -324,9 +335,9 @@ export default function PreviousEventsSection({ isRtl = false }) {
                         <Users className="w-3.5 h-3.5 text-neutral-400" />
                         {event.attendees} {isRtl ? 'حاضر' : 'Attendees'}
                       </span>
-                      <span>
+                      {/* <span>
                         {event.speakersCount} {isRtl ? 'متحدث' : 'Speakers'}
-                      </span>
+                      </span> */}
                     </div>
 
                     <button
@@ -362,10 +373,10 @@ export default function PreviousEventsSection({ isRtl = false }) {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.25 }}
-                className="relative z-10 w-full max-w-2xl bg-white rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col"
+                className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl max-h-[95vh] flex flex-col"
               >
                 {/* Modal Header Image */}
-                <div className="relative h-56 bg-neutral-900">
+                <div className="relative h-95 md:h-95 bg-neutral-900">
                   <img
                     src={activeModalEvent.image}
                     alt={activeModalEvent.title[isRtl ? 'ar' : 'en']}
@@ -392,15 +403,15 @@ export default function PreviousEventsSection({ isRtl = false }) {
                   {/* Meta Details */}
                   <div className="flex flex-wrap gap-4 text-xs font-semibold text-neutral-600 bg-neutral-50 p-4 rounded-2xl border border-neutral-100">
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-forestGreen" />
+                      <Calendar className="w-4 h-4 text-gold" />
                       <span>{activeModalEvent.date[isRtl ? 'ar' : 'en']}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-forestGreen" />
+                      <MapPin className="w-4 h-4 text-gold" />
                       <span>{activeModalEvent.location[isRtl ? 'ar' : 'en']}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-forestGreen" />
+                      <Users className="w-4 h-4 text-gold" />
                       <span>{activeModalEvent.attendees} {isRtl ? 'مشارك' : 'Participants'}</span>
                     </div>
                   </div>
