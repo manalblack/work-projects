@@ -247,7 +247,7 @@ export default function PreviousEventsSection({ isRtl = false }) {
           </div>
 
           {/* Year Filter Buttons */}
-          <motion.div 
+          {/* <motion.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -267,7 +267,7 @@ export default function PreviousEventsSection({ isRtl = false }) {
                 {year === 'All' ? (isRtl ? 'الكل' : 'All') : year}
               </button>
             ))}
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Events Grid */}
