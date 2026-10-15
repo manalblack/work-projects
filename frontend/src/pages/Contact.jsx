@@ -463,14 +463,14 @@ export default function ContactDispatchPage() {
                             </span>
                         </motion.div>
                         <div className='flex flex-row lg:flex-col justify-between items-center lg:h-45 h-20 w-50 p-2 rounded-md'>
-                            <a target='_blank'  className=''>
-                                <FaInstagram className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            <a href='https://www.instagram.com/trv.ev?stkn=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr' target='_blank'  className=''>
+                              <FaInstagram className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
                             </a>
-                            <a target='_blank'  className=''>
-                                <FaTiktok className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            <a href='https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-99v1Bt5qiQ9' target='_blank'  className=''>
+                              <FaTiktok className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
                             </a>
-                            <a target='_blank'  className=''>
-                                <FaWhatsapp className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
+                            <a href='https://wa.me/message/DRZ3AJKQ32KJA1' target='_blank'  className=''>
+                              <FaWhatsapp className='size-10 text-gold hover:bg-forestGreen p-1 rounded-md transition-all duration-300 ease-in-out'/>
                             </a>
                         </div>
                     </div>

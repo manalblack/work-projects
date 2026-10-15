@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Globe,
@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
 import { Link as NavLink } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import { useLanguage } from '../hooks/LanguageContext';
 import TourInfoModal from '../re-build-components/TourInfoModal';
 
@@ -41,15 +42,15 @@ const EXPEDITIONS = [
     corridor: 'south-south',
     corridorName: {
       en: 'Bauchi State • 4 Days / 3 Nights',
-      ar: 'ولاية كروس ريفر • 6 أيام / 5 ليالٍ'
+      ar: 'ولاية باوتشي • 4 أيام / 3 ليالٍ'
     },
     subTitle: {
       en: 'Yankari Natural Sanctuary',
       ar: 'محمية يانكاري الطبيعية'
     },
     title: {
-      en: 'Yankari is Natural sanctuary for more than 20 different animals',
-      ar: 'يانكاري محمية طبيعية تضم أكثر من 20 نوعًا من الحيوانات'
+      en: 'Yankari is Natural sanctuary for more than 283 species of birds, 34 species of mammals and 34 species of reptiles',
+      ar: 'يانكاري محمية طبيعية تضم أكثر من 283 نوع من الطيور و 34 نوع من الثدييات و 32 نوع من الزواحف'
     },
     // description: {
     //   en: 'Ascend above the cloud line to private Alpine-style villas. Includes bespoke botanical canopy walks, private fire pits under sub-tropical stars, and Michelin-trained chef sourcing local mountain organic produce.',
@@ -185,7 +186,16 @@ const EXPEDITIONS = [
     ]
   }
 ];
+/*
+  email js actual production data: 
+    service id : service_xgquvfj
+    template id: template_y6o946r
+    api key : ah1Y-zeBkndkLjhx3
+*/
 
+// email.js service key: service_w1cs7w4
+// template id: template_czisrvw
+// api key : 8p1KpiSiLTSjFeQW5
 
 
 export default function ToursAndServices() {
@@ -193,6 +203,14 @@ export default function ToursAndServices() {
   const [dossierModal, setDossierModal] = useState(null);
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    user_name: '',
+    user_email: '',
+    message: ''
+  });
+  const formRef = useRef();
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(null);
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
@@ -228,6 +246,16 @@ export default function ToursAndServices() {
     ]
   };
   
+
+  // Generic handler for input and textarea changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const filteredExpeditions = activeCorridor === 'all'
     ? EXPEDITIONS
     : EXPEDITIONS.filter((exp) => exp.corridor === activeCorridor);
@@ -242,12 +270,36 @@ export default function ToursAndServices() {
   const handleInquirySubmit = (e) => {
     e.preventDefault();
     setInquirySubmitted(true);
-    setTimeout(() => {
-      setInquirySubmitted(false);
-    }, 5000);
+    // setTimeout(() => {
+    //   setInquirySubmitted(false);
+    // }, 5000);
+    e.preventDefault();
+    setLoading(true);
+    setStatus(null);
+
+    emailjs
+      .send(
+        'service_xgquvfj',     // <-- Paste your Service ID here
+        'template_y6o946r',    // <-- Paste your Template ID here
+        formData,
+        'ah1Y-zeBkndkLjhx3'      // <-- Paste your Public Key here
+      )
+      .then(
+        (result) => {
+          console.log('SUCCESS!', result.text);
+          setLoading(false);
+          setStatus('success');
+          // formRef.current.reset();
+        },
+        (error) => {
+          console.log('FAILED...', error);
+          setLoading(false);
+          setStatus('error');
+        }
+      );
   };
 
-
+  
 
 
   return (
@@ -266,12 +318,12 @@ export default function ToursAndServices() {
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forestGreen border border-white text-white font-bold text-xs uppercase tracking-widest mb-6">
                 <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-                <span>{isRtl ? 'رحلات تروفيستا والاستجمام السيادي' : 'TROVIESTA EXPEDITIONS & SOVEREIGN LEISURE'}</span>
+                <span>{isRtl ? 'رحلات و مغامرات تروفيستا' : 'TROVIESTA EXPEDITIONS & ADVENTURES'}</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gold tracking-tight leading-[1.1]">
                 {isRtl ? (
-                  <>جولات طبيعية و<span className="font-serif italic font-normal text-white"> فعاليات </span></>
+                  <>جولات طبيعية و<span className="font-serif italic font-normal text-white"> مغامرات</span></>
                 ) : (
                   <>Nature Tours & <span className="font-serif italic font-normal text-white">Events</span></>
                 )}
@@ -520,8 +572,8 @@ export default function ToursAndServices() {
                       {isRtl ? 'التفاصيل' : 'Details'}
                     </button>
                     <button className='text-sm bg-forestGreen text-white px-3.5 font-semibold py-0.5 rounded-full border border-forestGreen hover:bg-white hover:text-forestGreen active:scale-85 transition-all duration-300 ease-in-out'>
-                      <NavLink>
-                          {isRtl ? 'التواصل' : 'Contact'}
+                      <NavLink to='/contact'>
+                        {isRtl ? 'التواصل' : 'Contact'}
                       </NavLink>
                     </button>
                   </div>
@@ -536,7 +588,7 @@ export default function ToursAndServices() {
       {/* TODO: Add client email / fix zoho issues */}
 
       {/* 3. CONSULTATION & INQUIRY FORM */}
-      <section className="bg-black text-white py-16 lg:py-24 border-t border-slate" id="inquiry-consultation">
+      <section className="bg-black text-white py-16 lg:py-24 border-t border-slate">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
@@ -601,7 +653,7 @@ export default function ToursAndServices() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleInquirySubmit} className="space-y-4">
+                <form  onSubmit={handleInquirySubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     {/* Full Name */}
@@ -613,7 +665,10 @@ export default function ToursAndServices() {
                         required
                         type="text" 
                         placeholder={isRtl ? 'مثال: عبد الله المنصور' : 'e.g. Lord Alexander Vance'}
-                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400 text-sm focus:outline-none focus:border-gold"
+                        value={formData.user_name}
+                        name='user_name'
+                        onChange={handleChange}
+                        className="w-full z-10 px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder-slate-400 text-sm focus:outline-none focus:border-gold"
                       />
                     </div>
 
@@ -625,7 +680,10 @@ export default function ToursAndServices() {
                         required
                         type="email" 
                         placeholder="vance@office.com"
-                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-white placeholder-slate-400   text-sm focus:outline-none focus:border-gold"
+                        value={formData.user_email}
+                        name='user_email'
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder-slate-400   text-sm focus:outline-none focus:border-gold"
                       />
                     </div>
                   </div>
@@ -643,7 +701,7 @@ export default function ToursAndServices() {
                       </select>
                     </div> */}
 
-                    <div>
+                    {/* <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-forestGreen mb-1.5">
                         {isRtl ? 'عدد الضيوف المتوقع' : 'Estimated Guest Count'}
                       </label>
@@ -654,7 +712,7 @@ export default function ToursAndServices() {
                         defaultValue="4"
                         className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen text-sm focus:outline-none focus:border-gold"
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   <div>
@@ -664,6 +722,9 @@ export default function ToursAndServices() {
                     <textarea 
                       rows="3"
                       placeholder={isRtl ? 'أخبرنا بأي احتياجات غذائية أو نوع الفعالية أو أي تفاصيل أخرى نود معرفتها...' : 'Tell us about food needs, event type, or anything else we should know...'}
+                      value={formData.message}
+                      name='message'
+                      onChange={handleChange}
                       className="w-full px-4 py-3 rounded-md bg-white border border-forestGreen text-forestGreen placeholder:text-sm focus:outline-none focus:border-gold"
                     />
                   </div>
@@ -684,7 +745,7 @@ export default function ToursAndServices() {
       </section>
 
       {/* 4. DOSSIER MODAL */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {dossierModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>
             <motion.div
@@ -764,7 +825,7 @@ export default function ToursAndServices() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
       
       {isModalOpen && 
       <TourInfoModal  

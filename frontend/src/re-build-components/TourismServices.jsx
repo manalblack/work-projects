@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Compass, Clock, Check, ArrowRight, ArrowLeft, X, Users, Star, Send, ShieldCheck, Sparkles, ExternalLink } from 'lucide-react';
 import {useNavigate, Link} from 'react-router-dom';
-import TourImageGalleryModal from './TourImagesModal';
 import TourInfoModal from './TourInfoModal';
 
 

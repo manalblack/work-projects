@@ -32,9 +32,9 @@ export default function Navbar({ toggleLanguage, isRtl }) {
 
   const navItems = [
     { path: '/', label: { en: 'Home', ar: 'الرئيسية' } },
-    { path: '/tours-and-services', label: { en: 'Tours & Services', ar: 'الرحلات والخدمات' } },
+    { path: '/tours-and-services', label: { en: 'Tours & Services', ar: 'السياحة والخدمات' } },
     { path: '/founder', label: { en: 'Founder', ar: 'المؤسس' } },
-    { path: '/contact', label: { en: 'Contact', ar: 'اتصل بنا' } },
+    { path: '/contact', label: { en: 'Contact', ar: 'التواصل' } },
     { path: '/events', label: { en: 'Events', ar: 'الفعاليات' } },
   ];
 

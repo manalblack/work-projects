@@ -35,8 +35,8 @@ const FEATURED_EVENTS = [
     vipPrice: '₦5,000',
     image: '/red-area-event.png',
     description: {
-      en: 'Join over 1,200 tech pioneers, investors, and policymakers for a 3-day summit exploring AI infrastructure, fintech, and digital economy growth across West Africa.',
-      ar: 'انضم إلى أكثر من 1,200 من رواد التكنولوجيا والستثمرين وصناع القرار في قمة تستمر 3 أيام لاستكشاف البنية التحتية للذكاء الاصطناعي، والتكنولوجيا المالية، ونمو الاقتصاد الرقمي في غرب إفريقيا.'
+      en: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers',
+      ar: 'يوم استثنائي مليء بالإضاءة الحمراء والموسيقى والرقص، بحضور فنانين ومؤثرين على مواقع التواصل الاجتماعي',
     },
     speakers: [
       { en: 'Amina Bello (Tech Africa)', ar: 'أمينة بيلو (تيك إفريقيا)' },

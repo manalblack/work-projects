@@ -95,8 +95,8 @@ export default function Home() {
         <html lang={lang} dir={isRtl ? 'rtl' : 'ltr'} />
         <title>
           {isRtl 
-            ? 'تي آر للسياحة والفعاليات | رحلات فاخرة ومؤتمرات عالمية' 
-            : 'Troveista Travel & Events | Journeys & World-Stage Summits'}
+            ? 'تروفيستا للجولات السياحية و الفعاليات' 
+            : 'Troveista Travel & Events '}
         </title>
         <meta 
           name="description" 

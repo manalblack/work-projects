@@ -5,6 +5,7 @@ import {
   X, MapPin, Calendar, CheckCircle2, 
   ChevronLeft, ChevronRight, SaudiRiyal 
 } from 'lucide-react';
+import { FaWhatsapp } from "react-icons/fa6";
 
 // const testTourImages = [
 //   {
@@ -104,7 +105,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
             className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]"
             >
             {/* Header Image Catalogue Gallery inside Modal */}
-            <div className="relative h-95 md:h-85 bg-neutral-700 flex-shrink-0 select-none overflow-hidden group">
+            <div className="relative h-55 md:h-85 bg-neutral-700 flex-shrink-0 select-none overflow-hidden group">
                 
                 {/* Swipeable & Animated Main Image */}
                 <AnimatePresence mode="wait">
@@ -127,7 +128,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                         prevImage();
                     }
                     }}
-                    className="md:w-full w-96 h-full object-fill md:object-cover cursor-grab active:cursor-grabbing"
+                    className="md:w-full w-full h-full object-contain md:object-cover cursor-grab active:cursor-grabbing"
                 />
                 </AnimatePresence>
 
@@ -165,7 +166,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                     <MapPin className="w-3.5 h-3.5 text-forestGreen" />
                     {heroTour.location && <span>{heroTour.location}</span>}
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h3 className="md:text-2xl text-md font-extrabold tracking-tight">
                     {heroTour.title}
                 </h3>
                 </div>
@@ -180,7 +181,7 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                         <button
                             key={idx}
                             onClick={() => setCurrentImgIndex(idx)}
-                            className={`relative flex-shrink-0 w-9 h-9 rounded-lg overflow-hidden border-2 transition-all ${
+                            className={`relative flex-shrink-0 md:w-9 md:h-9 w-7 h-7 rounded-lg overflow-hidden border-2 transition-all ${
                             idx === currentImgIndex
                                 ? 'border-emerald-400 scale-105 opacity-100'
                                 : 'border-transparent opacity-50 hover:opacity-100'
@@ -329,13 +330,21 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                     {isRtl ? 'إلغاء' : 'Close'}
                 </button>
 
-                <Link
+                {/* this button should redirect to troviesta whatsapp */}
+                {/* <Link
                     to="/tours-and-services"
                     className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-neutral-900 hover:border-neutral-900 transition-all shadow-md"
                 >
-                    <span>{isRtl ? 'المزيد من التفاصيل' : 'More details'}</span>
-                    {/* <ArrowIcon className="w-4 h-4" /> */}
-                </Link>
+                    <span>{isRtl ? 'المزيد من التفاصيل' : 'Book Tour / Whatsapp'} <FaWhatsapp /></span>
+                  
+                </Link> */}
+                <button className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-md">
+                    <a href='https://wa.me/message/DRZ3AJKQ32KJA1' target='_blank' rel="noopener noreferrer">
+                        {isRtl ? "احجز عبر الواتساب" : "Book on whatsapp"} 
+                    </a>
+                    <span><FaWhatsapp className='text-gold text-lg'/></span>
+                </button>
+              
                 </div>
             </div>
             </motion.div>

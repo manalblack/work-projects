@@ -11,14 +11,20 @@ Client Requests
 
 ]
 
-1- Keep the UI / UX as simple as possible
-2- Easy navigation throughout the application is a must.
-3- Keep the home page hero section brief but informative
-4- start working on the ui
 
-5- Admin dashboard, redesign.
-6- Founder page CRUD operations on (Name, header, image and description and contact info)
-7- Tours and services page CRUD operations similar to the events functionality
+    PHASE 1 [95% Done / Awaiting client approval]
+
+1-Keep the UI / UX as simple as possible
+2-Easy navigation throughout the application is a must.
+3-Keep the home page hero section brief but informative
+4-start working on the ui
+5-Bilingual website
+
+    PHASE 2
+
+1-Admin dashboard, redesign.
+2-Founder page CRUD operations on (Name, header, image and description and contact info)
+3-Tours and services page CRUD operations similar to the events functionality
 
 
 [
