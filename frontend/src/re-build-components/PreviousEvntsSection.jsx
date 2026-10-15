@@ -46,37 +46,37 @@ const PAST_EVENTS = [
       ar: ['ليلة واحدة. ألوان نيون. موسيقى ورقص تحت الأضواء السوداء.']
     }
   },
-  {
-    id: 'past-2',
-    year: '2025',
-    title: {
-      en: 'Black Light 2',
-      ar:  'الأضواء السوداء 2'
-    },
-    category: {
-      en: 'Entertainment',
-      ar: 'ترفيه'
-    },
-    date: {
-      en: 'Aug 2025',
-      ar: 'اغسطس 2025'
-    },
-    location: {
-      en: 'Kano, Nigeria',
-      ar: 'كانو، نيجيريا'
-    },
-    attendees: '800+',
-    speakersCount: '28',
-    image: '/black-lights-event2.png',
-    summary: {
-      en: 'The night everyone loved is back, bigger and brighter. Enjoy more neon colors, glowing decorations, live music, and dancing under the black lights, with new surprises along the way.',
-      ar: 'الليلة التي أحبها الجميع تعود من جديد، بشكل أكبر وأكثر إشراقًا. استمتع بمزيد من الألوان النيون، والديكورات المضيئة، والموسيقى الحية، والرقص تحت الأضواء السوداء، مع مفاجآت جديدة في انتظارك.'
-    },
-    keyTakeaways: {
-      en: ["Back for round two. More glow, more music, more fun."],
-      ar: ['نعود لجولة ثانية. توهج أكبر، وموسيقى أكثر، ومتعة أكثر.']
-    }
-  },
+  // {
+  //   id: 'past-2',
+  //   year: '2025',
+  //   title: {
+  //     en: 'Black Light 2',
+  //     ar:  'الأضواء السوداء 2'
+  //   },
+  //   category: {
+  //     en: 'Entertainment',
+  //     ar: 'ترفيه'
+  //   },
+  //   date: {
+  //     en: 'Aug 2025',
+  //     ar: 'اغسطس 2025'
+  //   },
+  //   location: {
+  //     en: 'Kano, Nigeria',
+  //     ar: 'كانو، نيجيريا'
+  //   },
+  //   attendees: '800+',
+  //   speakersCount: '28',
+  //   image: '/black-lights-event2.png',
+  //   summary: {
+  //     en: 'The night everyone loved is back, bigger and brighter. Enjoy more neon colors, glowing decorations, live music, and dancing under the black lights, with new surprises along the way.',
+  //     ar: 'الليلة التي أحبها الجميع تعود من جديد، بشكل أكبر وأكثر إشراقًا. استمتع بمزيد من الألوان النيون، والديكورات المضيئة، والموسيقى الحية، والرقص تحت الأضواء السوداء، مع مفاجآت جديدة في انتظارك.'
+  //   },
+  //   keyTakeaways: {
+  //     en: ["Back for round two. More glow, more music, more fun."],
+  //     ar: ['نعود لجولة ثانية. توهج أكبر، وموسيقى أكثر، ومتعة أكثر.']
+  //   }
+  // },
   {
     id: 'past-3',
     year: '2024',

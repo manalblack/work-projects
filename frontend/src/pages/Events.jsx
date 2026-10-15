@@ -32,7 +32,7 @@ const EVENTS_DATA = {
       statusText: 'Tier 1 Tickets Available',
       statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-300',
       statusDot: 'bg-emerald-500',
-      image: '/red-area-event.png',
+      image: '/red-area-character.jpeg',
       actionText: 'Access Ticket Store →',
       secondaryActionText: 'Event Dossier & Protocol',
       actionType: 'primary',
@@ -118,7 +118,7 @@ const EVENTS_DATA = {
       statusText: 'تذاكر الفئة الأولى متاحة',
       statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-300',
       statusDot: 'bg-emerald-500',
-      image: '/red-area-event.png',
+      image: '/red-area-character.jpeg',
       actionText: '← شباك التذاكر',
       secondaryActionText: 'ملف الفعالية والبروتوكول',
       actionType: 'primary',
@@ -202,7 +202,7 @@ const EVENTS_DATA = {
     regularPrice: '₦2,000',
     vipPrice: '₦5,000',
     stallPrice: '₦15,000', // <--- Added stall price
-    image: '/red-area-event.png',
+    image: '/red-area-character.jpeg',
     description: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers.',
     comingSoon: false,
   }
@@ -436,7 +436,7 @@ export default function EventsAndCommissionPage() {
                     <div className={`flex flex-col justify-between h-full ${event.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
                       <div>
                         {/* Visual Container */}
-                        <div className="relative w-full md:h-75 h-85 overflow-hidden bg-slate-900">
+                        <div className="relative w-full md:h-85 h-90 overflow-hidden bg-slate-900">
                           <motion.img
                             whileHover={event.comingSoon ? {} : { scale: 1.08 }}
                             transition={{ duration: 0.6, ease: 'easeOut' }}

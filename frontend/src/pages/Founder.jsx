@@ -97,7 +97,7 @@ const content = {
       { outlet: "عصير صمدو", title: "\"تسويق بالمحتوى\"", date: "٢٠٢٤", image: '/samado-juice.jpeg'},
       { outlet: "المذاق المغربي كافيه", title: "\"تصوير و مونتاج\"", date: "الشرق الأوسط", image: '/morc-cafe.jpeg' },
       { outlet: "بيج ويست", title: "\"تسويق\"", date: "عالمي", image: '/big-west.jpeg' },
-      { outlet: "بي.كي.است", title: "\"شراكة استراتيجية\"", date: "حوار تنفيذي", image:'/bk-est.jpeg' }
+      { outlet: "بي.كي.است", title: "\"شراكة استراتيجية\"", date: "حوار تنفيذي", image:'/bk-est.jpegs' }
     ],
     keynotes: [
       { tag: "متحدث", title: "المنتدى العالمي للسياحة السيادية • جنيف", sub: "\"تطور الفخامة الهادئة والبروتوكولات الحكومية\"" },
@@ -120,11 +120,7 @@ const content = {
 // Animation Variants
 
 /*
-  morc taste: filming and dercting
-  big west: Marketing
-  bk.est & rtm logistics: stratigic partnership, 
-  samado: marketing / or marketing content
-
+  change the event cover image and add a mutlti image modal
 
 */
 
@@ -199,7 +195,7 @@ export default function Founder() {
                 {t.founderNameFirst} <span className="italic font-normal text-slate-00">{t.founderNameLast}</span>
               </motion.h1>
 
-              <motion.p variants={fadeInUp} className="text-xs uppercase tracking-[0.2em] text-white font-bold">
+              <motion.p variants={fadeInUp} className="text-xs uppercase  text-white font-bold font-arabic">
                 {t.title}
               </motion.p>
 
@@ -355,8 +351,8 @@ export default function Founder() {
                 <p className="text-slate-300 text-xs">{t.connectDesc}</p>
                 <div className="pt-2 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-gold" />
-                  <a className="font-serif text-base text-white hover:text-gold transition-colors hover:underline" href="mailto:founder-office@tr-tourism.com">
-                    founder-office@tr-tourism.com
+                  <a className="font-serif text-base text-white hover:text-gold transition-colors hover:underline" href="mailto:info@troveista.com">
+                    
                   </a>
                 </div>
               </div>

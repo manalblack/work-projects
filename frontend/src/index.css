@@ -11,6 +11,7 @@
   --color-lightPurple: #cd99d9;
   --color-darkBg: #111827;
   --color-ghostWhite: #f8f8ff;
+  --font-arabic: "El Messiri";
   /* --font-poppins: "Poppins", sans-serif, system-ui; */
 
   /* Rebuild colors. The first var is the color from the pdf file */

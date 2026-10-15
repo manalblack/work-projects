@@ -1,17 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { 
-  X, MapPin, Calendar, Ticket, Store, Check, 
-  Sparkles, ArrowRight, ArrowLeft, ShieldCheck 
+  X, MapPin, Calendar, Ticket, Store, 
+  Sparkles, ArrowRight, ArrowLeft, ChevronLeft, ChevronRight 
 } from 'lucide-react';
 
-
+// Fallback test images if event.images is not provided
+const TEST_IMAGES = [
+  "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"
+];
 
 export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = false }) {
   if (!event) return null;
 
-  console.log(event);
+  // Derive images list from event props or fallback test array
+  const images = (event.images && event.images.length > 0) 
+    ? event.images 
+    : (event.image ? [event.image, ...TEST_IMAGES.slice(1)] : TEST_IMAGES);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
   const t = {
     eventName: isRtl ? 'المنطقة الحمراء' : 'Red Area',
@@ -28,11 +46,12 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
     close: isRtl ? 'إغلاق' : 'Close',
     bookAction: isRtl ? 'احجز تذكرتك / كشكك الآن' : 'Book Ticket / Stall',
   };
-  
 
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
+  const LeftNavIcon = isRtl ? ChevronRight : ChevronLeft;
+  const RightNavIcon = isRtl ? ChevronLeft : ChevronRight;
 
- return (
+  return (
     <AnimatePresence>
       {isOpen && (
         <div 
@@ -56,18 +75,26 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative z-10 w-full max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
+            className="relative z-10 w-9/10 max-w-2xl bg-white rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
           >
             {/* ---------------------------------------------------- */}
-            {/* HEADER IMAGE & TITLE OVERLAY                         */}
+            {/* MULTI-IMAGE CAROUSEL HEADER                          */}
             {/* ---------------------------------------------------- */}
-            <div className="relative h-80 bg-slate-900 flex-shrink-0">
-              <img
-                src={event.image}
-                alt={typeof event.title === 'object' ? event.title[isRtl ? 'ar' : 'en'] : event.title}
-                className="w-full h-full object-cover opacity-85"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
+            <div className="relative h-80 bg-slate-900 flex-shrink-0 group overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImageIndex}
+                  src={images[currentImageIndex]}
+                  alt={typeof event.title === 'object' ? event.title[isRtl ? 'ar' : 'en'] : event.title}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 0.85, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-contain md:object-cover"
+                />
+              </AnimatePresence>
+
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/30 to-transparent pointer-events-none" />
 
               {/* Close Button */}
               <button
@@ -85,16 +112,50 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                 </span>
               </div>
 
+              {/* Image Navigation Controls (Show if > 1 image) */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevImage}
+                    className={`hidden md:absolute top-1/2 -translate-y-1/2 ${isRtl ? 'right-3' : 'left-3'} p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer opacity-80 hover:opacity-100`}
+                  >
+                    <LeftNavIcon className="w-5 h-5" />
+                  </button>
+
+                  <button
+                    onClick={handleNextImage}
+                    className={`hidden md:absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-3' : 'right-3'} p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer opacity-80 hover:opacity-100`}
+                  >
+                    <RightNavIcon className="w-5 h-5" />
+                  </button>
+
+                  {/* Carousel Indicators / Dots */}
+                  <div className="absolute bottom-20 inset-x-0 flex items-center justify-center gap-1.5 z-20">
+                    {images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === currentImageIndex 
+                            ? 'w-6 bg-gold' 
+                            : 'w-1.5 bg-white/50 hover:bg-white/80'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+
               {/* Title & Venue Overlay */}
-              <div className="absolute bottom-5 inset-x-6 text-white z-10">
-                <div className="flex items-center gap-2 text-xs font-semibold text-gold mb-1">
+              <div className="absolute bottom-4 inset-x-6 text-white z-10">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white mb-1">
                   <Calendar className="w-3.5 h-3.5 text-gold" />
                   <span>{typeof event.date === 'object' ? event.date[isRtl ? 'ar' : 'en'] : event.date}</span>
                   <span>•</span>
                   <MapPin className="w-3.5 h-3.5 text-gold" />
                   <span>{typeof event.venue === 'object' ? event.venue[isRtl ? 'ar' : 'en'] : event.venue}</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h3 className="md:text-2xl text-xl font-extrabold tracking-tight">
                   {typeof event.title === 'object' ? event.title[isRtl ? 'ar' : 'en'] : event.title}
                 </h3>
               </div>
@@ -111,8 +172,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                   {t.eventDescription}
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                  {/* {typeof event.description === 'object' ? event.description[isRtl ? 'ar' : 'en'] : event.description} */}
-                    {t.eventExplanation}
+                  {t.eventExplanation}
                 </p>
               </div>
 
@@ -136,7 +196,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">
-                        {/* {t.regularDesc} */}
+                        {t.regularDesc}
                       </p>
                     </div>
 
@@ -160,7 +220,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">
-                        {/* {t.vipDesc} */}
+                        {t.vipDesc}
                       </p>
                     </div>
 
@@ -222,4 +282,3 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
     </AnimatePresence>
   );
 };
-

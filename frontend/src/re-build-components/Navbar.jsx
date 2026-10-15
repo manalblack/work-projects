@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, User, Menu, X } from 'lucide-react';
 import {Link, NavLink} from 'react-router-dom';
 import { useLanguage } from '../hooks/LanguageContext';
-
-
+// import { FaWhatsapp } from "react-icon";
+import { FaWhatsapp } from "react-icons/fa";
 /*  TODOS:
   The navbar needs to show a light background color on the based on the current page
   The mobile Menu is not functional and the ui needs some work
@@ -121,10 +121,12 @@ export default function Navbar({ toggleLanguage, isRtl }) {
           <motion.a 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.96 }}
-            href="#" 
-            className="hidden md:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-forestGreen text-white font-semibold text-[14px] hover:bg-white hover:text-forestGreen shadow-md transition-all duration-300 ease-in-out border border-forestGreen"
+            target='_blank'
+            href="https://wa.me/message/DRZ3AJKQ32KJA1" 
+            className="hidden md:inline-flex items-center gap-3 flex-row justify-center px-5 py-2.5 rounded-full bg-forestGreen text-white font-semibold text-[14px] hover:bg-white hover:text-forestGreen shadow-md transition-all duration-300 ease-in-out border border-forestGreen"
           >
-            {isRtl ? 'احجز الآن' : 'Inquire Now'}
+            {isRtl ? 'استفسر او واتساب' : 'Inquire / Whatsapp'}
+            <span><FaWhatsapp className='text-gold'/></span>
           </motion.a>
 {/* 
           <div className="w-9 h-9 rounded-full bg-neutral-900 text-white flex items-center justify-center shadow-sm">
@@ -204,13 +206,13 @@ export default function Navbar({ toggleLanguage, isRtl }) {
                     {isRtl ? 'التواصل' : 'Contact'}
                   </Link>
 
-                  <Link
-                    to="/contact"
+                  <a
+                    href="https://wa.me/message/DRZ3AJKQ32KJA1" 
                     onClick={() => setIsOpen(false)}
-                    className="mt-2 md:hidden flex items-center justify-center w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
+                    className="mt-2 md:hidden flex items-center justify-center gap-3 w-full py-3 rounded-full bg-forestGreen text-white font-semibold text-[15px] border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-[0_4px_14px_rgba(14,165,233,0.3)]"
                   >
-                    {isRtl ? 'احجز الآن' : 'Inquire Now'}
-                  </Link>
+                    {isRtl ? 'احجز الآن' : 'Inquire / Whatsapp'} <span><FaWhatsapp className='text-gold'/></span>
+                  </a>
                 </nav>
               </motion.div>
             </>
