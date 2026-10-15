@@ -393,7 +393,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                       </p>
                     </div>
 
-                    {activeModal.event.speakers && (
+                    {/* {activeModal.event.speakers && (
                       <div>
                         <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-2">
                           {isRtl ? 'المتحدثون البارزون' : 'Featured Speakers'}
@@ -407,7 +407,7 @@ export default function FeaturedEvents({ isRtl = false }) {
                           ))}
                         </ul>
                       </div>
-                    )}
+                    )} */}
 
                     {activeModal.event.highlights && (
                       <div>
