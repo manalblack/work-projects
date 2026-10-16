@@ -269,11 +269,7 @@ export default function ToursAndServices() {
     // TODO: fix the zoho mail for this function to work
   const handleInquirySubmit = (e) => {
     e.preventDefault();
-    setInquirySubmitted(true);
-    // setTimeout(() => {
-    //   setInquirySubmitted(false);
-    // }, 5000);
-    e.preventDefault();
+    
     setLoading(true);
     setStatus(null);
 

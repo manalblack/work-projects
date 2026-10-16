@@ -3,8 +3,8 @@ import { Compass, Mail, Phone, MapPin, Globe, ArrowUpRight } from 'lucide-react'
 
 const FOOTER_CONTENT = {
   about: {
-    en: 'Curated expeditions, luxury eco-retreats, and bespoke travel management across Western Africa.',
-    ar: 'رحلات استكشافية فاخرة، منتجعات بيئية، وخدمات سفر مخصصة في جميع أنحاء غرب إفريقيا.'
+    en: 'Curated expeditions, eco-retreats, and bespoke travel management across Nigeria',
+    ar: 'رحلات استكشافية، منتجعات بيئية، وخدمات سفر مخصصة في جميع أنحاء نيجيريا.'
   },
   quickLinksTitle: {
     en: 'Quick Links',
@@ -59,7 +59,9 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
               <div className="p-2 rounded-xl bg-gold">
                 <Compass className="w-5 h-5" />
               </div>
-              <span>Destination Tour</span>
+              <span>
+                {isRtl ? 'تروفيستا' : 'Troveista'}
+              </span>
             </Link>
             
             <p className="text-xs sm:text-sm text-white leading-relaxed max-w-sm">
@@ -141,14 +143,14 @@ export default function Footer({ isRtl = false, onToggleLanguage }) {
 
         {/* Bottom Copyright Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
-          <p>© {new Date().getFullYear()} Destination Tour. {FOOTER_CONTENT.copyright[langKey]}</p>
+          <p>© {new Date().getFullYear()} {isRtl ? 'تروفيستا' : 'Troveista'}. {FOOTER_CONTENT.copyright[langKey]}</p>
           <div className="flex items-center gap-6">
-            <a href="#privacy" className="hover:text-neutral-300 transition-colors">
+            {/* <a href="#privacy" className="hover:text-neutral-300 transition-colors">
               {isRtl ? 'سياسة الخصوصية' : 'Privacy Policy'}
             </a>
             <a href="#terms" className="hover:text-neutral-300 transition-colors">
               {isRtl ? 'الشروط والأحكام' : 'Terms of Service'}
-            </a>
+            </a> */}
           </div>
         </div>
 

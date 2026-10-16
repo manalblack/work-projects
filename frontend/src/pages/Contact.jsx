@@ -20,6 +20,7 @@ import Layout from '../layouts/Layout';
 import { FaTiktok, FaInstagram } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from '../hooks/LanguageContext';
+import emailjs from '@emailjs/browser';
 
 // --- Translations Data ---
 const translations = {
@@ -265,6 +266,22 @@ export default function ContactDispatchPage() {
   // const [currentLang, setCurrentLang] = useState(lang);
   const [activeClassification, setActiveClassification] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+      user_name: '',
+      user_email: '',
+      phone_number: '',
+      message: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
@@ -274,6 +291,34 @@ export default function ContactDispatchPage() {
   const handleDispatch = (e) => {
     e.preventDefault();
     setIsModalOpen(true);
+  };
+
+   const handleInquirySubmit = (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setStatus(null);
+
+    emailjs
+      .send(
+        'service_xgquvfj',     // <-- Paste your Service ID here
+        'template_y6o946r',    // <-- Paste your Template ID here
+        formData,
+        'ah1Y-zeBkndkLjhx3'      // <-- Paste your Public Key here
+      )
+      .then(
+        (result) => {
+          console.log('SUCCESS!', result.text);
+          setLoading(false);
+          setStatus('success');
+          // formRef.current.reset();
+        },
+        (error) => {
+          console.log('FAILED...', error);
+          setLoading(false);
+          setStatus('error');
+        }
+      );
   };
 
     // const toggleLanguage = (newLang) => {
@@ -296,6 +341,9 @@ export default function ContactDispatchPage() {
         transition: { staggerChildren: 0.08, delayChildren: 0.05 }
     }
     };
+
+
+
 
   return (
     <Layout isRtl={isRtl} onToggleLanguage={toggleLanguage}>
@@ -374,77 +422,165 @@ export default function ContactDispatchPage() {
                 </section>
                 
                 <section className='m-auto flex bg-pink-00 md:flex-row flex-col gap-9 md:justify-between md:w-3xl justify-center items-center pb-10 mt-10'>
-                    <form action=""
-                        className='bg-white rounded-xl p-2 w-80 md:w-md h-140'>
-                        <motion.div 
-                            variants={fadeIn} 
-                            className="inline-flex items-center m-5 gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
-                            >
-                            <span className="flex h-2 w-2 relative shrink-0">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
-                            </span>
-                            <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
-                                {isRtl 
-                                ? 'تواصل معانا عبر الايميل' 
-                                : 'Email Us'}
-                            </span>
-                        </motion.div>
+                   <form 
+  action=""
+  onSubmit={handleInquirySubmit}
+  className="relative overflow-hidden bg-white rounded-xl p-2 w-80 md:w-md min-h-[560px] flex flex-col justify-between"
+>
+  {/* ---------------------------------------------------- */}
+  {/* SUCCESS OVERLAY (Shows when status === 'success')    */}
+  {/* ---------------------------------------------------- */}
+  <AnimatePresence>
+    {status === 'success' && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="absolute inset-0 z-30 bg-white/95 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center space-y-4"
+      >
+        {/* Animated Checkmark Circle */}
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
+          className="w-16 h-16 bg-forestGreen/10 rounded-full flex items-center justify-center border border-forestGreen/20 shadow-sm"
+        >
+          <CheckCircle2 className="w-10 h-10 text-forestGreen" />
+        </motion.div>
 
-                        <div className='flex flex-col gap-4 justify-center items-center'>
+        {/* Message Heading */}
+        <h3 className="text-xl font-extrabold text-forestGreen">
+          {isRtl ? 'تم إرسال رسالتك بنجاح!' : 'Message Sent Successfully!'}
+        </h3>
 
-                           <div className='flex flex-col gap-3'>
-                                <label htmlFor="fullName" className='font-bold text-forestGreen text-lg'>
-                                    {isRtl 
-                                    ? 'الاسم كامل' 
-                                    : 'Full name'}
-                                </label>
-                                <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
-                           </div>
+        {/* Subtext */}
+        <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+          {isRtl 
+            ? 'شكراً لتواصلك معنا. قام فريقنا باستلام رسالتك وسنرد عليك في أقرب وقت.' 
+            : 'Thank you for reaching out. team has received your inquiry and will respond shortly.'}
+        </p>
 
-                            <div className='flex flex-col gap-3'>
-                                <label htmlFor="fullName" className='font-bold text-forestGreen text-lg'>
-                                    {isRtl 
-                                    ? 'الايميل' 
-                                    : 'Email'}
-                                </label>
-                                <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
-                           </div>
+        {/* Action Button to Send Another Message */}
+        <button
+          type="button"
+          onClick={() => {
+            setStatus(null);
+            setFormData({
+              user_name: '',
+              user_email: '',
+              phone_number: '',
+              message: ''
+            });
+          }}
+          className="mt-2 px-6 py-2.5 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 shadow-md cursor-pointer"
+        >
+          {isRtl ? 'إرسال رسالة أخرى' : 'Send Another Message'}
+        </button>
+      </motion.div>
+    )}
+  </AnimatePresence>
 
-                             <div className='flex flex-col gap-3'>
-                                <label htmlFor="fullName" className='font-bold text-forestGreen text-lg'>
-                                    {isRtl 
-                                    ? 'رقم الجوال' 
-                                    : 'Phone number'}
-                                </label>
-                                <input type="text" id='fullName' placeholder='Full name'
-                                className='bg-gray-20 md:w-90 w-70 px-3 py-2 rounded-md shadow-md outline outline-gold transition-all duration-300 ease-in-out'/>
-                           </div>
-                           <div className='flex flex-col gap-3'>
-                                <label htmlFor="" className='font-bold text-forestGreen text-lg'>
-                                    {isRtl 
-                                    ? 'الرسالة' 
-                                    : 'Message'}
-                                </label>
-                                <textarea name="" id=""
-                                  className='outline outline-gold md:w-sm w-70 h-25 px-3 py-3' />
-                           </div>
+  {/* ---------------------------------------------------- */}
+  {/* FORM FIELDS                                         */}
+  {/* ---------------------------------------------------- */}
+  <motion.div 
+    variants={fadeIn} 
+    className="inline-flex items-center m-5 gap-2 rounded-full bg-forestGreen border border-white/80 px-3.5 py-1.5 shadow-sm max-w-full"
+  >
+    <span className="flex h-2 w-2 relative shrink-0">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
+    </span>
+    <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
+      {isRtl ? 'تواصل معانا عبر الايميل' : 'Email Us'}
+    </span>
+  </motion.div>
 
-                           <button className="text-[15px] sm:text-[17px] rounded-full shadow-md px-5 py-1 w- font-bold text-white bg-forestGreen tracking-wide leading-tight truncate sm:whitespace-normal border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
-                                {/* {isRtl 
-                                ? 'ارسل' 
-                                : 'Send'} */}
-                                <span className='flex flex-row gap-2'>
-                                    {isRtl 
-                                    ? 'ارسل' 
-                                    : ' Send'}
-                                    <Send  className='size-4 text-gold'/>
-                                </span>       
-                           </button>
-                        </div>
-                    </form>
+  <div className="flex flex-col gap-4 justify-center items-center pb-4">
+
+    {/* Full Name */}
+    <div className="flex flex-col gap-2">
+      <label htmlFor="fullName" className="font-bold text-forestGreen text-base">
+        {isRtl ? 'الاسم كامل' : 'Full name'}
+      </label>
+      <input 
+        value={formData.user_name} 
+        onChange={handleChange}
+        type="text" 
+        name="user_name" 
+        placeholder={isRtl ? 'أدخل اسمك' : 'Enter your full name'}
+        required
+        className="bg-gray-50 md:w-90 w-70 px-3 py-2 rounded-md shadow-xs border border-forestGreen text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+      />
+    </div>
+
+    {/* Email */}
+    <div className="flex flex-col gap-2">
+      <label htmlFor="user_email" className="font-bold text-forestGreen text-base">
+        {isRtl ? 'الايميل' : 'Email'}
+      </label>
+      <input 
+        value={formData.user_email} 
+        onChange={handleChange}
+        type="email" 
+        name="user_email" 
+        placeholder="you@example.com"
+        required
+        dir="ltr"
+        className="bg-gray-50 md:w-90 w-70 px-3 py-2 rounded-md shadow-xs border border-forestGreen text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all text-left"
+      />
+    </div>
+
+    {/* Phone Number */}
+    <div className="flex flex-col gap-2">
+      <label className="font-bold text-forestGreen text-base">
+        {isRtl ? 'رقم الجوال' : 'Phone number'}
+      </label>
+      <input 
+        value={formData.phone_number} 
+        onChange={handleChange}
+        type="tel" 
+        name="phone_number" 
+        placeholder="+218..."
+        dir="ltr"
+        className="bg-gray-50 md:w-90 w-70 px-3 py-2 rounded-md shadow-xs border border-forestGreen text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all text-left"
+      />
+    </div>
+
+    {/* Message */}
+    <div className="flex flex-col gap-2">
+      <label className="font-bold text-forestGreen text-base">
+        {isRtl ? 'الرسالة' : 'Message'}
+      </label>
+      <textarea 
+        value={formData.message} 
+        onChange={handleChange}
+        name="message" 
+        required
+        placeholder={isRtl ? 'اكتب رسالتك هنا...' : 'Write your message here...'}
+        className="border border-forestGreen md:w-90 w-70 h-24 px-3 py-2 rounded-md shadow-xs text-slate-900 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+      />
+    </div>
+
+    {/* Error Alert Box (Only shows if EmailJS fails) */}
+    {status === 'error' && (
+      <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 rounded-md text-xs w-70 md:w-90 text-center">
+        {isRtl ? 'حدث خطأ، يرجى المحاولة لاحقاً.' : 'Failed to send message. Please try again.'}
+      </div>
+    )}
+
+    {/* Submit Button */}
+    <button 
+      type="submit"
+      disabled={loading}
+      className="text-[15px] sm:text-[17px] rounded-full shadow-md px-6 py-2 font-bold text-white bg-forestGreen tracking-wide border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+    >
+      <span>{loading ? (isRtl ? 'جاري الإرسال...' : 'Sending...') : (isRtl ? 'ارسل' : 'Send')}</span>
+      {!loading && <Send className="w-4 h-4 text-gold" />}
+    </button>
+  </div>
+</form>
 
                     {/* TODO: Add the social links from the notes file */}
                     <div className='flex flex-col bg-white lg:h-70 rounded-md'>
@@ -458,7 +594,7 @@ export default function ContactDispatchPage() {
                             </span>
                             <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
                                 {isRtl 
-                                ? 'تواصل معانا عبر الايميل' 
+                                ? 'تواصل معانا عبر حسابتنا' 
                                 : 'Our Social Media'}
                             </span>
                         </motion.div>

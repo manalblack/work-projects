@@ -11,22 +11,24 @@ import {
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
 import { useLanguage } from '../hooks/LanguageContext';
+import { Link } from 'react-router-dom';
+import { FaWhatsapp, FaTiktok, FaInstagram } from "react-icons/fa";
 
 const content = {
   en: {
     feature: "FOUNDER DOSSIER",
     edition: "VOL. IV — 2025",
     cities: ["Lagos", "Abuja", "Dubai", "Zurich"],
-    roleBadge: "Curator & Diplomatic Envoy",
+    roleBadge: "content creator & visionary",
     founderNameFirst: "Yaser",
     founderNameLast: "Abakar (Yas one)",
     title: "Founder & Social media influencer, Troviesta",
-    heroDescription: "Architecting sovereign journeys across Nigeria — ",
+    heroDescription: "Designing journeys and events across Nigeria — ",
     heroHighlight: "where deep cultural heritage meets amazing adventures.",
     stats: [
-      { val: "400K+", label: "Followers across platforms" },
-      // { val: "28", label: "Corridors" },
-      { val: "340+", label: "Summits" }
+      { val: "5+ Years", label: "Managing Events" },
+      { val: "2+ Years", label: "In Tourism" },
+      { val: "37+", label: "Tour & Event" }
     ],
     description: 'Yasser Abkar (Yas One) is the CEO and Founder of Troveista, an officially registered Nigerian company specializing in organizing entertainment events alongside offering distinguished tourism programs as a tour guide. Beyond that, Yasser is an active content creator on YouTube, TikTok, and Snapchat, with a following of over 400,000. He combines his expertise in content marketing, event management, and tourism guidance to deliver innovative marketing and entertainment solutions for companies, brands, and visitors alike.',
     // dossierLabel: "Dossier 01",
@@ -38,7 +40,7 @@ const content = {
     part1P1: "Before Troviesta, luxury tourism in global hubs was formulaic. Tariq Al-Rahman’s background in state protocol revealed that sovereign dignitaries and global founders are moved by stillness, sanctuary, and contextual relevance.",
     part2Header: "II. Transcontinental Corridor",
     part2P1: "Tariq pioneered bespoke corridors linking West Africa (Lagos, Abuja) directly with the GCC (Dubai, Riyadh, Doha), enabling seamless enterprise, sovereign wealth investment, and private cultural expeditions.",
-    axiomQuote: "“True luxury is never loud. It is the effortless alignment of sovereign discretion and human connection.”",
+    axiomQuote: "“Whether it is a tour through Nigeria's wild places or an event people talk about for months, my goal is the same: to create moments you will never forget.”",
     part3Header: "III. The Architecture",
     part3P1: "Troviesta executes irreproducible itineraries: opening private aviation corridors, orchestrating full-island buyouts in the Arabian Gulf, and stewarding bilateral economic symposiums within restricted monuments.",
     publicRecordTag: "Record & Partnerships",
@@ -49,35 +51,35 @@ const content = {
       { outlet: "B.K.EST & Rtm Logistics", title: "\"Strategic Partnership\"", date: "Dialogue", image: 'bk-est.jpeg' }
     ],
     keynotes: [
-      { tag: "Keynote", title: "World Sovereign Tourism Forum • Geneva", sub: "\"Evolution of Quiet Luxury & State Protocols\"" },
-      { tag: "Advisor", title: "Future Hospitality Summit • Riyadh", sub: "African & Arabian Luxury Integration" }
+      { tag: "Content Creator", title: "With over 400,000 followers across social media"},
+      { tag: "Advisor", title: "Future Hospitality Summit • Riyadh", sub: "African & Arabian cultures Integration" }
     ],
-    connectTag: "Direct Dispatch",
+    connectTag: "Contact ",
     connectTitle: "Private Office Access",
-    connectDesc: "For confidential itineraries, sovereign delegations, or keynote inquiries.",
+    connectDesc: "For Tours and Events bookings.",
     links: [
-      { name: "LinkedIn Executive Dispatch", icon: FileText },
-      { name: "X / Twitter Executive Office", icon: Hash },
-      { name: "Instagram Private Journal", icon: Camera }
+      { name: "Whatsapp", icon: FaWhatsapp, url: 'https://wa.me/message/DRZ3AJKQ32KJA1' },
+      { name: "Tiktok", icon: FaTiktok, url: 'https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-99v1Bt5qiQ9' },
+      { name: "Instagram", icon: FaInstagram, url: 'https://www.instagram.com/trv.ev?stkn=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr' }
     ],
     emailLabel: "Confidential Contact",
     emailSub: "Monitored 24/7 by Chief Protocol Officer",
-    ctaBtn: "Request Media / Speaking Inquiry"
+    ctaBtn: "Reach Us",
   },
   ar: {
     feature: "ملف المؤسس",
     edition: "المجلد الرابع — ٢٠٢٥",
     cities: ["لاغوس", "أبوجا", "دبي", "زوريخ"],
-    roleBadge: "قيّم ومبعوث دبلماسي",
+    roleBadge: "صانع محتوى ورؤيوي",
     founderNameFirst: "ياسر",
     founderNameLast: "ابكر (ياس ون)",
     title: "المؤسس وشخصية سوشيل ميديا، تروفيستا",
-    heroDescription: "هندسة رحلات سيادية عبر نيجيريا — ",
+    heroDescription: " تصميم الرحلات والفعاليات في أنحاء نيجيريا — ",
     heroHighlight: "حيث يلتقي التراث الثقافي بالمغامرات الرائعة.",
     stats: [
-      { val: "+١٥", label: "عاماً في البروتوكول" },
-      { val: "٢٨", label: "ممر ثنائي" },
-      { val: "+٣٤٠", label: "قمة سيادية" }
+      { val: "+5", label: "عاماً في ادارة الفعاليات" },
+      { val: "+2", label: "عاماً في السياحة" },
+      { val: "37+", label: "رحلة و فعالية" }
     ],
     description: 'ياسر أبكر ( ياس ون )  هو الرئيس التنفيذي والمؤسس لشركة Troveista، شركة نيجيرية مسجلة رسمياً متخصصة في تنظيم الفعاليات الترفيهية إلى جانب تقديم برامج سياحية مميزة كمرشد سياحي. إلى جانب ذلك، ياسر منشئ محتوى نشط عبر يوتيوب وتيك توك وسناب شات بقاعدة متابعين تتجاوز 400 ألف متابع. يجمع بين خبرته في التسويق بالمحتوى وإدارة الفعاليات والإرشاد السياحي لتقديم حلول تسويقية وترفيهية مبتكرة للشركات والعلامات التجارية والزوّار على حد سواء',
     dossierLabel: "الملف ٠١",
@@ -89,7 +91,7 @@ const content = {
     part1P1: "قبل تأسيس تروفيستا، كانت السياحة الفاخرة نمطية. أظهرت خبرة طارق الرحمان في بروتوكول الدولة أن الشخصيات السيادية تبحث عن السكينة، والخصوصية، والارتباط الثقافي العميق.",
     part2Header: "٢. الجسر العابر للقارات",
     part2P1: "ابتكر طارق ممرات خاصة تربط غرب إفريقيا (لاغوس، أبوجا) مباشرة بالخليج (دبي، الرياض، الدوحة)، مما مهد الطريق للتعاون الاقتصادي الاستثماري والبعثات الثقافية الخاصة.",
-    axiomQuote: "“الفخامة الحقيقية ليست صاخبة أبداً. إنها التناغم السلس بين السرية السيادية والتواصل الإنساني.”",
+    axiomQuote: "“سواء كانت رحلة عبر أجمل مناطق نيجيريا الطبيعية أو فعالية يتحدث عنها الناس لأشهر، هدفي واحد: أن أصنع لحظات لن تنساها أبدًا.”",
     part3Header: "٣. هندسة التجارب",
     part3P1: "تنفذ تروفيستا مسارات فريدة: فتح ممرات طيران خاصة، حجز جزر بالكامل في الخليج العربي، وتنظيم قمم اقتصادية ثنائية داخل معالم تاريخية مغلقة.",
     publicRecordTag: "السجل والشراكات",
@@ -100,22 +102,22 @@ const content = {
       { outlet: "بي.كي.است", title: "\"شراكة استراتيجية\"", date: "حوار تنفيذي", image:'/bk-est.jpegs' }
     ],
     keynotes: [
-      { tag: "متحدث", title: "المنتدى العالمي للسياحة السيادية • جنيف", sub: "\"تطور الفخامة الهادئة والبروتوكولات الحكومية\"" },
-      { tag: "مستشار", title: "قمة ضيافة المستقبل • الرياض", sub: "التكامل الفاخر الإفريقي والعربي" }
+      { tag: "صانع محتوى", title: "أكثر من 400,000 متابع عبر مواقع التواصل الاجتماعي" },
+      { tag: "مستشار", title: "قمة ضيافة المستقبل • الرياض" }
     ],
     connectTag: "التواصل المباشر",
     connectTitle: "الوصول للمكتب الخاص",
-    connectDesc: "للمسارات السرية، والوفود السيادية، واستفسارات المشاركات.",
+    connectDesc: "للجولات السياحية و حجز الفعاليات",
     links: [
-      { name: "رسائل لينكد إن التنفيذية", icon: FileText },
-      { name: "المكتب التنفيذي X / تويتر", icon: Hash },
-      { name: "المجلة الخاصة على إنستغرام", icon: Camera }
+      { name: "واتساب", icon: FaWhatsapp, url:'https://wa.me/message/DRZ3AJKQ32KJA1' },
+      { name: "تيك توك", icon: FaTiktok, url: 'https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-99v1Bt5qiQ9' },
+      { name: " إنستغرام", icon: FaInstagram, url: 'https://www.instagram.com/trv.ev?stkn=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr'}
     ],
     emailLabel: "البريد السري",
     emailSub: "مراقب على مدار الساعة من قبل رئيس البروتوكول",
-    ctaBtn: "طلب إلقاء كلمة أو استفسار إعلامي"
+    ctaBtn: "تواصل معانا"
   }
-};
+}
 
 // Animation Variants
 
@@ -352,7 +354,7 @@ export default function Founder() {
                 <div className="pt-2 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-gold" />
                   <a className="font-serif text-base text-white hover:text-gold transition-colors hover:underline" href="mailto:info@troveista.com">
-                    
+                    info@troveista.com
                   </a>
                 </div>
               </div>
@@ -363,28 +365,28 @@ export default function Founder() {
                   {t.links.map((link, idx) => {
                     const IconComponent = link.icon;
                     return (
-                      <motion.a 
+                      <Link
                         key={idx} 
-                        href="#" 
+                        to={link.url} 
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                         className="p-2.5 rounded-lg bg-forestGreen/70 hover:bg-slate-700 text-gold border border-forestGreen transition-colors" 
                         title={link.name}
                       >
                         <IconComponent className="w-4 h-4" />
-                      </motion.a>
+                      </Link>
                     );
                   })}
                 </div>
-                <motion.a 
+                <Link
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all duration-300 ease-in-out" 
-                  href="#"
+                  to="/contact"
                 >
                   <span>{t.ctaBtn}</span>
                   <Send className="w-3.5 h-3.5 text-gold" />
-                </motion.a>
+                </Link>
               </div>
             </div>
           </motion.div>
