@@ -9,8 +9,8 @@ import {
 // Fallback test images if event.images is not provided
 const TEST_IMAGES = [
   "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"
+  "/red-area-stage.jpeg",
+  "/red-area-cart.jpeg"
 ];
 
 export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = false }) {
@@ -80,7 +80,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
             {/* ---------------------------------------------------- */}
             {/* MULTI-IMAGE CAROUSEL HEADER                          */}
             {/* ---------------------------------------------------- */}
-            <div className="relative h-64 sm:h-80 bg-slate-900 flex-shrink-0 group overflow-hidden">
+            <div className="relative md:h-98 h-80 bg-slate-900 flex-shrink-0 group overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImageIndex}
@@ -131,14 +131,14 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
               <>
                 <button
                   onClick={handlePrevImage}
-                  className={`absolute top-1/2 -translate-y-1/2 ${isRtl ? 'right-2 sm:right-3' : 'left-2 sm:left-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
+                  className={`hidden md:flex absolute top-1/2 -translate-y-1/2 ${isRtl ? 'right-2 sm:right-3' : 'left-2 sm:left-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
                 >
                   <LeftNavIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
                 <button
                   onClick={handleNextImage}
-                  className={`absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
+                  className={`hidden md:flex absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
                 >
                   <RightNavIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
