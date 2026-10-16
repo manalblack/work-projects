@@ -236,7 +236,7 @@ export default function Founder() {
                     <p className="text-[10px] uppercase tracking-widest text-white font-bold">{t.dossierLabel}</p>
                     <p className="font-serif text-sm font-medium">{t.founderNameFirst} {t.founderNameLast}</p>
                   </div>
-                  <span className="text-[11px] font-medium text-slate-300">{t.location}</span>
+                  {/* <span className="text-[11px] font-medium text-slate-300">{t.location}</span> */}
                 </div>
               </motion.div>
             </motion.div>
