@@ -80,7 +80,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
             {/* ---------------------------------------------------- */}
             {/* MULTI-IMAGE CAROUSEL HEADER                          */}
             {/* ---------------------------------------------------- */}
-            <div className="relative h-80 bg-slate-900 flex-shrink-0 group overflow-hidden">
+            <div className="relative h-64 sm:h-80 bg-slate-900 flex-shrink-0 group overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImageIndex}
@@ -90,72 +90,92 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                   animate={{ opacity: 0.85, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full object-contain md:object-cover"
+                  /* SWIPE / DRAG HANDLERS */
+                  drag={images.length > 1 ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipeThreshold = 50; // Minimum px distance needed to trigger swipe
+                    if (offset.x < -swipeThreshold) {
+                      // Swiped left
+                      isRtl ? handlePrevImage() : handleNextImage();
+                    } else if (offset.x > swipeThreshold) {
+                      // Swiped right
+                      isRtl ? handleNextImage() : handlePrevImage();
+                    }
+                  }}
+                  className="w-full h-full object-cover"
                 />
               </AnimatePresence>
 
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/30 to-transparent pointer-events-none" />
 
-              {/* Close Button */}
-              <button
+             <button
                 onClick={onClose}
-                className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
+                className={`absolute top-3 sm:top-4 ${isRtl ? 'left-3 sm:left-4' : 'right-3 sm:right-4'} p-2 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
 
-              {/* Top Region Flag Badge */}
-              <div className={`absolute top-4 ${isRtl ? 'right-4' : 'left-4'} z-10`}>
-                <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-xs shadow-sm flex items-center gap-1.5">
+              <div className={`absolute top-3 sm:top-4 ${isRtl ? 'right-3 sm:right-4' : 'left-3 sm:left-4'} z-10`}>
+                <span className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-900 font-bold text-[11px] sm:text-xs shadow-sm flex items-center gap-1.5">
                   <span>{event.flag}</span>
-                  <span>{typeof event.regionName === 'object' ? event.regionName[isRtl ? 'ar' : 'en'] : event.regionName}</span>
+                  <span className="truncate max-w-[120px] sm:max-w-none">
+                    {typeof event.regionName === 'object' ? event.regionName[isRtl ? 'ar' : 'en'] : event.regionName}
+                  </span>
                 </span>
               </div>
 
               {/* Image Navigation Controls (Show if > 1 image) */}
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={handlePrevImage}
-                    className={`hidden md:absolute top-1/2 -translate-y-1/2 ${isRtl ? 'right-3' : 'left-3'} p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer opacity-80 hover:opacity-100`}
-                  >
-                    <LeftNavIcon className="w-5 h-5" />
-                  </button>
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevImage}
+                  className={`absolute top-1/2 -translate-y-1/2 ${isRtl ? 'right-2 sm:right-3' : 'left-2 sm:left-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
+                >
+                  <LeftNavIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
 
-                  <button
-                    onClick={handleNextImage}
-                    className={`hidden md:absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-3' : 'right-3'} p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer opacity-80 hover:opacity-100`}
-                  >
-                    <RightNavIcon className="w-5 h-5" />
-                  </button>
+                <button
+                  onClick={handleNextImage}
+                  className={`absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} p-1.5 sm:p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md transition-all z-20 cursor-pointer`}
+                >
+                  <RightNavIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
 
-                  {/* Carousel Indicators / Dots */}
-                  <div className="absolute bottom-20 inset-x-0 flex items-center justify-center gap-1.5 z-20">
-                    {images.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                          idx === currentImageIndex 
-                            ? 'w-6 bg-gold' 
-                            : 'w-1.5 bg-white/50 hover:bg-white/80'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
+                {/* Dots Positioned Cleanly Above Content */}
+                <div className="absolute bottom-16 sm:bottom-20 inset-x-0 flex items-center justify-center gap-1.5 z-20">
+                  {images.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentImageIndex(idx)}
+                      className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                        idx === currentImageIndex 
+                          ? 'w-5 sm:w-6 bg-gold' 
+                          : 'w-1.5 bg-white/50 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
 
               {/* Title & Venue Overlay */}
-              <div className="absolute bottom-4 inset-x-6 text-white z-10">
-                <div className="flex items-center gap-2 text-xs font-semibold text-white mb-1">
-                  <Calendar className="w-3.5 h-3.5 text-gold" />
-                  <span>{typeof event.date === 'object' ? event.date[isRtl ? 'ar' : 'en'] : event.date}</span>
-                  <span>•</span>
-                  <MapPin className="w-3.5 h-3.5 text-gold" />
-                  <span>{typeof event.venue === 'object' ? event.venue[isRtl ? 'ar' : 'en'] : event.venue}</span>
+              <div className="absolute bottom-3 sm:bottom-4 inset-x-4 sm:inset-x-6 text-white z-10">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-xs font-semibold text-gold mb-1">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-gold shrink-0" />
+                    <span>{typeof event.date === 'object' ? event.date[isRtl ? 'ar' : 'en'] : event.date}</span>
+                  </div>
+                  <span className="hidden sm:inline">•</span>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-gold shrink-0" />
+                    <span className="truncate max-w-[160px] sm:max-w-none">
+                      {typeof event.venue === 'object' ? event.venue[isRtl ? 'ar' : 'en'] : event.venue}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="md:text-2xl text-xl font-extrabold tracking-tight">
+                <h3 className="text-xl sm:text-3xl font-extrabold tracking-tight leading-snug">
                   {typeof event.title === 'object' ? event.title[isRtl ? 'ar' : 'en'] : event.title}
                 </h3>
               </div>
