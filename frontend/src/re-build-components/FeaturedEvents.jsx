@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Ticket, Info, X, Clock, Users, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import {Link} from 'react-router-dom';
+import EventDetailsModal from '../re-build-components/EventDetailsModal'
 
 const FEATURED_EVENTS = [
   {
@@ -33,7 +34,7 @@ const FEATURED_EVENTS = [
     comingSoon: false,
     regularPrice: '₦2,000',
     vipPrice: '₦5,000',
-    image: '/red-area-event.png',
+    image: '/red-area-character.jpeg',
     description: {
       en: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers',
       ar: 'يوم استثنائي مليء بالإضاءة الحمراء والموسيقى والرقص، بحضور فنانين ومؤثرين على مواقع التواصل الاجتماعي',
@@ -124,11 +125,29 @@ const FEATURED_EVENTS = [
   }
 ];
 
+ const MODAL_EVENT = 
+  {
+    id: 'evt-1',
+    title: 'Red Area',
+    venue: 'Murtala Mohammad Square',
+    date: 'NOV 29th, 2026',
+    flag: '🇳🇬',
+    regionName: 'Kaduna, Nigeria',
+    regularPrice: '₦2,000',
+    vipPrice: '₦5,000',
+    stallPrice: '₦15,000', // <--- Added stall price
+    image: '/red-area-character.jpeg',
+    description: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers.',
+    comingSoon: false,
+  }
+
 // original background : bg-neutral-50/50
 
 export default function FeaturedEvents({ isRtl = false }) {
   const [activeModal, setActiveModal] = useState(null); // { type: 'about' | 'book', event: Object }
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
 
   const langKey = isRtl ? 'ar' : 'en';
 
@@ -150,6 +169,12 @@ export default function FeaturedEvents({ isRtl = false }) {
     setActiveModal(null);
     setBookingSuccess(false);
   };
+
+  const openAboutModal = () => {
+    setIsOpenModal(true);
+    console.log('123');
+    
+  }
 
   return (
     <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-100/10" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -216,7 +241,7 @@ export default function FeaturedEvents({ isRtl = false }) {
               <div className={`flex flex-col justify-between h-full ${evt.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
                 {/* Card Media */}
                 <div>
-                  <div className="relative md:h-65 h-80 w-full overflow-hidden bg-neutral-100">
+                  <div className="relative md:h-70 h-80 w-full overflow-hidden bg-neutral-100">
                     <img 
                       src={evt.image} 
                       alt={evt.title[langKey]}
@@ -254,7 +279,8 @@ export default function FeaturedEvents({ isRtl = false }) {
                 <div className="p-5 sm:p-6 pt-0 grid grid-cols-2 gap-2.5">
                   <button
                     type="button"
-                    onClick={() => openModal('about', evt)}
+                    // onClick={() => openModal('about', evt)}
+                    onClick={openAboutModal}
                     className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full border border-neutral-200 hover:border-forestGreen bg-white text-neutral-800 text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ease-in-out"
                   >
                     <Info className="w-4 h-4 text-gold" />
@@ -509,7 +535,17 @@ export default function FeaturedEvents({ isRtl = false }) {
             </motion.div>
           </div>
         )}
+
+        {isOpenModal && 
+        <EventDetailsModal 
+          event={MODAL_EVENT}
+          isOpen={isOpenModal}
+          onClose={() => setIsOpenModal(false)}
+          isRtl={isRtl}/>}
       </AnimatePresence>
+
+      
+
     </section>
   );
 }

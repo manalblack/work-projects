@@ -11,14 +11,14 @@ const FOUNDER_DATA = {
     en: 'Founder & Managing Director',
     ar: 'المؤسس والمدير التنفيذي'
   },
-  image: '/founder-orange.jpeg',
+  image: '/founder-true.jpeg',
   quote: {
     en: 'We believe travel should be more than just visiting a place—it should transform how you see the world while preserving the communities and nature that make it extraordinary.',
     ar: 'نؤمن بأن السفر يجب أن يكون أكثر من مجرد زيارة مكان—بل ينبغي أن يغير طريقة رؤيتك للعالم مع الحفاظ على المجتمعات والطبيعة التي تجعله استثنائياً.'
   },
   bioSummary: {
     en: 'Founded with a passion for sustainable eco-tourism and cultural preservation, our mission is to deliver authentic, high-end travel experiences that leave a lasting positive impact across West Africa.',
-    ar: 'تأسست الشركة بشغف لسياحة بيئية مستدامة وحفظ التراث الثقافي، ومهمتنا هي تقديم تجارب سفر فاخرة وأصيلة تترك أثراً إيجابياً مستداماً في جميع أنحاء غرب إفريقيا.'
+    ar: 'تأسست الشركة بشغف لسياحة بيئية مستدامة وحفظ التراث الثقافي، ومهمتنا هي تقديم تجارب سفر فاخرة وأصيلة تترك أثراً إيجابياً مستداماً في جميع أنحاء نيجيريا.'
   }
 };
 
@@ -116,7 +116,7 @@ export default function FounderVisionSection({ isRtl = false, founderPageRoute =
 
             {/* Founder Quote Card */}
             <div className="p-6 rounded-2xl bg-gold/30 border border-gold/60 relative">
-              <Quote className="w-8 h-8 text-forestGreen absolute top-4 right-4" />
+              {/* <Quote className="w-8 h-8 text-forestGreen absolute top-4 right-1" /> */}
               <p className="text-sm sm:text-base text-neutral-700 italic leading-relaxed relative z-10">
                 "{FOUNDER_DATA.quote[langKey]}"
               </p>

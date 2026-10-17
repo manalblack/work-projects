@@ -230,7 +230,7 @@ export default function Founder() {
               >
                 <img
                   alt="Yaser Abakar"
-                  className="w-full md:h-[380px] h-[500px] object-cover object-center grayscale contrast-105 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
+                  className="w-full md:h-[550px] h-[500px] object-cover object-center grayscale contrast-105 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
                   src="/founder-reading.jpeg"
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white flex justify-between items-end">

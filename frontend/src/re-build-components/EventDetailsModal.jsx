@@ -216,7 +216,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">
-                        {t.regularDesc}
+                        {/* {t.regularDesc} */}
                       </p>
                     </div>
 
@@ -240,7 +240,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">
-                        {t.vipDesc}
+                        {/* {t.vipDesc} */}
                       </p>
                     </div>
 
@@ -261,7 +261,7 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                         </span>
                       </div>
                       <p className="text-xs text-slate-500">
-                        {t.stallDesc}
+                        {/* {t.stallDesc} */}
                       </p>
                     </div>
 
