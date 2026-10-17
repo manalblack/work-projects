@@ -285,14 +285,15 @@ export default function EventDetailsModal ({ isOpen, onClose, event, isRtl = fal
                   {t.close}
                 </button>
 
-                <NavLink
-                  to="/contact"
+                <a 
+                  target='_blank'
+                  href='https://wa.me/message/DRZ3AJKQ32KJA1'
                   className="flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-white hover:text-forestGreen transition-all shadow-md cursor-pointer"
                 >
                   <Ticket className="w-4 h-4 text-gold" />
                   <span>{t.bookAction}</span>
                   <ArrowIcon className="w-4 h-4" />
-                </NavLink>
+                </a>
               </div>
 
             </div>
