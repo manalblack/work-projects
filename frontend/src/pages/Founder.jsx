@@ -52,7 +52,7 @@ const content = {
     ],
     keynotes: [
       { tag: "Content Creator", title: "With over 400,000 followers across social media"},
-      { tag: "Advisor", title: "Future Hospitality Summit • Riyadh", sub: "African & Arabian cultures Integration" }
+      { tag: "Advisor", title: 'Content Creation and Content Marketing Consultant' }
     ],
     connectTag: "Contact ",
     connectTitle: "Private Office Access",
@@ -103,7 +103,7 @@ const content = {
     ],
     keynotes: [
       { tag: "صانع محتوى", title: "أكثر من 400,000 متابع عبر مواقع التواصل الاجتماعي" },
-      { tag: "مستشار", title: "قمة ضيافة المستقبل • الرياض" }
+      { tag: "مستشار", title: "مستشار في صناعة المحتوى والتسويق بالمحتوى" }
     ],
     connectTag: "التواصل المباشر",
     connectTitle: "الوصول للمكتب الخاص",
