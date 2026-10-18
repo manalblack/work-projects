@@ -6,6 +6,7 @@ import {
   ChevronLeft, ChevronRight, SaudiRiyal 
 } from 'lucide-react';
 import { FaWhatsapp } from "react-icons/fa6";
+import PriceOption from './PricingOption';
 
 // const testTourImages = [
 //   {
@@ -55,6 +56,9 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
             caption: isRtl ? 'اكواخ الزوار' : 'Visitors huts',
         }
     ]
+
+    console.log(heroTour);
+    
 
     // Determine image list (checks heroTour.gallery, falls back to testTourImages or single heroTour.image)
     const tourImages = heroTour?.gallery?.length 
@@ -234,9 +238,15 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                     
                     <div className='flex flex-col gap-2 mt-1 w-[200px] bg-amber-00'>
                         <p>{isRtl ? 'الحجز المسبق للفرد' : 'Early birds'}</p>
-
-                    <div className='flex flex-row gap-2'>
                         
+                    <div className='flex flex-row gap-2'>
+                        <div>
+                            <PriceOption 
+                            tourName={heroTour.title}
+                            price={`₦${heroTour.earlyPricingN} -- SAR${heroTour.earlyPricingR}`}
+                            packageType={isRtl? 'الحجز المسبق للفرد' : 'Early birds'}
+                            currency='$' />
+                        </div>
                         <span className="text- font-extrabold text-forestGreen">
                             ₦{heroTour.earlyPricingN}
                         </span>
@@ -252,7 +262,13 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                             ₦{heroTour.latePricingN} --- ${heroTour.latePricingR}
                         </p> */}
                         <div className='flex flex-row gap-2'>
-                        
+                                <div>
+                                    <PriceOption 
+                                    tourName={heroTour.title}
+                                    price={`₦${heroTour.latePricingN} -- SAR${heroTour.latePricingR}`}
+                                    packageType={isRtl? 'الحجز المتأخر للفرد' : 'Early birds'}
+                                    currency='$' />
+                                </div>
                             <span className="text- font-extrabold text-forestGreen">
                                 ₦{heroTour.latePricingN}
                             </span>
@@ -267,6 +283,13 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                             ₦{heroTour.familyPricingN} --- ${heroTour.familyPricingR}
                         </p> */}  
                         <div className='flex flex-row gap-2'>
+                            <div>
+                                <PriceOption 
+                                tourName={heroTour.title}
+                                price={`₦${heroTour.familyPricingN} -- SAR${heroTour.familyPricingR}`}
+                                packageType={isRtl? 'عائلة / كبلز' : 'Families / Couples(3)'}
+                                currency='$' />
+                            </div>
                             <span className="text- font-extrabold text-forestGreen">
                                 ₦{heroTour.familyPricingN}
                             </span>
@@ -283,12 +306,20 @@ export default function TourInfoModal({heroTour, isModalOpen, setIsModalOpen, is
                             ₦{heroTour.soloRoomN} --- ${heroTour.soloRoomR}
                         </p> */}
                         <div className='flex flex-row gap-2'>
+                            <div>
+                                <PriceOption 
+                                tourName={heroTour.title}
+                                price={`₦${heroTour.soloRoomN} -- SAR${heroTour.soloRoomR}`}
+                                packageType={isRtl? 'غرفة خاصة للشخص' : 'Private room / individual'}
+                                currency='$' />
+                            </div>
                             <span className="text- font-extrabold text-forestGreen">
                                 ₦{heroTour.soloRoomN}
                             </span>
                                 ---
                             {/* <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.soloRoomR}</span> */}
                             {isRtl ? <span className="flex text- font-extrabold text-forestGreen">{heroTour.soloRoomR}<SaudiRiyal className='size-4'/></span> : <span className="flex text- font-extrabold text-forestGreen"><SaudiRiyal className='size-4'/>{heroTour.latePricingR}</span>}
+                             
                         </div>
                     </div>
 
