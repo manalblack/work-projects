@@ -1,0 +1,551 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, MapPin, Ticket, Info, X, Clock, Users, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import {Link} from 'react-router-dom';
+import EventDetailsModal from '../re-build-components/EventDetailsModal'
+
+const FEATURED_EVENTS = [
+  {
+    id: 'evt-1',
+    title: {
+      en: 'Red Area',
+      ar: 'المنطقة الحمراء'
+    },
+    category: {
+      en: 'Summit',
+      ar: 'ترفيه'
+    },
+    date: {
+      en: 'Nov 29th 2026',
+      ar: '2026 نوفمبر 29'
+    },
+    time: {
+      en: '12PM to 9PM',
+      ar: '12 الى 9 مساءً'
+    },
+    location: {
+      en: 'Lagos, Nigeria',
+      ar: 'كادونا، نيجيريا'
+    },
+    venue: {
+      en: 'Murtala Mohammad Square',
+      ar:  ' مركز مورتلا محمد'
+    },
+    comingSoon: false,
+    regularPrice: '₦2,000',
+    vipPrice: '₦5,000',
+    image: '/red-area-character.jpeg',
+    description: {
+      en: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers',
+      ar: 'يوم استثنائي مليء بالإضاءة الحمراء والموسيقى والرقص، بحضور فنانين ومؤثرين على مواقع التواصل الاجتماعي',
+    },
+    speakers: [
+      { en: 'Amina Bello (Tech Africa)', ar: 'أمينة بيلو (تيك إفريقيا)' },
+      { en: 'David Okafor (FinPulse)', ar: 'ديفيد أوكافور (فين بالس)' },
+      { en: 'Sarah Jenkins (Global Ventures)', ar: 'سارة جينكينز (جلوبال فينتشرز)' }
+    ]
+  },
+  {
+    id: 'evt-2',
+    title: {
+      en: 'Obudu Mountain Eco Sanctuary Retreat',
+      ar: 'ملاذ محمية جبل أوبودو البيئية'
+    },
+    category: {
+      en: 'Luxury Escape',
+      ar: 'عطلة فاخرة'
+    },
+    date: {
+      en: 'Nov 12 - 15, 2026',
+      ar: '12 - 15 نوفمبر 2026'
+    },
+    time: {
+      en: 'All Day Event',
+      ar: 'حدث على مدار اليوم'
+    },
+    location: {
+      en: 'Cross River, Nigeria',
+      ar: 'كروس ريفر، نيجيريا'
+    },
+    venue: {
+      en: 'Obudu Mountain Resort',
+      ar: 'منتجع جبل أوبودو'
+    },
+    comingSoon: true,
+    price: '$1,200',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+    description: {
+      en: 'An ultra-bespoke retreat combining executive networking, wellness workshops, and guided mountain expeditions designed for C-suite leaders and sovereign founders.',
+      ar: 'ملاذ فاخر مصمم خصيصًا يجمع بين التواصل التنفيذي، وورش العمل الصحية، والرحلات الجبلية الموجهة المصممة لكبار التنفيذيين والمؤسسين.'
+    },
+    highlights: [
+      { en: 'Private Helicopter Transfer', ar: 'نقل خاص بالطائرة المروحية' },
+      { en: 'Executive Wellness Sessions', ar: 'جلسات صحية تنفيذية' },
+      { en: 'Guided Cloud Canopy Tour', ar: 'جولة موجهة فوق السحاب' }
+    ]
+  },
+  {
+    id: 'evt-3',
+    title: {
+      en: 'Pan-African Sovereign Investment Gala',
+      ar: 'حفل الاستثمار السيادي لعموم إفريقيا'
+    },
+    category: {
+      en: 'Gala',
+      ar: 'حفل فاخر'
+    },
+    date: {
+      en: 'Dec 05, 2026',
+      ar: '05 ديسمبر 2026'
+    },
+    time: {
+      en: '06:30 PM WAT',
+      ar: '06:30 مساءً بتوقيت غرب إفريقيا'
+    },
+    location: {
+      en: 'Abuja, Nigeria',
+      ar: 'أبوجا، نيجيريا'
+    },
+    venue: {
+      en: 'Transcorp Hilton Grand Ballroom',
+      ar: 'قاعة ترانسكورب هيلتون الكبرى'
+    },
+    comingSoon: true,
+    price: '$550',
+    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
+    description: {
+      en: 'An exclusive black-tie gala recognizing outstanding infrastructure projects and private equity achievements across the continent.',
+      ar: 'حفل رسمي فاخر لتكريم مشاريع البنية التحتية المتميزة وإنجازات الملكية الخاصة في جميع أنحاء القارة.'
+    },
+    highlights: [
+      { en: 'Keynote Address by Industry Leaders', ar: 'كلمة رئيسية من قادة القطاع' },
+      { en: '4-Course Gourmet Dinner', ar: 'عشاء فاخر مكون من 4 أطباق' },
+      { en: 'Private VIP Lounge Access', ar: 'دخول حصري لصالة كبار الشخصيات' }
+    ]
+  }
+];
+
+ const MODAL_EVENT = 
+  {
+    id: 'evt-1',
+    title: 'Red Area',
+    venue: 'Murtala Mohammad Square',
+    date: 'NOV 29th, 2026',
+    flag: '🇳🇬',
+    regionName: 'Kaduna, Nigeria',
+    regularPrice: '₦2,000',
+    vipPrice: '₦5,000',
+    stallPrice: '₦15,000', // <--- Added stall price
+    image: '/red-area-character.jpeg',
+    description: 'An extraordinary day filled with red lighting, music, and dancing, attended by artists and social media influencers.',
+    comingSoon: false,
+  }
+
+// original background : bg-neutral-50/50
+
+export default function FeaturedEvents({ isRtl = false }) {
+  const [activeModal, setActiveModal] = useState(null); // { type: 'about' | 'book', event: Object }
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+
+  const langKey = isRtl ? 'ar' : 'en';
+
+  const fadeIn = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] } 
+    }
+  };
+
+  const openModal = (type, event) => {
+    setBookingSuccess(false);
+    setActiveModal({ type, event });
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setBookingSuccess(false);
+  };
+
+  const openAboutModal = () => {
+    setIsOpenModal(true);
+    console.log('123');
+    
+  }
+
+  return (
+    <section className="w-full bg-black py-12 sm:py-16 lg:py-24 border-t border-neutral-100/10" dir={isRtl ? 'rtl' : 'ltr'}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4">
+          <div>
+            <motion.div 
+              variants={fadeIn} 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 rounded-full mb-5 bg-forestGreen border border-neutral-200/80 px-3.5 py-1.5 shadow-sm max-w-full"
+            >
+              <span className="flex h-2 w-2 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-gold" />
+              </span>
+              <span className="text-[11px] sm:text-[12px] font-bold text-white tracking-wide leading-tight truncate sm:whitespace-normal">
+                {isRtl ? 'فعاليات مختارة' : 'Handpicked Experiences'}
+              </span>
+            </motion.div>
+
+            <h2 className="mt-1 text-2xl sm:text-4xl font-extrabold text-gold tracking-tight">
+              {isRtl ? 'الفعاليات القادمة المميزة' : 'Featured Events'}
+            </h2>
+          </div>
+
+          <Link
+            to='/events'
+            className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-forestGreen px-3 py-1 rounded-full hover:bg-white hover:text-forestGreen border border-forestGreen self-start md:self-auto transition-all duration-300 ease-in-out">
+            <span>{isRtl ? 'عرض جميع الفعاليات' : 'View All Events'}</span>
+            <ArrowRight className={`w-4 h-4 text-gold ${isRtl ? 'rotate-180' : ''}`} />
+          </Link>
+        </div>
+
+        {/* Events Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {FEATURED_EVENTS.map((evt) => (
+            <motion.div
+              key={evt.id}
+              whileHover={evt.comingSoon ? {} : { y: -4 }}
+              transition={{ duration: 0.2 }}
+              className="relative bg-white rounded-xl overflow-hidden border border-neutral-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              {/* ========================================================= */}
+              {/* FULL-CARD BLUR OVERLAY FOR COMING SOON EVENTS             */}
+              {/* ========================================================= */}
+              {evt.comingSoon && (
+                <div className="absolute inset-0 z-30 bg-black/45 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+                  <div className="bg-neutral-900/90 border border-amber-400/40 text-amber-400 font-extrabold text-sm uppercase tracking-widest px-6 py-3 rounded-full shadow-2xl backdrop-blur-xl">
+                    {isRtl ? 'قريباً' : 'Coming Soon'}
+                  </div>
+                  <p className="text-xs font-semibold text-neutral-300 mt-3 max-w-[220px]">
+                    {isRtl ? 'هذه الفعالية ستكون متاحة للحجز قريباً' : 'This event will be available for booking soon'}
+                  </p>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* CARD CONTENT (BLURRED OUT WHEN COMING SOON IS TRUE)       */}
+              {/* ========================================================= */}
+              <div className={`flex flex-col justify-between h-full ${evt.comingSoon ? 'filter blur-sm select-none pointer-events-none' : ''}`}>
+                {/* Card Media */}
+                <div>
+                  <div className="relative md:h-70 h-80 w-full overflow-hidden bg-neutral-100">
+                    <img 
+                      src={evt.image} 
+                      alt={evt.title[langKey]}
+                      className="w-full h-full object-cover" 
+                    />
+                    <span className="absolute top-3 start-3 bg-white/90 backdrop-blur-md text-gold text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                      {evt.category[langKey]}
+                    </span>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-5 sm:p-6">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-neutral-500 mb-3">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-gold" />
+                        {evt.date[langKey]}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-gold" />
+                        {evt.location[langKey]}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-neutral-900 line-clamp-2 leading-snug mb-2">
+                      {evt.title[langKey]}
+                    </h3>
+
+                    <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed">
+                      {evt.description[langKey]}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card Footer Actions */}
+                <div className="p-5 sm:p-6 pt-0 grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    // onClick={() => openModal('about', evt)}
+                    onClick={openAboutModal}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-full border border-neutral-200 hover:border-forestGreen bg-white text-neutral-800 text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ease-in-out"
+                  >
+                    <Info className="w-4 h-4 text-gold" />
+                    <span>{isRtl ? 'عن الفعالية' : 'About Event'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => openModal('book', evt)}
+                    className="inline-flex items-center justify-center gap-2 md:px-3 px-2 py-2.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white text-xs sm:text-sm font-semibold shadow-sm cursor-pointer border border-forestGreen transition-all duration-300 ease-in-out"
+                  >
+                    <Ticket className="w-4 h-4 text-gold" />
+                    <span>{isRtl ? 'احجز تذكرة' : 'Book Ticket'}</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* View All Events Bottom CTA (Mobile friendly) */}
+        <div className="mt-8 text-center md:hidden">
+
+          {/* Redirect to the events page */}
+          <Link
+            // to="/events"
+            className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-forestGreen border border-forestGreen text-white hover:bg-white hover:text-forestGreen font-semibold text-sm shadow-sm transition-all duration-300 ease-in-out"
+          >
+            <span>{isRtl ? 'استكشف كل الفعاليات' : 'Explore All Events'}</span>
+            <ArrowRight className={`w-4 h-4 text-gold ${isRtl ? 'rotate-180' : ''}`} />
+          </Link>
+        </div>
+
+      </div>
+
+      {/* Dynamic Pop-up Modal */}
+      <AnimatePresence>
+        {activeModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" dir={isRtl ? 'rtl' : 'ltr'}>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeModal}
+              className="absolute inset-0 bg-neutral-950/60 backdrop-blur-sm"
+            />
+
+            {/* Modal Dialog */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden z-10 border border-neutral-100 max-h-[90vh] flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+                <span className="text-xs font-bold uppercase tracking-wider text-gold">
+                  {activeModal.type === 'about' ? (isRtl ? 'تفاصيل الفعالية' : 'Event Details') : (isRtl ? 'حجز التذاكر' : 'Ticket Reservation')}
+                </span>
+                <button
+                  onClick={closeModal}
+                  className="p-1.5 rounded-full text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto space-y-5">
+                <div>
+                  <h3 className="text-xl font-bold text-forestGreen leading-snug">
+                    {activeModal.event.title[langKey]}
+                  </h3>
+                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-semibold text-neutral-500">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-gold" />
+                      {activeModal.event.date[langKey]}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-gold" />
+                      {activeModal.event.time[langKey]}
+                    </span>
+                  </div>
+                </div>
+
+                {/* CONTENT FOR "ABOUT EVENT" MODAL */}
+                {activeModal.type === 'about' && (
+                  <div className="space-y-4">
+                    <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <MapPin className="w-4 h-4 text-gold" />
+                        {isRtl ? 'الموقع والمكان' : 'Venue & Location'}
+                      </div>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        {activeModal.event.venue[langKey]}, {activeModal.event.location[langKey]}
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <Ticket className="w-4 h-4 text-gold" />
+                        {isRtl ? ' التذاكر و الطاولات' : 'Tickets / Stalls'}
+                      </div>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        Regular --- ₦2,000
+                      </p>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        VIP --- ₦5,000
+                      </p>
+                       <p className="text-sm font-semibold text-forestGreen">
+                        Stall --- ₦15,000
+                      </p>
+                      
+                      {/* <div>
+
+                      </div> */}
+                    </div>
+
+                    {/* <div className="rounded-2xl bg-neutral-50 p-4 border border-neutral-100 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-forestGreen uppercase">
+                        <MapPin className="w-4 h-4 text-gold" />
+                        {isRtl ? 'الموقع والمكان' : 'Venue & Location'}
+                      </div>
+                      <p className="text-sm font-semibold text-forestGreen">
+                        {activeModal.event.venue[langKey]}, {activeModal.event.location[langKey]}
+                      </p>
+                    </div> */}
+
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-1">
+                        {isRtl ? 'عن التجربة' : 'Overview'}
+                      </h4>
+                      <p className="text-sm text-neutral-600 leading-relaxed">
+                        {activeModal.event.description[langKey]}
+                      </p>
+                    </div>
+
+                    {/* {activeModal.event.speakers && (
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-gold mb-2">
+                          {isRtl ? 'المتحدثون البارزون' : 'Featured Speakers'}
+                        </h4>
+                        <ul className="space-y-1.5">
+                          {activeModal.event.speakers.map((sp, idx) => (
+                            <li key={idx} className="flex items-center gap-2 text-sm text-forestGreen font-medium">
+                              <Users className="w-4 h-4 text-gold" />
+                              {sp[langKey]}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )} */}
+
+                    {activeModal.event.highlights && (
+                      <div>
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                          {isRtl ? 'أبرز مميزات الفعالية' : 'Event Highlights'}
+                        </h4>
+                        <ul className="space-y-1.5">
+                          {activeModal.event.highlights.map((hl, idx) => (
+                            <li key={idx} className="flex items-center gap-2 text-sm text-neutral-700 font-medium">
+                              <Sparkles className="w-4 h-4 text-[#10b981]" />
+                              {hl[langKey]}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* CONTENT FOR "BOOK TICKET" MODAL */}
+                {activeModal.type === 'book' && (
+                  <div>
+                    {bookingSuccess ? (
+                      <div className="text-center py-6 space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-[#10b981]/15 text-[#10b981] flex items-center justify-center mx-auto">
+                          <CheckCircle2 className="w-7 h-7" />
+                        </div>
+                        <h4 className="text-lg font-bold text-neutral-900">
+                          {isRtl ? 'تم تأكيد طلب الحجز!' : 'Reservation Confirmed!'}
+                        </h4>
+                        <p className="text-xs text-neutral-500 max-w-xs mx-auto">
+                          {isRtl 
+                            ? 'لقد حجزنا تذكرتك المؤقتة. سيقوم فريق الكونسيرج بالتواصل معك.' 
+                            : 'We have reserved your pass. Our concierge team will reach out shortly.'}
+                        </p>
+                      </div>
+                    ) : (
+                      <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
+                        <div className="flex  justify-between p-3.5 rounded-xl bg-gold/80 text-white border border-gold/20">
+                          <span className="text-xs font-bold">{isRtl ? 'سعر التذكرة' : 'Ticket Price'}</span>
+                          <div className='flex flex-col'>
+                            <span className="text-lg font-extrabold">
+                              Regular --- {activeModal.event.regularPrice}
+                            </span>
+                            <span className="text-lg font-extrabold">
+                              VIP --- {activeModal.event.vipPrice}
+                            </span>
+                          </div>
+
+                        </div>
+
+                        {/* <div>
+                          <label className="block text-xs font-bold text-neutral-700 uppercase mb-1">
+                            {isRtl ? 'الاسم الكامل' : 'Full Name'}
+                          </label>
+                          <input 
+                            required
+                            type="text" 
+                            placeholder={isRtl ? 'مثال: أحمد علي' : 'e.g. Alexander Vance'}
+                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold"
+                          />
+                        </div> */}
+
+                        {/* <div>
+                          <label className="block text-xs font-bold text-neutral-700 uppercase mb-1">
+                            {isRtl ? 'البريد الإلكتروني' : 'Email Address'}
+                          </label>
+                          <input 
+                            required
+                            type="email" 
+                            placeholder="alexander@company.com"
+                            className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-gold"
+                          />
+                        </div> */}
+
+                        <button
+                          type="submit"
+                          className="w-full py-3.5 rounded-full bg-forestGreen hover:bg-white hover:text-forestGreen text-white font-bold border border-forestGreen text-sm shadow-md mt-2 transition-all duration-300 ease-in-out"
+                        >
+                          <Link to='/contact'>
+                            {isRtl ? 'تأكيد الحجز' : 'Confirm Reservation'}
+                          </Link>
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50/50 text-end">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 text-xs font-bold text-neutral-500 hover:text-neutral-800 transition-colors"
+                >
+                  {isRtl ? 'إغلاق' : 'Close'}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {isOpenModal && 
+        <EventDetailsModal 
+          event={MODAL_EVENT}
+          isOpen={isOpenModal}
+          onClose={() => setIsOpenModal(false)}
+          isRtl={isRtl}/>}
+      </AnimatePresence>
+
+      
+
+    </section>
+  );
+}
