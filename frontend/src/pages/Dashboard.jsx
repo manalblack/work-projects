@@ -1,155 +1,240 @@
-import {motion, AnimatePresence} from 'motion/react'
-import { useState } from 'react';
-import { CiSquarePlus } from "react-icons/ci";
-import { IoTicketOutline, IoSearch,  IoHomeOutline, IoMenu, IoCloseSharp  } from "react-icons/io5";
-
-import { Ticket, Tickets, House, CalendarPlus2, FilePen, Search } from 'lucide-react';
-
-import { FaArrowUpRightFromSquare} from "react-icons/fa6";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, NavLink } from 'react-router-dom';
-import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
-import { FaRegEdit } from "react-icons/fa";
+import { 
+  House, 
+  CalendarPlus2, 
+  Ticket, 
+  Tickets, 
+  FilePen, 
+  Search, 
+  PanelLeftClose, 
+  PanelLeft, 
+  ExternalLink, 
+  Menu, 
+  X,
+  Sparkles,
+  Globe,
+  Plane
+} from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
-import MainDash from './admin/features/MainDash';
-import AddEventArea from './admin/features/AddEventArea';
-import CreateTicketArea from './admin/features/CreateTicketArea';
-import EditEventArea from './admin/features/EditEventArea';
-import FindTicketArea from './admin/features/FindTicketArea';
 import { useMediaQuery } from '../hooks/useMediaQuery';
-
+import { useLanguage } from '../../src/hooks/LanguageContext'; // Update to your hook's path
 
 export default function Dashboard() {
+  const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
-    const [isOpen, setIsOpen] = useState(false);
-    const isMobile = useMediaQuery("(max-width: 768px)");
-    const [activeTab, setActiveTab] = useState('Main Area');
+  // Pull language state & toggle function from your hook
+  const { lang, isRtl, toggleLanguage } = useLanguage();
 
-  
+  // Keep document direction synced with hook state
+  useEffect(() => {
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = isRtl ? 'ar' : 'en';
+  }, [isRtl]);
 
-    const tabs = [
-        {to: 'main', icon: House, label: 'Main'},
-        {to: 'add-events', icon: CalendarPlus2, label: 'Add Event'},
-        {to: 'create-ticket', icon: Ticket, label: 'Create Ticket'},
-         {to: 'create-tickets', icon: Tickets, label: 'Bulk Tickets'},
-        {to: 'edit-event', icon: FilePen, label: 'Edit event'},
-        {to: 'find-ticket', icon: Search, label: 'Find ticket'},
-       
-    ]
-
-    const sidebarVariants = {
-    open: { 
-      x: 0,
-      width: isMobile ? "280px" : "210px",
-      transition: { type: "spring", stiffness: 300, damping: 30 }
-    },
-    closed: { 
-       x: isMobile ? "-100%" : 0, // Moves it completely out of view to the left
-      width: isMobile ? "280px" : "100px",
-      transition: { type: "spring", stiffness: 300, damping: 30 }
+  // UI Translations Dictionary
+  const t = {
+    brandName: isRtl ? 'تروفيستا' : 'TROVEISTA',
+    dashTitle: isRtl ? 'لوحة المشرف' : 'Admin Dashboard',
+    mainSite: isRtl ? 'الموقع الرئيسي' : 'Live Site',
+    version: isRtl ? 'لوحة التحكم v2.0' : 'Sovereign Admin v2.0',
+    nav: {
+      main: isRtl ? 'الرئيسية' : 'Main Area',
+      addEvents: isRtl ? 'إضافة فعالية' : 'Add Event',
+      createTicket: isRtl ? 'إنشاء تذكرة' : 'Create Ticket',
+      bulkTickets: isRtl ? 'تذاكر متعددة' : 'Bulk Tickets',
+      editEvent: isRtl ? 'تعديل فعالية' : 'Edit Event',
+      findTicket: isRtl ? 'البحث عن تذكرة' : 'Find Ticket',
+      tours: isRtl ? 'اضف جولة سياحية' : 'Add Tourist Tour',
     }
   };
-    const sidebarTransition = { type: "spring", stiffness: 300, damping: 30 };
 
+  const tabs = [
+    { to: 'main', icon: House, label: t.nav.main },
+    { to: 'add-events', icon: CalendarPlus2, label: t.nav.addEvents },
+    { to: 'create-ticket', icon: Ticket, label: t.nav.createTicket },
+    { to: 'create-tickets', icon: Tickets, label: t.nav.bulkTickets },
+    { to: 'edit-event', icon: FilePen, label: t.nav.editEvent },
+    { to: 'find-ticket', icon: Search, label: t.nav.findTicket },
+    {to: 'add-tours', icon: Plane, label: t.nav.tours}
+  ];
 
-    return(
-        <div className="bg-gray-100 h-screen w-full flex overflow-hidden">
+  // Responsive Motion Variants (Accounting for LTR / RTL slide directions)
+  const sidebarVariants = {
+    open: { 
+      x: 0,
+      width: isMobile ? "280px" : "240px",
+      transition: { type: "spring", stiffness: 300, damping: 28 }
+    },
+    closed: { 
+      x: isMobile ? (isRtl ? "100%" : "-100%") : 0,
+      width: isMobile ? "280px" : "80px",
+      transition: { type: "spring", stiffness: 300, damping: 28 }
+    }
+  };
 
-            {/* 1. THE OVERLAY (Mobile Only) */}
-            <AnimatePresence>
-                {isOpen && isMobile && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setIsOpen(false)}
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] md:hidden"
-                />
-                )}
-            </AnimatePresence>
+  return (
+    <div 
+      dir={isRtl ? 'rtl' : 'ltr'} 
+      className={`bg-slate-900 text-slate-100 h-screen w-full flex overflow-hidden ${isRtl ? 'font-arabic' : 'font-sans'} selection:bg-gold selection:text-slate-950`}
+    >
 
-            {/* side bar component */}
-            <motion.aside 
-            initial='closed'
-            animate={isOpen ? "open" : 'closed'}
-            // transition={sidebarTransition}
-            variants={sidebarVariants}
-            className={`bg-ghostWhite z-99 shadow-[4px_0_10px_rgba(0,0,0,0.05)] md:relative flex flex-col md:gap- p-1 fixed shrink-0 top-0 left-0 h-full md:translate-x-0 md:opacity-100 `}>
+      {/* ---------------------------------------------------- */}
+      {/* MOBILE BACKDROP OVERLAY                              */}
+      {/* ---------------------------------------------------- */}
+      <AnimatePresence>
+        {isOpen && isMobile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] md:hidden"
+          />
+        )}
+      </AnimatePresence>
 
-                <button className='absolute cursor-pointer top-4 md:hidden flex right-4 bg-blue-300 text-white rounded-md active:scale-85 transition-all duration-300 ease-in-out'>
-                    <IoCloseSharp className='size-7 '/>
-                </button>
-
-                <div className='flex justify-center items-center z-100'>
-                   <img src='/TRAVLISTA-logo.png' alt='company logo'/>
-                    
-                </div>
-
-                <div className='flex flex-col flex-1 gap-20 bg-red-0'>
-                    <nav className='flex flex-col gap-8 p-1'>
-                        {tabs.map(({to, icon: Icon, label}) => (
-                            <NavLink key={label} to={to} className={({isActive}) => isActive ? 'active-nav-item' : 'nav-item'}>
-                                <div onClick={() => setIsOpen(false)}
-                                data-tooltip-id="sidebar-tooltip"
-                                data-tooltip-content={isOpen ? '' : label}
-                                className='groupe sidebar-link-item'>
-                                    <span className={`flex flex-row ${isOpen ? 'justify-between' : 'justify-center items-center'} px-1 py-1 rounded-sm bg-pink-00 text-gray-700 hover:bg-blue-300 hover:text-white hover:shadow-md active:scale-85 transition-all duration-300 ease-in-out`}>
-                                            <Icon className={`${isOpen ? 'size-5': 'size-7'}`}/>
-                                            <span className={`${isOpen ? 'flex' : 'hidden'} text-lg`}> 
-                                                {label} 
-                                            </span>
-                                    </span>  
-                               </div>
-                            </NavLink>
-                        ))}
-                    </nav>
-                </div>
-            </motion.aside>
-
-            {/* main content area and navbar */}
-            <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
-                <nav className='bg-ghostWhite md:p-3 p-2 flex justify-between items-center shadow-md'>
-                    <div className='flex md:gap-5 gap-10 '>
-                        <button onClick={() => 
-                        setIsOpen(!isOpen)}
-                 className='bg-red-00 hidden md:flex'>
-                    {isOpen ? <GoSidebarExpand  
-                    className='size-6 text-gray-700'/>  
-                    : <GoSidebarCollapse 
-                    className='size-6 text-gray-700'/>}
-                </button>
-                 <button onClick={() => setIsOpen(true)}
-                    className='bg-blue-300 text-white p-0.2 rounded-md md:hidden flex'>
-                        <IoMenu className='size-8'/>
-                    </button>
-
-                    <header className='text-sm hidden md:text-lg font-bold'>
-                        {activeTab}
-                    </header>
-                </div>
-                   
-                    <div className='bg-gray-0'>
-                        <Link to='/' target='_blank' className='flex justify-end items-center gap-1 p-2'>
-                            <span
-                             className='flex md:gap-3 gap-1 justify-center items-center text-md p-1 rounded-md active:bg-blue-300 hover:bg-blue-300 hover:text-white transition-all duration-300 ease-in-out '>
-                                Main Site
-                                <FaArrowUpRightFromSquare />
-                            </span>
-                        </Link>
-                    </div>
-                </nav>
-
-                <main className="flex-1 overflow-y-auto p-2 md:pl-5">
-                    <Outlet />
-                </main>
+      {/* ---------------------------------------------------- */}
+      {/* SOVEREIGN SIDEBAR NAVIGATION                         */}
+      {/* ---------------------------------------------------- */}
+      <motion.aside 
+        initial="closed"
+        animate={isOpen ? "open" : "closed"}
+        variants={sidebarVariants}
+        className={`fixed md:relative z-[80] top-0 ${isRtl ? 'right-0 border-l' : 'left-0 border-r'} h-full bg-slate-950 border-gold/20 shadow-2xl flex flex-col shrink-0 overflow-hidden`}
+      >
+        {/* Sidebar Header / Logo */}
+        <div className="relative h-20 flex items-center justify-between px-4 border-b border-white/10 shrink-0">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-10 h-10 rounded-xl bg-white border border-gold/30 flex items-center justify-center shrink-0 shadow-md">
+              {/* <Sparkles className="w-5 h-5 text-gold" /> */}
+              <img src="/troveista-logo-cropped.png" alt="" />
             </div>
+            <span className={`font-extrabold text-base tracking-wider text-white transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0 md:hidden'}`}>
+              {t.brandName}
+            </span>
+          </div>
 
-            <Tooltip 
-            // id="sidebar-tooltip" 
-            anchorSelect=".sidebar-link-item"
-        className="z-99 rounded-md bg-stone-800 px-3 py-1.5 text-xs opacity-100"
-        noArrow={false}
-      />
+          {/* Mobile Close Button */}
+          {isMobile && (
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
-    )
 
+        {/* Navigation Tab Links */}
+        <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+          {tabs.map(({ to, icon: Icon, label }) => (
+            <NavLink 
+              key={to} 
+              to={to} 
+              onClick={() => isMobile && setIsOpen(false)}
+              className={({ isActive }) => 
+                `sidebar-link-item group relative flex items-center gap-3.5 px-3.5 py-3 rounded-xl font-bold text-xs tracking-wide transition-all duration-300 cursor-pointer ${
+                  isActive 
+                    ? 'bg-forestGreen text-white border border-gold/40 shadow-lg shadow-forestGreen/20' 
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent hover:border-white/5'
+                }`
+              }
+              data-tooltip-id="sidebar-tooltip"
+              data-tooltip-content={!isOpen && !isMobile ? label : ''}
+            >
+              <Icon className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+              
+              <span className={`whitespace-nowrap transition-all duration-200 ${isOpen || isMobile ? 'opacity-100' : 'opacity-0 md:hidden'}`}>
+                {label}
+              </span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer Indicator */}
+        <div className="p-4 border-t border-white/10 text-[10px] font-bold tracking-wider text-slate-500 uppercase flex items-center justify-center">
+          <span className={`${isOpen || isMobile ? 'block' : 'hidden md:hidden'}`}>
+            {t.version}
+          </span>
+        </div>
+      </motion.aside>
+
+      {/* ---------------------------------------------------- */}
+      {/* MAIN CONTENT WRAPPER & TOP NAVBAR                    */}
+      {/* ---------------------------------------------------- */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-slate-900">
+        
+        {/* Top Navbar */}
+        <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3.5 flex items-center justify-between shadow-md shrink-0">
+          
+          <div className="flex items-center gap-4">
+            {/* Desktop Sidebar Toggle */}
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="hidden md:flex p-2 rounded-xl bg-white border-white/10 text-gold hover:text-gold hover:bg-white/95 transition-all cursor-pointer"
+              title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            >
+              {isOpen ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeft className="w-5 h-5" />}
+            </button>
+
+            {/* Mobile Sidebar Trigger */}
+            <button 
+              onClick={() => setIsOpen(true)}
+              className="flex md:hidden p-2 rounded-xl bg-forestGreen text-white border border-forestGreen hover:bg-white hover:text-forestGreen transition-all cursor-pointer shadow-md duration-300 ease-in-out"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            {/* Live Indicator */}
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+              <span className="text-xs sm:text-sm font-extrabold text-white tracking-wide">
+                {t.dashTitle}
+              </span>
+            </div>
+          </div>
+
+          {/* Action Area: Language Switcher & Live Site Link */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* Language Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gold/30 text-slate-950 hover:bg-white/90 hover:text-slate-950 text-xs font-bold transition-all duration-300 shadow-md cursor-pointer active:scale-95"
+            >
+              <Globe className="w-4 h-4 text-gold group-hover:text-slate-950 shrink-0" />
+              <span>{isRtl ? 'English' : 'العربية'}</span>
+            </button>
+
+            {/* Live Site External Link */}
+            <Link 
+              to="/" 
+              target="_blank" 
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-forestGreen text-white border border-forestGreen hover:bg-white hover:text-forestGreen font-bold text-xs transition-all duration-300 shadow-md active:scale-95"
+            >
+              <span>{t.mainSite}</span>
+              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+            </Link>
+          </div>
+
+        </header>
+
+        {/* Dynamic Page Content Outlet */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-900">
+          <Outlet context={{ isRtl, lang }} />
+        </main>
+      </div>
+
+      {/* Tooltip for Collapsed Sidebar Icons */}
+      <Tooltip 
+        id="sidebar-tooltip" 
+        place={isRtl ? 'left' : 'right'}
+        className="z-[99] !bg-slate-950 !border !border-gold/30 !text-white !font-bold !text-xs !rounded-lg !px-3 !py-1.5 shadow-xl"
+      />
+    </div>
+  );
 }

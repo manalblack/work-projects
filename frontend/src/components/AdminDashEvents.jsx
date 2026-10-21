@@ -41,21 +41,21 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
 
 
     return (
-        <div className="w-full md:w-9/10 px-5">
+        <div className="w-full px-5">
             <div key={id}
-                className="h-auto w-full lg:w bg-ghostWhite shadow-md flex flex-col items-center p-2 gap-6 md:gap-8 lg:gap-4 rounded-sm">
-                <div className="w-full bgwhite/50 rounded-sm aspect-video flex justify-center items-center">
+                className="h-auto w-full lg:w bg-ghostWhite shadow-md flex flex-col items-center p-2 pb-5 gap-6 md:gap-8 lg:gap-4 rounded-lg">
+                <div className="w-full bgwhite/50 rounded-sm aspect-video object-cover flex justify-center items-center">
                     <img src={image} alt="placeholder image" className="rounded-sm lg:h- h-60 shadow-md"/>
                 </div>
 
                 <div className="text-white bg-green-6 flex flex-col gap-3">
-                    <h2 className="text-xl font-bold text-gray-700">{title}</h2>
-                    <p className={`${isExpanded ? '' : 'line-clamp-4'} text-md text-gray-700`}>
+                    <h2 className="text-xl font-bold text-slate-950">{title}</h2>
+                    <p className={`${isExpanded ? '' : 'line-clamp-4'} text-md text-forestGreen`}>
                         {description || <span>No description found</span>}
                     </p>
                     <button 
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className={`${!description ? 'hidden' : 'flex'} mt-1 text-blue-600 font-medium hover:underline text-sm`}
+                        className={`${!description ? 'hidden' : 'flex'} mt-1 text-gold font-medium hover:underline text-sm`}
                     >
                         {isExpanded ? 'Show Less' : 'Read More'}
                     </button>
@@ -63,18 +63,20 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
                     <div className="flex flex-row gap-3 bg-red-00 w-full">
                     
                         <div className="flex flex-col gap-4 bg-red-0 mt-4 relative w-full">
-                            <div className="bg-red-0 p-1 flex bg-gren-300 w-full flex-row justify-between gap-10">
+                            <div className="bg-red-0 p-1 flex bg-gren-300 w-full flex-row justify-between gap-">
                                 
-                                <span className="bg-white/50 w-1/2 text-gray-800 md:px-1 py-1 rounded-sm px-1 text-sm md:text- shadow-md">
+                                <span className="bg-white/50 w-3/5 text-gray-800 md:px-1 py-1 rounded-sm px-1 text-sm md:text- shadow-">
                                     Date: {date}, Time: {time}
                                     <br />
                                     Venue: {location}
                                 </span>
+
                                 <div className="flex flex-col font-bold gap-5">
-                                    <span className="bg-blue-300 px-1 py-1 rounded-sm">
-                                        Regular N{regular_price}
+                                    <span className="bg-white/20 text-forestGreen text-xs border border-forestGreen/30 px-1 py-1 rounded-sm ">
+                                        Regular: 
+                                        N{regular_price}
                                     </span>
-                                       <span className="bg-blue-300 px-1 py-1 rounded-sm">
+                                       <span className="bg-white/20 text-forestGreen text-xs border border-forestGreen/30 px-1 py-1 rounded-sm ">
                                         VIP N{vip_price || 0}
                                     </span>
                                 </div>
@@ -99,7 +101,7 @@ export default function AdminDashEvents({allEvents, setAllEvents, id, image, tit
 
                 </div>
                 <button onClick={() => openScannedTicketsModal(id)}
-                    className="px-2 py-1 bg-blue-200 text-white font-bold rounded-md shadow-md active:scale-85 hover:bg-blue-300 transition-all duration-300 ease-in-out">
+                    className="px-3 py-1.5 bg-forestGreen text-white font-bold rounded-full border border-forestGreen shadow-md active:scale-85 hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
                     get scanned tickets
                 </button>
             </div> 

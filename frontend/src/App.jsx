@@ -16,7 +16,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const Home = lazy(() => import('./pages/Home'));
 const Events = lazy(() => import('./pages/Events'));
 
-
+// Client side things
 const Cart = lazy(() => import('./pages/Cart'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const Staff = lazy(() => import('./pages/Staff'));
@@ -34,6 +34,10 @@ const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const AdminProtectedRoute = lazy(() => import('./pages/admin/AdminProtectedRoutes'));
 const StaffFindTicket = lazy(() => import('./pages/StaffFindTicket'));
 
+/*
+  The components below well be edited in the phase 2 of the client rebuild request
+*/
+
 // New admin dashboard with nested routes for each feature
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const MainDash = lazy(() => import('./pages/admin/features/MainDash'));
@@ -41,7 +45,7 @@ const AddEventArea = lazy(() => import('./pages/admin/features/AddEventArea'));
 const CreateTicketArea = lazy(() => import('./pages/admin/features/CreateTicketArea'));
 const EditEventArea = lazy(() => import('./pages/admin/features/EditEventArea'));
 const FindTicketArea = lazy(() => import('./pages/admin/features/FindTicketArea'));
-
+const AddTour = lazy(() => import('./pages/admin/features/AddTours'))
 
 
 
@@ -55,7 +59,7 @@ function App() {
           <BrowserRouter>
           <ScrollToTop />
           
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div className='text-white font-semibold text-xl'>Loading...</div>}>
          
             <Routes>
               {/* public routes */}
@@ -88,6 +92,7 @@ function App() {
                   <Route path='create-ticket' element={<CreateTicketArea />} />
                   <Route path='create-tickets' element={<CreateTicketsArea />} />
                   <Route path='edit-event' element={<EditEventArea />}/>
+                  <Route path='add-tours' element={<AddTour />}/>
                   <Route path='find-ticket' element={<FindTicketArea />}/>
                 </Route>
                 {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>

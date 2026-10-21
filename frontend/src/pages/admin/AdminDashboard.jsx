@@ -7,7 +7,7 @@ import AllEvents from "../../components/admin-components/AllEvents";
 import axios from 'axios';
 import Loading from "../../components/Loading";
 import { supabase } from "../../supabaseConnection";
-
+import { useLanguage } from "../../hooks/LanguageContext";
 
 
 // Add the event to the database and work on the number input fields they nee fixing
@@ -20,6 +20,8 @@ export default function AdminDashboard() {
     // const [currentEvent, setCurrentEvent] = useState([]);
     const [soldOut, setSoldOut] = useState(false);
     const [eventPassed, setEventPassed] = useState(false);
+
+    const {isRtl} = useLanguage();
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -90,6 +92,24 @@ export default function AdminDashboard() {
             
         }
     }, [])
+
+    const t = {
+    dashTitle: isRtl ? 'لوحة تحكم المشرف' : 'Sovereign Admin Dashboard',
+    addEvents: isRtl ? 'إضافة فعالية' : 'Add Event',
+    createTicket: isRtl ? 'إنشاء تذكرة' : 'Create Ticket',
+    findTicket: isRtl ? 'البحث عن تذكرة' : 'Find Ticket',
+    currentEvent: isRtl ? 'الفعالية الحالية' : 'Active Featured Event',
+    allEvents: isRtl ? 'جميع الفعاليات' : 'All Events Overview',
+    passed: isRtl ? 'انتهت الفعالية' : 'Event Passed',
+    soldOut: isRtl ? 'نفذت التذاكر' : 'Sold Out',
+    activeTag: isRtl ? 'نشط الآن' : 'Currently Active',
+    vipPrice: isRtl ? 'سعر الـ VIP' : 'VIP Price',
+    regularPrice: isRtl ? 'السعر العادي' : 'Regular Price',
+    remaining: isRtl ? 'المتبقي' : 'Remaining',
+    sold: isRtl ? 'المباع' : 'Sold',
+    setOngoing: isRtl ? 'تعيين كفعالية حالية' : 'Set Active Event',
+    noEvent: isRtl ? 'لا توجد فعالية نشطة حالياً' : 'No active event currently set.',
+  };
 
 
 
