@@ -1,251 +1,393 @@
-import { useState } from "react"
+import { useState } from "react";
 import DatePicker from "react-datepicker";
-// IMPORTANT: You must import the CSS or the calendar will look broken
 import "react-datepicker/dist/react-datepicker.css";
-import LightBtn from "../../../components/LightBtn";
-import LightPurpleBtn from "../../../components/LightPurpleBtn";
 import axios from "axios";
 import { supabase } from "../../../supabaseConnection";
-import PriceContainer from "../../../components/PriceContainer";
+import { useOutletContext } from "react-router-dom";
 import toast from "react-hot-toast";
 import MiniLoading from "../../../components/admin-components/MiniLoading";
-import imageCompression from 'browser-image-compression';
-
-
-
+import { 
+  Calendar, 
+  MapPin, 
+  Ticket, 
+  Upload, 
+  Sparkles, 
+  DollarSign, 
+  FileText, 
+  Type,
+  CheckCircle2 
+} from "lucide-react";
 
 export default function AddEventArea() {
+  const { isRtl } = useOutletContext(); // Pull language state from parent Dashboard outlet
 
-    const [loading, setLoading] = useState(false);
-    const [eventTime, setEventTime] = useState(null);
-    const [eventData, setEventData] = useState({
+  const [loading, setLoading] = useState(false);
+  const [eventTime, setEventTime] = useState(null);
+  const [eventData, setEventData] = useState({
+    eventTitle: '',
+    eventDescription: '',
+    eventLocation: '',
+    totalTickets: 0,
+    vipPrice: 0,
+    regularPrice: 0
+  });
+  const [eventDate, setEventDate] = useState(new Date());
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Bilingual UI dictionary
+  const t = {
+    addEventTitle: isRtl ? 'إضافة فعالية جديدة' : 'Add New Event',
+    subtitle: isRtl ? 'قم بإنشاء فعالية جديدة ونشرها فوراً على المنصة' : 'Create and publish a new sovereign event listing',
+    titleLabel: isRtl ? 'عنوان الفعالية' : 'Event Title',
+    descLabel: isRtl ? 'وصف الفعالية' : 'Event Description',
+    dateLabel: isRtl ? 'تاريخ ووقت الفعالية' : 'Event Date & Time',
+    locationLabel: isRtl ? 'الموقع / القاعة' : 'Venue / Location',
+    imageLabel: isRtl ? 'صورة الغلاف' : 'Event Cover Image',
+    uploadPrompt: isRtl ? 'اختر صورة الفعالية' : 'Choose Cover Image',
+    ticketsLabel: isRtl ? 'إجمالي التذاكر' : 'Total Tickets',
+    pricingLabel: isRtl ? 'فئات الأسعار' : 'Ticket Pricing',
+    vipPrice: isRtl ? 'سعر الـ VIP' : 'VIP Price',
+    regularPrice: isRtl ? 'السعر العادي' : 'Regular Price',
+    submitBtn: isRtl ? 'حفظ ونشر الفعالية' : 'Publish Event',
+    previewTitle: isRtl ? 'معاينة بطاقة الفعالية' : 'Event Card Preview',
+    aboutEvent: isRtl ? 'عن الفعالية' : 'About Event',
+    buyTicket: isRtl ? 'احجز تذكرة' : 'Buy Ticket',
+  };
+
+  const handelFormChange = (e) => {
+    const { name, value } = e.target;
+    setEventData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handelImageFile = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setImageFile(selectedFile);
+      setImagePreview(URL.createObjectURL(selectedFile));
+    }
+  };
+
+  const addEventToDb = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formattedDate = eventDate.toISOString().split('T')[0];
+    const formattedTime = eventDate.toTimeString([], {
+      hour: 'numeric',
+      minutes: '2-digit',
+      hour12: true 
+    }).split(' ')[0];
+
+    setEventTime(formattedTime);
+     
+    try {
+      const fileName = `eventImage-${Date.now()}-${imageFile.name}`;
+      
+      const { data, error } = await supabase.storage.from('events_images').upload(fileName, imageFile);
+      if (error) throw error;
+
+      const { data: uploadedImage } = supabase.storage.from('events_images').getPublicUrl(fileName);
+      
+      const newEvent = {
+        title: eventData.eventTitle,
+        description: eventData.eventDescription,
+        location: eventData.eventLocation,
+        totalTickets: eventData.totalTickets,
+        vipPrice: eventData.vipPrice,
+        regularPrice: eventData.regularPrice,
+        time: formattedTime,
+        date: formattedDate,
+        image: uploadedImage.publicUrl,
+      };
+
+      const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+
+      if (response.data.message === 'SUCCESS') {
+        toast.success(isRtl ? "تم إضافة الفعالية بنجاح!" : "Event added to database successfully!", {
+          duration: 6000,
+          position: 'top-center',
+        });
+      }
+
+      setEventData({
         eventTitle: '',
         eventDescription: '',
         eventLocation: '',
         totalTickets: 0,
         vipPrice: 0,
         regularPrice: 0
-    });
-    const [eventDate, setEventDate] = useState(new Date());
-    const [imageFile, setImageFile] = useState(null)
-    const [imagePreview, setImagePreview] = useState(null);
-    const API_URL = import.meta.env.VITE_API_URL;
-    
-
-    const handelFormChange = (e) => {
-        const {name, value} = e.target;
-
-        setEventData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }
-        ))
+      });
+      setImagePreview(null);
+      setImageFile(null);
+    } catch (error) {
+      console.error('Error when trying to add event to db', error);
+      toast.error(isRtl ? "حدث خطأ أثناء إضافة الفعالية" : "Failed to add event.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const handelImageFile = (e) => {
-        const selectedFile = e.target.files[0];
-        
-        if(selectedFile) {
-          
-            setImageFile(selectedFile);
-            setImagePreview(URL.createObjectURL(selectedFile));
+  const formatDatePreview = (date) => {
+    if (!date) return "Select Date";
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
 
-        }
-        // setImageFile(URL.createObjectURL(e.target.files[0]));
-    }
-    
-        // Kinda working, keep testing it
-        const addEventToDb = async (e) => {
-            e.preventDefault();
+  const formatTimePreview = (date) => {
+    if (!date) return "Select Time";
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  };
 
-            setLoading(true);
-    
-           const formattedDate = eventDate.toISOString().split('T')[0];
-           const formattedTime = eventDate.toTimeString([], {
-            hour: 'numeric',
-            minutes: '2-digit',
-            hour12: true 
-           }).split(' ')[0];
-         
-        //    setEventDate(formattedDate);
-           setEventTime(formattedTime);
-            
-            try {
-                // upload image to a storage bucket first before adding to database table, We can't save an image file directly into a table
-                const fileName = `eventImage-${imageFile.name}`
-                
-                
-    
-                const {data, error} = await supabase.storage.from('events_images').upload(fileName, imageFile)
-                if(error) throw error;
+  if (loading) {
+    return <MiniLoading />;
+  }
 
-                // Get the public url to save to table
-                
-                const {data: uploadedImage} = supabase.storage.from('events_images').getPublicUrl(fileName);
-                
-    
-                const newEvent = {
-                    title: eventData.eventTitle,
-                    description: eventData.eventDescription,
-                    location: eventData.eventLocation,
-                    totalTickets: eventData.totalTickets,
-                    vipPrice: eventData.vipPrice,
-                    regularPrice: eventData.regularPrice,
-                    time: formattedTime,
-                    date: formattedDate,
-                    image: uploadedImage.publicUrl,
-                }
-
-                console.log(newEvent);
-                
-    
-                const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
-    
-                // const response = await axios.post('http://localhost:3001/admin/add-events', newEvent);
-    
-    
-                console.log(response);
-                if(response.data.message === 'SUCCESS') {
-                    toast.success("event added to database", {
-                    duration: 6000,
-                    position: 'top-center',
-                    });
-                    setLoading(false);
-                }
-    
-                setEventData({
-                    eventTitle: '',
-                    eventDescription: '',
-                    eventLocation: '',
-                    totalTickets: 0,
-                    vipPrice: 0,
-                    regularPrice: 0
-                })
-                setImagePreview(null)
-    
-            } catch (error) {
-                console.error('err when trying to add event to db', error);
-                
-            }
-        }
-        // preview section dat / time 
-        const formatDatePreview = (date) => {
-            if (!date) return "Select Date";
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        };
-    
-        const formatTimePreview = (date) => {
-            if (!date) return "Select Time";
-            return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-        };
-
-    // center the containers
-
-    if(loading) {
-        return <MiniLoading />
-    }
-
-
-    return (
-        <div className="bg-red-0 p-2 flex lg:flex-row flex-col justify-center items-center gap-20">
-
-            <div className="bg-blue-200 md:w-1/2 w-full h-auto p- rounded-sm">
-                <form action="" className="w-full flex justify-center items-center">
-                {/* This div is the inputs parent, remove the background color*/}
-                    <div className="w-9/10 flex pt- flex-col gap-7 justify-center items-center p-1 h- bg-red-0 min-h-0 flex-1 pb-2 bg-gray-40 rounded-sm">
-                        <input type="text"  placeholder="title" name="eventTitle" value={eventData.eventTitle} onChange={handelFormChange}
-                        className="bg-white w-9/11 px-2 py-2 rounded-sm mt-5 shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-                        <textarea placeholder="Description" name='eventDescription' value={eventData.eventDescription} onChange={handelFormChange}
-                        className="w-9/10 bg-white px-2 py-2 h-30 rounded-sm shrink-0 resize-none shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-
-                        <div className="flex flex-col gap-2 max-w-sm bg-blue-00">
-                            <label className="font-bold text-white">Choose Date & Time</label>
-                            <DatePicker selected={eventDate} onChange={(e) => setEventDate(e)}  
-                            showTimeSelect withPortal dateFormat="Pp"
-                            className="bg-white px-2 rounded-sm shadow-md w-60"/>
-                        </div>
-
-                        <input type="text" placeholder="Location" name='eventLocation' value={eventData.eventLocation} onChange={handelFormChange}
-                        className="bg-white px-2 py-1 rounded-sm shadow-md w-9/10 transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-
-                        <label htmlFor="" className="text-white font-bold text-xl">Select image</label>
-                        <input type="file" accept='image/*' onChange={handelImageFile} required
-                        className="bg-white w-3/4 px-2 shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-
-                        <label className="text-white font-bold text-xl">Total Tickets</label>
-                        <input type="number" name="totalTickets" value={eventData.totalTickets === 0? '': eventData.totalTickets} onChange={handelFormChange}
-                         className="bg-white w-1/2 px-2 rounded-sm py-1 transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50" placeholder="Total Tickets"/>
-
-                        <div className="bg-ghostWhite md:w-9/10 w-9/10 flex flex-col gap-2 items-center p-2  rounded-sm shadow-md">
-                            <label htmlFor="">Tickets Prices</label>
-
-                            <label htmlFor="vipPrice" className="font-light">Vip Price</label>
-                            <input type="number" name="vipPrice" value={eventData.vipPrice === 0 ? '' : eventData.vipPrice} onChange={handelFormChange}
-                            placeholder="Vip" className="bg-blue-100 w-1/2 px-1 rounded-sm shadow-md transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-
-                            <label htmlFor="regularPrice" className="font-light">Regular price</label>
-                            <input type="number" name="regularPrice"
-                            placeholder="Regular" value={eventData.regularPrice === 0 ? '' : eventData.regularPrice} onChange={handelFormChange}  className="bg-blue-100 w-1/2 px-1 rounded.sm shadow-lg rounded-sm transition-all outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-50"/>
-                        </div>
-
-                        <button onClick={addEventToDb}
-                            className="bg-ghostWhite text-gray-700 px-2 py-1 rounded-sm font-bold hover:bg-blue-300 hover:text-white shadow-md active:scale-85 transition-all duration-300 ease-in">
-                            Add Event
-                        </button>
-
-
-                    </div>
-                </form>
-            </div>
-
-            <h3 className="lg:hidden flex">
-                scroll down to see event card preview
-            </h3>
-
-            
-            <div className="pb-5 md:w-1/2 flex flex-col justify-center items-center">
-                <h3 className='text-2xl text-center font-bold'>Ticket Preview</h3>
-                    <div className="flex flex-col justify-center items-center w-9/10 bg-darkPurple p-2 rounded-sm shadow-md">
-                        <div className="">
-                            {imageFile && <img src={imagePreview} alt='Preview ticket image' className='rounded-sm'/>}
-                        </div>
-                        <div className="text-white bg-green-6 w-full  flex flex-col gap-3">
-                            <h2 className="text-xl font-bold">{eventData.eventTitle}</h2>
-                            <p className="line-clamp-2 text-lg">
-                                {eventData.eventDescription}
-                            </p>
-                            <div className="flex flex-row gap-8 bg-red-70">
-                                
-                                <div className="flex flex-col gap-3 bg-red-">
-                                    <div className="bg-red-0 p-1 flex flex-col gap-6">
-                                        <div>
-                                        <PriceContainer>
-                                            N{eventData.regularPrice}
-                                        </PriceContainer>
-                                    </div>
-                                        <span className="bg-white/50 text-gray-800 md:px-4 py-1 rounded-sm px-1 text-sm md:text-lg ">
-                                            Date: {formatDatePreview(eventDate)}, Time: {formatTimePreview(eventDate)}
-                                            <br />
-                                            Venue: {eventData.eventLocation}
-                                        </span>
-                                        
-                                    </div>
-                                    <span className="bg-white/50 md:w-1/2 text-gray-800 md:px-2 py-1 rounded-2xl px-2 text-sm md:text-lg">
-                                        Total tickets: {eventData.totalTickets}
-                                    </span>
-                                </div>
-                                <div className="flex flex-col gap-5 mt-12 w-1/2">
-                                    <LightBtn>About Event</LightBtn>
-                                    <LightPurpleBtn>
-                                        Buy Ticket
-                                    </LightPurpleBtn>
-                                </div>
-
-                            </div>
-                        
-                        </div>
-                    </div>
-            </div>
+  return (
+    <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full pb-12 text-slate-100">
+      
+      {/* Header Title */}
+      <div className="mb-8 px-2">
+        <div className="flex items-center gap-2 mb-1">
+          <Sparkles className="w-5 h-5 text-gold" />
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            {t.addEventTitle}
+          </h1>
         </div>
-    )
+        <p className="text-xs sm:text-sm text-slate-400">
+          {t.subtitle}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* ---------------------------------------------------- */}
+        {/* LEFT COLUMN: EVENT CREATION FORM                     */}
+        {/* ---------------------------------------------------- */}
+        <div className="lg:col-span-7 bg-white border border-white/10 rounded-xl p-6 sm:p-8 shadow-2xl">
+          <form onSubmit={addEventToDb} className="space-y-6">
+            
+            {/* Title Input */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Type className="w-4 h-4 text-gold" />
+                <span>{t.titleLabel}</span>
+              </label>
+              <input 
+                type="text" 
+                name="eventTitle" 
+                value={eventData.eventTitle} 
+                onChange={handelFormChange}
+                required
+                placeholder={isRtl ? 'أدخل عنوان الفعالية' : 'e.g., Sovereign Gala Night'}
+                className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+              />
+            </div>
+
+            {/* Description Textarea */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <FileText className="w-4 h-4 text-gold" />
+                <span>{t.descLabel}</span>
+              </label>
+              <textarea 
+                name="eventDescription" 
+                value={eventData.eventDescription} 
+                onChange={handelFormChange}
+                required
+                placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+              />
+            </div>
+
+            {/* Date & Time Picker */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Calendar className="w-4 h-4 text-gold" />
+                  <span>{t.dateLabel}</span>
+                </label>
+                <div className="relative">
+                  <DatePicker 
+                    selected={eventDate} 
+                    onChange={(date) => setEventDate(date)}  
+                    showTimeSelect 
+                    withPortal 
+                    dateFormat="Pp"
+                    className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Location Input */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span>{t.locationLabel}</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="eventLocation" 
+                  value={eventData.eventLocation} 
+                  onChange={handelFormChange}
+                  required
+                  placeholder={isRtl ? 'الرياض، المملكة العربية السعودية' : 'e.g., Riyadh Ballroom'}
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Image File Upload */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Upload className="w-4 h-4 text-gold" />
+                <span>{t.imageLabel}</span>
+              </label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handelImageFile} 
+                required
+                className="w-3/4 bg-white border border-forestGreen/40 py-2 px-3 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 file:transition-all text-slate-400 text-xs rounded-xl cursor-pointer"
+              />
+            </div>
+
+            {/* Total Tickets & Pricing Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div className="space-y-2">
+                <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Ticket className="w-3.5 h-3.5 text-gold" />
+                  <span>{t.ticketsLabel}</span>
+                </label>
+                <input 
+                  type="number" 
+                  name="totalTickets" 
+                  value={eventData.totalTickets === 0 ? '' : eventData.totalTickets} 
+                  onChange={handelFormChange}
+                  required
+                  placeholder="500"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <DollarSign className="w-3.5 h-3.5 text-forestGreen" />
+                  <span>{t.regularPrice}</span>
+                </label>
+                <input 
+                  type="number" 
+                  name="regularPrice" 
+                  value={eventData.regularPrice === 0 ? '' : eventData.regularPrice} 
+                  onChange={handelFormChange}
+                  required
+                  placeholder="2000"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Sparkles className="w-3.5 h-3.5 text-gold" />
+                  <span>{t.vipPrice}</span>
+                </label>
+                <input 
+                  type="number" 
+                  name="vipPrice" 
+                  value={eventData.vipPrice === 0 ? '' : eventData.vipPrice} 
+                  onChange={handelFormChange}
+                  required
+                  placeholder="7000"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button 
+              type="submit"
+              className="w-full py-3.5 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-wider border border-gold/30 hover:bg-gold hover:text-slate-950 transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 mt-4"
+            >
+              <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
+              <span>{t.submitBtn}</span>
+            </button>
+
+          </form>
+        </div>
+
+        {/* ---------------------------------------------------- */}
+        {/* RIGHT COLUMN: LIVE TICKET CARD PREVIEW               */}
+        {/* ---------------------------------------------------- */}
+        <div className="lg:col-span-5 flex flex-col items-center sticky top-24">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-gold mb-4">
+            {t.previewTitle}
+          </h3>
+
+          <div className="w-full max-w-md bg-slate-900 border border-gold/30 rounded-2xl overflow-hidden shadow-2xl p-4 flex flex-col gap-4">
+            
+            {/* Preview Image Box */}
+            <div className="relative h-52 bg-slate-800 rounded-xl overflow-hidden border border-white/10">
+              {imageFile && imagePreview ? (
+                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 gap-2">
+                  <Upload className="w-8 h-8 opacity-40" />
+                  <span className="text-xs font-semibold">{t.uploadPrompt}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Preview Content */}
+            <div className="space-y-3">
+              <h2 className="text-xl font-extrabold text-white truncate">
+                {eventData.eventTitle || (isRtl ? 'عنوان الفعالية هنا' : 'Event Title Preview')}
+              </h2>
+              
+              <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                {eventData.eventDescription || (isRtl ? 'سيظهر وصف الفعالية هنا بالتفصيل...' : 'Event description will appear here as you type...')}
+              </p>
+
+              {/* Pricing & Date Info Panel */}
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-white/5 space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">{t.regularPrice}:</span>
+                  <span className="font-extrabold text-gold">₦{eventData.regularPrice || '0'}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">{t.vipPrice}:</span>
+                  <span className="font-extrabold text-forestGreen">₦{eventData.vipPrice || '0'}</span>
+                </div>
+                <div className="pt-2 border-t border-white/5 flex flex-col gap-1 text-slate-300">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-gold shrink-0" />
+                    <span>{formatDatePreview(eventDate)} at {formatTimePreview(eventDate)}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-gold shrink-0" />
+                    <span className="truncate">{eventData.eventLocation || (isRtl ? 'الموقع' : 'Venue Location')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Simulated Action Buttons */}
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="py-2.5 text-center rounded-xl bg-slate-800 text-white font-bold text-xs border border-white/10">
+                  {t.aboutEvent}
+                </div>
+                <div className="py-2.5 text-center rounded-xl bg-forestGreen text-white font-bold text-xs border border-gold/30">
+                  {t.buyTicket}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
 }
