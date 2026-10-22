@@ -142,6 +142,25 @@ export default function AddEventArea() {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   };
 
+  const formatPrice = (price, currencySymbol = '') => {
+    if (price === null || price === undefined || price === '') return '0';
+    
+    // Convert to number and remove non-numeric characters if passed as string
+    const numericPrice = Number(String(price).replace(/[^0-9.-]+/g, ''));
+
+    if (isNaN(numericPrice)) return '0';
+
+    // Format with commas using built-in Intl.NumberFormat
+    const formatted = new Intl.NumberFormat('en-US').format(numericPrice);
+
+    // return currencySymbol ? `${formatted}` : formatted;
+
+    return formatted;
+
+};
+
+
+
   if (loading) {
     return <MiniLoading />;
   }
@@ -199,7 +218,7 @@ export default function AddEventArea() {
                 onChange={handelFormChange}
                 required
                 placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
               />
             </div>
 
@@ -309,7 +328,7 @@ export default function AddEventArea() {
             {/* Submit Button */}
             <button 
               type="submit"
-              className="w-full py-3.5 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-wider border border-gold/30 hover:bg-gold hover:text-slate-950 transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 mt-4"
+              className="w-full py-3.5 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-wider border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 mt-4"
             >
               <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
               <span>{t.submitBtn}</span>
@@ -326,14 +345,14 @@ export default function AddEventArea() {
             {t.previewTitle}
           </h3>
 
-          <div className="w-full max-w-md bg-slate-900 border border-gold/30 rounded-2xl overflow-hidden shadow-2xl p-4 flex flex-col gap-4">
+          <div className="w-full max-w-md bg-white border border-gold/30 rounded-2xl overflow-hidden shadow-2xl p-4 flex flex-col gap-4">
             
             {/* Preview Image Box */}
-            <div className="relative h-52 bg-slate-800 rounded-xl overflow-hidden border border-white/10">
+            <div className="relative md:h-70 h-85 bg-gold/40 rounded-xl overflow-hidden border border-white/10">
               {imageFile && imagePreview ? (
                 <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 gap-2">
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-700 gap-2">
                   <Upload className="w-8 h-8 opacity-40" />
                   <span className="text-xs font-semibold">{t.uploadPrompt}</span>
                 </div>
@@ -342,25 +361,31 @@ export default function AddEventArea() {
 
             {/* Preview Content */}
             <div className="space-y-3">
-              <h2 className="text-xl font-extrabold text-white truncate">
+              <h2 className="text-xl font-extrabold text-slate-950 truncate">
                 {eventData.eventTitle || (isRtl ? 'عنوان الفعالية هنا' : 'Event Title Preview')}
               </h2>
               
-              <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-forestGreen line-clamp-2 leading-relaxed">
                 {eventData.eventDescription || (isRtl ? 'سيظهر وصف الفعالية هنا بالتفصيل...' : 'Event description will appear here as you type...')}
               </p>
 
               {/* Pricing & Date Info Panel */}
-              <div className="p-3 rounded-xl bg-slate-800/80 border border-white/5 space-y-2 text-xs">
+              <div className="p-3 rounded-xl bg-white border border-forestGreen/30 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">{t.regularPrice}:</span>
-                  <span className="font-extrabold text-gold">₦{eventData.regularPrice || '0'}</span>
+                  <span className="text-forestGreen">{t.regularPrice}:</span>
+                  <span className="font-extrabold text-gold">
+                    {/* ₦{eventData.regularPrice || '0'} */}
+                    ₦{formatPrice(eventData.regularPrice)}
+                </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">{t.vipPrice}:</span>
-                  <span className="font-extrabold text-forestGreen">₦{eventData.vipPrice || '0'}</span>
+                  <span className="text-forestGreen">{t.vipPrice}:</span>
+                  <span className="font-extrabold text-gold">
+                    {/* ₦{eventData.vipPrice || '0'} */}
+                    ₦{formatPrice(eventData.vipPrice)}
+                </span>
                 </div>
-                <div className="pt-2 border-t border-white/5 flex flex-col gap-1 text-slate-300">
+                <div className="pt-2 border-t border-forestGreen/50 flex flex-col gap-1 text-forestGreen">
                   <div className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-gold shrink-0" />
                     <span>{formatDatePreview(eventDate)} at {formatTimePreview(eventDate)}</span>
@@ -374,10 +399,10 @@ export default function AddEventArea() {
 
               {/* Simulated Action Buttons */}
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="py-2.5 text-center rounded-xl bg-slate-800 text-white font-bold text-xs border border-white/10">
+                <div className="py-2.5 text-center rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
                   {t.aboutEvent}
                 </div>
-                <div className="py-2.5 text-center rounded-xl bg-forestGreen text-white font-bold text-xs border border-gold/30">
+                <div className="py-2.5 text-center rounded-full bg-forestGreen text-white font-bold text-xs border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out">
                   {t.buyTicket}
                 </div>
               </div>
