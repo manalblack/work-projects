@@ -46,6 +46,8 @@ const CreateTicketArea = lazy(() => import('./pages/admin/features/CreateTicketA
 const EditEventArea = lazy(() => import('./pages/admin/features/EditEventArea'));
 const FindTicketArea = lazy(() => import('./pages/admin/features/FindTicketArea'));
 const AddTourPackageArea = lazy(() => import('./pages/admin/features/AddTourPackageArea'))
+const EditFounderInfo = lazy(() => import('./pages/admin/features/EditFounderInfo'))
+
 
 
 
@@ -94,6 +96,7 @@ function App() {
                   <Route path='edit-event' element={<EditEventArea />}/>
                   <Route path='add-tours' element={<AddTourPackageArea />}/>
                   <Route path='find-ticket' element={<FindTicketArea />}/>
+                  <Route path='edit-founder' element={<EditFounderInfo />}/>
                 </Route>
                 {/* <Route path='/admin/dashboard' element={<AdminDashboard />}/>
                 <Route path='/admin/search-tickets' element={<CustomerTicket/>}/>

@@ -15,7 +15,8 @@ import {
   X,
   Sparkles,
   Globe,
-  Plane
+  Plane,
+  UserRoundPen
 } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -48,6 +49,7 @@ export default function Dashboard() {
       editEvent: isRtl ? 'تعديل فعالية' : 'Edit Event',
       findTicket: isRtl ? 'البحث عن تذكرة' : 'Find Ticket',
       tours: isRtl ? 'اضف جولة سياحية' : 'Add Tourist Tour',
+      founder: isRtl ? 'تعديل محتوى المؤسس': 'Edit Founder Info'
     }
   };
 
@@ -58,7 +60,8 @@ export default function Dashboard() {
     { to: 'create-tickets', icon: Tickets, label: t.nav.bulkTickets },
     { to: 'edit-event', icon: FilePen, label: t.nav.editEvent },
     { to: 'find-ticket', icon: Search, label: t.nav.findTicket },
-    {to: 'add-tours', icon: Plane, label: t.nav.tours}
+    { to: 'add-tours', icon: Plane, label: t.nav.tours },
+    { to: 'edit-founder', icon: UserRoundPen, label: t.nav.founder }
   ];
 
   // Responsive Motion Variants (Accounting for LTR / RTL slide directions)
