@@ -21,23 +21,20 @@ import {
 
 
 /*
+  Founder info to be edited:
 
-    Founder info to be edited:
+  name
+  Desc
+  portrait
+  header
+  a quote
+  previous work experience
+  (Below the record and partnerships section)
+  Roles and expertise
 
-    name
-    Desc
-    portrait
-    header
-    a quote
-    previous work experience
-    (Below the record and partnerships section)
-    Roles and expertise
+  TODO: ask the client if he wants to be able to add the contact info
 
-    TODO: ask the client if he wants to be able to add the contact info
-
-    Clean the design and start working on all the new API endpoints.
-
-
+  Clean the design and start working on all the new API endpoints.
 */
 
 
@@ -212,15 +209,15 @@ export default function EditFounderInfo() {
         {/* ==================================================== */}
         <div className="lg:col-span-6 space-y-6">
           
-          <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gold flex items-center gap-2">
+          <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
               <User className="w-4 h-4 text-gold" />
-              <span>{isRtl ? 'المعلومات الشخصية' : 'Executive Profile'}</span>
+              <span>{isRtl ? 'المعلومات الشخصية' : 'Founder Profile'}</span>
             </h3>
 
             {/* Name */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                 <Type className="w-4 h-4 text-gold" />
                 <span>{t.nameLabel}</span>
               </label>
@@ -231,13 +228,13 @@ export default function EditFounderInfo() {
                 onChange={handleFounderChange}
                 required
                 placeholder="e.g., Faisal Al-Sultan"
-                className="w-full bg-slate-800 border border-white/10 px-4 py-3 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
               />
             </div>
 
             {/* Title / Role */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                 <Briefcase className="w-4 h-4 text-gold" />
                 <span>{t.titleLabel}</span>
               </label>
@@ -248,13 +245,13 @@ export default function EditFounderInfo() {
                 onChange={handleFounderChange}
                 required
                 placeholder="e.g., Chief Executive Officer & Founder"
-                className="w-full bg-slate-800 border border-white/10 px-4 py-3 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
               />
             </div>
 
             {/* Bio / Description */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                 <FileText className="w-4 h-4 text-gold" />
                 <span>{t.bioLabel}</span>
               </label>
@@ -265,13 +262,13 @@ export default function EditFounderInfo() {
                 required
                 rows={5}
                 placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
-                className="w-full bg-slate-800 border border-white/10 px-4 py-3 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
               />
             </div>
 
             {/* Portrait Image Upload */}
             <div className="space-y-3">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                 <Upload className="w-4 h-4 text-gold" />
                 <span>{t.imageLabel}</span>
               </label>
@@ -279,7 +276,7 @@ export default function EditFounderInfo() {
                 type="file" 
                 accept="image/*" 
                 onChange={handleImageChange} 
-                className="w-full bg-slate-800 border border-white/10 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer"
+                className="w-full p-2 bg-white border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer"
               />
 
               {imagePreview && (
@@ -297,14 +294,14 @@ export default function EditFounderInfo() {
         {/* ==================================================== */}
         <div className="lg:col-span-6 space-y-6">
           
-          <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gold flex items-center gap-2">
+          <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-gold" />
               <span>{t.expHeader} ({experiences.length})</span>
             </h3>
 
             {/* Add Experience Sub-form */}
-            <div className="p-4 rounded-xl bg-slate-800/80 border border-white/5 space-y-3">
+            <div className="p-4 rounded-xl bg-white border border-forestGreen/50 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input 
                   type="text"
@@ -312,7 +309,7 @@ export default function EditFounderInfo() {
                   value={newExp.role}
                   onChange={handleExpChange}
                   placeholder={t.rolePlaceholder}
-                  className="bg-slate-900 border border-white/10 px-3 py-2 rounded-xl text-white text-xs focus:outline-none focus:border-gold"
+                  className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
                 />
                 <input 
                   type="text"
@@ -320,7 +317,7 @@ export default function EditFounderInfo() {
                   value={newExp.company}
                   onChange={handleExpChange}
                   placeholder={t.companyPlaceholder}
-                  className="bg-slate-900 border border-white/10 px-3 py-2 rounded-xl text-white text-xs focus:outline-none focus:border-gold"
+                  className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
                 />
               </div>
 
@@ -330,7 +327,7 @@ export default function EditFounderInfo() {
                 value={newExp.period}
                 onChange={handleExpChange}
                 placeholder={t.periodPlaceholder}
-                className="w-full bg-slate-900 border border-white/10 px-3 py-2 rounded-xl text-white text-xs focus:outline-none focus:border-gold"
+                className="w-full bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
               />
 
               <textarea 
@@ -339,15 +336,15 @@ export default function EditFounderInfo() {
                 onChange={handleExpChange}
                 rows={2}
                 placeholder={t.descPlaceholder}
-                className="w-full bg-slate-900 border border-white/10 px-3 py-2 rounded-xl text-white text-xs focus:outline-none focus:border-gold resize-none"
+                className="w-full bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold resize-none"
               />
 
               <button 
                 type="button"
                 onClick={addExperience}
-                className="w-full py-2.5 rounded-xl bg-forestGreen text-white font-bold text-xs hover:bg-gold hover:text-slate-950 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md"
+                className="w-full py-2.5 rounded-full border border-forestGreen bg-forestGreen text-white font-bold text-xs hover:bg-white hover:text-forestGreen transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md ease-in-out duration-300"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4 text-gold" />
                 <span>{t.addExpBtn}</span>
               </button>
             </div>
@@ -355,27 +352,26 @@ export default function EditFounderInfo() {
             {/* Existing Experiences List */}
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
               {experiences.map((exp, index) => (
-                <div key={index} className="p-4 rounded-xl bg-slate-800/50 border border-white/5 flex items-start justify-between gap-3 shadow-md">
+                <div key={index} className="p-4 rounded-xl bg-white border border-forestGreen/50 flex items-start justify-between gap-3 shadow-md">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-extrabold text-white text-sm">{exp.role}</h4>
+                      <h4 className="font-extrabold text-forestGreen text-sm">{exp.role}</h4>
                       <span className="text-[10px] font-bold text-gold px-2 py-0.5 rounded-full bg-gold/10 border border-gold/20">{exp.period}</span>
                     </div>
-                    <p className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-forestGreen" />
+                    <p className="text-xs font-semibold text-slate-950 flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-gold" />
                       <span>{exp.company}</span>
                     </p>
                     {exp.description && (
-                      <p className="text-xs text-slate-400 pt-1 leading-relaxed">{exp.description}</p>
+                      <p className="text-xs text-slate-800 pt-1 leading-relaxed">{exp.description}</p>
                     )}
                   </div>
 
                   <button 
                     type="button"
                     onClick={() => removeExperience(index)}
-                    className="text-red-400 hover:text-red-300 p-1.5 rounded-lg bg-red-950/40 border border-red-800/30 cursor-pointer shrink-0"
-                    title="Remove experience"
-                  >
+                    className="text-red-600 hover:text-red-400 p-1.5 rounded-lg bg-red-950/20 border border-red-800/30 cursor-pointer shrink-0 transition-all duration-300 ease-in-out"
+                    title="Remove experience">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
@@ -387,7 +383,7 @@ export default function EditFounderInfo() {
           {/* Submit Action Button */}
           <button 
             type="submit"
-            className="w-full py-4 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-widest border border-gold/30 hover:bg-gold hover:text-slate-950 transition-all duration-300 shadow-2xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-widest border border-gold/50 hover:bg-white hover:text-forestGreen transition-all duration-300 shadow-2xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 ease-in-out"
           >
             <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
             <span>{t.submitBtn}</span>
