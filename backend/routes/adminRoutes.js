@@ -12,7 +12,8 @@ router.get('/all-events', async (req, res) => {
     console.log('fetching all events')
 
     try {
-        const {data, error} = await supabase.from('events').select('*');
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('translated_events').select('*');
 
         if(error) {
             return res.status(400).json({message: 'error when fetching events'})
@@ -55,6 +56,75 @@ router.post('/add-events', async (req, res) => {
         res.status(400).json({message: 'Operation failed'});
     }
 })
+
+
+// Translated Route testing
+router.post('/add-translated-events', async (req, res) => {
+
+    console.log('route hit');
+    
+    const {
+        titleEn, 
+        titleAr, 
+        descriptionEn, 
+        descriptionAr, 
+        locationEn, 
+        locationAr,
+        totalTickets,
+        vipPrice,
+        regularPrice,
+        eventTime,
+        eventDate,
+        coverImage,
+    } = req.body;
+    // const {newEvent} = req.body;
+
+    // const newEvent  = {
+    //     title: title,
+    //     description: description,
+    //     location: location,
+    //     time: time,
+    //     event_date: date,
+    //     image: image,
+    //     total_tickets: totalTickets,
+    //     vip_price: vipPrice,
+    //     regular_price: regularPrice
+    // };
+
+    const newEventRecord = {
+      title: {
+        en: titleEn,
+        ar: titleAr
+      },
+      description: {
+        en: descriptionEn || '',
+        ar: descriptionAr || ''
+      },
+      location: {
+        en: locationEn || '',
+        ar: locationAr || ''
+      },
+      event_date: eventDate,
+      event_time: eventTime,
+      total_tickets: Number(totalTickets) || 0,
+      vip_price: Number(vipPrice) || 0,
+      regular_price: Number(regularPrice) || 0,
+      cover_image: coverImage
+    };
+    
+    try {
+        // Using translated events table for testing at the moment, if it works, keep the table as the main one for production
+        const {data, error} = await supabase.from('translated_events').insert([newEventRecord])
+        if(error) throw error;
+        
+        res.status(200).json({message: 'SUCCESS'});
+
+    } catch (error) {
+        console.log('error when creating new event', error);
+        res.status(400).json({message: 'Operation failed'});
+    }
+})
+
 
 router.get('/find-ticket', async (req, res) => {
     const {query} = req.query;

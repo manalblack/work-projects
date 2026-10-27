@@ -36,7 +36,7 @@ export default function MainDash() {
     currentEvent: isRtl ? 'الفعالية الحالية' : 'Current Active Event',
     totalTickets: isRtl ? 'إجمالي التذاكر' : 'Total Tickets',
     soldTickets: isRtl ? 'التذاكر المباعة' : 'Sold Tickets',
-    scannedTickets: isRtl ? 'التذاكر المسوحة' : 'Scanned Tickets',
+    scannedTickets: isRtl ? 'التذاكر الممسوحة' : 'Scanned Tickets',
     readMore: isRtl ? 'عرض المزيد' : 'Read More',
     readLess: isRtl ? 'عرض أقل' : 'Show Less',
     regular: isRtl ? 'العادية' : 'Regular',
@@ -57,6 +57,8 @@ export default function MainDash() {
           const NumberOfScannedTickets = scannedTicketsResponse.data.ticketsData;
           setScannedTicketsCount(NumberOfScannedTickets.length);
         }
+        console.log(allEvents);
+        
             
         if (response.data.length > 0) {
           const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
@@ -82,6 +84,7 @@ export default function MainDash() {
   };
 
   const ongoingEvent = allEvents.find(event => event.current_event === true);
+
 
   if (loading) {
     return <MiniLoading />;
@@ -243,24 +246,11 @@ export default function MainDash() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap- space-y-6">
-          {allEvents.map((event) => (
-            <AdminDashEvents 
-              key={event.id}
-              id={event.id} 
-              title={event.title}
-              description={event.description}
-              location={event.location}
-              date={event.date}
-              time={event.time}
-              regular_price={event.regular_price}
-              vip_price={event.vip_price}
-              image={event.image}
-              allEvents={allEvents}
-              setAllEvents={setAllEvents}
-              current_event={event.current_event}
-              isRtl={isRtl}
-            />
-          ))}
+          <AdminDashEvents 
+            allEvents={allEvents}
+            setAllEvents={setAllEvents}
+            isRtl={isRtl}
+          />
         </div>
       </div>
 

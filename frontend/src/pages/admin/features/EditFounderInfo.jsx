@@ -152,22 +152,22 @@ export default function EditFounderInfo() {
       let imageUrl = founderData.image;
 
       // Upload new image to Supabase if changed
-      if (imageFile) {
-        const fileName = `founderPortrait-${Date.now()}-${imageFile.name}`;
-        const { error: uploadError } = await supabase.storage.from('events_images').upload(fileName, imageFile);
-        if (uploadError) throw uploadError;
+      // if (imageFile) {
+      //   const fileName = `founderPortrait-${Date.now()}-${imageFile.name}`;
+      //   const { error: uploadError } = await supabase.storage.from('events_images').upload(fileName, imageFile);
+      //   if (uploadError) throw uploadError;
 
-        const { data: publicUrlData } = supabase.storage.from('events_images').getPublicUrl(fileName);
-        imageUrl = publicUrlData.publicUrl;
-      }
+      //   const { data: publicUrlData } = supabase.storage.from('events_images').getPublicUrl(fileName);
+      //   imageUrl = publicUrlData.publicUrl;
+      // }
 
-      const payload = {
-        name: founderData.name,
-        title: founderData.title,
-        bio: founderData.bio,
-        image: imageUrl,
-        experiences: experiences,
-      };
+      // const payload = {
+      //   name: founderData.name,
+      //   title: founderData.title,
+      //   bio: founderData.bio,
+      //   image: imageUrl,
+      //   experiences: experiences,
+      // };
 
       const response = await axios.post(`${API_URL}/admin/update-founder`, payload);
 

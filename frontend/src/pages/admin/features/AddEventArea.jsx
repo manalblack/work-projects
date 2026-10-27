@@ -24,9 +24,12 @@ export default function AddEventArea() {
   const [loading, setLoading] = useState(false);
   const [eventTime, setEventTime] = useState(null);
   const [eventData, setEventData] = useState({
-    eventTitle: '',
-    eventDescription: '',
-    eventLocation: '',
+    eventTitleE: '',
+    eventTitleR: '',
+    eventDescriptionE: '',
+    eventDescriptionR: '',
+    eventLocationE: '',
+    eventLocationR: '',
     totalTickets: 0,
     vipPrice: 0,
     regularPrice: 0
@@ -86,26 +89,42 @@ export default function AddEventArea() {
     setEventTime(formattedTime);
      
     try {
+
+      // Image handling logic
       const fileName = `eventImage-${Date.now()}-${imageFile.name}`;
       
       const { data, error } = await supabase.storage.from('events_images').upload(fileName, imageFile);
       if (error) throw error;
-
       const { data: uploadedImage } = supabase.storage.from('events_images').getPublicUrl(fileName);
       
+      // const newEvent = {
+      //   title: eventData.eventTitle,
+      //   description: eventData.eventDescription,
+      //   location: eventData.eventLocation,
+      //   totalTickets: eventData.totalTickets,
+      //   vipPrice: eventData.vipPrice,
+      //   regularPrice: eventData.regularPrice,
+      //   time: formattedTime,
+      //   date: formattedDate,
+      //   image: uploadedImage.publicUrl,
+      // };
+
       const newEvent = {
-        title: eventData.eventTitle,
-        description: eventData.eventDescription,
-        location: eventData.eventLocation,
+        titleEn: eventData.eventTitleE,
+        titleAr: eventData.eventTitleR,
+        descriptionEn: eventData.eventDescriptionE,
+        descriptionAr: eventData.eventDescriptionR,
+        locationEn: eventData.eventLocationE,
+        locationAr: eventData.eventLocationR,
         totalTickets: eventData.totalTickets,
         vipPrice: eventData.vipPrice,
         regularPrice: eventData.regularPrice,
-        time: formattedTime,
-        date: formattedDate,
-        image: uploadedImage.publicUrl,
+        eventTime: formattedTime,
+        eventDate: formattedDate,
+        coverImage: uploadedImage.publicUrl,
       };
 
-      const response = await axios.post(`${API_URL}/admin/add-events`, newEvent);
+      const response = await axios.post(`${API_URL}/admin/add-translated-events`, newEvent);
 
       if (response.data.message === 'SUCCESS') {
         toast.success(isRtl ? "تم إضافة الفعالية بنجاح!" : "Event added to database successfully!", {
@@ -114,10 +133,16 @@ export default function AddEventArea() {
         });
       }
 
+      console.log(eventData);
+      
+
       setEventData({
-        eventTitle: '',
-        eventDescription: '',
-        eventLocation: '',
+        eventTitleE: '',
+        eventTitleR: '',
+        eventDescriptionE: '',
+        eventDescriptionR: '',
+        eventLocationE: '',
+        eventLocationR: '',
         totalTickets: 0,
         vipPrice: 0,
         regularPrice: 0
@@ -166,7 +191,7 @@ export default function AddEventArea() {
   }
 
   return (
-    <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full pb-12 text-slate-100">
+    <div className="w-full pb-12 text-slate-100">
       
       {/* Header Title */}
       <div className="mb-8 px-2">
@@ -190,41 +215,150 @@ export default function AddEventArea() {
           <form onSubmit={addEventToDb} className="space-y-6">
             
             {/* Title Input */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Type className="w-4 h-4 text-gold" />
-                <span>{t.titleLabel}</span>
-              </label>
-              <input 
-                type="text" 
-                name="eventTitle" 
-                value={eventData.eventTitle} 
-                onChange={handelFormChange}
-                required
-                placeholder={isRtl ? 'أدخل عنوان الفعالية' : 'e.g., Sovereign Gala Night'}
-                className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-              />
+            <div className="flex justify-between gap-2">
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>
+                    اسم الفعالية
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="eventTitleR" 
+                  value={eventData.eventTitleR} 
+                  onChange={handelFormChange}
+                  dir="rtl"
+                  required
+                  placeholder='أدخل عنوان الفعالية'
+                  className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>
+                    Event Name
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                    name="eventTitleE" 
+                    value={eventData.eventTitleE} 
+                    onChange={handelFormChange}
+                    required
+                    dir="ltr"
+                    placeholder={isRtl ? 'أدخل عنوان الفعالية' : 'e.g., Sovereign Gala Night'}
+                    className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+              </div>
+
             </div>
 
             {/* Description Textarea */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <FileText className="w-4 h-4 text-gold" />
-                <span>{t.descLabel}</span>
-              </label>
-              <textarea 
-                name="eventDescription" 
-                value={eventData.eventDescription} 
-                onChange={handelFormChange}
-                required
-                placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
-              />
+            <div className="flex justify-between gap-2">
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>
+                    وصف الفعالية
+                  </span>
+                </label>
+                <textarea 
+                  name="eventDescriptionR" 
+                  value={eventData.eventDescriptionR} 
+                  onChange={handelFormChange}
+                  required
+                  dir="rtl"
+                  placeholder='اكتب وصفاً تفصيلياً للفعالية...'
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>
+                    Event description
+                  </span>
+                </label>
+                <textarea 
+                  name="eventDescriptionE" 
+                  value={eventData.eventDescriptionE} 
+                  onChange={handelFormChange}
+                  required
+                  dir='ltr'
+                  placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+                />
+              </div>
             </div>
 
-            {/* Date & Time Picker */}
+
+            {/* Location */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
               <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span>
+                    الموقع
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="eventLocationR" 
+                  value={eventData.eventLocationR} 
+                  onChange={handelFormChange}
+                  required
+                  dir='rtl'
+                  placeholder='كانو ,نيجيريا' 
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
+              {/* Location Input */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span>
+                    Venue / Location
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="eventLocationE" 
+                  value={eventData.eventLocationE} 
+                  onChange={handelFormChange}
+                  required
+                  dir='ltr'
+                  placeholder={isRtl ? 'كانو نيجيريا' : 'Kano, Nigeria 123 event Center'}
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Image File Upload */}
+            <div className="flex justify-between">
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Upload className="w-4 h-4 text-gold" />
+                  <span>{t.imageLabel}</span>
+                </label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handelImageFile} 
+                  required
+                  className="w-3/4 bg-white border border-forestGreen/40 py-2 px-3 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 file:transition-all text-slate-400 text-xs rounded-xl cursor-pointer"
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Calendar className="w-4 h-4 text-gold" />
                   <span>{t.dateLabel}</span>
@@ -241,37 +375,6 @@ export default function AddEventArea() {
                 </div>
               </div>
 
-              {/* Location Input */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <MapPin className="w-4 h-4 text-gold" />
-                  <span>{t.locationLabel}</span>
-                </label>
-                <input 
-                  type="text" 
-                  name="eventLocation" 
-                  value={eventData.eventLocation} 
-                  onChange={handelFormChange}
-                  required
-                  placeholder={isRtl ? 'الرياض، المملكة العربية السعودية' : 'e.g., Riyadh Ballroom'}
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Image File Upload */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Upload className="w-4 h-4 text-gold" />
-                <span>{t.imageLabel}</span>
-              </label>
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handelImageFile} 
-                required
-                className="w-3/4 bg-white border border-forestGreen/40 py-2 px-3 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 file:transition-all text-slate-400 text-xs rounded-xl cursor-pointer"
-              />
             </div>
 
             {/* Total Tickets & Pricing Grid */}

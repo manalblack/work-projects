@@ -95,7 +95,7 @@ export default function ScannedTicketsModal({eventId, isOpen, setScannedTickets}
                         <h2>
                             Loading scanned Tickets
                         </h2>
-                        <AiOutlineLoading3Quarters className="size-20 text-blue-300 animate-spin transition-all"/>
+                        <AiOutlineLoading3Quarters className="size-20 text-gold animate-spin transition-all"/>
                     </div> : 
                     <div className="bg-blue-00 w-full h-full flex flex-col justify-center items-center gap-12">
                         <h2 className="text-2xl">
