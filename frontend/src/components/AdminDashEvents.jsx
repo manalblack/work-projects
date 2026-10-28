@@ -52,8 +52,14 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
         );
     }
 
+    const formatNumber = (value) => {
+
+        if (isNaN(value)) return '0';
+        return Number(value).toLocaleString('en-US');
+    };
+
     return (
-        <div className="w-full px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="w-full bg-amber-00 px-2 grid grid-cols-1 md:grid-cols-2 gap-6">
             {allEvents.map((event) => {
                 // Extract bilingual fields safely based on isRtl flag
                 const title = event.title?.[isRtl ? 'ar' : 'en'] || event.title?.en || '';
@@ -66,7 +72,7 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
                         className="h-auto w-full bg-white border border-white/10 shadow-xl flex flex-col justify-between p-4 rounded-2xl">
                         
                         {/* Cover Image */}
-                        <div className="w-full bg-slate-950 rounded-xl overflow-hidden aspect-video relative shadow-inner">
+                        <div className="w-full bg-slate-950 rounded-xl overflow-hidden h-130 relative shadow-inner">
                             <img src={event.cover_image} alt={title || "Event image"} className="w-full h-full object-cover" />
                         </div>
 
@@ -101,10 +107,10 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
 
                                         <div className="flex flex-col font-bold gap-1.5 shrink-0">
                                             <span className="bg-white text-forestGreen text-[11px] border border-forestGreen/30 px-3 py-1 rounded-sm flex items-center gap-1">
-                                                <Ticket className="w-3 h-3" /> Reg: N{event.regular_price || 0}
+                                                <Ticket className="w-3 h-3" /> Reg: N{formatNumber(event.regular_price) || 0}
                                             </span>
                                             <span className="bg-white text-gold text-[11px] border border-gold/30 px-3 py-1 rounded-sm flex items-center gap-1">
-                                                <Crown className="w-3 h-3" /> VIP: N{event.vip_price || 0}
+                                                <Crown className="w-3 h-3" /> VIP: N{formatNumber(event.vip_price) || 0}
                                             </span>
                                         </div>
                                     </div>

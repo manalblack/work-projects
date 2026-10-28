@@ -241,17 +241,17 @@ export default function MainDash() {
       {/* ALL EVENTS GRID                                      */}
       {/* ---------------------------------------------------- */}
       <div className="space-y-4 pt-4">
-        <h2 className="text-2xl font-extrabold text-gold tracking-tight m-6 ">
+        <h2 className="text-3xl font-extrabold text-white tracking-tight m-6 ">
           {isRtl ? 'جميع الفعاليات' : 'All Events'}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap- space-y-6">
-          <AdminDashEvents 
-            allEvents={allEvents}
-            setAllEvents={setAllEvents}
-            isRtl={isRtl}
-          />
-        </div>
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap- space-y-6"> */}
+            <AdminDashEvents 
+              allEvents={allEvents}
+              setAllEvents={setAllEvents}
+              isRtl={isRtl}
+            />
+        {/* </div> */}
       </div>
 
       {/* Scanned Tickets Modal */}
