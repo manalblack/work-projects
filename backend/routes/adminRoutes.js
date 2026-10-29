@@ -270,7 +270,9 @@ router.get('/retrieve-event/:id', async (req, res) => {
     console.log(id);
 
     try {
-       const {data, error} = await supabase.from('events').select('*').eq('id', id);
+
+        // change to translated events table to test
+       const {data, error} = await supabase.from('translated_events').select('*').eq('id', id);
 
         if(error) {
             console.log('error when admin tries to fetch event for editing: ', error);
@@ -304,19 +306,10 @@ router.patch('/edit-event/:eventId', async (req, res) => {
     
    try {
 
+        // changing the table to translated events, for developments 
         const { data, error } = await supabase
-        .from('events')
-        .update({
-            title: updatedEvent.title,
-            event_date: updatedEvent.event_date,
-            time: updatedEvent.time,
-            location: updatedEvent.location,
-            image: updatedEvent.image,
-            total_tickets: updatedEvent.total_tickets,
-            regular_price:updatedEvent.regular_price,
-            vip_price: updatedEvent.vip_price,
-            description: updatedEvent.description
-        })
+        .from('translated_events')
+        .update([updatedEvent])
         .eq('id', eventId)      // Critical: Only update the row matching this ID
         .select();       // Returns the updated record
 

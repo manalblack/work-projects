@@ -49,16 +49,20 @@ export default function EditEventArea() {
     const [isConfirmationModel, setIsConfirmationModal] = useState(false);
     // states for from editing and image change.
     const [imageFile, setImageFile] = useState(null)
-    const [eventDate, setEventDate] = useState('');
+    const [eventDate, setEventDate] = useState(new Date());
 
     const [imagePreview, setImagePreview] = useState(null);
     const [formData, setFormData] = useState({
-        eventTitle: '',
-        eventDescription: '',
-        eventLocation: '',
-        totalTickets: 0,
-        vipPrice: 0,
-        regularPrice: 0
+      eventTitle: '',
+      eventTitleAr: '',
+      eventDescription: '',
+      eventDescriptionAr: '',
+      eventLocation: '',
+      eventLocationAr: '',
+      totalTickets: '',
+      vipPrice: '',
+      regularPrice: '',
+      eventTime: '',
     });
     const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -96,19 +100,18 @@ export default function EditEventArea() {
     useEffect(() => {
         try {
 
-            const fetchEvents = async () => {
-                // change this link to ngrok 
-                const response = await axios.get(`${API_URL}/admin/all-events`);
+          const fetchEvents = async () => {
+              // change this link to ngrok 
+              const response = await axios.get(`${API_URL}/admin/all-events`);
 
-                console.log(response.data);
+              console.log(response.data);
 
-                setAllEvents(response.data);
-                setLoading(false)
-                        
+              setAllEvents(response.data);
+              setLoading(false)      
 
-            }
+          }
 
-            fetchEvents();
+          fetchEvents();
         } catch (error) {
             console.error('error when fetching events', error)
             
@@ -144,7 +147,7 @@ export default function EditEventArea() {
     }
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const openEditingForm = async () => {
@@ -163,15 +166,20 @@ export default function EditEventArea() {
             const pulledEvent = response.data;
 
             setFormData({
-                eventTitle: pulledEvent.title,
-                eventDescription: pulledEvent.description,
-                eventLocation: pulledEvent.location,
-                totalTickets: pulledEvent.total_tickets,
-                vipPrice: pulledEvent.vip_price,
-                regularPrice: pulledEvent.regular_price
+              eventTitle: pulledEvent.title['en'],
+              eventTitleAr: pulledEvent.title['ar'],
+              eventDescription: pulledEvent.description['en'],
+              eventDescriptionAr: pulledEvent.description['ar'],
+              eventLocation: pulledEvent.location['en'],
+              eventLocationAr: pulledEvent.location['ar'],
+              totalTickets: pulledEvent.total_tickets,
+              vipPrice: pulledEvent.vip_price,
+              regularPrice: pulledEvent.regular_price,
+              eventTime: pulledEvent.event_time
             });
 
-            setImagePreview(pulledEvent.image);
+
+            setImagePreview(pulledEvent.cover_image);
 
             // setImageFile(pulledEvent.image);
 
@@ -182,7 +190,10 @@ export default function EditEventArea() {
         const combinedDateTime = `${pulledEvent.event_date}T${pulledEvent.time}`
         const initialDate = new Date(combinedDateTime)
 
-        setEventDate(initialDate)
+        console.log(pulledEvent.event_date);
+        
+
+        setEventDate(pulledEvent.event_date)
 
 
             setLoadingEventDetails(false);
@@ -214,8 +225,8 @@ export default function EditEventArea() {
         setLoadingUpdate(true);
 
         //  1 slice and format the date and time 
-        const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
-        const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
+        // const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
+        // const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
         
         // 2 Process image file 
         let imageUrlToSave = imagePreview;
@@ -243,24 +254,33 @@ export default function EditEventArea() {
                 imageUrlToSave = publicData.publicUrl;
 
             }
-            
-
-            
 
         try {
 
             // create a new object that contains all the updated event data to send it to db
             const updatedEvent = {
-                title: formData.eventTitle,
-                event_date: updatedDate,
-                time: updatedTime,
-                location: formData.location,
-                image: imageUrlToSave,
-                total_tickets: formData.totalTickets,
-                regular_price: formData.regularPrice,
-                vip_price: formData.vipPrice,
-                description: formData.description,
+              title: {
+                en: formData.eventTitle || '',
+                ar: formData.eventTitleAr || '',
+              },
+              description: {
+                en: formData.eventDescription || '',
+                ar: formData.eventDescriptionAr || '',
+              },
+              location: {
+                en: formData.eventLocation || '',
+                ar: formData.eventLocationAr || '',
+              },
+              event_date: eventDate,
+              event_time: formData.eventTime,
+              total_tickets: Number(formData.totalTickets) || 0,
+              vip_price: Number(formData.vipPrice) || 0,
+              regular_price: Number(formData.regularPrice) || 0,
+              cover_image: imagePreview,
             } 
+
+            console.log(updatedEvent);
+            
 
             const response = await axios.patch(`${API_URL}/admin/edit-event/${eventId}`, {updatedEvent});
 
@@ -322,7 +342,7 @@ export default function EditEventArea() {
     }
 
     if (loading) {
-        return <MiniLoading />;
+      return <MiniLoading />;
     };
 
     if(loadingEventDetails) {
@@ -361,6 +381,25 @@ export default function EditEventArea() {
     }
 
 
+    const formatEventDate = (dateInput) => {
+      if (!dateInput) return 'Date not set';
+      
+      const date = new Date(dateInput);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) return 'Invalid date';
+
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      });
+    };
+    
+
 
     return(
       <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full pb-12 text-slate-100 font-sans">
@@ -386,6 +425,7 @@ export default function EditEventArea() {
           <select 
             value={eventId} 
             onChange={(e) => setEventId(e.target.value)}
+            required
             className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all cursor-pointer"
           >
             <option value="" disabled>{t.selectPrompt}</option>
@@ -410,180 +450,310 @@ export default function EditEventArea() {
         /* ---------------------------------------------------- */
         /* STAGE 2: EDITING FORM SCREEN                         */
         /* ---------------------------------------------------- */
-        <div className="max-w-2xl mx-auto bg-white border border-forestGreen rounded-2xl p-6 sm:p-10 shadow-2xl">
-          
-          <div className="mb-8 border-b border-forestGreen/50 pb-4">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-forestGreen tracking-tight flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-gold" />
-              <span>{t.formHeader}</span>
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              {/* {t.formSubtitle} */}
-            </p>
-          </div>
+        <div className="flex flex-col justify-center md:items-start items-center md:flex-row gap-7 w-full bg-amber-00">
 
-          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-            
-            {/* Title */}
-            <div className="space-y-2 ">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Type className="w-4 h-4 text-gold" />
-                <span>{t.titleLabel}</span>
-              </label>
-              <Input 
-                value={formData.eventTitle || ''} 
-                name='eventTitle' 
-                onChange={handleChange}
-                placeholder={t.titleLabel}
-                className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
-              />
+          <div className="md:w-1/2 mx-auto bg-white border border-forestGreen rounded-2xl p-6 sm:p-10 shadow-2xl">
+        
+            <div className="mb-8 border-b border-forestGreen/50 pb-4">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-forestGreen tracking-tight flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-gold" />
+                <span>{t.formHeader}</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                {/* {t.formSubtitle} */}
+              </p>
             </div>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <FileText className="w-4 h-4 text-gold" />
-                <span>{t.descLabel}</span>
-              </label>
-              <textarea 
-                value={formData.eventDescription || ''} 
-                name='eventDescription' 
-                onChange={handleChange}
-                placeholder={t.descLabel} 
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
-              />
-            </div>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+              
+              {/* Title (English) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>{t.titleLabel} (English)</span>
+                </label>
+                <Input 
+                  value={formData.eventTitle || ''} 
+                  name='eventTitle' 
+                  onChange={handleChange}
+                  placeholder="Event Title (EN)"
+                  className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
 
-            {/* Date & Time Picker */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Calendar className="w-4 h-4 text-gold" />
-                <span>{t.dateLabel}</span>
-              </label>
-              <DatePicker 
-                selected={eventDate} 
-                onChange={(date) => setEventDate(date)}  
-                showTimeSelect 
-                withPortal 
-                dateFormat="Pp"
-                className="w-full sm:w-72 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
-              />
-            </div>
+              {/* Title (Arabic) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>{t.titleLabel} (العربية)</span>
+                </label>
+                <Input 
+                  value={formData.eventTitleAr || ''} 
+                  name='eventTitleAr' 
+                  onChange={handleChange}
+                  placeholder="عنوان الفعالية (AR)"
+                  dir="rtl"
+                  className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all text-right"
+                />
+              </div>
 
-            {/* Location */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <MapPin className="w-4 h-4 text-gold" />
-                <span>{t.locationLabel}</span>
-              </label>
-              <Input 
-                name='eventLocation' 
-                value={formData.eventLocation || ''} 
-                onChange={handleChange} 
-                placeholder={t.locationLabel}
-                className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
-              />
-            </div>
+              {/* Description (English) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>{t.descLabel} (English)</span>
+                </label>
+                <textarea 
+                  value={formData.eventDescription || ''} 
+                  name='eventDescription' 
+                  onChange={handleChange}
+                  placeholder="Event Description (EN)" 
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                />
+              </div>
 
-            {/* Current Image Preview */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-forestGreen block">
-                {t.currentImage}
-              </label>
-              {imagePreview && (
-                <div className="relative w-full max-w-md h-65 rounded-xl overflow-hidden shadow-lg bg-slate-800">
-                  <img src={imagePreview} alt="Current Event Cover" className="w-full h-full object-cover" />
-                </div>
-              )}
-            </div>
+              {/* Description (Arabic) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>{t.descLabel} (العربية)</span>
+                </label>
+                <textarea 
+                  value={formData.eventDescriptionAr || ''} 
+                  name='eventDescriptionAr' 
+                  onChange={handleChange}
+                  placeholder="وصف الفعالية (AR)" 
+                  dir="rtl"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none text-right"
+                />
+              </div>
 
-            {/* Upload New Image */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Upload className="w-4 h-4 text-gold" />
-                <span>{t.newImage}</span>
-              </label>
-              <input 
-                type="file" 
-                accept='image/*' 
-                onChange={handelImageFile}
-                className="w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 file:transition-all text-slate-400 text-xs rounded-xl cursor-pointer"
-              />
-            </div>
+              {/* Date & Time Picker */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Calendar className="w-4 h-4 text-gold" />
+                  <span>{t.dateLabel}</span>
+                </label>
+                <DatePicker 
+                  selected={eventDate} 
+                  onChange={(date) => setEventDate(date)}  
+                  showTimeSelect 
+                  withPortal 
+                  dateFormat="Pp"
+                  className="w-full sm:w-72 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
 
-            {/* Total Tickets */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Ticket className="w-4 h-4 text-gold" />
-                <span>{t.totalTickets}</span>
-              </label>
-              <input 
-                type="number" 
-                name="totalTickets" 
-                value={formData.totalTickets || ''} 
-                onChange={handleChange}
-                placeholder="500"
-                className="w-full sm:w-1/2 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-              />
-            </div>
+              {/* Location (English) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span>{t.locationLabel} (English)</span>
+                </label>
+                <Input 
+                  name='eventLocation' 
+                  value={formData.eventLocation || ''} 
+                  onChange={handleChange} 
+                  placeholder="Location (EN)"
+                  className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
 
-            {/* Ticket Prices Box */}
-            <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-forestGreen">
-                {t.pricingLabel}
-              </h3>
+              {/* Location (Arabic) */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span>{t.locationLabel} (العربية)</span>
+                </label>
+                <Input 
+                  name='eventLocationAr' 
+                  value={formData.eventLocationAr || ''} 
+                  onChange={handleChange} 
+                  placeholder="موقع الفعالية (AR)"
+                  dir="rtl"
+                  className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all text-right"
+                />
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs text-white font-semibold">{t.vipPrice}</label>
-                  <input 
-                    type="number" 
-                    name="vipPrice" 
-                    value={formData.vipPrice || ''} 
-                    onChange={handleChange}
-                    placeholder="5000" 
-                    className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                  />
-                </div>
+              {/* Current Image Preview */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-forestGreen block">
+                  {t.currentImage}
+                </label>
+                {imagePreview && (
+                  <div className="relative w-full max-w-md h-65 rounded-xl overflow-hidden shadow-lg bg-slate-800">
+                    <img src={imagePreview} alt="Current Event Cover" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs text-white font-semibold">{t.regularPrice}</label>
-                  <input 
-                    type="number" 
-                    name="regularPrice" 
-                    value={formData.regularPrice || ''} 
-                    onChange={handleChange}
-                    placeholder="2000" 
-                    className="w-full bg-white border border-white/10 px-4 py-2.5 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                  />
+              {/* Upload New Image */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Upload className="w-4 h-4 text-gold" />
+                  <span>{t.newImage}</span>
+                </label>
+                <input 
+                  type="file" 
+                  accept='image/*' 
+                  onChange={handelImageFile}
+                  className="w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 file:transition-all text-slate-400 text-xs rounded-xl cursor-pointer"
+                />
+              </div>
+
+              {/* Total Tickets */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Ticket className="w-4 h-4 text-gold" />
+                  <span>{t.totalTickets}</span>
+                </label>
+                <input 
+                  type="number" 
+                  name="totalTickets" 
+                  value={formData.totalTickets || ''} 
+                  onChange={handleChange}
+                  placeholder="500"
+                  className="w-full sm:w-1/2 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
+                />
+              </div>
+
+              {/* Ticket Prices Box */}
+              <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  {t.pricingLabel}
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-white font-semibold">{t.vipPrice}</label>
+                    <input 
+                      type="number" 
+                      name="vipPrice" 
+                      value={formData.vipPrice || ''} 
+                      onChange={handleChange}
+                      placeholder="5000" 
+                      className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs text-white font-semibold">{t.regularPrice}</label>
+                    <input 
+                      type="number" 
+                      name="regularPrice" 
+                      value={formData.regularPrice || ''} 
+                      onChange={handleChange}
+                      placeholder="2000" 
+                      className="w-full bg-white border border-white/10 px-4 py-2.5 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
+                    />
+                  </div>
                 </div>
               </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
+                <button 
+                  type="button"
+                  onClick={openConfirmationModel}
+                  className="flex-1 py-3.5 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-wider border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
+                  <span>{t.submitBtn}</span>
+                </button>
+
+                <button 
+                  type="button"
+                  onClick={openConfirmDeleteModal}
+                  className="py-3.5 px-6 rounded-full bg-red-950/80 text-red-400 font-bold text-xs uppercase tracking-wider border border-red-800/40 hover:bg-red-700 hover:text-white transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>{t.deleteBtn}</span>
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+
+           {/* Live Preview Card */}
+          <div className="space-y-4 md:w-1/2">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-gold" />
+              <span>Live Event Preview Card</span>
+            </h3>
+
+            <div 
+              className="rounded-2xl border border-forestGreen/30 bg-white shadow-xl overflow-hidden transition-all"
+              dir={isRtl ? 'rtl' : 'ltr'}
+            >
+              {/* Cover Image */}
+              <div className="relative w-full h-75 bg-slate-800">
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Event Cover Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-mono">
+                    No Image Uploaded
+                  </div>
+                )}
+                <div className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'} bg-forestGreen text-white font-mono text-xs px-2.5 py-1 rounded-full shadow-md`}>
+                  {formData.totalTickets || 0} Tickets
+                </div>
+              </div>
+
+              {/* Content Area */}
+              <div className="p-6 space-y-4">
+                
+                {/* Dynamic Content based on isRtl */}
+                <div className={`space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 inline-block">
+                    {isRtl ? 'عرض اللغة العربية' : 'English View'}
+                  </span>
+                  
+                  <h4 className="text-xl font-bold text-slate-900">
+                    {isRtl 
+                      ? (formData.eventTitleAr || 'عنوان الفعالية بالعربية') 
+                      : (formData.eventTitle || 'Event Title (English)')}
+                  </h4>
+                  
+                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                    {isRtl 
+                      ? (formData.eventDescriptionAr || 'سيظهر وصف الفعالية هنا...') 
+                      : (formData.eventDescription || 'Event description will appear here...')}
+                  </p>
+
+                  <p className={`text-xs font-semibold text-slate-700 flex items-center gap-1 pt-1 ${isRtl ? 'justify-end' : 'justify-start'}`}>
+                    <MapPin className="w-3.5 h-3.5 text-gold shrink-0" />
+                    <span>
+                      {isRtl 
+                        ? (formData.eventLocationAr || 'موقع الفعالية بالعربية') 
+                        : (formData.eventLocation || 'Event Location (English)')}
+                    </span>
+                  </p>
+                </div>
+
+                <hr className="border-slate-100" />
+
+                {/* Pricing & Date Footer */}
+                <div className="flex items-center justify-between pt-2">
+                  <div className="space-y-0.5 font-mono text-xs">
+                    <div className="text-slate-500">Regular: <span className="text-forestGreen font-bold">{formData.regularPrice || 0} SAR</span></div>
+                    <div className="text-slate-500">VIP: <span className="text-gold font-bold">{formData.vipPrice || 0} SAR</span></div>
+                  </div>
+                  <div className={`font-mono text-xs text-slate-500 ${isRtl ? 'text-left' : 'text-right'}`}>
+                    <div>{formatEventDate(eventDate)}</div>
+                  </div>
+                </div>
+
+              </div>
             </div>
+          </div>
+        </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
-              <button 
-                type="button"
-                onClick={openConfirmationModel}
-                className="flex-1 py-3.5 rounded-full bg-forestGreen text-white font-bold text-xs uppercase tracking-wider border border-forestGreen hover:bg-white hover:text-forestGreen transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
-                <span>{t.submitBtn}</span>
-              </button>
 
-              <button 
-                type="button"
-                onClick={openConfirmDeleteModal}
-                className="py-3.5 px-6 rounded-full bg-red-950/80 text-red-400 font-bold text-xs uppercase tracking-wider border border-red-800/40 hover:bg-red-700 hover:text-white transition-all duration-300 shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>{t.deleteBtn}</span>
-              </button>
-            </div>
-
-          </form>
-        </div>  
       )}
+
+     
+
 
       {/* ---------------------------------------------------- */}
       {/* UPDATE CONFIRMATION MODAL                            */}
