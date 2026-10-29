@@ -398,6 +398,12 @@ export default function EditEventArea() {
         hour12: true,
       });
     };
+
+    const formatNumber = (value) => {
+
+      if (isNaN(value)) return '0';
+      return Number(value).toLocaleString('en-US');
+    };
     
 
 
@@ -735,10 +741,12 @@ export default function EditEventArea() {
 
                 {/* Pricing & Date Footer */}
                 <div className="flex items-center justify-between pt-2">
+
                   <div className="space-y-0.5 font-mono text-xs">
-                    <div className="text-slate-500">Regular: <span className="text-forestGreen font-bold">{formData.regularPrice || 0} SAR</span></div>
-                    <div className="text-slate-500">VIP: <span className="text-gold font-bold">{formData.vipPrice || 0} SAR</span></div>
+                    <div className="text-slate-500">Regular: <span className="text-forestGreen font-bold">₦{formatNumber(formData.regularPrice) || 0}</span></div>
+                    <div className="text-slate-500">VIP: <span className="text-gold font-bold">₦{formatNumber(formData.vipPrice) || 0}</span></div>
                   </div>
+
                   <div className={`font-mono text-xs text-slate-500 ${isRtl ? 'text-left' : 'text-right'}`}>
                     <div>{formatEventDate(eventDate)}</div>
                   </div>
