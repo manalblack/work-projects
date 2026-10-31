@@ -72,7 +72,7 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
                         className="h-auto w-full bg-white border border-white/10 shadow-xl flex flex-col justify-between p-4 rounded-2xl">
                         
                         {/* Cover Image */}
-                        <div className="w-full bg-slate-950 rounded-xl overflow-hidden h-130 relative shadow-inner">
+                        <div className="w-full h-100 bg-slate-950 rounded-xl overflow-hidden relative shadow-inner">
                             <img src={event.cover_image} alt={title || "Event image"} className="w-full h-full object-cover" />
                         </div>
 

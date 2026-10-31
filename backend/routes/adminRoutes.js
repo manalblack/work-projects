@@ -366,4 +366,39 @@ router.delete('/delete-event/:eventId', async (req, res) => {
 
 })
 
+
+
+router.post('/add-tour', async (req, res) => {
+
+    // this endpoint is to add tours to the database.
+
+    /*
+        translated fields:
+        Tour title
+        tour description
+        destination / location
+        Package Inclusions
+        date
+        cover image
+        multi-image functionality
+
+        pricing is 3 different packages:
+        early birds
+        late booking
+        family / couples
+        private room, individuals
+        duration_days
+    */
+
+})
+
+/*      
+    TODO:
+ Create new routes to add tours and edit them
+1- each input needs to have bilingual, inputs
+2- you need to create a function to minimize image size before downloading to database
+
+
+*/
+
 export default router;
