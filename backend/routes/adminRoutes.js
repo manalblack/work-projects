@@ -302,8 +302,6 @@ router.patch('/edit-event/:eventId', async (req, res) => {
     console.log(updatedEvent);
     
     
-
-    
    try {
 
         // changing the table to translated events, for developments 
@@ -371,6 +369,38 @@ router.delete('/delete-event/:eventId', async (req, res) => {
 router.post('/add-tour', async (req, res) => {
 
     // this endpoint is to add tours to the database.
+
+    try{
+        const {newTour} = req.body;
+
+        // const {
+        //     titleEn,
+        //     titleAr,
+        //     descriptionEn,
+        //     descriptionAr,
+        //     locationEn,
+        //     locationAr,
+        //     date,
+        //     time,
+
+        //     earlyBirds,
+        //     lateBooking,
+        //     familyCouples,
+        //     privateRoom,
+            
+        //     inclusions,
+        //     coverImage,
+        //     carouselImages,
+        // } = req.body;
+        
+        console.log('route hit');
+        console.log(newTour);
+        console.log('individual fields: ', newTour.titleEn, newTour.titleAr, newTour.descriptionEn, newTour.descriptionAr);
+        
+
+    } catch (error) { 
+
+    }
 
     /*
         translated fields:

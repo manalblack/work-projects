@@ -37,6 +37,7 @@ export default function AddEventArea() {
   const [eventDate, setEventDate] = useState(new Date());
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Bilingual UI dictionary
