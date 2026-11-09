@@ -17,6 +17,7 @@ import MiniLoading from "../../../components/admin-components/MiniLoading";
 import AdminDashEvents from "../../../components/AdminDashEvents";
 import ScannedTicketsModal from "./ScannedTicketsModal";
 import { useLanguage } from "../../../hooks/LanguageContext";
+import AdminDashTour from "../../../components/admin-components/AdminDashTours";
 
 export default function MainDash() {
   const { isRtl } = useLanguage(); // Pull language state from Dashboard outlet
@@ -45,6 +46,7 @@ export default function MainDash() {
   };
 
   useEffect(() => {
+
     const fetchEvents = async () => {
       try {
         const response = await axios.get(`${API_URL}/admin/all-events`);
@@ -245,13 +247,15 @@ export default function MainDash() {
           {isRtl ? 'جميع الفعاليات' : 'All Events'}
         </h2>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap- space-y-6"> */}
-            <AdminDashEvents 
-              allEvents={allEvents}
-              setAllEvents={setAllEvents}
-              isRtl={isRtl}
-            />
-        {/* </div> */}
+        <AdminDashEvents 
+          allEvents={allEvents}
+          setAllEvents={setAllEvents}
+          isRtl={isRtl}
+        />
+
+        <AdminDashTour />
+
+        
       </div>
 
       {/* Scanned Tickets Modal */}

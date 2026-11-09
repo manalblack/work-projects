@@ -2,7 +2,8 @@ import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
 import { supabase } from "../supabaseConnection";
 import ScannedTicketsModal from "../pages/admin/features/ScannedTicketsModal";
-import { MapPin, Crown, Ticket, Calendar, Sparkles } from "lucide-react";
+import { MapPin, Crown, Ticket, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function AdminDashEvents({ allEvents, setAllEvents }) {
     const { isRtl } = useOutletContext() || { isRtl: false };
@@ -12,19 +13,11 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
     const [scannedTicketsModal, setScannedTickModal] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState(null);
 
-    console.log(allEvents);
-    
-
     const toggleExpand = (id) => {
         setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
     const handelOngoingBox = async (eventId) => {
-        const updatedEvents = allEvents.map((ev) => ({
-            ...ev,
-            current_event: ev.id === eventId
-        }));
-
         try {
             const { error } = await supabase.rpc('set_single_current_event', { target_id: eventId });
 
@@ -33,7 +26,6 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
                 console.log(error);
                 return;
             }
-            // setAllEvents(updatedEvents);
         } catch (error) {
             console.log('error when updating current event: ', error);
         }
@@ -53,14 +45,13 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
     }
 
     const formatNumber = (value) => {
-
         if (isNaN(value)) return '0';
         return Number(value).toLocaleString('en-US');
     };
 
     return (
-        <div className="w-full bg-amber-00 px-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {allEvents.map((event) => {
+        <div className="w-full px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allEvents.map((event, index) => {
                 // Extract bilingual fields safely based on isRtl flag
                 const title = event.title?.[isRtl ? 'ar' : 'en'] || event.title?.en || '';
                 const description = event.description?.[isRtl ? 'ar' : 'en'] || event.description?.en || '';
@@ -68,62 +59,85 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
                 const isExpanded = !!expandedIds[event.id];
 
                 return (
-                    <div key={event.id}
-                        className="h-auto w-full bg-white border border-white/10 shadow-xl flex flex-col justify-between p-4 rounded-2xl">
+                    <motion.div 
+                        key={event.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                        className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow flex flex-col justify-between group"
+                    >
                         
-                        {/* Cover Image */}
-                        <div className="w-full h-100 bg-slate-950 rounded-xl overflow-hidden relative shadow-inner">
-                            <img src={event.cover_image} alt={title || "Event image"} className="w-full h-full object-cover" />
+                        {/* Cover Image Header */}
+                        <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                            <motion.img 
+                                whileHover={{ scale: 1.08 }}
+                                transition={{ duration: 0.4 }}
+                                src={event.cover_image} 
+                                alt={title || "Event image"} 
+                                className="w-full h-full object-cover" 
+                            />
+                            {/* Date Badge Overlay */}
+                            <div className="absolute top-3 right-3 bg-slate-950/70 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                <Calendar className="w-3 h-3 text-gold" />
+                                <span>{event.event_date}</span>
+                            </div>
                         </div>
 
                         {/* Content Body */}
-                        <div className="text-slate-100 flex flex-col gap-3 py-4 flex-1 justify-between">
-                            <div className="space-y-2">
-                                <h2 className="text-lg font-extrabold text-forestGreen tracking-tight">{title}</h2>
-                                <p className={`${isExpanded ? '' : 'line-clamp-4'} text-xs text-slate-950 leading-relaxed`}>
+                        <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
+                            <div className="space-y-2.5">
+                                <div className="flex items-center gap-1.5 text-xs font-semibold text-gold">
+                                    <MapPin className="w-3.5 h-3.5 shrink-0" />
+                                    <span className="truncate">{location}</span>
+                                </div>
+                                <h3 className="text-sm font-bold text-slate-900 tracking-tight line-clamp-1">{title}</h3>
+                                <p className={`text-xs text-slate-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
                                     {description || <span>No description found</span>}
                                 </p>
                                 {description && (
                                     <button 
+                                        type="button"
                                         onClick={() => toggleExpand(event.id)}
-                                        className="mt-1 text-gold font-medium hover:underline text-xs cursor-pointer"
+                                        className="text-gold font-medium hover:underline text-xs cursor-pointer inline-block pt-0.5"
                                     >
                                         {isExpanded ? (isRtl ? 'عرض أقل' : 'Show Less') : (isRtl ? 'قراءة المزيد' : 'Read More')}
                                     </button>
                                 )}
 
-                                <div className="flex flex-col gap-3 w-full pt-2">
-                                    <div className="p-2.5 rounded-md bg-white border border-forestGreen/50 flex flex-row justify-between items-center gap-2">
-                                        <div className="text-xs text-slate-300 space-y-1">
-                                            <p className="flex items-center gap-1 font-semibold text-forestGreen">
-                                                <Calendar className="w-3.5 h-3.5 text-gold" />
-                                                <span>{event.event_date} | {event.event_time}</span>
-                                            </p>
-                                            <p className="flex items-center gap-1 text-forestGreen">
-                                                <MapPin className="w-3.5 h-3.5 text-gold" />
-                                                <span>{location}</span>
-                                            </p>
+                                {/* Pricing Cards Box */}
+                                <div className="p-3 rounded-xl bg-forestGreen/5 border border-forestGreen/10 grid grid-cols-2 gap-2 mt-3">
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-forestGreen bg-white p-2 rounded-lg border border-forestGreen/20 shadow-xs">
+                                        <Ticket className="w-3.5 h-3.5 text-gold shrink-0" />
+                                        <div className="truncate">
+                                            <span className="text-[10px] block text-slate-400 font-normal">Reg</span>
+                                            <span>N{formatNumber(event.regular_price) || 0}</span>
                                         </div>
-
-                                        <div className="flex flex-col font-bold gap-1.5 shrink-0">
-                                            <span className="bg-white text-forestGreen text-[11px] border border-forestGreen/30 px-3 py-1 rounded-sm flex items-center gap-1">
-                                                <Ticket className="w-3 h-3" /> Reg: N{formatNumber(event.regular_price) || 0}
-                                            </span>
-                                            <span className="bg-white text-gold text-[11px] border border-gold/30 px-3 py-1 rounded-sm flex items-center gap-1">
-                                                <Crown className="w-3 h-3" /> VIP: N{formatNumber(event.vip_price) || 0}
-                                            </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 bg-white p-2 rounded-lg border border-gold/30 shadow-xs">
+                                        <Crown className="w-3.5 h-3.5 text-gold shrink-0" />
+                                        <div className="truncate">
+                                            <span className="text-[10px] block text-slate-400 font-normal">VIP</span>
+                                            <span>N{formatNumber(event.vip_price) || 0}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Scanned Tickets Button */}
-                        <button onClick={() => openScannedTicketsModal(event.id)}
-                            className="w-full py-2.5 bg-forestGreen text-white font-bold rounded-xl border border-forestGreen shadow-md active:scale-95 hover:bg-white hover:text-forestGreen transition-all duration-300 ease-in-out text-xs uppercase tracking-wider cursor-pointer">
-                            {isRtl ? 'عرض التذاكر الممسوحة' : 'Get Scanned Tickets'}
-                        </button>
-                    </div> 
+                            {/* Scanned Tickets Action Button */}
+                            <div className="pt-3 border-t border-slate-100">
+                                <motion.button 
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    type="button"
+                                    onClick={() => openScannedTicketsModal(event.id)}
+                                    className="w-full py-2.5 px-4 bg-forestGreen text-white font-bold rounded-xl border border-forestGreen shadow-xs hover:bg-gold hover:text-slate-950 transition-all duration-300 ease-in-out text-xs uppercase tracking-wider cursor-pointer text-center"
+                                >
+                                    {isRtl ? 'عرض التذاكر الممسوحة' : 'Get Scanned Tickets'}
+                                </motion.button>
+                            </div>
+                        </div>
+                    </motion.div> 
                 );
             })}
 
