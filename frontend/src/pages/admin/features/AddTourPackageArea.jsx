@@ -277,7 +277,6 @@ export default function AddTourPackageArea() {
         startDate: tourStartDate.toISOString().split('T')[0],
         endDate: tourEndDate.toISOString().split('T')[0],
         durationDays: calculateDurationDays(tourStartDate, tourEndDate),
-
         earlyBirds: Number(tourData.earlyBirdsPrice) || 0,
         lateBooking: Number(tourData.lateBookingPrice) || 0,
         familyCouples: Number(tourData.familyCouplesPrice) || 0,
@@ -292,83 +291,10 @@ export default function AddTourPackageArea() {
       const response = await axios.post(`${API_URL}/admin/add-tour`, {newTour});
 
       console.log(response);
-      
-      
-      // 1. Upload Cover Image to Supabase
-
-    //   const coverFileName = `tourCover-${Date.now()}-${coverImageFile.name}`;
-    //   const { error: coverError } = await supabase.storage.from('events_images').upload(coverFileName, coverImageFile);
-    //   if (coverError) throw coverError;
-    //   const { data: coverUrlData } = supabase.storage.from('events_images').getPublicUrl(coverFileName);
-
-      // 2. Upload Carousel Images in Parallel
-
-    //   const carouselUrls = [];
-    //   for (let i = 0; i < carouselFiles.length; i++) {
-    //     const file = carouselFiles[i];
-    //     const fileName = `tourCarousel-${Date.now()}-${i}-${file.name}`;
-    //     const { error: carError } = await supabase.storage.from('events_images').upload(fileName, file);
-    //     if (carError) throw carError;
-    //     const { data: carUrlData } = supabase.storage.from('events_images').getPublicUrl(fileName);
-    //     carouselUrls.push(carUrlData.publicUrl);
-    //   }
-
-      // 3. Format Date & Time
-    //   const formattedDate = tourDate.toISOString().split('T')[0];
-    //   const formattedTime = tourDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
-
-      // 4. Construct Payload
-    //   const newTourPackage = {
-    //     title: tourData.title,
-    //     description: tourData.description,
-    //     location: tourData.location,
-    //     date: formattedDate,
-    //     time: formattedTime,
-    //     coverImage: coverUrlData.publicUrl,
-    //     carouselImages: carouselUrls,
-    //     pricing: {
-    //       earlyBirds: Number(tourData.earlyBirdsPrice) || 0,
-    //       lateBooking: Number(tourData.lateBookingPrice) || 0,
-    //       familyCouples: Number(tourData.familyCouplesPrice) || 0,
-    //       privateRoom: Number(tourData.privateRoomPrice) || 0,
-    //     },
-    //     inclusions: inclusions,
-    //   };
-
-      // 5. Send to Backend
-    //   const response = await axios.post(`${API_URL}/admin/add-tour`, newTourPackage);
-
-    //   if (response.status === 200 || response.data?.message === 'SUCCESS') {
-    //     toast.success(t.successMsg);
-    //     setTourData({
-    //       title: '', description: '', location: '',
-    //       earlyBirdsPrice: '', lateBookingPrice: '', familyCouplesPrice: '', privateRoomPrice: ''
-    //     });
-    //     setCoverImageFile(null);
-    //     setCoverImagePreview(null);
-    //     setCarouselFiles([]);
-    //     setCarouselPreviews([]);
-    //   }
-
-
-    console.log('Tour form data');
-    
-    console.log(tourData);
-    
-    console.log('cover image file');
-
-    console.log(coverImageFile);
-
-    console.log('Gallery images');
-
-    console.log(carouselFiles);
-
-    console.log('Tour inclusion');
-    
-    console.log(inclusions);
     
 
     } catch (error) {
+      
       console.error('Error adding tour package:', error);
       toast.error(t.errorMsg);
 

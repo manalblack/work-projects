@@ -370,55 +370,55 @@ router.post('/add-tour', async (req, res) => {
 
     // this endpoint is to add tours to the database.
 
+    console.log('Add tour route hit');
+
     try{
+
         const {newTour} = req.body;
 
-        // const {
-        //     titleEn,
-        //     titleAr,
-        //     descriptionEn,
-        //     descriptionAr,
-        //     locationEn,
-        //     locationAr,
-        //     date,
-        //     time,
+        console.log('New tour data:', newTour);
 
-        //     earlyBirds,
-        //     lateBooking,
-        //     familyCouples,
-        //     privateRoom,
-            
-        //     inclusions,
-        //     coverImage,
-        //     carouselImages,
-        // } = req.body;
+        const tour = {
+            title: {
+                en: newTour.titleEn,
+                ar: newTour.titleAr
+            },
+            description: {
+                en: newTour.descriptionEn,
+                ar: newTour.descriptionAr
+            },
+            location: {
+                en: newTour.locationEn,
+                ar: newTour.locationAr
+            },
+            cover_image: newTour.coverImage,
+            gallery_images: newTour.carouselImages,
+            inclusions: newTour.inclusions || [],
+            start_date: newTour.startDate,
+            end_date: newTour.endDate,
+            duration_days: newTour.durationDays,
+            early_birds: newTour.earlyBirds,
+            late_booking: newTour.lateBooking,
+            family_couples: newTour.familyCouples,
+            individual_room: newTour.privateRoom,
+        };
+
+
+
+        console.log('Tour to be added:', tour);
+
+        const {data, error} = await supabase.from('tours').insert([tour])
+
+        if(error) throw error;
+
         
-        console.log('route hit');
-        console.log(newTour);
-        console.log('individual fields: ', newTour.titleEn, newTour.titleAr, newTour.descriptionEn, newTour.descriptionAr);
-        
+        res.status(200).json({message: 'SUCCESS'});
+
 
     } catch (error) { 
-
+        console.error('Error adding tour:', error);
+        res.status(500).json({ error: error.message }); 
     }
-
-    /*
-        translated fields:
-        Tour title
-        tour description
-        destination / location
-        Package Inclusions
-        date
-        cover image
-        multi-image functionality
-
-        pricing is 3 different packages:
-        early birds
-        late booking
-        family / couples
-        private room, individuals
-        duration_days
-    */
 
 })
 
