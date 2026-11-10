@@ -16,7 +16,8 @@ import {
   Sparkles,
   Globe,
   Plane,
-  UserRoundPen
+  UserRoundPen,
+  PlaneLanding
 } from 'lucide-react';
 import { Tooltip } from 'react-tooltip';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -49,7 +50,8 @@ export default function Dashboard() {
       editEvent: isRtl ? 'تعديل فعالية' : 'Edit Event',
       findTicket: isRtl ? 'البحث عن تذكرة' : 'Find Ticket',
       tours: isRtl ? 'اضف جولة سياحية' : 'Add Tourist Tour',
-      founder: isRtl ? 'تعديل محتوى المؤسس': 'Edit Founder Info'
+      editTour: isRtl ? 'تعديل معلومات الجولة': 'Edit Tour info',
+      founder: isRtl ? 'تعديل محتوى المؤسس': 'Edit Founder Info'   
     }
   };
 
@@ -61,7 +63,9 @@ export default function Dashboard() {
     { to: 'edit-event', icon: FilePen, label: t.nav.editEvent },
     { to: 'find-ticket', icon: Search, label: t.nav.findTicket },
     { to: 'add-tours', icon: Plane, label: t.nav.tours },
-    { to: 'edit-founder', icon: UserRoundPen, label: t.nav.founder }
+    { to: 'edit-tour', icon: PlaneLanding, label: t.nav.editTour },
+    { to: 'edit-founder', icon: UserRoundPen, label: t.nav.founder },
+
   ];
 
   // Responsive Motion Variants (Accounting for LTR / RTL slide directions)
@@ -132,7 +136,7 @@ export default function Dashboard() {
         </div>
 
         {/* Navigation Tab Links */}
-        <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto custom-scrollbar">
           {tabs.map(({ to, icon: Icon, label }) => (
             <NavLink 
               key={to} 
