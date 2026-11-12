@@ -359,14 +359,14 @@ export default function EditEventArea() {
     }
 
     if(loadingDelete) {
-        return (
-            <div>
-                <h2>
-                    Deleting event from database
-                </h2>
-                <MiniLoading />
-            </div>
-        )
+      return (
+          <div>
+              <h2>
+                  Deleting event from database
+              </h2>
+              <MiniLoading />
+          </div>
+      )
     }
 
     if (loadingUpdate) {

@@ -27,6 +27,7 @@ import {
   UsersRound
 } from 'lucide-react';
 
+
 /*
   fix the ui and work on the backend endpoint
 */
@@ -63,12 +64,30 @@ export default function AddTourPackageArea() {
 
   // Inclusions State (Targeting 6 to 12 items)
   const [inclusions, setInclusions] = useState([
-    'Luxury 5-Star Hotel Accommodation',
-    'Private VIP Airport Transfers',
-    'Professional Certified Tour Guide',
-    'All Gourmet Meals & Beverages',
-    'Exclusive Desert Safari Access',
-    'Comprehensive Travel Insurance'
+    {
+      en: 'Luxury 5-Star Hotel Accommodation',
+      ar: 'إقامة فاخرة في فندق 5 نجوم'
+    },
+    {
+      en: 'Private VIP Airport Transfers',
+      ar: 'توصيل خاص من وإلى المطار بخدمة VIP'
+    },
+    {
+      en: 'Professional Certified Tour Guide',
+      ar: 'مرشد سياحي محترف ومعتمد'
+    },
+    {
+      en: 'All Gourmet Meals & Beverages',
+      ar: 'جميع الوجبات الفاخرة والمشروبات'
+    },
+    {
+      en: 'Exclusive Desert Safari Access',
+      ar: 'دخول حصري إلى سفاري الصحراء'
+    },
+    {
+      en: 'Comprehensive Travel Insurance',
+      ar: 'تأمين سفر شامل'
+    }
   ]);
 
   const [inclusionInputEn, setInclusionInputEn] = useState('')
@@ -156,8 +175,9 @@ export default function AddTourPackageArea() {
     
     setCarouselFiles(updatedFiles);
     setCarouselPreviews(updatedPreviews);
-};
+  };
   // Inclusions Handlers
+
   const addInclusion = () => {
     if (!inclusionInputEn.trim() && !inclusionInputAr.trim()) return;
 
@@ -502,9 +522,7 @@ export default function AddTourPackageArea() {
             </div>
 
 
-
           </div>
-
 
           {/* Media Uploads Card */}
           <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">

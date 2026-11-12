@@ -364,7 +364,53 @@ router.delete('/delete-event/:eventId', async (req, res) => {
 
 })
 
+router.get('/all-tours', async (req, res) => {
 
+    console.log('fetching all tours')
+
+    try {
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('tours').select('*');
+
+        if(error) {
+            return res.status(400).json({message: 'error when fetching tours'})
+        }
+
+        console.log('tours data fetched:', data);
+
+        res.status(200).json(data)
+
+    } catch (error) {
+        console.log('error when fetching tours from database', error)
+    }
+
+})
+
+router.get('/retrieve-tour/:id', async (req, res) => {
+    console.log('route hit');
+    
+    const {id} = req.params;
+    console.log(id);
+
+    try {
+
+        // change to translated events table to test
+       const {data, error} = await supabase.from('tours').select('*').eq('id', id);
+
+        if(error) {
+            console.log('error when admin tries to fetch event for editing: ', error);
+        };
+
+        console.log(data);
+        
+        res.status(200).json(data[0]);
+
+    } catch (error) {
+        console.log('error when trying to fetch event for editing');
+        res.status(500).json({message: 'error when fetching event for editing'})
+    };
+
+});
 
 router.post('/add-tour', async (req, res) => {
 
