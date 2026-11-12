@@ -214,7 +214,9 @@ export default function EditEventArea() {
           privateBooking: pulledEvent.individual_room || 0
         });
 
-        setInclusions(pulledEvent.inclusions)
+        setInclusions(pulledEvent.inclusions);
+        setStartDate(pulledEvent.start_date);
+        setEndDate(pulledEvent.end_date)
 
 
         setImagePreview(pulledEvent.cover_image);
@@ -255,6 +257,8 @@ export default function EditEventArea() {
     setIsConfirmationModal(false)
   };
 
+
+
   const updateEvent = async () => {
 
     console.log(imageFile);
@@ -275,10 +279,10 @@ export default function EditEventArea() {
 
     if(imageFile) {
 
-        const fileName = `eventImage-${imageFile.name}`;
+        const fileName = `tourImage-${imageFile.name}`;
 
         const { data, error } = await supabase.storage
-        .from('events_images')
+        .from('tours_images')
         .upload(fileName, imageFile, {
             contentType: 'img/*'
         });
@@ -286,13 +290,26 @@ export default function EditEventArea() {
         if (error) throw error;
 
         // Get the public url to save image to database
-        // const { data: publicData } = supabase.storage
-        //   .from('events_images')
-        //   .getPublicUrl(fileName);
+        const { data: publicData } = supabase.storage
+          .from('tours_images')
+          .getPublicUrl(fileName);
           
-        // imageUrlToSave = publicData.publicUrl;
-
+        imageUrlToSave = publicData.publicUrl;
     }
+
+      const galleryImageUrls = [];
+
+      if (existingGalleryUrls && existingGalleryUrls.length > 0) {
+        for (const file of existingGalleryUrls) {
+          const fileName = `tourGallery-${crypto.randomUUID()}-${file.name}`;
+          
+          const { data, error } = await supabase.storage.from('tours_images').upload(fileName, file);
+          if (error) throw error;
+          
+          const { data: uploadedImage } = supabase.storage.from('tours_images').getPublicUrl(fileName);
+          galleryImageUrls.push(uploadedImage.publicUrl);
+        }
+      }
 
     try {
 
@@ -317,15 +334,15 @@ export default function EditEventArea() {
           late_booking: formData.lateBooking,
           family_couples: formData.familyCouples,
           individual_room: formData.privateBooking,
-          cover_image: imagePreview,
-          gallery_images: existingGalleryUrls,
+          cover_image: imageUrlToSave,
+          gallery_images: galleryImageUrls,
           inclusions: inclusions,
         } 
 
         console.log(updatedEvent);
         
 
-        // const response = await axios.patch(`${API_URL}/admin/edit-event/${tourId}`, {updatedEvent});
+        const response = await axios.patch(`${API_URL}/admin/edit-tour/${tourId}`, {updatedEvent});
 
         // console.log(response);
         

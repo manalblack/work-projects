@@ -364,6 +364,9 @@ router.delete('/delete-event/:eventId', async (req, res) => {
 
 })
 
+
+// Rebuild endpoints 
+
 router.get('/all-tours', async (req, res) => {
 
     console.log('fetching all tours')
@@ -465,6 +468,41 @@ router.post('/add-tour', async (req, res) => {
         console.error('Error adding tour:', error);
         res.status(500).json({ error: error.message }); 
     }
+
+})
+
+router.patch('/edit-tour/:tourId', async (req, res) => {
+
+    console.log('editing route hit');
+
+    const {tourId} = req.params;
+    
+    const {updatedEvent} = req.body;
+
+    console.log(tourId);
+
+    console.log(updatedEvent);
+    
+    
+   try {
+
+        // changing the table to translated events, for developments 
+        const { data, error } = await supabase
+        .from('tours')
+        .update([updatedEvent])
+        .eq('id', tourId)      // Critical: Only update the row matching this ID
+        .select();       // Returns the updated record
+
+        if (error) throw error;
+        console.log(data);
+        
+
+        res.status(200).json(data);
+    
+   } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+   }
 
 })
 
