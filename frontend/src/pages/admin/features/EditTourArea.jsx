@@ -31,10 +31,13 @@ import {
   UsersRound,
   Plus
 } from 'lucide-react';
+import LiveTourPreviewCard from "../../../components/LiveTourPreviewCard";
 
 
 
-// keep testing 
+
+
+// TODO: Work on the tour review section
 
 export default function EditEventArea() {
 
@@ -612,8 +615,8 @@ export default function EditEventArea() {
             </div>
 
             {/* Date & Time Picker */}
-            <div className='flex gap-3'>
-              <div className="space-y-2">
+            <div className='flex gap-3 bg-amber-00'>
+              <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Calendar className="w-4 h-4 text-gold" />
                   <span>
@@ -626,11 +629,11 @@ export default function EditEventArea() {
                   showTimeSelect 
                   withPortal 
                   dateFormat="Pp"
-                  className="w-full sm:w-72 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Calendar className="w-4 h-4 text-gold" />
                   <span>{t.dateLabel}</span>
@@ -641,7 +644,7 @@ export default function EditEventArea() {
                   showTimeSelect 
                   withPortal 
                   dateFormat="Pp"
-                  className="w-full sm:w-72 bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
 
@@ -936,82 +939,17 @@ export default function EditEventArea() {
         </div>
 
           {/* Live Preview Card */}
-        <div className="space-y-4 md:w-1/2">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-gold" />
-            <span>Live Event Preview Card</span>
-          </h3>
-
-          <div 
-            className="rounded-2xl border border-forestGreen/30 bg-white shadow-xl overflow-hidden transition-all"
-            dir={isRtl ? 'rtl' : 'ltr'}
-          >
-            {/* Cover Image */}
-            <div className="relative w-full h-75 bg-slate-800">
-              {imagePreview ? (
-                <img src={imagePreview} alt="Event Cover Preview" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-mono">
-                  No Image Uploaded
-                </div>
-              )}
-              <div className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'} bg-forestGreen text-white font-mono text-xs px-2.5 py-1 rounded-full shadow-md`}>
-                {formData.totalTickets || 0} Tickets
-              </div>
-            </div>
-
-            {/* Content Area */}
-            <div className="p-6 space-y-4">
-              
-              {/* Dynamic Content based on isRtl */}
-              <div className={`space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 inline-block">
-                  {isRtl ? 'عرض اللغة العربية' : 'English View'}
-                </span>
-                
-                <h4 className="text-xl font-bold text-slate-900">
-                  {isRtl 
-                    ? (formData.eventTitleAr || 'عنوان الفعالية بالعربية') 
-                    : (formData.eventTitle || 'Event Title (English)')}
-                </h4>
-                
-                <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
-                  {isRtl 
-                    ? (formData.eventDescriptionAr || 'سيظهر وصف الفعالية هنا...') 
-                    : (formData.eventDescription || 'Event description will appear here...')}
-                </p>
-
-                <p className={`text-xs font-semibold text-slate-700 flex items-center gap-1 pt-1 ${isRtl ? 'justify-end' : 'justify-start'}`}>
-                  <MapPin className="w-3.5 h-3.5 text-gold shrink-0" />
-                  <span>
-                    {isRtl 
-                      ? (formData.eventLocationAr || 'موقع الفعالية بالعربية') 
-                      : (formData.eventLocation || 'Event Location (English)')}
-                  </span>
-                </p>
-              </div>
-
-              <hr className="border-slate-100" />
-
-              {/* Pricing & Date Footer */}
-
-             
-
-              <div className="flex items-center justify-between pt-2">
-
-                <div className="space-y-0.5 font-mono text-xs">
-                  <div className="text-slate-500">Regular: <span className="text-forestGreen font-bold">₦{formatNumber(formData.regularPrice) || 0}</span></div>
-                  <div className="text-slate-500">VIP: <span className="text-gold font-bold">₦{formatNumber(formData.vipPrice) || 0}</span></div>
-                </div>
-
-                <div className={`font-mono text-xs text-slate-500 ${isRtl ? 'text-left' : 'text-right'}`}>
-                  <div>{formatEventDate(eventDate)}</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
+          <LiveTourPreviewCard 
+            formData={formData}
+            isRtl={isRtl}
+            formatNumber={formatNumber}
+            formatEventDate={formatEventDate}
+            inclusions={inclusions}
+            imagePreview={imagePreview}
+            existingGalleryUrls={existingGalleryUrls}
+            startDate={startDate}
+            endDate={endDate}
+          />
       </div>
 
 
