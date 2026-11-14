@@ -65,38 +65,39 @@ router.post('/verify-staff', (req, res) => {
 });
 
 router.post('/scan-tickets', async (req, res) => {
-    const {ticketId} = req.body;
-    console.log('scanning route');
+  const {ticketId} = req.body;
+  console.log('scanning route');
+  
+  verifyStaff(req, res, async () => {
+  // const secretKey = process.env.ADMIN_SECRET_KEY;
+
+  const todaysDate = new Date().toISOString();
+
+  try {
+      
+    const {data, error} = await supabase.from('tickets').update({
+      is_scanned: true,
+      scanned_at: todaysDate
+    }).eq('id', ticketId).eq('is_scanned', false).select();
     
-    verifyStaff(req, res, async () => {
-         // const secretKey = process.env.ADMIN_SECRET_KEY;
 
-    const todaysDate = new Date().toISOString();
 
-    try {
-        
-        const {data, error} = await supabase.from('tickets').update({
-            is_scanned: true,
-            scanned_at: todaysDate
-        }).eq('id', ticketId).eq('is_scanned', false).select();
-        
-
-        if(error) {
-            console.log('error when updating ticket status in db, ', error);
-            return res.status(500).json({
-              error: 'Database Error',
-              message: 'could not connect to the database please try again'
-            })
-        }
-        res.status(200).json({message: 'SUCCESS'})
-    
- 
-    } catch (error) {
-        console.log('error when checking ticket status in the database', error);
-        toast.error('Connection failed.Please try again');
-        // window.location.reload();
-        
+    if(error) {
+        console.log('error when updating ticket status in db, ', error);
+        return res.status(500).json({
+          error: 'Database Error',
+          message: 'could not connect to the database please try again'
+        })
     }
+    res.status(200).json({message: 'SUCCESS'})
+  
+
+  } catch (error) {
+      console.log('error when checking ticket status in the database', error);
+      toast.error('Connection failed.Please try again');
+      // window.location.reload();
+      
+  }
     });
     
    
