@@ -62,6 +62,8 @@ export default function CreateTicketsArea() {
       try {
         const response = await axios.get(`${API_URL}/admin/all-events`);
         setEvents(response.data);
+        console.log(response.data);
+        
       } catch (error) {
         console.error('Error when fetching events: ', error);
       }

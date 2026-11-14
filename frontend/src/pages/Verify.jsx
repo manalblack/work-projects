@@ -65,7 +65,7 @@ export default function Verify() {
         // query the database to check the is_scanned and scanned_at columns 
          const checkTicketStatus = async () => {
             try {
-                const {data, error} = await supabase.from('testing_tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
+                const {data, error} = await supabase.from('tickets').select('is_scanned, scanned_at, event_name').eq('id', ticketId).single();
 
                 if(error) {
                     console.log('error checking ticket status in the db', error);

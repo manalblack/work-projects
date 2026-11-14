@@ -64,6 +64,8 @@ export default function CreateTicketArea() {
       try {
         const response = await axios.get(`${API_URL}/admin/all-events`);
         setEvents(response.data);
+        console.log(response.data);
+        
       } catch (error) {
         console.error('Error when fetching events: ', error);
       }
@@ -83,11 +85,10 @@ export default function CreateTicketArea() {
   const handelTicketCreation = async (e) => {
     e.preventDefault();
 
-    if (!formData.customerName || !formData.customerEmail || !selectedEventId || !formData.ticketType) {
-      toast.error(t.fillFormError, { duration: 6000 });
-      return;
-    }
-
+    // if (!formData.customerName || !formData.customerEmail || !selectedEventId || !formData.ticketType) {
+    //   toast.error(t.fillFormError, { duration: 6000 });
+    //   return;
+    // }
     setLoading(true);
 
     const newTicket = {
@@ -99,9 +100,11 @@ export default function CreateTicketArea() {
     };
 
     try {
+
       const response = await axios.post(`${API_URL}/admin/create-ticket`, { ticketInfo: newTicket });
 
       setPdfUrl(response.data);
+
       setLoading(false);
       setFormData({
         customerName: '',
@@ -111,6 +114,7 @@ export default function CreateTicketArea() {
       });
       setSelectedEventId('');
       toast.success(t.ticketCreatedSuccess, { duration: 6000 });
+
     } catch (error) {
       console.error('Error when creating a ticket!: ', error);
       toast.error(isRtl ? 'حدث خطأ أثناء إنشاء التذكرة' : 'Error creating ticket');
@@ -235,6 +239,7 @@ export default function CreateTicketArea() {
                 <Calendar className="w-4 h-4 text-gold" />
                 <span>{t.eventLabel}</span>
               </label>
+              
               <select 
                 name="eventId" 
                 value={selectedEventId} 

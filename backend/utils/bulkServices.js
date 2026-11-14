@@ -83,11 +83,24 @@ async function generateSinglePdf({ customerName, ticketId, verifyUrl, type, even
  */
 async function createBulkTickets({ eventData, bulkInfo }) {
 
-  const image = eventData.image;
-  const eventName = eventData.title;
+
+  console.log('event data', eventData);
+  
+
+  // const image = eventData.image;
+  // const eventName = eventData.title;
+  // const eventId = eventData.id;
+  // const location = eventData.location;
+  // const eventDate = eventData.event_date;
+
   const eventId = eventData.id;
-  const location = eventData.location;
-  const eventDate = eventData.event_date;
+  const image = eventData.cover_image;
+
+  // Extract bilingual fields safely (defaulting to English or selecting based on language preference)
+  const eventName = typeof eventData.title === 'object' ? eventData.title.en : eventData.title;
+  const location = typeof eventData.location === 'object' ? eventData.location.en : eventData.location;
+
+  const eventDate = eventData.event_date
 
   console.log('event data object', eventData);
   console.log('bulk info object, ', bulkInfo);

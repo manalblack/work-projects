@@ -117,13 +117,33 @@ async function createImageBuffer(url) {
 
 async function createTicket({eventData, ticketInfo}){
     
+    console.log(eventData);
+    console.log(ticketInfo);
+    
+    // Event information
+    // const image = eventData.cover_image
+    // const eventName = eventData.title
+    // const eventId = eventData.id;
+    // const location = eventData.location;
 
     // Event information
-    const image = eventData.image
-    const eventName = eventData.title
     const eventId = eventData.id;
-    const location = eventData.location;
-    const eventDate = eventData.date
+    const image = eventData.cover_image;
+
+    // Extract bilingual fields safely (defaulting to English or selecting based on language preference)
+    const eventName = typeof eventData.title === 'object' ? eventData.title.en : eventData.title;
+    const location = typeof eventData.location === 'object' ? eventData.location.en : eventData.location;
+
+    const eventDate = eventData.event_date
+
+    console.log('debugging step 1');
+    console.log(image);
+    console.log(eventName);
+    console.log(location);
+    
+    
+    
+    
 
     // Ticket information
     const type = ticketInfo.type;
@@ -151,20 +171,20 @@ async function createTicket({eventData, ticketInfo}){
     });
 
     // change the bucket to production storage before committing
-    const {data: uploadedData, error: uploadError} = await supabase.storage.from('testing').upload(`ticket_${ticketId}.pdf`, pdfBuffer, {
-            contentType: 'application/pdf',
-            upsert: true
-    })
+    const {data: uploadedData, error: uploadError} = await supabase.storage.from('tickets_qr_codes').upload(`ticket_${ticketId}.pdf`, pdfBuffer, {
+        contentType: 'application/pdf',
+        upsert: true
+    });
 
-        if(uploadError) return uploadError;
-      
-    const {data: urlData, error: urlError} = supabase.storage.from('testing').getPublicUrl(`ticket_${ticketId}.pdf`);
+    if(uploadError) return uploadError;
+    
+    const {data: urlData, error: urlError} = supabase.storage.from('tickets_qr_codes').getPublicUrl(`ticket_${ticketId}.pdf`);
 
-        updateDb(eventId)
+    updateDb(eventId);
 
-        console.log('error when fetching the url', urlError);
+    console.log('error when fetching the url', urlError);
 
-    const {error: insertToTableError} = await supabase.from('testing_tickets').insert([{
+    const {data:ticketData, error: insertToTableError} = await supabase.from('tickets').insert([{
         id: ticketId,
         customer_email: customerEmail,
         customer_name: customerName,
@@ -175,6 +195,9 @@ async function createTicket({eventData, ticketInfo}){
         event_name: eventName,
         event_id: eventId,
     }]);
+
+    console.log(ticketData);
+    
 
     if(insertToTableError) {
         console.log('ticket was not saved to database', insertToTableError);

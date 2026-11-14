@@ -101,13 +101,13 @@ export default function EditEventArea() {
         try {
 
           const fetchEvents = async () => {
-              // change this link to ngrok 
-              const response = await axios.get(`${API_URL}/admin/all-events`);
+            // change this link to ngrok 
+            const response = await axios.get(`${API_URL}/admin/all-events`);
 
-              console.log(response.data);
+            console.log(response.data);
 
-              setAllEvents(response.data);
-              setLoading(false)      
+            setAllEvents(response.data);
+            setLoading(false)      
 
           }
 

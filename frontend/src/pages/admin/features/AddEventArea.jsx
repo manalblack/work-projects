@@ -18,6 +18,7 @@ import {
   CheckCircle2 
 } from "lucide-react";
 
+
 export default function AddEventArea() {
   const { isRtl } = useOutletContext(); // Pull language state from parent Dashboard outlet
 

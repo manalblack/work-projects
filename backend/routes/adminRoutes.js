@@ -26,6 +26,8 @@ router.get('/all-events', async (req, res) => {
     }
 })
 
+
+// This route is not used at all
 router.post('/add-events', async (req, res) => {
 
     console.log('route hit');
@@ -46,7 +48,8 @@ router.post('/add-events', async (req, res) => {
     };
     
     try {
-        const {data, error} = await supabase.from('events').insert([newEvent])
+        const {data, error} = await supabase.from('translated_events').insert([newEvent]);
+
         if(error) throw error;
         
         res.status(200).json({message: 'SUCCESS'});
@@ -148,13 +151,15 @@ router.get('/find-ticket', async (req, res) => {
 router.post('/create-ticket', async (req, res) => {
     
     const {ticketInfo} = req.body;
+    console.log(ticketInfo);
+    
     const eventId = ticketInfo.eventId
 
-    const {data, error} = await supabase.from('events').select('*').eq('id', eventId);
+    const {data, error} = await supabase.from('translated_events').select('*').eq('id', eventId);
 
-        if(error){
-            console.log('error when admin tries to create a ticket: ', error);
-        }
+    if(error){
+        console.log('error when admin tries to create a ticket: ', error);
+    }
 
     try {
         const pdfFileLink = await createTicket({
@@ -175,16 +180,22 @@ router.post('/create-ticket', async (req, res) => {
 // Create bulk tickets route/ multiple tickets at once
 router.post('/create-bulk-tickets', async (req, res) => {
 
+    console.log('bulk route hit');
+    
+
   try {
     const { bulkInfo } = req.body;
 
+    console.log('bulk info', bulkInfo);
+    
+
     // 1. Validation
-    if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
-      return res.status(400).json({
-        success: false,
-        message: 'Missing required fields: eventId and groupName are required.'
-      });
-    }
+    // if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'Missing required fields: eventId and groupName are required.'
+    //   });
+    // }
 
     const quantity = parseInt(bulkInfo.quantity, 10);
     if (isNaN(quantity) || quantity < 1 || quantity > 100) {
@@ -196,10 +207,15 @@ router.post('/create-bulk-tickets', async (req, res) => {
 
     // 2. Fetch event data directly in the route (ensures accurate event details)
     const { data: eventData, error: eventError } = await supabase
-      .from('events')
+      .from('translated_events')
       .select('*')
       .eq('id', bulkInfo.eventId)
       .single();
+
+      if (eventError) {
+        console.log(eventError);
+        
+      }
 
     if (eventError || !eventData) {
       return res.status(404).json({
@@ -505,6 +521,28 @@ router.patch('/edit-tour/:tourId', async (req, res) => {
    }
 
 })
+
+
+router.get('/founder-info', async (req, res) => {
+
+    console.log('fetching founder info')
+
+    try {
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('founder_profiles').select('*');
+
+        if(error) {
+            return res.status(400).json({message: 'error when fetching founder info'});
+        };
+        console.log('Fetched Founder Data:', data);
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        console.log('error when fetching tours from database', error)
+    }
+})
+
 
 /*      
     TODO:
