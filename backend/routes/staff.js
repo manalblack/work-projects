@@ -89,6 +89,7 @@ router.post('/scan-tickets', async (req, res) => {
           message: 'could not connect to the database please try again'
         })
     }
+    
     res.status(200).json({message: 'SUCCESS'})
   
 

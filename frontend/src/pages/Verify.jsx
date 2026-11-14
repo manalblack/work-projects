@@ -108,46 +108,46 @@ export default function Verify() {
     
     // This function is not working
     const handelTicketVerification = async () => {
-            setVerifyTicket(true);
-            const { data: { session } } = await supabase.auth.getSession();
-            if(!session) {
-                console.error('no active session found');
-                return;   
-            }
+        setVerifyTicket(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        if(!session) {
+            console.error('no active session found');
+            return;   
+        }
 
-            try {
-                const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
-                    ticketId: ticketId,
-                    bouncerId: passKey
-                }, {headers: {
-                    'Authorization': `Bearer ${session.access_token}`,
-                    'Content-Type': 'application/json'
-                }});
+        try {
+            const response = await axios.post(`${API_URL}/staff/scan-tickets`, {
+                ticketId: ticketId,
+                bouncerId: passKey
+            }, {headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json'
+            }});
 
-                // const response = await axios.post(`http://localhost:3001/api/staff/scan-tickets`, {
-                //     ticketId: ticketId,
-                //     bouncerId: passKey
-                // }, {headers: {
-                //     'Authorization': `Bearer ${session.access_token}`,
-                //     'Content-Type': 'application/json'
-                // }});
+            // const response = await axios.post(`http://localhost:3001/api/staff/scan-tickets`, {
+            //     ticketId: ticketId,
+            //     bouncerId: passKey
+            // }, {headers: {
+            //     'Authorization': `Bearer ${session.access_token}`,
+            //     'Content-Type': 'application/json'
+            // }});
 
 
-                console.log(response)
-                
-                
-                if(response.data.message === 'SUCCESS'){
-                    setVerifyTicket(false);
-                    navigate('/success')
-                };
-
-                console.log(response);
-                 
-            } catch (error) {
-                console.log('error when checking ticket status', error);
-                toast.error('Connection failed.Please try again');
-                // window.location.reload();
+            console.log(response)
+            
+            
+            if(response.data.message === 'SUCCESS'){
+                setVerifyTicket(false);
+                navigate('/success')
             };
+
+            console.log('endpoint response:', response);
+                
+        } catch (error) {
+            console.log('error when checking ticket status', error);
+            toast.error('Connection failed.Please try again');
+            // window.location.reload();
+        };
     }
         
         
