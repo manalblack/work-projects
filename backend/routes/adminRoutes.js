@@ -12,7 +12,8 @@ router.get('/all-events', async (req, res) => {
     console.log('fetching all events')
 
     try {
-        const {data, error} = await supabase.from('events').select('*');
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('translated_events').select('*');
 
         if(error) {
             return res.status(400).json({message: 'error when fetching events'})
@@ -25,6 +26,8 @@ router.get('/all-events', async (req, res) => {
     }
 })
 
+
+// This route is not used at all
 router.post('/add-events', async (req, res) => {
 
     console.log('route hit');
@@ -45,7 +48,8 @@ router.post('/add-events', async (req, res) => {
     };
     
     try {
-        const {data, error} = await supabase.from('events').insert([newEvent])
+        const {data, error} = await supabase.from('translated_events').insert([newEvent]);
+
         if(error) throw error;
         
         res.status(200).json({message: 'SUCCESS'});
@@ -55,6 +59,75 @@ router.post('/add-events', async (req, res) => {
         res.status(400).json({message: 'Operation failed'});
     }
 })
+
+
+// Translated Route testing
+router.post('/add-translated-events', async (req, res) => {
+
+    console.log('route hit');
+    
+    const {
+        titleEn, 
+        titleAr, 
+        descriptionEn, 
+        descriptionAr, 
+        locationEn, 
+        locationAr,
+        totalTickets,
+        vipPrice,
+        regularPrice,
+        eventTime,
+        eventDate,
+        coverImage,
+    } = req.body;
+    // const {newEvent} = req.body;
+
+    // const newEvent  = {
+    //     title: title,
+    //     description: description,
+    //     location: location,
+    //     time: time,
+    //     event_date: date,
+    //     image: image,
+    //     total_tickets: totalTickets,
+    //     vip_price: vipPrice,
+    //     regular_price: regularPrice
+    // };
+
+    const newEventRecord = {
+      title: {
+        en: titleEn,
+        ar: titleAr
+      },
+      description: {
+        en: descriptionEn || '',
+        ar: descriptionAr || ''
+      },
+      location: {
+        en: locationEn || '',
+        ar: locationAr || ''
+      },
+      event_date: eventDate,
+      event_time: eventTime,
+      total_tickets: Number(totalTickets) || 0,
+      vip_price: Number(vipPrice) || 0,
+      regular_price: Number(regularPrice) || 0,
+      cover_image: coverImage
+    };
+    
+    try {
+        // Using translated events table for testing at the moment, if it works, keep the table as the main one for production
+        const {data, error} = await supabase.from('translated_events').insert([newEventRecord])
+        if(error) throw error;
+        
+        res.status(200).json({message: 'SUCCESS'});
+
+    } catch (error) {
+        console.log('error when creating new event', error);
+        res.status(400).json({message: 'Operation failed'});
+    }
+})
+
 
 router.get('/find-ticket', async (req, res) => {
     const {query} = req.query;
@@ -78,13 +151,15 @@ router.get('/find-ticket', async (req, res) => {
 router.post('/create-ticket', async (req, res) => {
     
     const {ticketInfo} = req.body;
+    console.log(ticketInfo);
+    
     const eventId = ticketInfo.eventId
 
-    const {data, error} = await supabase.from('events').select('*').eq('id', eventId);
+    const {data, error} = await supabase.from('translated_events').select('*').eq('id', eventId);
 
-        if(error){
-            console.log('error when admin tries to create a ticket: ', error);
-        }
+    if(error){
+        console.log('error when admin tries to create a ticket: ', error);
+    }
 
     try {
         const pdfFileLink = await createTicket({
@@ -105,16 +180,22 @@ router.post('/create-ticket', async (req, res) => {
 // Create bulk tickets route/ multiple tickets at once
 router.post('/create-bulk-tickets', async (req, res) => {
 
+    console.log('bulk route hit');
+    
+
   try {
     const { bulkInfo } = req.body;
 
+    console.log('bulk info', bulkInfo);
+    
+
     // 1. Validation
-    if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
-      return res.status(400).json({
-        success: false,
-        message: 'Missing required fields: eventId and groupName are required.'
-      });
-    }
+    // if (!bulkInfo || !bulkInfo.eventId || !bulkInfo.groupName) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'Missing required fields: eventId and groupName are required.'
+    //   });
+    // }
 
     const quantity = parseInt(bulkInfo.quantity, 10);
     if (isNaN(quantity) || quantity < 1 || quantity > 100) {
@@ -126,10 +207,15 @@ router.post('/create-bulk-tickets', async (req, res) => {
 
     // 2. Fetch event data directly in the route (ensures accurate event details)
     const { data: eventData, error: eventError } = await supabase
-      .from('events')
+      .from('translated_events')
       .select('*')
       .eq('id', bulkInfo.eventId)
       .single();
+
+      if (eventError) {
+        console.log(eventError);
+        
+      }
 
     if (eventError || !eventData) {
       return res.status(404).json({
@@ -200,7 +286,9 @@ router.get('/retrieve-event/:id', async (req, res) => {
     console.log(id);
 
     try {
-       const {data, error} = await supabase.from('events').select('*').eq('id', id);
+
+        // change to translated events table to test
+       const {data, error} = await supabase.from('translated_events').select('*').eq('id', id);
 
         if(error) {
             console.log('error when admin tries to fetch event for editing: ', error);
@@ -230,23 +318,12 @@ router.patch('/edit-event/:eventId', async (req, res) => {
     console.log(updatedEvent);
     
     
-
-    
    try {
 
+        // changing the table to translated events, for developments 
         const { data, error } = await supabase
-        .from('events')
-        .update({
-            title: updatedEvent.title,
-            event_date: updatedEvent.event_date,
-            time: updatedEvent.time,
-            location: updatedEvent.location,
-            image: updatedEvent.image,
-            total_tickets: updatedEvent.total_tickets,
-            regular_price:updatedEvent.regular_price,
-            vip_price: updatedEvent.vip_price,
-            description: updatedEvent.description
-        })
+        .from('translated_events')
+        .update([updatedEvent])
         .eq('id', eventId)      // Critical: Only update the row matching this ID
         .select();       // Returns the updated record
 
@@ -302,5 +379,178 @@ router.delete('/delete-event/:eventId', async (req, res) => {
     
 
 })
+
+
+// Rebuild endpoints 
+
+router.get('/all-tours', async (req, res) => {
+
+    console.log('fetching all tours')
+
+    try {
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('tours').select('*');
+
+        if(error) {
+            return res.status(400).json({message: 'error when fetching tours'})
+        }
+
+        console.log('tours data fetched:', data);
+
+        res.status(200).json(data)
+
+    } catch (error) {
+        console.log('error when fetching tours from database', error)
+    }
+
+})
+
+router.get('/retrieve-tour/:id', async (req, res) => {
+    console.log('route hit');
+    
+    const {id} = req.params;
+    console.log(id);
+
+    try {
+
+        // change to translated events table to test
+       const {data, error} = await supabase.from('tours').select('*').eq('id', id);
+
+        if(error) {
+            console.log('error when admin tries to fetch event for editing: ', error);
+        };
+
+        console.log(data);
+        
+        res.status(200).json(data[0]);
+
+    } catch (error) {
+        console.log('error when trying to fetch event for editing');
+        res.status(500).json({message: 'error when fetching event for editing'})
+    };
+
+});
+
+router.post('/add-tour', async (req, res) => {
+
+    // this endpoint is to add tours to the database.
+
+    console.log('Add tour route hit');
+
+    try{
+
+        const {newTour} = req.body;
+
+        console.log('New tour data:', newTour);
+
+        const tour = {
+            title: {
+                en: newTour.titleEn,
+                ar: newTour.titleAr
+            },
+            description: {
+                en: newTour.descriptionEn,
+                ar: newTour.descriptionAr
+            },
+            location: {
+                en: newTour.locationEn,
+                ar: newTour.locationAr
+            },
+            cover_image: newTour.coverImage,
+            gallery_images: newTour.carouselImages,
+            inclusions: newTour.inclusions || [],
+            start_date: newTour.startDate,
+            end_date: newTour.endDate,
+            duration_days: newTour.durationDays,
+            early_birds: newTour.earlyBirds,
+            late_booking: newTour.lateBooking,
+            family_couples: newTour.familyCouples,
+            individual_room: newTour.privateRoom,
+        };
+
+
+
+        console.log('Tour to be added:', tour);
+
+        const {data, error} = await supabase.from('tours').insert([tour])
+
+        if(error) throw error;
+
+        
+        res.status(200).json({message: 'SUCCESS'});
+
+
+    } catch (error) { 
+        console.error('Error adding tour:', error);
+        res.status(500).json({ error: error.message }); 
+    }
+
+})
+
+router.patch('/edit-tour/:tourId', async (req, res) => {
+
+    console.log('editing route hit');
+
+    const {tourId} = req.params;
+    
+    const {updatedEvent} = req.body;
+
+    console.log(tourId);
+
+    console.log(updatedEvent);
+    
+    
+   try {
+
+        // changing the table to translated events, for developments 
+        const { data, error } = await supabase
+        .from('tours')
+        .update([updatedEvent])
+        .eq('id', tourId)      // Critical: Only update the row matching this ID
+        .select();       // Returns the updated record
+
+        if (error) throw error;
+        console.log(data);
+        
+
+        res.status(200).json(data);
+    
+   } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+   }
+
+})
+
+
+router.get('/founder-info', async (req, res) => {
+
+    console.log('fetching founder info')
+
+    try {
+        // Change the table from events to translated events for testing
+        const {data, error} = await supabase.from('founder_profiles').select('*');
+
+        if(error) {
+            return res.status(400).json({message: 'error when fetching founder info'});
+        };
+        console.log('Fetched Founder Data:', data);
+
+        res.status(200).json(data);
+
+    } catch (error) {
+        console.log('error when fetching tours from database', error)
+    }
+})
+
+
+/*      
+    TODO:
+ Create new routes to add tours and edit them
+1- each input needs to have bilingual, inputs
+2- you need to create a function to minimize image size before downloading to database
+
+
+*/
 
 export default router;

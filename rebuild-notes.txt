@@ -12,7 +12,7 @@ Client Requests
 ]
 
 
-    PHASE 1 [95% Done / Awaiting client approval]
+    PHASE 1 [95% Done / Upload the new design to the droplet]
 
 1-Keep the UI / UX as simple as possible
 2-Easy navigation throughout the application is a must.
@@ -20,11 +20,17 @@ Client Requests
 4-start working on the ui
 5-Bilingual website
 
+2026 / 10 /19: BEFORE THE FINAL MERGE ADD ar/en BASED ON THE OVER ALL LANG
+
+
+
+
     PHASE 2
 
 1-Admin dashboard, redesign.
 2-Founder page CRUD operations on (Name, header, image and description and contact info)
 3-Tours and services page CRUD operations similar to the events functionality
+4-Ask if the client wants to add anything new
 
 
 [
@@ -37,6 +43,5 @@ Client Requests
     tiktok: https://www.tiktok.com/@trv.ev?_r=1&_t=ZS-99v1Bt5qiQ9
 
     instagram: https://www.instagram.com/trv.ev?stkn=MWJrZ3RoaG5kbTdraw%3D%3D&utm_source=qr
-
 
 ]

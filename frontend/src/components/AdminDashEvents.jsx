@@ -1,112 +1,154 @@
 import { useState } from "react"
+import { useOutletContext } from "react-router-dom";
 import { supabase } from "../supabaseConnection";
 import ScannedTicketsModal from "../pages/admin/features/ScannedTicketsModal";
+import { MapPin, Crown, Ticket, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
-export default function AdminDashEvents({allEvents, setAllEvents, id, image, title, description, date, location, time, regular_price, vip_price, current_event}){
+export default function AdminDashEvents({ allEvents, setAllEvents }) {
+    const { isRtl } = useOutletContext() || { isRtl: false };
 
-    const [isExpanded, setIsExpanded] = useState(false);
+    // Track expansion state per event ID
+    const [expandedIds, setExpandedIds] = useState({});
     const [scannedTicketsModal, setScannedTickModal] = useState(false);
+    const [selectedEventId, setSelectedEventId] = useState(null);
 
+    const toggleExpand = (id) => {
+        setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
+    };
 
-    // TODO: fix this function....
-     const handelOngoingBox = async (eventId) => {
-        console.log(eventId);
-        
-        const updatedEvents = allEvents.map((ev) => ({
-            ...ev,
-            current_event: ev.id === eventId // True for the one clicked, false for others
-        }));
-
+    const handelOngoingBox = async (eventId) => {
         try {
             const { error } = await supabase.rpc('set_single_current_event', { target_id: eventId });
 
-                if(error) {
-                    alert('failed to update current event');
-                    console.log(error);
-                    
-                }
-                setAllEvents(updatedEvents);
+            if (error) {
+                alert('failed to update current event');
+                console.log(error);
+                return;
+            }
         } catch (error) {
             console.log('error when updating current event: ', error);
-            
         }
-    }
+    };
 
     const openScannedTicketsModal = (eventId) => {
-        setScannedTickModal(true)
-        // setEventId(eventId)
+        setSelectedEventId(eventId);
+        setScannedTickModal(true);
+    };
+
+    if (!Array.isArray(allEvents) || allEvents.length === 0) {
+        return (
+            <div className="w-full py-12 text-center text-slate-400 text-sm">
+                {isRtl ? 'لا توجد فعاليات متاحة حالياً.' : 'No events found.'}
+            </div>
+        );
     }
 
-    
-
+    const formatNumber = (value) => {
+        if (isNaN(value)) return '0';
+        return Number(value).toLocaleString('en-US');
+    };
 
     return (
-        <div className="w-full md:w-9/10 px-5">
-            <div key={id}
-                className="h-auto w-full lg:w bg-ghostWhite shadow-md flex flex-col items-center p-2 gap-6 md:gap-8 lg:gap-4 rounded-sm">
-                <div className="w-full bgwhite/50 rounded-sm aspect-video flex justify-center items-center">
-                    <img src={image} alt="placeholder image" className="rounded-sm lg:h- h-60 shadow-md"/>
-                </div>
+        <div className="w-full px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allEvents.map((event, index) => {
+                // Extract bilingual fields safely based on isRtl flag
+                const title = event.title?.[isRtl ? 'ar' : 'en'] || event.title?.en || '';
+                const description = event.description?.[isRtl ? 'ar' : 'en'] || event.description?.en || '';
+                const location = event.location?.[isRtl ? 'ar' : 'en'] || event.location?.en || '';
+                const isExpanded = !!expandedIds[event.id];
 
-                <div className="text-white bg-green-6 flex flex-col gap-3">
-                    <h2 className="text-xl font-bold text-gray-700">{title}</h2>
-                    <p className={`${isExpanded ? '' : 'line-clamp-4'} text-md text-gray-700`}>
-                        {description || <span>No description found</span>}
-                    </p>
-                    <button 
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className={`${!description ? 'hidden' : 'flex'} mt-1 text-blue-600 font-medium hover:underline text-sm`}
+                return (
+                    <motion.div 
+                        key={event.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.1 }}
+                        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                        className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow flex flex-col justify-between group"
                     >
-                        {isExpanded ? 'Show Less' : 'Read More'}
-                    </button>
+                        
+                        {/* Cover Image Header */}
+                        <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                            <motion.img 
+                                whileHover={{ scale: 1.08 }}
+                                transition={{ duration: 0.4 }}
+                                src={event.cover_image} 
+                                alt={title || "Event image"} 
+                                className="w-full h-full object-cover" 
+                            />
+                            {/* Date Badge Overlay */}
+                            <div className="absolute top-3 right-3 bg-slate-950/70 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                <Calendar className="w-3 h-3 text-gold" />
+                                <span>{event.event_date}</span>
+                            </div>
+                        </div>
 
-                    <div className="flex flex-row gap-3 bg-red-00 w-full">
-                    
-                        <div className="flex flex-col gap-4 bg-red-0 mt-4 relative w-full">
-                            <div className="bg-red-0 p-1 flex bg-gren-300 w-full flex-row justify-between gap-10">
-                                
-                                <span className="bg-white/50 w-1/2 text-gray-800 md:px-1 py-1 rounded-sm px-1 text-sm md:text- shadow-md">
-                                    Date: {date}, Time: {time}
-                                    <br />
-                                    Venue: {location}
-                                </span>
-                                <div className="flex flex-col font-bold gap-5">
-                                    <span className="bg-blue-300 px-1 py-1 rounded-sm">
-                                        Regular N{regular_price}
-                                    </span>
-                                       <span className="bg-blue-300 px-1 py-1 rounded-sm">
-                                        VIP N{vip_price || 0}
-                                    </span>
+                        {/* Content Body */}
+                        <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
+                            <div className="space-y-2.5">
+                                <div className="flex items-center gap-1.5 text-xs font-semibold text-gold">
+                                    <MapPin className="w-3.5 h-3.5 shrink-0" />
+                                    <span className="truncate">{location}</span>
+                                </div>
+                                <h3 className="text-sm font-bold text-slate-900 tracking-tight line-clamp-1">{title}</h3>
+                                <p className={`text-xs text-slate-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
+                                    {description || <span>No description found</span>}
+                                </p>
+                                {description && (
+                                    <button 
+                                        type="button"
+                                        onClick={() => toggleExpand(event.id)}
+                                        className="text-gold font-medium hover:underline text-xs cursor-pointer inline-block pt-0.5"
+                                    >
+                                        {isExpanded ? (isRtl ? 'عرض أقل' : 'Show Less') : (isRtl ? 'قراءة المزيد' : 'Read More')}
+                                    </button>
+                                )}
+
+                                {/* Pricing Cards Box */}
+                                <div className="p-3 rounded-xl bg-forestGreen/5 border border-forestGreen/10 grid grid-cols-2 gap-2 mt-3">
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-forestGreen bg-white p-2 rounded-lg border border-forestGreen/20 shadow-xs">
+                                        <Ticket className="w-3.5 h-3.5 text-gold shrink-0" />
+                                        <div className="truncate">
+                                            <span className="text-[10px] block text-slate-400 font-normal">Reg</span>
+                                            <span>N{formatNumber(event.regular_price) || 0}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 bg-white p-2 rounded-lg border border-gold/30 shadow-xs">
+                                        <Crown className="w-3.5 h-3.5 text-gold shrink-0" />
+                                        <div className="truncate">
+                                            <span className="text-[10px] block text-slate-400 font-normal">VIP</span>
+                                            <span>N{formatNumber(event.vip_price) || 0}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            {/* <div className="p-2 flex flex-row gap-5 ml-auto bg-blue-300 rounded-sm">
-                                <label htmlFor="" className="font-bold">
-                                    Current event
-                                </label>
-                                <input type="radio" checked={current_event} name='current-event-selection' onChange={()=> handelOngoingBox(id)}
-                                className="w-5 shadow-lg"/>
-                            </div> */}
+
+                            {/* Scanned Tickets Action Button */}
+                            <div className="pt-3 border-t border-slate-100">
+                                <motion.button 
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    type="button"
+                                    onClick={() => openScannedTicketsModal(event.id)}
+                                    className="w-full py-2.5 px-4 bg-forestGreen text-white font-bold rounded-xl border border-forestGreen shadow-xs hover:bg-gold hover:text-slate-950 transition-all duration-300 ease-in-out text-xs uppercase tracking-wider cursor-pointer text-center"
+                                >
+                                    {isRtl ? 'عرض التذاكر الممسوحة' : 'Get Scanned Tickets'}
+                                </motion.button>
+                            </div>
                         </div>
-                        {/* <div className="flex flex-col gap-5 mt-8 w-1/2 ">
-                            <LightBtn onPress={() => aboutEventModal(event)}>About Event</LightBtn>
-                            <LightPurpleBtn onPress={
-                                () => buyTicketModal(event)}>
-                                Buy Ticket
-                            </LightPurpleBtn>
-                        </div> */}
+                    </motion.div> 
+                );
+            })}
 
-                    </div>
-
-                </div>
-                <button onClick={() => openScannedTicketsModal(id)}
-                    className="px-2 py-1 bg-blue-200 text-white font-bold rounded-md shadow-md active:scale-85 hover:bg-blue-300 transition-all duration-300 ease-in-out">
-                    get scanned tickets
-                </button>
-            </div> 
-            {scannedTicketsModal && 
-                <ScannedTicketsModal eventId={id} isOpen={scannedTicketsModal} setScannedTickets={setScannedTickModal}/>
-            }
+            {/* Scanned Tickets Modal */}
+            {scannedTicketsModal && selectedEventId && (
+                <ScannedTicketsModal 
+                    eventId={selectedEventId} 
+                    isOpen={scannedTicketsModal} 
+                    setScannedTickets={setScannedTickModal} 
+                />
+            )}
         </div>
-
-    )
+    );
 }

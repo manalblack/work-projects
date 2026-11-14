@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileText, 
@@ -13,6 +13,8 @@ import Layout from '../layouts/Layout';
 import { useLanguage } from '../hooks/LanguageContext';
 import { Link } from 'react-router-dom';
 import { FaWhatsapp, FaTiktok, FaInstagram } from "react-icons/fa";
+import axios from 'axios';
+
 
 const content = {
   en: {
@@ -117,10 +119,10 @@ const content = {
     emailSub: "مراقب على مدار الساعة من قبل رئيس البروتوكول",
     ctaBtn: "تواصل معانا"
   }
-}
+};
+
 
 // Animation Variants
-
 /*
   change the event cover image and add a mutlti image modal
 
@@ -129,16 +131,20 @@ const content = {
 
 export default function Founder() {
 
-  // const [lang, setLang] = useState('EN');
-  // const isArabic = lang === 'AR';
 
-  // const [currentLang, setCurrentLang] = useState(lang);
-    
-  //   const isRtl = currentLang === 'ar';
+  const [founder, setFounder] = useState([]);
   
-  //   const toggleLanguage = (newLang) => {
-  //     setCurrentLang(newLang);
-  //   };
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+
+    // create a function to fetch founder info
+
+    const fetchFounderInfo = () => {
+      
+    }
+  }, [])
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 

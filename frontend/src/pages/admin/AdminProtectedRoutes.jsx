@@ -7,12 +7,12 @@ import toast from 'react-hot-toast';
 
 export default function AdminProtectedRoute() {
 
-    const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
 
-    if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  if (loading) return <div className="flex text-white font-semibold h-screen items-center justify-center">Loading...</div>;
 
-    if (!user || !isAdmin) {
-      toast.error('You ar not Authorized to visit this page');
+  if (!user || !isAdmin) {
+    toast.error('You ar not Authorized to visit this page');
     return <Navigate to="/admin-login" replace />;
   }
 
