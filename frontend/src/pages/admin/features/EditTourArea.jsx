@@ -35,8 +35,6 @@ import LiveTourPreviewCard from "../../../components/LiveTourPreviewCard";
 
 
 
-
-
 // TODO: Work on the tour review section
 
 export default function EditEventArea() {
@@ -60,8 +58,10 @@ export default function EditEventArea() {
   const [endDate, setEndDate ] = useState(new Date());
 
   const [imagePreview, setImagePreview] = useState(null);
+
   const [existingGalleryUrls, setExistingGalleryUrls] = useState([]);
   const [newGalleryPreviews, setNewGalleryPreviews] = useState([]);
+
   const [formData, setFormData] = useState({
     eventTitle: '',
     eventTitleAr: '',
@@ -85,6 +85,8 @@ export default function EditEventArea() {
   const [inclusionInputEn, setInclusionInputEn] = useState('')
   const [inclusionInputAr, setInclusionInputAr] = useState('')
   
+  const [isCompressingCover, setIsCompressingCover] = useState(false);
+  const [isCompressingCarousel, setIsCompressingCarousel] = useState(false);
 
   // Pull language state from parent Dashboard outlet
   const { isRtl } = useOutletContext() || { isRtl: false }; 
@@ -139,7 +141,35 @@ export default function EditEventArea() {
   }, [])
 
 
+  // const compressImage = async (file) => {
+  //   const options = {
+  //     maxSizeMB: 2,          // Aim for 1MB
+  //     maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
+  //     useWebWorker: true     // Keeps the UI from freezing during compression
+  //   }
+  //   const compressedFile = await imageCompression(file, options);
+
+  //   const finalFile = new File([compressedFile], file.name, {
+  //       type: compressedFile.type,
+  //       lastModified: Date.now(),
+  //   });
+
+  //     setImageFile(finalFile);
+
+  //     setImagePreview(URL.createObjectURL(finalFile));
+  // };
+
+  // const handelImageFile = async (e) => {
+
+  //   const selectedFile = e.target.files[0];
+  //   if(selectedFile) {
+  //       compressImage(selectedFile)
+  //   }
+  //   // setImageFile(URL.createObjectURL(e.target.files[0]));
+  // }
+
   const compressImage = async (file) => {
+  
     const options = {
       maxSizeMB: 2,          // Aim for 1MB
       maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
@@ -157,25 +187,98 @@ export default function EditEventArea() {
       setImagePreview(URL.createObjectURL(finalFile));
   };
 
+    
   const handelImageFile = async (e) => {
+    setIsCompressingCover(true);
 
     const selectedFile = e.target.files[0];
+
     if(selectedFile) {
-        compressImage(selectedFile)
+      compressImage(selectedFile)
     }
+
+    setIsCompressingCover(false);
+
     // setImageFile(URL.createObjectURL(e.target.files[0]));
   }
 
-  const handleGalleryImages = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
-    const newPreviews = files.map(file => URL.createObjectURL(file));
-    setNewGalleryPreviews(prev => [...prev, ...newPreviews]);
+  // const handleGalleryImages = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   if (files.length === 0) return;
+  //   const newPreviews = files.map(file => URL.createObjectURL(file));
+  //   setNewGalleryPreviews(prev => [...prev, ...newPreviews]);
+  // };
+
+  const handleGalleryImages = async (e) => {
+  const newFiles = Array.from(e.target.files);
+  if (newFiles.length === 0) return;
+
+  // Check total combined count across existing URLs + already queued new files + incoming files
+  const totalCount = existingGalleryUrls.length + newGalleryPreviews.length + newFiles.length;
+
+  if (totalCount > 5) {
+    toast.error(
+      isRtl 
+        ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' 
+        : 'Maximum 5 images allowed in total. Please remove some before adding more.'
+    );
+    e.target.value = '';
+    return;
+  }
+
+  setIsCompressingCarousel(true);
+
+  try {
+    // Compress only the newly selected files in parallel
+    const compressedNewFiles = await Promise.all(
+      newFiles.map(async (file) => {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 1280,
+          useWebWorker: true
+        };
+
+        const compressedBlob = await imageCompression(file, options);
+
+        return new File([compressedBlob], file.name, {
+          type: compressedBlob.type,
+          lastModified: Date.now(),
+        });
+      })
+    );
+
+    // 1. Add compressed File objects ONLY to newGalleryFiles (NOT existingGalleryUrls!)
+    setNewGalleryPreviews((prev) => [...prev, ...compressedNewFiles]);
+
+    // 2. Add blob preview URLs ONLY to newGalleryPreviews
+    const newPreviewUrls = compressedNewFiles.map((file) => URL.createObjectURL(file));
+    setNewGalleryPreviews((prev) => [...prev, ...newPreviewUrls]);
+
+  } catch (error) {
+    console.error("Error compressing gallery images:", error);
+    toast.error(isRtl ? 'فشل ضغط بعض صور المعرض' : 'Failed to compress some gallery images.');
+  } finally {
+    setIsCompressingCarousel(false);
+    e.target.value = '';
+  }
+};
+
+  const removeExistingGalleryImage = (indexToRemove) => {
+    const targetPreview = newGalleryPreviews[indexToRemove];
+
+    // Revoke object URL if it's a local blob preview to prevent memory leaks
+    if (targetPreview && targetPreview.startsWith('blob:')) {
+      URL.revokeObjectURL(targetPreview);
+    }
+
+    setExistingGalleryUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+    setNewGalleryPreviews((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
-  const removeExistingGalleryImage = (index) => {
-    setExistingGalleryUrls(prev => prev.filter((_, i) => i !== index));
-  };
+
+  // const removeExistingGalleryImage = (index) => {
+  //   setExistingGalleryUrls(prev => prev.filter((_, i) => i !== index));
+  // };
 
   const removeNewGalleryImage = (index) => {
     setNewGalleryPreviews(prev => prev.filter((_, i) => i !== index));
@@ -223,6 +326,7 @@ export default function EditEventArea() {
 
 
         setImagePreview(pulledEvent.cover_image);
+        
         setExistingGalleryUrls(pulledEvent.gallery_images || []);
 
         // setImageFile(pulledEvent.image);
@@ -280,39 +384,53 @@ export default function EditEventArea() {
 
     // const fileName = `eventImage-${imageFile.name}`
 
-    if(imageFile) {
+    // 1. Handle Cover Image (Only upload if it's a NEW File object)
+    if (imageFile instanceof File) {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `tourCover-${crypto.randomUUID()}.${fileExt}`;
 
-        const fileName = `tourImage-${imageFile.name}`;
-
-        const { data, error } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from('tours_images')
-        .upload(fileName, imageFile, {
-            contentType: 'img/*'
-        });
+        .upload(fileName, imageFile); // Let Supabase auto-detect content type
 
-        if (error) throw error;
+      if (error) throw error;
 
-        // Get the public url to save image to database
-        const { data: publicData } = supabase.storage
-          .from('tours_images')
-          .getPublicUrl(fileName);
-          
-        imageUrlToSave = publicData.publicUrl;
+      // Get the public url for the newly uploaded cover image
+      const { data: publicData } = supabase.storage
+        .from('tours_images')
+        .getPublicUrl(fileName);
+        
+      imageUrlToSave = publicData.publicUrl;
     }
 
-      const galleryImageUrls = [];
+    // 2. Handle Gallery Images (Supports a mix of existing URL strings and new File objects)
+    const galleryImageUrls = [];
+    const incomingGallery = formData.gallery_images || []; // Can contain strings or Files
 
-      if (existingGalleryUrls && existingGalleryUrls.length > 0) {
-        for (const file of existingGalleryUrls) {
-          const fileName = `tourGallery-${crypto.randomUUID()}-${file.name}`;
+    if (incomingGallery.length > 0) {
+      for (const item of incomingGallery) {
+        if (item instanceof File) {
+          // It's a brand new uploaded file -> Upload to Supabase Storage
+          const fileExt = item.name.split('.').pop();
+          const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
           
-          const { data, error } = await supabase.storage.from('tours_images').upload(fileName, file);
+          const { data, error } = await supabase.storage
+            .from('tours_images')
+            .upload(fileName, item);
+            
           if (error) throw error;
           
-          const { data: uploadedImage } = supabase.storage.from('tours_images').getPublicUrl(fileName);
+          const { data: uploadedImage } = supabase.storage
+            .from('tours_images')
+            .getPublicUrl(fileName);
+            
           galleryImageUrls.push(uploadedImage.publicUrl);
+        } else if (typeof item === 'string') {
+          // It's already an existing URL string from the database -> Keep it as is!
+          galleryImageUrls.push(item);
         }
       }
+    }
 
     try {
 
@@ -421,28 +539,30 @@ export default function EditEventArea() {
     setInclusions((prev) => prev.filter((_, i) => i !== index));
   };
 
+
+
   if (loading) {
     return <MiniLoading />;
   };
 
-    if(loadingEventDetails) {
-      return (
-        <div>
-            <h2>
-                loading event data
-            </h2>
+  if(loadingEventDetails) {
+    return (
+      <div>
+          <h2>
+              Loading Tour data
+          </h2>
 
-            <MiniLoading />
-        </div>
-      )
-        // console.log(eventDetails.title);
+          <MiniLoading />
+      </div>
+    )
+    // console.log(eventDetails.title);
   }
 
   if(loadingDelete) {
     return (
       <div>
           <h2>
-              Deleting event from database
+              Deleting Tour from database
           </h2>
           <MiniLoading />
       </div>
@@ -452,10 +572,10 @@ export default function EditEventArea() {
   if (loadingUpdate) {
     return (
       <div className='h-screen w-full flex flex-col justify-center items-center'>
-          <h2 className="text-2xl font-bold">
-              updating event
-          </h2>
-          <MiniLoading />
+        <h2 className="text-2xl font-bold">
+          updating Tour
+        </h2>
+        <MiniLoading />
       </div>
     )
   }

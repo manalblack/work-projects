@@ -17,6 +17,7 @@ import {
   Type,
   CheckCircle2 
 } from "lucide-react";
+import imageCompression from 'browser-image-compression';
 
 
 export default function AddEventArea() {
@@ -69,13 +70,74 @@ export default function AddEventArea() {
     }));
   };
 
-  const handelImageFile = (e) => {
+  // const handelImageFile = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     setImageFile(selectedFile);
+  //     setImagePreview(URL.createObjectURL(selectedFile));
+  //   }
+  // };
+
+  // Compress image before adding to DB
+
+  const compressImage = async (file) => {
+  
+    const options = {
+      maxSizeMB: 0.8,          // Aim for 1MB
+      maxWidthOrHeight: 1280, // Resize if it's a massive 4K photo
+      useWebWorker: true     // Keeps the UI from freezing during compression
+    }
+    const compressedFile = await imageCompression(file, options);
+
+    const finalFile = new File([compressedFile], file.name, {
+      type: compressedFile.type,
+      lastModified: Date.now(),
+    });
+
+    // setImageFile(finalFile);
+
+    // setImagePreview(URL.createObjectURL(finalFile));
+
+    console.log(`Compressed successfully! New size: ${(finalFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+    return finalFile;
+    
+  };
+  
+  const handelImageFile = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setImageFile(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile));
+      try {
+        // Run compression right away in the background
+        const finalCompressedFile = await compressImage(selectedFile);
+
+        // Save the compressed File object to state (used for Supabase upload)
+        setImageFile(finalCompressedFile);
+
+        // Generate the preview URL from the compressed file
+        setImagePreview(URL.createObjectURL(finalCompressedFile));
+
+      } catch (error) {
+        console.error("Error during image compression:", error);
+      }
     }
   };
+
+  // const handelImageFile = async (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     try {
+  //       const finalFile = await compressImage(selectedFile);
+
+  //       setImageFile(finalFile);
+
+  //       setImagePreview(URL.createObjectURL(finalFile));
+        
+  //     } catch (error) {
+  //       console.error("Error compressing image:", error);
+  //     }
+  //   }
+  // };
 
   const addEventToDb = async (e) => {
     e.preventDefault();
@@ -89,14 +151,26 @@ export default function AddEventArea() {
     }).split(' ')[0];
 
     setEventTime(formattedTime);
-     
+
+    // let fileToUpload = imageFile;
+
+    // if(imageFile instanceof File) {
+    //   fileToUpload = await compressImage(imageFile)
+    // }
+
+
     try {
 
       // Image handling logic
       const fileName = `eventImage-${Date.now()}-${imageFile.name}`;
+
+      console.log('Image file', imageFile);
+      
       
       const { data, error } = await supabase.storage.from('events_images').upload(fileName, imageFile);
+      
       if (error) throw error;
+
       const { data: uploadedImage } = supabase.storage.from('events_images').getPublicUrl(fileName);
       
       // const newEvent = {

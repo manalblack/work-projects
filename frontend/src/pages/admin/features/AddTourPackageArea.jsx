@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import imageCompression from 'browser-image-compression';
 import MiniLoading from "../../../components/admin-components/MiniLoading";
 import { supabase } from "../../../supabaseConnection";
 import { 
@@ -24,7 +25,8 @@ import {
   BedDouble,
   X,
   UserRound,
-  UsersRound
+  UsersRound,
+  Loader2
 } from 'lucide-react';
 
 
@@ -34,6 +36,7 @@ import {
 
 
 export default function AddTourPackageArea() {
+
   const { isRtl } = useOutletContext() || { isRtl: false };
 
   const [loading, setLoading] = useState(false);
@@ -61,6 +64,9 @@ export default function AddTourPackageArea() {
   
   const [carouselFiles, setCarouselFiles] = useState([]);
   const [carouselPreviews, setCarouselPreviews] = useState([]);
+
+  const [isCompressingCover, setIsCompressingCover] = useState(false);
+  const [isCompressingCarousel, setIsCompressingCarousel] = useState(false);
 
   // Inclusions State (Targeting 6 to 12 items)
   const [inclusions, setInclusions] = useState([
@@ -120,53 +126,146 @@ export default function AddTourPackageArea() {
     errorMsg: isRtl ? 'حدث خطأ أثناء رفع البيانات' : 'Failed to publish tour package.',
   };
 
+
+  const compressImage = async (file) => {
+
+    const options = {
+      maxSizeMB: 2,          // Aim for 1MB
+      maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
+      useWebWorker: true     // Keeps the UI from freezing during compression
+    }
+    const compressedFile = await imageCompression(file, options);
+
+    const finalFile = new File([compressedFile], file.name, {
+        type: compressedFile.type,
+        lastModified: Date.now(),
+    });
+
+      setCoverImageFile(finalFile);
+
+      setCoverImagePreview(URL.createObjectURL(finalFile));
+  };
+  
+  const handleCoverImage = async (e) => {
+    setIsCompressingCover(true);
+
+    const selectedFile = e.target.files[0];
+
+    if(selectedFile) {
+      compressImage(selectedFile)
+    }
+
+    setIsCompressingCover(false);
+    // setImageFile(URL.createObjectURL(e.target.files[0]));
+  }
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setTourData(prev => ({ ...prev, [name]: value }));
   };
 
   // Cover Image Handler
-  const handleCoverImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setCoverImageFile(file);
-      setCoverImagePreview(URL.createObjectURL(file));
-    }
+  // const handleCoverImage = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setCoverImageFile(file);
+  //     setCoverImagePreview(URL.createObjectURL(file));
+  //   }
 
-    console.log(file);
-    console.log(URL.createObjectURL(file));
+  //   console.log(file);
+  //   console.log(URL.createObjectURL(file));
     
     
-  };
+  // };
 
   // Carousel Images Handler (Max 5)
-  const handleCarouselImages = (e) => {
+  // const handleCarouselImages = (e) => {
+  //   const newFiles = Array.from(e.target.files);
+  //   if (newFiles.length === 0) return;
+
+  // // Combine existing files with the newly selected files
+  //   const combinedFiles = [...carouselFiles, ...newFiles];
+
+  //   // Enforce the maximum limit of 5 images
+  //   if (combinedFiles.length > 5) {
+  //       toast.error(isRtl ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' : 'Maximum 5 images allowed in total. Please remove some before adding more.');
+  //       e.target.value = ''; // Reset input
+  //       return;
+  //   }
+
+  //   // Create previews for the new files only
+  //   const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+    
+  //   // Combine previews
+  //   const combinedPreviews = [...carouselPreviews, ...newPreviews];
+
+  //   setCarouselFiles(combinedFiles);
+  //   setCarouselPreviews(combinedPreviews);
+
+  //   // Clear the input value so selecting the same file/batch again triggers onChange properly
+  //   e.target.value = '';
+  // };
+
+  const handleCarouselImages = async (e) => {
     const newFiles = Array.from(e.target.files);
     if (newFiles.length === 0) return;
 
-  // Combine existing files with the newly selected files
-    const combinedFiles = [...carouselFiles, ...newFiles];
+    // Check the combined limit before starting compression
+    const combinedFilesCheck = [...carouselFiles, ...newFiles];
 
-    // Enforce the maximum limit of 5 images
-    if (combinedFiles.length > 5) {
-        toast.error(isRtl ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' : 'Maximum 5 images allowed in total. Please remove some before adding more.');
-        e.target.value = ''; // Reset input
-        return;
+    if (combinedFilesCheck.length > 5) {
+      toast.error(
+        isRtl 
+          ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' 
+          : 'Maximum 5 images allowed in total. Please remove some before adding more.'
+      );
+      e.target.value = ''; // Reset input
+      return;
     }
 
-    // Create previews for the new files only
-    const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-    
-    // Combine previews
-    const combinedPreviews = [...carouselPreviews, ...newPreviews];
+    setIsCompressingCarousel(true);
 
-    setCarouselFiles(combinedFiles);
-    setCarouselPreviews(combinedPreviews);
+    try {
+      // Compress each new file concurrently in the background
+      const compressedNewFiles = await Promise.all(
+        newFiles.map(async (file) => {
+          const options = {
+            maxSizeMB: 0.8,          // Aim for under 1MB
+            maxWidthOrHeight: 1280,  // Resize dimensions
+            useWebWorker: true       // Keeps the UI responsive
+          };
 
-    // Clear the input value so selecting the same file/batch again triggers onChange properly
-    e.target.value = '';
+          const compressedBlob = await imageCompression(file, options);
+
+          // Wrap back into a proper File object
+          return new File([compressedBlob], file.name, {
+            type: compressedBlob.type,
+            lastModified: Date.now(),
+          });
+        })
+      );
+
+      // Combine existing files with the newly compressed files
+      const combinedFiles = [...carouselFiles, ...compressedNewFiles];
+
+      // Create previews for the newly compressed files only
+      const newPreviews = compressedNewFiles.map(file => URL.createObjectURL(file));
+      const combinedPreviews = [...carouselPreviews, ...newPreviews];
+
+      setCarouselFiles(combinedFiles);
+      setCarouselPreviews(combinedPreviews);
+
+    } catch (error) {
+      console.error("Error compressing carousel images:", error);
+      toast.error(isRtl ? 'فشل ضغط بعض صور المعرض' : 'Failed to compress some gallery images.');
+    } finally {
+      setIsCompressingCarousel(false);
+      // Clear the input value so selecting the same file/batch again triggers onChange properly
+      e.target.value = '';
+    }
   };
 
+  
   const removeCarouselImage = (index) => {
     URL.revokeObjectURL(carouselPreviews[index]);
     
@@ -525,76 +624,107 @@ export default function AddTourPackageArea() {
           </div>
 
           {/* Media Uploads Card */}
-          <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
-              <Images className="w-4 h-4 text-gold" />
-              <span>{isRtl ? 'وسائط الباقة والمعرض' : 'Tour Media & Gallery'}</span>
-            </h3>
+        <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
+          <Images className="w-4 h-4 text-gold" />
+          <span>{isRtl ? 'وسائط الباقة والمعرض' : 'Tour Media & Gallery'}</span>
+        </h3>
 
-            {/* Cover Image Upload */}
-            <div className="space-y-2 ">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Upload className="w-4 h-4 text-gold" />
-                <span>{t.coverImageLabel}</span>
-              </label>
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleCoverImage} 
-                required
-                className="w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer"
-              />
-              {coverImagePreview && (
-                <div className="relative w-full h-120 rounded-xl overflow-hidden border border-white/10 mt-3">
-                  <img src={coverImagePreview} alt="Cover Preview" className="w-full h-full object-cover" />
-                </div>
-              )}
+        {/* Cover Image Upload */}
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-forestGreen">
+            <div className="flex items-center gap-2">
+              <Upload className="w-4 h-4 text-gold" />
+              <span>{t.coverImageLabel}</span>
             </div>
-
-            {/* Carousel Images Upload (4-5 Images) */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Images className="w-4 h-4 text-forestGreen" />
-                <span>{t.carouselLabel}</span>
-              </label>
-              <input 
-                type="file" 
-                accept="image/*" 
-                multiple
-                onChange={handleCarouselImages} 
-                // required
-                className="w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer"
-              />
-              <span className="text-[11px] text-slate-950 block">
-                {isRtl ? 'اختر من 4 إلى 5 صور لتظهر في معرض الوسائط (Modal Carousel)' : 'Select 4 to 5 images for the read-about modal carousel.'}
+            {isCompressingCover && (
+              <span className="text-[11px] text-gold flex items-center gap-1.5 animate-pulse font-medium">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                {isRtl ? 'جاري ضغط الصورة...' : 'Compressing image...'}
               </span>
-
-              {/* Carousel Previews Grid */}
-              {carouselPreviews.length > 0 && (
-                <div className="grid grid-cols-5 gap-2 mt-3">
-                  {carouselPreviews.map((src, idx) => (
-                    <div key={idx} className="relative h-auto rounded-lg overflow-hidden border border-white/10 bg-slate-800">
-                      <img src={src} alt={`Carousel ${idx}`} className="w-full h-full object-cover" />
-                      {/* Overlay Remove Button */}
-                        <button 
-                            type="button"
-                            onClick={() => removeCarouselImage(idx)}
-                            className="absolute top-1.5 right-1.5 p-1 rounded-full bg-red-600/90 text-white opacity group-hover:opacity-100 transition-opacity duration-200 cursor-pointer shadow-lg hover:bg-red-500"
-                            title="Remove image"
-                        >
-                            <X className="w-3.5 h-3.5" />
-                        </button>
-                        
-                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-bold text-white">
-                            #{idx + 1}
-                        </span>
-                    </div>
-                  ))}
+            )}
+          </label>
+          
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleCoverImage} 
+            required
+            disabled={isCompressingCover}
+            className={`w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer ${
+              isCompressingCover ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          />
+          
+          {coverImagePreview && (
+            <div className="relative w-full h-[300px] sm:h-[400px] rounded-xl overflow-hidden border border-white/10 mt-3 bg-slate-100">
+              <img src={coverImagePreview} alt="Cover Preview" className="w-full h-full object-cover" />
+              {isCompressingCover && (
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center text-white text-xs font-semibold">
+                  {isRtl ? 'جارٍ تحسين الصورة...' : 'Optimizing image...'}
                 </div>
               )}
             </div>
+          )}
+        </div>
 
-          </div>
+        {/* Carousel Images Upload (4-5 Images) */}
+        <div className="space-y-2">
+          <label className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-forestGreen">
+            <div className="flex items-center gap-2">
+              <Images className="w-4 h-4 text-forestGreen" />
+              <span>{t.carouselLabel}</span>
+            </div>
+            {isCompressingCarousel && (
+              <span className="text-[11px] text-gold flex items-center gap-1.5 animate-pulse font-medium">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                {isRtl ? 'جاري ضغط صور المعرض...' : 'Compressing gallery images...'}
+              </span>
+            )}
+          </label>
+
+          <input 
+            type="file" 
+            accept="image/*" 
+            multiple
+            onChange={handleCarouselImages} 
+            disabled={isCompressingCarousel}
+            className={`w-full bg-white p-2 border border-forestGreen/40 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-forestGreen file:text-white hover:file:bg-gold hover:file:text-slate-950 text-slate-400 text-xs rounded-xl cursor-pointer ${
+              isCompressingCarousel ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          />
+          
+          <span className="text-[11px] text-slate-950 block">
+            {isRtl ? 'اختر من 4 إلى 5 صور لتظهر في معرض الوسائط (Modal Carousel)' : 'Select 4 to 5 images for the read-about modal carousel.'}
+          </span>
+
+          {/* Carousel Previews Grid */}
+          {carouselPreviews.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-3">
+              {carouselPreviews.map((src, idx) => (
+                <div key={idx} className="relative h-28 sm:h-32 rounded-lg overflow-hidde border border-white/10 bg-slate-800">
+                  <img src={src} alt={`Carousel ${idx}`} className="w-full h-full object-cover" />
+                  
+                  {/* Overlay Remove Button */}
+                  <button 
+                      type="button"
+                      onClick={() => removeCarouselImage(idx)}
+                      disabled={isCompressingCarousel}
+                      className="absolute top-1.5 right-1.5 p-1 rounded-full bg-red-600/90 text-white transition-opacity duration-200 cursor-pointer shadow-lg hover:bg-red-500"
+                      title="Remove image"
+                  >
+                      <X className="w-3.5 h-3.5" />
+                  </button>
+                  
+                  <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-bold text-white">
+                      #{idx + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+</div>
 
         </div>
 
