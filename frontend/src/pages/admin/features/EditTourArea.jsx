@@ -61,6 +61,8 @@ export default function EditEventArea() {
 
   const [existingGalleryUrls, setExistingGalleryUrls] = useState([]);
   const [newGalleryPreviews, setNewGalleryPreviews] = useState([]);
+  const [newGalleryFiles, setNewGalleryFiles] = useState([])
+  
 
   const [formData, setFormData] = useState({
     eventTitle: '',
@@ -210,68 +212,87 @@ export default function EditEventArea() {
   // };
 
   const handleGalleryImages = async (e) => {
-  const newFiles = Array.from(e.target.files);
-  if (newFiles.length === 0) return;
+    const newFiles = Array.from(e.target.files);
+    if (newFiles.length === 0) return;
 
-  // Check total combined count across existing URLs + already queued new files + incoming files
-  const totalCount = existingGalleryUrls.length + newGalleryPreviews.length + newFiles.length;
+    // Check total combined count across existing URLs + already queued new files + incoming files
+    const totalCount = existingGalleryUrls.length + newGalleryFiles.length + newFiles.length;
 
-  if (totalCount > 5) {
-    toast.error(
-      isRtl 
-        ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' 
-        : 'Maximum 5 images allowed in total. Please remove some before adding more.'
-    );
-    e.target.value = '';
-    return;
-  }
-
-  setIsCompressingCarousel(true);
-
-  try {
-    // Compress only the newly selected files in parallel
-    const compressedNewFiles = await Promise.all(
-      newFiles.map(async (file) => {
-        const options = {
-          maxSizeMB: 0.8,
-          maxWidthOrHeight: 1280,
-          useWebWorker: true
-        };
-
-        const compressedBlob = await imageCompression(file, options);
-
-        return new File([compressedBlob], file.name, {
-          type: compressedBlob.type,
-          lastModified: Date.now(),
-        });
-      })
-    );
-
-    // 1. Add compressed File objects ONLY to newGalleryFiles (NOT existingGalleryUrls!)
-    setNewGalleryPreviews((prev) => [...prev, ...compressedNewFiles]);
-
-    // 2. Add blob preview URLs ONLY to newGalleryPreviews
-    const newPreviewUrls = compressedNewFiles.map((file) => URL.createObjectURL(file));
-    setNewGalleryPreviews((prev) => [...prev, ...newPreviewUrls]);
-
-  } catch (error) {
-    console.error("Error compressing gallery images:", error);
-    toast.error(isRtl ? 'فشل ضغط بعض صور المعرض' : 'Failed to compress some gallery images.');
-  } finally {
-    setIsCompressingCarousel(false);
-    e.target.value = '';
-  }
-};
-
-  const removeExistingGalleryImage = (indexToRemove) => {
-    const targetPreview = newGalleryPreviews[indexToRemove];
-
-    // Revoke object URL if it's a local blob preview to prevent memory leaks
-    if (targetPreview && targetPreview.startsWith('blob:')) {
-      URL.revokeObjectURL(targetPreview);
+    if (totalCount > 5) {
+      toast.error(
+        isRtl 
+          ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' 
+          : 'Maximum 5 images allowed in total. Please remove some before adding more.'
+      );
+      e.target.value = '';
+      return;
     }
 
+    setIsCompressingCarousel(true);
+
+    try {
+      // Compress only the newly selected files in parallel
+      const compressedNewFiles = await Promise.all(
+        newFiles.map(async (file) => {
+          const options = {
+            maxSizeMB: 0.8,
+            maxWidthOrHeight: 1280,
+            useWebWorker: true
+          };
+
+          const compressedBlob = await imageCompression(file, options);
+
+          return new File([compressedBlob], file.name, {
+            type: compressedBlob.type,
+            lastModified: Date.now(),
+          });
+        })
+      );
+
+      // 1. Add compressed File objects ONLY to newGalleryFiles (NOT existingGalleryUrls!)
+      setNewGalleryFiles((prev) => [...prev, ...compressedNewFiles]);
+
+      // 2. Add blob preview URLs ONLY to newGalleryPreviews
+      const newPreviewUrls = compressedNewFiles.map((file) => URL.createObjectURL(file));
+
+      setNewGalleryPreviews((prev) => [...prev, ...newPreviewUrls]);
+
+    } catch (error) {
+      console.error("Error compressing gallery images:", error);
+      toast.error(isRtl ? 'فشل ضغط بعض صور المعرض' : 'Failed to compress some gallery images.');
+
+    } finally {
+      setIsCompressingCarousel(false);
+      e.target.value = '';
+    }
+  };
+
+
+  // const removeExistingGalleryImage = (indexToRemove) => {
+  //   const targetPreview = newGalleryPreviews[indexToRemove];
+
+  //   // Revoke object URL if it's a local blob preview to prevent memory leaks
+  //   if (targetPreview && targetPreview.startsWith('blob:')) {
+  //     URL.revokeObjectURL(targetPreview);
+  //   }
+
+  //   setExistingGalleryUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  //   setNewGalleryPreviews((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  // };
+
+  // Remove an existing image from Supabase URLs list
+  const removeExistingGalleryImage = (indexToRemove) => {
     setExistingGalleryUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+    // Remove a newly added image (cleans up both the File and the blob preview)
+  const removeNewGalleryImage = (indexToRemove) => {
+    const previewToRevoke = newGalleryPreviews[indexToRemove];
+    if (previewToRevoke) {
+    URL.revokeObjectURL(previewToRevoke);
+    }
+
+    setNewGalleryFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
     setNewGalleryPreviews((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
@@ -280,9 +301,9 @@ export default function EditEventArea() {
   //   setExistingGalleryUrls(prev => prev.filter((_, i) => i !== index));
   // };
 
-  const removeNewGalleryImage = (index) => {
-    setNewGalleryPreviews(prev => prev.filter((_, i) => i !== index));
-  };
+  // const removeNewGalleryImage = (index) => {
+  //   setNewGalleryPreviews(prev => prev.filter((_, i) => i !== index));
+  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -326,7 +347,7 @@ export default function EditEventArea() {
 
 
         setImagePreview(pulledEvent.cover_image);
-        
+
         setExistingGalleryUrls(pulledEvent.gallery_images || []);
 
         // setImageFile(pulledEvent.image);
@@ -380,7 +401,6 @@ export default function EditEventArea() {
     
     // 2 Process image file 
     let imageUrlToSave = imagePreview;
-    // TODO: FIX THE IMAGE UPLOAD PART IT'S ONLY WORKING WITH NEW IMAGES AND NOT THE EXISTING ONE.
 
     // const fileName = `eventImage-${imageFile.name}`
 
@@ -407,30 +427,57 @@ export default function EditEventArea() {
     const galleryImageUrls = [];
     const incomingGallery = formData.gallery_images || []; // Can contain strings or Files
 
-    if (incomingGallery.length > 0) {
-      for (const item of incomingGallery) {
-        if (item instanceof File) {
-          // It's a brand new uploaded file -> Upload to Supabase Storage
-          const fileExt = item.name.split('.').pop();
-          const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
+    // if (incomingGallery.length > 0) {
+    //   for (const item of incomingGallery) {
+    //     if (item instanceof File) {
+    //       // It's a brand new uploaded file -> Upload to Supabase Storage
+    //       const fileExt = item.name.split('.').pop();
+    //       const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
           
-          const { data, error } = await supabase.storage
-            .from('tours_images')
-            .upload(fileName, item);
+    //       const { data, error } = await supabase.storage
+    //         .from('tours_images')
+    //         .upload(fileName, item);
             
-          if (error) throw error;
+    //       if (error) throw error;
           
-          const { data: uploadedImage } = supabase.storage
-            .from('tours_images')
-            .getPublicUrl(fileName);
+    //       const { data: uploadedImage } = supabase.storage
+    //         .from('tours_images')
+    //         .getPublicUrl(fileName);
             
-          galleryImageUrls.push(uploadedImage.publicUrl);
-        } else if (typeof item === 'string') {
-          // It's already an existing URL string from the database -> Keep it as is!
-          galleryImageUrls.push(item);
-        }
+    //       galleryImageUrls.push(uploadedImage.publicUrl);
+    //     } else if (typeof item === 'string') {
+    //       // It's already an existing URL string from the database -> Keep it as is!
+    //       galleryImageUrls.push(item);
+    //     }
+    //   }
+    // }
+
+    
+    const newlyUploadedUrls = [];
+
+    // Loop over newGalleryFiles (the actual File objects), NOT newGalleryPreviews
+    if (newGalleryFiles.length > 0) {
+      for (const file of newGalleryFiles) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
+
+        const { error } = await supabase.storage
+          .from('tours_images')
+          .upload(fileName, file);
+
+        if (error) throw error;
+
+        const { data: uploadedImage } = supabase.storage
+          .from('tours_images')
+          .getPublicUrl(fileName);
+
+        newlyUploadedUrls.push(uploadedImage.publicUrl);
       }
     }
+
+    // Merge remaining existing URLs with the newly uploaded URLs
+    const finalGalleryImages = [...existingGalleryUrls, ...newlyUploadedUrls];
+
 
     try {
 
@@ -456,7 +503,7 @@ export default function EditEventArea() {
           family_couples: formData.familyCouples,
           individual_room: formData.privateBooking,
           cover_image: imageUrlToSave,
-          gallery_images: galleryImageUrls,
+          gallery_images: finalGalleryImages,
           inclusions: inclusions,
         } 
 
@@ -465,7 +512,7 @@ export default function EditEventArea() {
 
         const response = await axios.patch(`${API_URL}/admin/edit-tour/${tourId}`, {updatedEvent});
 
-        // console.log(response);
+        console.log(response);
         
         setIsConfirmationModal(false);
 
@@ -829,6 +876,8 @@ export default function EditEventArea() {
               />
             </div>
 
+            {/* TODO: FIX BUG */}
+
             {/* Gallery Images */}
             <div className="space-y-3">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-600">Gallery Images</label>
@@ -1001,7 +1050,7 @@ export default function EditEventArea() {
               </div>
 
             {/* Ticket Prices Box */}
-            <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
+            {/* <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-forestGreen">
                 {t.pricingLabel}
               </h3>
@@ -1031,7 +1080,7 @@ export default function EditEventArea() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">
