@@ -40,10 +40,15 @@ import {
 
 
 export default function EditFounderInfo() {
+
   const { isRtl } = useOutletContext() || { isRtl: false };
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const [fetching, setFetching] = useState(true);
+
+  const [founder, setFounder] = useState([]);
+    
 
   // Founder Data State
   const [founderData, setFounderData] = useState({
@@ -86,32 +91,29 @@ export default function EditFounderInfo() {
     errorMsg: isRtl ? 'حدث خطأ أثناء تحديث البيانات' : 'Failed to update founder profile.',
   };
 
-  // Fetch existing founder data on load
+  // Fetch existing founder data on load    
   useEffect(() => {
-    const fetchFounder = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/admin/founder`);
-        if (response.data) {
-          setFounderData({
-            name: response.data.name || '',
-            title: response.data.title || '',
-            bio: response.data.bio || '',
-            image: response.data.image || '',
-          });
-          setImagePreview(response.data.image || '');
-          if (response.data.experiences && response.data.experiences.length > 0) {
-            setExperiences(response.data.experiences);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching founder data:', error);
-      } finally {
-        setFetching(false);
-      }
-    };
+    // create a function to fetch founder info
 
+    const fetchFounder = async () => {
+      // change this link to ngrok 
+      const response = await axios.get(`${API_URL}/admin/founder`);
+
+      console.log(response.data[0]);
+
+      setFounder(response.data);
+          
+      console.log(founder);
+
+      setLoading(false)  
+     
+
+    };
+  
     fetchFounder();
-  }, [API_URL]);
+  
+  }, []);
+
 
   const handleFounderChange = (e) => {
     const { name, value } = e.target;
@@ -182,11 +184,14 @@ export default function EditFounderInfo() {
     }
   };
 
-  if (fetching || loading) {
+  if (loading) {
     return <MiniLoading />;
   }
 
+  // TODO: Change the text direction
+
   return (
+
     <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full pb-16 text-slate-100 font-sans">
       
       {/* Header */}
@@ -215,28 +220,58 @@ export default function EditFounderInfo() {
               <span>{isRtl ? 'المعلومات الشخصية' : 'Founder Profile'}</span>
             </h3>
 
-            {/* Name */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Type className="w-4 h-4 text-gold" />
-                <span>{t.nameLabel}</span>
-              </label>
-              <input 
-                type="text" 
-                name="name" 
-                value={founderData.name} 
-                onChange={handleFounderChange}
-                required
-                placeholder="e.g., Faisal Al-Sultan"
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-              />
+            {/* Name Container / both langs */}
+            <div className='flex gap-2'>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>
+                    اسم المؤسس
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="name" 
+                  value={founderData.name} 
+                  onChange={handleFounderChange}
+                  required
+                  placeholder="e.g., Faisal Al-Sultan"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Type className="w-4 h-4 text-gold" />
+                  <span>
+                    {/* {t.nameLabel} */}
+                    Founder Name
+                  </span>
+                </label>
+                <input 
+                  type="text" 
+                  name="name" 
+                  value={founderData.name} 
+                  onChange={handleFounderChange}
+                  required
+                  placeholder="e.g., Faisal Al-Sultan"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+
             </div>
 
             {/* Title / Role */}
-            <div className="space-y-2">
+          <div className='flex flex-row gap-2'>
+
+            <div className="space-y-2 w-1/2">
               <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                 <Briefcase className="w-4 h-4 text-gold" />
-                <span>{t.titleLabel}</span>
+                <span>
+                  {/* {t.titleLabel} */}
+                  اللقب المهني / المسمى الوظيفي
+                </span>
               </label>
               <input 
                 type="text" 
@@ -249,21 +284,61 @@ export default function EditFounderInfo() {
               />
             </div>
 
-            {/* Bio / Description */}
-            <div className="space-y-2">
+            <div className="space-y-2 w-1/2">
               <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <FileText className="w-4 h-4 text-gold" />
-                <span>{t.bioLabel}</span>
+                <Briefcase className="w-4 h-4 text-gold" />
+                <span>
+                  {/* {t.titleLabel} */}
+                  Professional Title / Role
+                </span>
               </label>
-              <textarea 
-                name="bio" 
-                value={founderData.bio} 
+              <input 
+                type="text" 
+                name="title" 
+                value={founderData.title} 
                 onChange={handleFounderChange}
                 required
-                rows={5}
-                placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                placeholder="e.g., Chief Executive Officer & Founder"
+                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
               />
+            </div>
+
+          </div>
+
+            {/* Bio / Description */}
+            
+            <div className='flex gap-2'>
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>{t.bioLabel}</span>
+                </label>
+                <textarea 
+                  name="bio" 
+                  value={founderData.bio} 
+                  onChange={handleFounderChange}
+                  required
+                  rows={5}
+                  placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <FileText className="w-4 h-4 text-gold" />
+                  <span>{t.bioLabel}</span>
+                </label>
+                <textarea 
+                  name="bio" 
+                  value={founderData.bio} 
+                  onChange={handleFounderChange}
+                  required
+                  rows={5}
+                  placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                />
+              </div>
             </div>
 
             {/* Portrait Image Upload */}

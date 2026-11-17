@@ -607,7 +607,7 @@ router.delete('/delete-tour/:tourId', async (req, res) => {
 
 
 
-router.get('/founder-info', async (req, res) => {
+router.get('/founder', async (req, res) => {
 
     console.log('fetching founder info')
 
@@ -618,6 +618,7 @@ router.get('/founder-info', async (req, res) => {
         if(error) {
             return res.status(400).json({message: 'error when fetching founder info'});
         };
+
         console.log('Fetched Founder Data:', data);
 
         res.status(200).json(data);
