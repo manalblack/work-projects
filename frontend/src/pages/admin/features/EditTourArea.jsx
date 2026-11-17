@@ -540,26 +540,39 @@ export default function EditEventArea() {
   const deleteEvent = async () => {
     setLoadingDelete(true)
     try {
-        const response = await axios.delete(`${API_URL}/admin/delete-event/${eventId}`);
+      const response = await axios.delete(`${API_URL}/admin/delete-tour/${tourId}`);
 
-        console.log(response);
-        if(response.status === 200) {
-            setFormData({
-                eventTitle: '',
-                eventDescription: '',
-                eventLocation: '',
-                totalTickets: 0,
-                vipPrice: 0,
-                regularPrice: 0
-            })
-            setImagePreview(null);
-            setImageFile(null);
-            setEventDate('');
-        }
-        setConfirmDelete(false)
-        setLoadingDelete(false);
+      console.log(response);
 
-        toast.success('Event deleted successfully!')
+      if(response.status === 200) {
+        setFormData({
+          eventTitle: '',
+          eventTitleAr: '',
+          eventDescription: '',
+          eventDescriptionAr: '',
+          eventLocation: '',
+          eventLocationAr: '',
+          totalTickets: '',
+          earlyBirds: 0,
+          lateBooking: 0,
+          familyCouples: 0,
+          privateBooking: 0,
+          vipPrice: '',
+          regularPrice: '',
+          eventTime: '',
+        })
+        setImagePreview(null);
+        setImageFile(null);
+        setEventDate('');
+
+        setInitialPageLoad(true);
+
+        toast.success('Tour deleted successfully!')
+      }
+
+      setConfirmDelete(false);
+      setLoadingDelete(false);
+    
         
     } catch (error) {
         console.log('error when deleting event', error);

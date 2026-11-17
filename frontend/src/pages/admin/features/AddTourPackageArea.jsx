@@ -130,7 +130,7 @@ export default function AddTourPackageArea() {
   const compressImage = async (file) => {
 
     const options = {
-      maxSizeMB: 2,          // Aim for 1MB
+      maxSizeMB: 0.8,          // Aim for 1MB
       maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
       useWebWorker: true     // Keeps the UI from freezing during compression
     }
@@ -410,6 +410,10 @@ export default function AddTourPackageArea() {
       const response = await axios.post(`${API_URL}/admin/add-tour`, {newTour});
 
       console.log(response);
+
+      if(response.status == 200) {
+        toast.success('Tour Added successfully!')
+      }
     
 
     } catch (error) {

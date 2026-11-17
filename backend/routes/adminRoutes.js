@@ -485,7 +485,7 @@ router.post('/add-tour', async (req, res) => {
         res.status(500).json({ error: error.message }); 
     }
 
-})
+});
 
 router.patch('/edit-tour/:tourId', async (req, res) => {
 
@@ -520,7 +520,91 @@ router.patch('/edit-tour/:tourId', async (req, res) => {
     
    }
 
-})
+});
+
+router.delete('/delete-tour/:tourId', async (req, res) => {
+
+    const {tourId} = req.params;
+
+    console.log(tourId);
+
+    try {
+        // get the image first, to know which row to delete from the bucket
+        const { data: tour } = await supabase
+        .from('tours')
+        .select('cover_image, gallery_images')
+        .eq('id', tourId)
+        .single();
+
+        console.log('tour images: ', tour);
+        
+
+        // delete the event from the table
+        const { error: dbError } = await supabase
+        .from('tours')
+        .delete()
+        .eq('id', tourId);
+
+        if (dbError) throw dbError;
+
+        // delete the image from the bucket 
+
+
+        // if (tour?.cover_image || tour?.gallery_images) {
+        //     const fileName = tour.cover_image.split('/').pop(); // Extracts filename from URL
+        //     console.log(fileName);
+        //     await supabase.storage
+        //     .from('tours_images')
+        //     .remove([fileName]);
+        // }
+
+        const filesToDelete = [];
+
+        // Add cover image filename if it exists
+        if (tour?.cover_image) {
+            const coverFileName = decodeURIComponent(tour.cover_image.split('/').pop());
+            if (coverFileName) {
+                filesToDelete.push(coverFileName);
+            };
+        };
+
+        // Add gallery image filenames ONLY if gallery_images exists and has items
+        if (Array.isArray(tour?.gallery_images) && tour.gallery_images.length > 0) {
+        tour.gallery_images.forEach((url) => {
+            if (typeof url === 'string' && url.trim() !== '') {
+            const galleryFileName = decodeURIComponent(url.split('/').pop());
+            if (galleryFileName) {
+                filesToDelete.push(galleryFileName);
+            }
+            }
+        });
+        }
+
+        // 3. Delete all collected files in a single storage request (skipped if empty)
+        if (filesToDelete.length > 0) {
+        console.log('Deleting files from bucket:', filesToDelete);
+
+        const { error: storageError } = await supabase.storage
+            .from('tours_images')
+            .remove(filesToDelete);
+
+        if (storageError) {
+            console.error('Storage deletion error:', storageError);
+        }
+        }
+
+
+        res.status(200).json({message: 'Deleted'});
+
+
+    } catch (error) {
+        
+    }
+
+    
+
+});
+
 
 
 router.get('/founder-info', async (req, res) => {
