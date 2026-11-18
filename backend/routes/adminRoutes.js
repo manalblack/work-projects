@@ -628,6 +628,39 @@ router.get('/founder', async (req, res) => {
     }
 })
 
+router.patch('/update-founder/:userId', async (req, res) => {
+
+    const {userId} = req.params;
+
+    const {payload} = req.body;
+
+    
+    console.log('payload from frontend: ', payload);
+
+    console.log(userId);
+    
+    try {
+
+        // changing the table to translated events, for developments 
+        const { data, error } = await supabase
+        .from('founder_profiles')
+        .update(payload)   
+        .eq('founder_id', userId)
+        .select();      
+
+        if (error) throw error;
+
+        console.log(data);
+        
+
+        res.status(200).json(data);
+    
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    
+    }
+
+});
 
 /*      
     TODO:

@@ -35,14 +35,14 @@ import {
 
 export default function EditEventArea() {
 
-    // loading states
-    const [loading, setLoading] = useState(true);
-    const [loadingEventDetails, setLoadingEventDetails] = useState(false);
+  // loading states
+  const [loading, setLoading] = useState(true);
+  const [loadingEventDetails, setLoadingEventDetails] = useState(false);
 
-    const [initialPageLoad, setInitialPageLoad] = useState(true);
+  const [initialPageLoad, setInitialPageLoad] = useState(true);
     
-    const [loadingUpdate, setLoadingUpdate] = useState(false);
-    const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
     const [allEvents, setAllEvents] = useState([]);
     const [eventId, setEventId] = useState('');

@@ -13,107 +13,115 @@ import {
   Upload, 
   Plus, 
   Trash2, 
-  CheckCircle2, 
-  Calendar, 
-  Building2 
+  CheckCircle2,
+  Quote
 } from 'lucide-react';
 
-
-
-/*
-  Founder info to be edited:
-
-  name
-  Desc
-  portrait
-  header
-  a quote
-  previous work experience
-  (Below the record and partnerships section)
-  Roles and expertise
-
-  TODO: ask the client if he wants to be able to add the contact info
-
-  Clean the design and start working on all the new API endpoints.
-*/
-
-
+import { useAuth } from '../hooks/userAuth';
 
 export default function EditFounderInfo() {
-
   const { isRtl } = useOutletContext() || { isRtl: false };
 
   const [loading, setLoading] = useState(true);
+  const [founderId, setFounderId] = useState(null);
 
-  const [fetching, setFetching] = useState(true);
-
-  const [founder, setFounder] = useState([]);
-    
-
-  // Founder Data State
+  // Founder Data State (mapped to bilingual fields)
   const [founderData, setFounderData] = useState({
     name: '',
+    nameAr: '',
     title: '',
+    titleAr: '',
     bio: '',
+    bioAr: '',
+    quote: '',
+    quoteAr: '',
     image: '',
   });
 
-  // Work Experiences State
-  const [experiences, setExperiences] = useState([
-    { role: 'Managing Director & Founder', company: 'Sovereign Ventures', period: '2021 - Present', description: 'Leading strategic expansion and institutional partnerships across the region.' }
-  ]);
+
+  // Work Experiences / Partnerships State (matches DB JSONB structure)
+  const [experiences, setExperiences] = useState([]);
 
   // New Experience Input State
-  const [newExp, setNewExp] = useState({ role: '', company: '', period: '', description: '' });
+  const [newExp, setNewExp] = useState({
+    roleEn: '',
+    roleAr: '',
+    brandNameEn: '',
+    brandNameAr: '',
+    period: '',
+    brandImage: ''
+  });
 
   // Image States
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+  const {user} = useAuth();
+
+  // const userId = user.id;
+
+  // console.log(user.id);
+  
+  
+
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Bilingual UI Dictionary
   const t = {
     headerTitle: isRtl ? 'إدارة صفحة المؤسس' : 'Founder Page Management',
     subtitle: isRtl ? 'تحديث السيرة الذاتية، اللقب المهني، الصورة الشخصية، وخبرات العمل السابقة' : 'Update executive biography, professional title, portrait, and career history',
-    nameLabel: isRtl ? 'اسم المؤسس' : 'Founder Name',
-    titleLabel: isRtl ? 'اللقب المهني / المسمى الوظيفي' : 'Professional Title / Role',
-    bioLabel: isRtl ? 'نبذة تعريفية / السيرة الذاتية' : 'Executive Bio & Vision',
     imageLabel: isRtl ? 'الصورة الشخصية (Portrait)' : 'Founder Portrait Image',
-    expHeader: isRtl ? 'الخبرات المهنية السابقة' : 'Previous Work Experience',
-    rolePlaceholder: isRtl ? 'المسمى الوظيفي (مثال: مدير تقني أول)' : 'Role / Position (e.g., Senior Partner)',
-    companyPlaceholder: isRtl ? 'اسم الشركة / المؤسسة' : 'Company / Organization',
+    expHeader: isRtl ? 'الخبرات المهنية والشراكات' : 'Previous Work Experience & Partnerships',
+    companyPlaceholder: isRtl ? 'اسم الشركة / المؤسسة (EN)' : 'Company / Organization (EN)',
     periodPlaceholder: isRtl ? 'فترة العمل (مثال: 2018 - 2021)' : 'Period (e.g., 2018 - 2021)',
-    descPlaceholder: isRtl ? 'وصف الإنجازات والمهام الرئيسية...' : 'Key responsibilities and achievements...',
     addExpBtn: isRtl ? 'إضافة خبرة جديدة' : 'Add Experience',
     submitBtn: isRtl ? 'حفظ وتحديث صفحة المؤسس' : 'Save Founder Profile',
     successMsg: isRtl ? 'تم تحديث بيانات المؤسس بنجاح!' : 'Founder profile updated successfully!',
     errorMsg: isRtl ? 'حدث خطأ أثناء تحديث البيانات' : 'Failed to update founder profile.',
   };
 
-  // Fetch existing founder data on load    
+  // Fetch and populate existing founder data on load
   useEffect(() => {
-    // create a function to fetch founder info
-
     const fetchFounder = async () => {
-      // change this link to ngrok 
-      const response = await axios.get(`${API_URL}/admin/founder`);
+      try {
+        const response = await axios.get(`${API_URL}/admin/founder`);
+        // Handle both array response ([{...}]) and single object response ({...})
+        const data = Array.isArray(response.data) ? response.data[0] : response.data;
 
-      console.log(response.data[0]);
+        if (data) {
+          setFounderId(data.id);
 
-      setFounder(response.data);
-          
-      console.log(founder);
+          setFounderData({
+            name: data.name?.en || '',
+            nameAr: data.name?.ar || '',
+            title: data.header?.en || '',
+            titleAr: data.header?.ar || '',
+            bio: data.description?.en || '',
+            bioAr: data.description?.ar || '',
+            quote: data.founder_quote?.en || '',
+            quoteAr: data.founder_quote?.ar || '',
+            image: data.image || '',
+          });
 
-      setLoading(false)  
-     
+          // Populate existing portrait preview
+          if (data.image) {
+            setImagePreview(data.image);
+          }
 
+          // Populate existing partnerships/experiences
+          if (Array.isArray(data.partnerships)) {
+            setExperiences(data.partnerships);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching founder data from database:', error);
+        toast.error(isRtl ? 'فشل تحميل بيانات المؤسس' : 'Failed to load founder data.');
+      } finally {
+        setLoading(false);
+      }
     };
-  
-    fetchFounder();
-  
-  }, []);
 
+    fetchFounder();
+  }, [API_URL, isRtl]);
 
   const handleFounderChange = (e) => {
     const { name, value } = e.target;
@@ -134,16 +142,30 @@ export default function EditFounderInfo() {
   };
 
   const addExperience = () => {
-    if (!newExp.role || !newExp.company) {
-      toast.error(isRtl ? 'يرجى إدخال المسمى الوظيفي واسم الشركة على الأقل' : 'Please provide at least a role and company name.');
+    if (!newExp.roleEn && !newExp.roleAr) {
+      toast.error(isRtl ? 'يرجى إدخال المسمى الوظيفي' : 'Please provide a role/position.');
       return;
     }
-    setExperiences([...experiences, newExp]);
-    setNewExp({ role: '', company: '', period: '', description: '' });
+
+    const formattedExp = {
+      role: {
+        en: newExp.roleEn,
+        ar: newExp.roleAr,
+      },
+      brand_name: {
+        en: newExp.brandNameEn,
+        ar: newExp.brandNameAr,
+      },
+      period: newExp.period,
+      brand_image: newExp.brandImage || '/bk-est.jpeg',
+    };
+
+    setExperiences(prev => [...prev, formattedExp]);
+    setNewExp({ roleEn: '', roleAr: '', brandNameEn: '', brandNameAr: '', period: '', brandImage: '' });
   };
 
   const removeExperience = (index) => {
-    setExperiences(experiences.filter((_, i) => i !== index));
+    setExperiences(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSaveFounder = async (e) => {
@@ -153,25 +175,37 @@ export default function EditFounderInfo() {
     try {
       let imageUrl = founderData.image;
 
-      // Upload new image to Supabase if changed
-      // if (imageFile) {
-      //   const fileName = `founderPortrait-${Date.now()}-${imageFile.name}`;
-      //   const { error: uploadError } = await supabase.storage.from('events_images').upload(fileName, imageFile);
-      //   if (uploadError) throw uploadError;
+      // Upload new portrait to Supabase if selected
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `founderPortrait-${crypto.randomUUID()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('events_images')
+          .upload(fileName, imageFile);
 
-      //   const { data: publicUrlData } = supabase.storage.from('events_images').getPublicUrl(fileName);
-      //   imageUrl = publicUrlData.publicUrl;
-      // }
+        if (uploadError) throw uploadError;
 
-      // const payload = {
-      //   name: founderData.name,
-      //   title: founderData.title,
-      //   bio: founderData.bio,
-      //   image: imageUrl,
-      //   experiences: experiences,
-      // };
+        const { data: publicUrlData } = supabase.storage
+          .from('events_images')
+          .getPublicUrl(fileName);
+        imageUrl = publicUrlData.publicUrl;
+      }
 
-      const response = await axios.post(`${API_URL}/admin/update-founder`, payload);
+      // Reconstruct the exact JSONB schema expected by your Supabase table
+      const payload = {
+        id: founderId,
+        name: { en: founderData.name, ar: founderData.nameAr },
+        header: { en: founderData.title, ar: founderData.titleAr },
+        description: { en: founderData.bio, ar: founderData.bioAr },
+        founder_quote: { en: founderData.quote, ar: founderData.quoteAr },
+        image: imageUrl,
+        partnerships: experiences,
+      };
+
+      const response = await axios.patch(`${API_URL}/admin/update-founder/${user.id}`, {payload});
+
+      console.log(response);
+      
 
       if (response.status === 200 || response.data?.message === 'SUCCESS') {
         toast.success(t.successMsg);
@@ -188,10 +222,7 @@ export default function EditFounderInfo() {
     return <MiniLoading />;
   }
 
-  // TODO: Change the text direction
-
   return (
-
     <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full pb-16 text-slate-100 font-sans">
       
       {/* Header */}
@@ -209,34 +240,29 @@ export default function EditFounderInfo() {
 
       <form onSubmit={handleSaveFounder} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* ==================================================== */}
-        {/* LEFT COLUMN: CORE FOUNDER INFO & PORTRAIT            */}
-        {/* ==================================================== */}
+        {/* LEFT COLUMN: CORE FOUNDER INFO & PORTRAIT */}
         <div className="lg:col-span-6 space-y-6">
-          
           <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
             <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
               <User className="w-4 h-4 text-gold" />
               <span>{isRtl ? 'المعلومات الشخصية' : 'Founder Profile'}</span>
             </h3>
 
-            {/* Name Container / both langs */}
-            <div className='flex gap-2'>
-
+            {/* Name Container (AR & EN) */}
+            <div className="flex gap-2">
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Type className="w-4 h-4 text-gold" />
-                  <span>
-                    اسم المؤسس
-                  </span>
+                  <span>اسم المؤسس</span>
                 </label>
                 <input 
                   type="text" 
-                  name="name" 
-                  value={founderData.name} 
+                  name="nameAr" 
+                  value={founderData.nameAr} 
                   onChange={handleFounderChange}
                   required
-                  placeholder="e.g., Faisal Al-Sultan"
+                  dir="rtl"
+                  placeholder="مثال: منال م."
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
@@ -244,10 +270,7 @@ export default function EditFounderInfo() {
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Type className="w-4 h-4 text-gold" />
-                  <span>
-                    {/* {t.nameLabel} */}
-                    Founder Name
-                  </span>
+                  <span>Founder Name</span>
                 </label>
                 <input 
                   type="text" 
@@ -255,71 +278,64 @@ export default function EditFounderInfo() {
                   value={founderData.name} 
                   onChange={handleFounderChange}
                   required
-                  placeholder="e.g., Faisal Al-Sultan"
+                  dir="ltr"
+                  placeholder="e.g., Manal M."
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Header / Title (AR & EN) */}
+            <div className="flex flex-row gap-2">
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Briefcase className="w-4 h-4 text-gold" />
+                  <span>اللقب المهني / العنوان</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="titleAr" 
+                  value={founderData.titleAr} 
+                  onChange={handleFounderChange}
+                  required
+                  dir="rtl"
+                  placeholder="مثال: صانع محتوى"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
 
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Briefcase className="w-4 h-4 text-gold" />
+                  <span>Header / Professional Title</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="title" 
+                  value={founderData.title} 
+                  onChange={handleFounderChange}
+                  required
+                  dir="ltr"
+                  placeholder="e.g., Content Creator and Visionary"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                />
+              </div>
             </div>
 
-            {/* Title / Role */}
-          <div className='flex flex-row gap-2'>
-
-            <div className="space-y-2 w-1/2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Briefcase className="w-4 h-4 text-gold" />
-                <span>
-                  {/* {t.titleLabel} */}
-                  اللقب المهني / المسمى الوظيفي
-                </span>
-              </label>
-              <input 
-                type="text" 
-                name="title" 
-                value={founderData.title} 
-                onChange={handleFounderChange}
-                required
-                placeholder="e.g., Chief Executive Officer & Founder"
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-              />
-            </div>
-
-            <div className="space-y-2 w-1/2">
-              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                <Briefcase className="w-4 h-4 text-gold" />
-                <span>
-                  {/* {t.titleLabel} */}
-                  Professional Title / Role
-                </span>
-              </label>
-              <input 
-                type="text" 
-                name="title" 
-                value={founderData.title} 
-                onChange={handleFounderChange}
-                required
-                placeholder="e.g., Chief Executive Officer & Founder"
-                className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-              />
-            </div>
-
-          </div>
-
-            {/* Bio / Description */}
-            
-            <div className='flex gap-2'>
+            {/* Bio / Description (AR & EN) */}
+            <div className="flex gap-2">
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <FileText className="w-4 h-4 text-gold" />
-                  <span>{t.bioLabel}</span>
+                  <span>نبذة تعريفية / السيرة الذاتية</span>
                 </label>
                 <textarea 
-                  name="bio" 
-                  value={founderData.bio} 
+                  name="bioAr" 
+                  value={founderData.bioAr} 
                   onChange={handleFounderChange}
                   required
+                  dir="rtl"
                   rows={5}
-                  placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
                 />
               </div>
@@ -327,15 +343,48 @@ export default function EditFounderInfo() {
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <FileText className="w-4 h-4 text-gold" />
-                  <span>{t.bioLabel}</span>
+                  <span>Executive Bio & Vision</span>
                 </label>
                 <textarea 
                   name="bio" 
                   value={founderData.bio} 
                   onChange={handleFounderChange}
                   required
+                  dir="ltr"
                   rows={5}
-                  placeholder="Share the founder's vision, background, and sovereign leadership philosophy..."
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                />
+              </div>
+            </div>
+
+            {/* Founder Quote (AR & EN) */}
+            <div className="flex gap-2">
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Quote className="w-4 h-4 text-gold" />
+                  <span>اقتباس المؤسس</span>
+                </label>
+                <textarea 
+                  name="quoteAr" 
+                  value={founderData.quoteAr} 
+                  onChange={handleFounderChange}
+                  dir="rtl"
+                  rows={2}
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
+                />
+              </div>
+
+              <div className="space-y-2 w-1/2">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                  <Quote className="w-4 h-4 text-gold" />
+                  <span>Founder Quote</span>
+                </label>
+                <textarea 
+                  name="quote" 
+                  value={founderData.quote} 
+                  onChange={handleFounderChange}
+                  dir="ltr"
+                  rows={2}
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
                 />
               </div>
@@ -360,15 +409,11 @@ export default function EditFounderInfo() {
                 </div>
               )}
             </div>
-
           </div>
         </div>
 
-        {/* ==================================================== */}
-        {/* RIGHT COLUMN: WORK EXPERIENCES                       */}
-        {/* ==================================================== */}
+        {/* RIGHT COLUMN: WORK EXPERIENCES & PARTNERSHIPS */}
         <div className="lg:col-span-6 space-y-6">
-          
           <div className="bg-white border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
             <h3 className="text-sm font-bold uppercase tracking-wider text-forestGreen flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-gold" />
@@ -380,17 +425,40 @@ export default function EditFounderInfo() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input 
                   type="text"
-                  name="role"
-                  value={newExp.role}
+                  name="roleAr"
+                  value={newExp.roleAr}
                   onChange={handleExpChange}
-                  placeholder={t.rolePlaceholder}
+                  dir="rtl"
+                  placeholder="المسمى الوظيفي (عربي)"
                   className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
                 />
                 <input 
                   type="text"
-                  name="company"
-                  value={newExp.company}
+                  name="roleEn"
+                  value={newExp.roleEn}
                   onChange={handleExpChange}
+                  dir="ltr"
+                  placeholder="Role / Position (English)"
+                  className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input 
+                  type="text"
+                  name="brandNameAr"
+                  value={newExp.brandNameAr}
+                  onChange={handleExpChange}
+                  dir="rtl"
+                  placeholder="الشركة أو المؤسسة (عربي)"
+                  className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
+                />
+                <input 
+                  type="text"
+                  name="brandNameEn"
+                  value={newExp.brandNameEn}
+                  onChange={handleExpChange}
+                  dir="ltr"
                   placeholder={t.companyPlaceholder}
                   className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
                 />
@@ -405,15 +473,6 @@ export default function EditFounderInfo() {
                 className="w-full bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
               />
 
-              <textarea 
-                name="description"
-                value={newExp.description}
-                onChange={handleExpChange}
-                rows={2}
-                placeholder={t.descPlaceholder}
-                className="w-full bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold resize-none"
-              />
-
               <button 
                 type="button"
                 onClick={addExperience}
@@ -424,35 +483,45 @@ export default function EditFounderInfo() {
               </button>
             </div>
 
-            {/* Existing Experiences List */}
+            {/* Existing Experiences / Partnerships List */}
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
               {experiences.map((exp, index) => (
                 <div key={index} className="p-4 rounded-xl bg-white border border-forestGreen/50 flex items-start justify-between gap-3 shadow-md">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-extrabold text-forestGreen text-sm">{exp.role}</h4>
-                      <span className="text-[10px] font-bold text-gold px-2 py-0.5 rounded-full bg-gold/10 border border-gold/20">{exp.period}</span>
+                      <h4 className="font-extrabold text-forestGreen text-sm">
+                        {isRtl ? (exp.role?.ar || exp.role?.en) : (exp.role?.en || exp.role?.ar)}
+                      </h4>
+                      {exp.period && (
+                        <span className="text-[10px] font-bold text-gold px-2 py-0.5 rounded-full bg-gold/10 border border-gold/20">
+                          {exp.period}
+                        </span>
+                      )}
                     </div>
+
                     <p className="text-xs font-semibold text-slate-950 flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-gold" />
-                      <span>{exp.company}</span>
+                      <img 
+                        src={exp.brand_image || '/bk-est.jpeg'} 
+                        alt="" 
+                        className="w-7 h-7 rounded object-cover" 
+                      />
+                      <span>
+                        {isRtl ? (exp.brand_name?.ar || exp.brand_name?.en) : (exp.brand_name?.en || exp.brand_name?.ar)}
+                      </span>
                     </p>
-                    {exp.description && (
-                      <p className="text-xs text-slate-800 pt-1 leading-relaxed">{exp.description}</p>
-                    )}
                   </div>
 
                   <button 
                     type="button"
                     onClick={() => removeExperience(index)}
                     className="text-red-600 hover:text-red-400 p-1.5 rounded-lg bg-red-950/20 border border-red-800/30 cursor-pointer shrink-0 transition-all duration-300 ease-in-out"
-                    title="Remove experience">
+                    title="Remove experience"
+                  >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               ))}
             </div>
-
           </div>
 
           {/* Submit Action Button */}
@@ -463,7 +532,6 @@ export default function EditFounderInfo() {
             <CheckCircle2 className="w-4 h-4 text-gold group-hover:text-slate-950" />
             <span>{t.submitBtn}</span>
           </button>
-
         </div>
 
       </form>

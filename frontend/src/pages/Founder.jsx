@@ -132,9 +132,6 @@ const content = {
 
 export default function Founder() {
 
-  const [founder, setFounder] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
  
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
@@ -157,11 +154,6 @@ export default function Founder() {
       }
     }
   };
-
-  if (loading) {
-    return <MiniLoading />;
-  };
-  
 
 
   return (
