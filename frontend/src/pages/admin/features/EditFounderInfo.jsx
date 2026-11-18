@@ -16,6 +16,8 @@ import {
   CheckCircle2,
   Quote
 } from 'lucide-react';
+import imageCompression from 'browser-image-compression';
+
 
 import { useAuth } from '../hooks/userAuth';
 
@@ -23,6 +25,7 @@ export default function EditFounderInfo() {
   const { isRtl } = useOutletContext() || { isRtl: false };
 
   const [loading, setLoading] = useState(true);
+
   const [founderId, setFounderId] = useState(null);
 
   // Founder Data State (mapped to bilingual fields)
@@ -49,7 +52,8 @@ export default function EditFounderInfo() {
     brandNameEn: '',
     brandNameAr: '',
     period: '',
-    brandImage: ''
+    brandImageFile: '',
+    brandImagePreview: '',
   });
 
   // Image States
@@ -61,6 +65,42 @@ export default function EditFounderInfo() {
   // const userId = user.id;
 
   // console.log(user.id);
+
+  // 2. Handler for selecting & compressing the brand logo
+  const handleBrandImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const options = {
+        maxSizeMB: 0.3,          // Small target size for brand logos
+        maxWidthOrHeight: 400,   // Logos don't need 1280px
+        useWebWorker: true,
+      };
+
+      const compressedBlob = await imageCompression(file, options);
+      const compressedFile = new File([compressedBlob], file.name, {
+        type: compressedBlob.type,
+        lastModified: Date.now(),
+      });
+
+      // Revoke previous preview if user picks a different file before clicking Add
+      if (newExp.brandImagePreview) {
+        URL.revokeObjectURL(newExp.brandImagePreview);
+      }
+
+      setNewExp((prev) => ({
+        ...prev,
+        brandImageFile: compressedFile,
+        brandImagePreview: URL.createObjectURL(compressedFile),
+      }));
+    } catch (error) {
+      console.error('Error compressing brand image:', error);
+      toast.error(isRtl ? 'فشل ضغط شعار الشركة' : 'Failed to compress brand logo.');
+    } finally {
+      e.target.value = '';
+    }
+  };
   
   
 
@@ -82,7 +122,9 @@ export default function EditFounderInfo() {
   // Fetch and populate existing founder data on load
   useEffect(() => {
     const fetchFounder = async () => {
+
       try {
+
         const response = await axios.get(`${API_URL}/admin/founder`);
         // Handle both array response ([{...}]) and single object response ({...})
         const data = Array.isArray(response.data) ? response.data[0] : response.data;
@@ -111,6 +153,8 @@ export default function EditFounderInfo() {
           if (Array.isArray(data.partnerships)) {
             setExperiences(data.partnerships);
           }
+
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching founder data from database:', error);
@@ -157,20 +201,71 @@ export default function EditFounderInfo() {
         ar: newExp.brandNameAr,
       },
       period: newExp.period,
-      brand_image: newExp.brandImage || '/bk-est.jpeg',
+      brand_image: newExp.brandImagePreview || '/bk-est.jpeg', // Used for immediate preview
+      brandImageFile: newExp.brandImageFile || null,           // Held until form submit
     };
 
-    setExperiences(prev => [...prev, formattedExp]);
-    setNewExp({ roleEn: '', roleAr: '', brandNameEn: '', brandNameAr: '', period: '', brandImage: '' });
+    setExperiences((prev) => [...prev, formattedExp]);
+
+    // Reset sub-form
+    setNewExp({
+      roleEn: '',
+      roleAr: '',
+      brandNameEn: '',
+      brandNameAr: '',
+      period: '',
+      brandImageFile: null,
+      brandImagePreview: '',
+    });
   };
 
   const removeExperience = (index) => {
-    setExperiences(prev => prev.filter((_, i) => i !== index));
+    const target = experiences[index];
+    if (target?.brand_image?.startsWith('blob:')) {
+      URL.revokeObjectURL(target.brand_image);
+    }
+    setExperiences((prev) => prev.filter((_, i) => i !== index));
   };
 
+  
   const handleSaveFounder = async (e) => {
     e.preventDefault();
+
     setLoading(true);
+
+    const resolvedPartnerships = await Promise.all(
+
+      experiences.map(async (exp) => {
+
+        let finalBrandImage = exp.brand_image;
+
+        // Upload only if a new File object was attached to this item
+        if (exp.brandImageFile instanceof File) {
+          const fileExt = exp.brandImageFile.name.split('.').pop();
+          const fileName = `brandLogo-${crypto.randomUUID()}.${fileExt}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('brand_images')
+            .upload(fileName, exp.brandImageFile);
+
+          if (uploadError) throw uploadError;
+
+          const { data: publicUrlData } = supabase.storage
+            .from('brand_images')
+            .getPublicUrl(fileName);
+
+          finalBrandImage = publicUrlData.publicUrl;
+        }
+
+        // Return clean JSONB object without temporary File properties
+        return {
+          role: exp.role,
+          brand_name: exp.brand_name,
+          period: exp.period,
+          brand_image: finalBrandImage,
+        };
+      })
+    );
 
     try {
       let imageUrl = founderData.image;
@@ -180,16 +275,17 @@ export default function EditFounderInfo() {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `founderPortrait-${crypto.randomUUID()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage
-          .from('events_images')
+          .from('brand_images')
           .upload(fileName, imageFile);
 
         if (uploadError) throw uploadError;
 
         const { data: publicUrlData } = supabase.storage
-          .from('events_images')
+          .from('brand_images')
           .getPublicUrl(fileName);
         imageUrl = publicUrlData.publicUrl;
       }
+      
 
       // Reconstruct the exact JSONB schema expected by your Supabase table
       const payload = {
@@ -199,7 +295,7 @@ export default function EditFounderInfo() {
         description: { en: founderData.bio, ar: founderData.bioAr },
         founder_quote: { en: founderData.quote, ar: founderData.quoteAr },
         image: imageUrl,
-        partnerships: experiences,
+        partnerships: resolvedPartnerships,
       };
 
       const response = await axios.patch(`${API_URL}/admin/update-founder/${user.id}`, {payload});
@@ -217,6 +313,7 @@ export default function EditFounderInfo() {
       setLoading(false);
     }
   };
+
 
   if (loading) {
     return <MiniLoading />;
@@ -464,14 +561,42 @@ export default function EditFounderInfo() {
                 />
               </div>
 
-              <input 
-                type="text"
-                name="period"
-                value={newExp.period}
-                onChange={handleExpChange}
-                placeholder={t.periodPlaceholder}
-                className="w-full bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
-              />
+              {/* Period + Brand Logo Upload Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                <input 
+                  type="text"
+                  name="period"
+                  value={newExp.period}
+                  onChange={handleExpChange}
+                  placeholder={t.periodPlaceholder}
+                  className="w-full bg-white border border-forestGreen/40 px-3 py-2.5 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
+                />
+
+                <div className="flex items-center gap-2">
+                  <label className="flex-1 flex items-center justify-center gap-2 border border-dashed border-forestGreen/50 hover:border-gold rounded-xl px-3 py-2 cursor-pointer bg-slate-50 text-forestGreen text-xs font-bold transition-all">
+                    <Upload className="w-3.5 h-3.5 text-gold shrink-0" />
+                    <span className="truncate">
+                      {newExp.brandImageFile 
+                        ? newExp.brandImageFile.name 
+                        : (isRtl ? 'رفع شعار الشركة' : 'Upload Brand Logo')}
+                    </span>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleBrandImageChange} 
+                      className="hidden" 
+                    />
+                  </label>
+
+                  {newExp.brandImagePreview && (
+                    <img 
+                      src={newExp.brandImagePreview} 
+                      alt="Brand Preview" 
+                      className="w-9 h-9 rounded-lg object-cover border border-gold/40 shrink-0" 
+                    />
+                  )}
+                </div>
+              </div>
 
               <button 
                 type="button"
@@ -482,7 +607,6 @@ export default function EditFounderInfo() {
                 <span>{t.addExpBtn}</span>
               </button>
             </div>
-
             {/* Existing Experiences / Partnerships List */}
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
               {experiences.map((exp, index) => (

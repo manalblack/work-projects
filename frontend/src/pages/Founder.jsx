@@ -123,16 +123,8 @@ const content = {
 };
 
 
-// Animation Variants
-/*
-  change the event cover image and add a mutlti image modal
-
-*/
-
-
 export default function Founder() {
 
- 
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 
