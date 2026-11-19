@@ -462,10 +462,26 @@ router.post('/add-tour', async (req, res) => {
             start_date: newTour.startDate,
             end_date: newTour.endDate,
             duration_days: newTour.durationDays,
-            early_birds: newTour.earlyBirds,
-            late_booking: newTour.lateBooking,
-            family_couples: newTour.familyCouples,
-            individual_room: newTour.privateRoom,
+            early_birds: {
+                ngn: newTour.earlyBirdsNgn,
+                sar: newTour.earlyBirdsSar
+            },
+            late_booking: {
+                ngn: newTour.lateBookingNgn,
+                sar: newTour.lateBookingSar
+            },
+            family_couples: {
+                ngn: newTour.familyCouplesNgn,
+                sar: newTour.familyCouplesSar
+            }, 
+            individual_room: {
+                ngn: newTour.privateRoomNgn,
+                sar: newTour.privateRoomSar,
+            },
+            // early_birds: newTour.earlyBirds,
+            // late_booking: newTour.lateBooking,
+            // family_couples: newTour.familyCouples,
+            // individual_room: newTour.privateRoom,
         };
 
 

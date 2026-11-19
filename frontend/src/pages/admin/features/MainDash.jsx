@@ -19,7 +19,9 @@ import ScannedTicketsModal from "./ScannedTicketsModal";
 import { useLanguage } from "../../../hooks/LanguageContext";
 import AdminDashTour from "../../../components/admin-components/AdminDashTours";
 
+
 export default function MainDash() {
+  
   const { isRtl } = useLanguage(); // Pull language state from Dashboard outlet
 
   const [allEvents, setAllEvents] = useState([]);
@@ -76,6 +78,10 @@ export default function MainDash() {
         setLoading(false);
       }
     };
+
+    const fetchTours = async () => {
+      
+    }
        
     fetchEvents();
   }, [API_URL]);

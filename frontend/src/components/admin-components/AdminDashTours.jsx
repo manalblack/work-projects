@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Compass, Calendar, Clock, MapPin, Sparkles, X, Edit3 } from 'lucide-react';
+import { Compass, Clock, MapPin, Sparkles, X, Edit3, Tag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../hooks/LanguageContext';
-
 
 // Placeholder data for existing tours
 const PLACEHOLDER_TOURS = [
@@ -22,6 +21,29 @@ const PLACEHOLDER_TOURS = [
       'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80&w=800'
+    ],
+    price_tiers: [
+      {
+        name: { en: 'Standard', ar: 'الباقة الأساسية' },
+        price: 1200,
+        subtitle: { en: 'Shared transport & standard camp', ar: 'نقل مشترك ومخيم قياسي' }
+      },
+      {
+        name: { en: 'Silver', ar: 'الباقة الفضية' },
+        price: 1850,
+        subtitle: { en: 'Private SUV & 4-star stay', ar: 'سيارة خاصة وإقامة 4 نجوم' }
+      },
+      {
+        name: { en: 'Gold', ar: 'الباقة الذهبية' },
+        price: 2600,
+        subtitle: { en: 'VIP lounge, private guide & 5-star', ar: 'صالة VIP ومرشد خاص و5 نجوم' },
+        featured: true
+      },
+      {
+        name: { en: 'Royal VIP', ar: 'الباقة الملكية' },
+        price: 4200,
+        subtitle: { en: 'Helicopter transfer & private villa', ar: 'نقل بالهليكوبتر وفيلا خاصة' }
+      }
     ],
     inclusions: [
       { en: 'Airport VIP Pickup', ar: 'استقبال VIP من المطار' },
@@ -45,6 +67,29 @@ const PLACEHOLDER_TOURS = [
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=800',
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800'
     ],
+    price_tiers: [
+      {
+        name: { en: 'Standard', ar: 'الباقة الأساسية' },
+        price: 950,
+        subtitle: { en: 'Shared boat & snorkeling equipment', ar: 'قارب مشترك ومعدات غوص' }
+      },
+      {
+        name: { en: 'Silver', ar: 'الباقة الفضية' },
+        price: 1500,
+        subtitle: { en: 'Semi-private yacht & seaside lunch', ar: 'يخت شبه خاص وغداء بحري' }
+      },
+      {
+        name: { en: 'Gold', ar: 'الباقة الذهبية' },
+        price: 2300,
+        subtitle: { en: 'Private yacht & certified dive guide', ar: 'يخت خاص ومدرب غوص معتمد' },
+        featured: true
+      },
+      {
+        name: { en: 'Royal VIP', ar: 'الباقة الملكية' },
+        price: 3800,
+        subtitle: { en: 'Superyacht charter & private chef', ar: 'يخت فائق الفخامة وطاهٍ خاص' }
+      }
+    ],
     inclusions: [
       { en: 'Luxury Yacht Charter', ar: 'تأجير يخت فاخر' },
       { en: 'Snorkeling Gear & Instructor', ar: 'معدات الغوص مع مدرب' },
@@ -53,12 +98,10 @@ const PLACEHOLDER_TOURS = [
   }
 ];
 
-export default function AdminDashTour ({ onEditTour }) {
-
+export default function AdminDashTour({ onEditTour }) {
   const [tours, setTours] = useState(PLACEHOLDER_TOURS);
   const [selectedTour, setSelectedTour] = useState(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
 
   const { isRtl } = useLanguage();
 
@@ -83,7 +126,7 @@ export default function AdminDashTour ({ onEditTour }) {
         <div className="flex items-center gap-3">
           <motion.div 
             whileHover={{ scale: 1.05, rotate: 5 }}
-            className="p-2.5 rounded-2xl bg-white/0 border border-forestGreen/2"
+            className="p-2.5 rounded-2xl bg-white/0 border border-forestGreen/20"
           >
             <Compass className="w-6 h-6 text-gold" />
           </motion.div>
@@ -91,9 +134,6 @@ export default function AdminDashTour ({ onEditTour }) {
             <h2 className="text-2xl font-extrabold text-white tracking-tight">
               {isRtl ? 'إدارة الرحلات السياحية' : 'Tours Management'}
             </h2>
-            {/* <p className="text-xs text-slate-500">
-              {isRtl ? 'عرض وإدارة جميع الرحلات والرحلات الاستكشافية المتاحة' : 'View and manage all active tours & expeditions'}
-            </p> */}
           </div>
         </div>
       </div>
@@ -171,32 +211,34 @@ export default function AdminDashTour ({ onEditTour }) {
       {/* About Tour Modal */}
       <AnimatePresence>
         {selectedTour && (
-          <div onClick={handleCloseModal}
-           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-            <motion.div 
+          <div
+            onClick={handleCloseModal}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="bg-white rounded-3xl max-w-xl w-full h-150 overflow-hidden shadow-2xl my-8"
+              className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
             >
-              
-              {/* Carousel Header */}
-              <div className="relative h-75 sm:h- w-full bg-slate-900">
+              {/* Carousel Header (Pinned at top) */}
+              <div className="relative h-64 sm:h-72 w-full bg-slate-900 shrink-0">
                 <AnimatePresence mode="wait">
-                  <motion.img 
+                  <motion.img
                     key={activeImageIndex}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    src={selectedTour.gallery_images[activeImageIndex] || selectedTour.cover_image} 
-                    alt="Tour Gallery Preview" 
+                    src={selectedTour.gallery_images[activeImageIndex] || selectedTour.cover_image}
+                    alt="Tour Gallery Preview"
                     className="w-full h-full object-cover"
                   />
                 </AnimatePresence>
 
-                <motion.button 
+                <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   type="button"
@@ -215,7 +257,9 @@ export default function AdminDashTour ({ onEditTour }) {
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       onClick={() => setActiveImageIndex(idx)}
-                      className={`w-12 h-10 rounded-lg overflow-hidden border-2 transition-all shadow-md ${activeImageIndex === idx ? 'border-gold scale-105' : 'border-white/50 opacity-70'}`}
+                      className={`w-12 h-10 rounded-lg overflow-hidden border-2 transition-all shadow-md cursor-pointer ${
+                        activeImageIndex === idx ? 'border-gold scale-105' : 'border-white/50 opacity-70'
+                      }`}
                     >
                       <img src={img} alt="Thumb" className="w-full h-full object-cover" />
                     </motion.button>
@@ -223,9 +267,8 @@ export default function AdminDashTour ({ onEditTour }) {
                 </div>
               </div>
 
-              {/* Modal Body */}
-              <div className="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                
+              {/* Modal Body (Scrolls smoothly in the remaining space) */}
+              <div className="p-6 sm:p-8 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
                 {/* Title & Location */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-xs font-bold text-gold">
@@ -240,22 +283,95 @@ export default function AdminDashTour ({ onEditTour }) {
                 {/* Dates & Duration Badges */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-forestGreen/5 border border-forestGreen/10">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{isRtl ? 'تاريخ البدء' : 'Start Date'}</span>
-                    <p className="text-xs font-bold text-slate-900">{new Date(selectedTour.tour_date).toLocaleDateString()}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {isRtl ? 'تاريخ البدء' : 'Start Date'}
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">
+                      {new Date(selectedTour.tour_date).toLocaleDateString()}
+                    </p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{isRtl ? 'تاريخ الانتهاء' : 'End Date'}</span>
-                    <p className="text-xs font-bold text-slate-900">{new Date(selectedTour.end_date).toLocaleDateString()}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {isRtl ? 'تاريخ الانتهاء' : 'End Date'}
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">
+                      {new Date(selectedTour.end_date).toLocaleDateString()}
+                    </p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{isRtl ? 'المدة' : 'Duration'}</span>
-                    <p className="text-xs font-bold text-forestGreen">{selectedTour.duration_days} {isRtl ? 'أيام' : 'Days'}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      {isRtl ? 'المدة' : 'Duration'}
+                    </span>
+                    <p className="text-xs font-bold text-forestGreen">
+                      {selectedTour.duration_days} {isRtl ? 'أيام' : 'Days'}
+                    </p>
                   </div>
                 </div>
 
+                {/* 4 Price Tiers Section */}
+                {Array.isArray(selectedTour.price_tiers) && selectedTour.price_tiers.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                      <Tag className="w-3.5 h-3.5 text-gold" />
+                      <span>{isRtl ? 'فئات الأسعار' : 'Pricing Tiers'}</span>
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {selectedTour.price_tiers.slice(0, 4).map((tier, idx) => {
+                        const tierName = typeof tier.name === 'object'
+                          ? (isRtl ? tier.name.ar : tier.name.en)
+                          : tier.name;
+                        const tierSubtitle = typeof tier.subtitle === 'object'
+                          ? (isRtl ? tier.subtitle.ar : tier.subtitle.en)
+                          : tier.subtitle;
+
+                        return (
+                          <div
+                            key={idx}
+                            className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-2 ${
+                              tier.featured
+                                ? 'bg-forestGreen text-white border-gold shadow-md'
+                                : 'bg-slate-50/80 text-slate-900 border-slate-200/80'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span
+                                className={`text-xs font-extrabold uppercase tracking-wide ${
+                                  tier.featured ? 'text-gold' : 'text-forestGreen'
+                                }`}
+                              >
+                                {tierName}
+                              </span>
+                              <span
+                                className={`text-sm font-black ${
+                                  tier.featured ? 'text-white' : 'text-slate-950'
+                                }`}
+                              >
+                                {Number(tier.price).toLocaleString()} {isRtl ? 'ر.س' : 'SAR'}
+                              </span>
+                            </div>
+
+                            {tierSubtitle && (
+                              <p
+                                className={`text-[11px] leading-snug ${
+                                  tier.featured ? 'text-slate-200' : 'text-slate-500'
+                                }`}
+                              >
+                                {tierSubtitle}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 {/* Description */}
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">{isRtl ? 'وصف الرحلة' : 'Description'}</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    {isRtl ? 'وصف الرحلة' : 'Description'}
+                  </h4>
                   <p className="text-sm text-slate-600 leading-relaxed">
                     {isRtl ? selectedTour.description.ar : selectedTour.description.en}
                   </p>
@@ -269,18 +385,20 @@ export default function AdminDashTour ({ onEditTour }) {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selectedTour.inclusions.map((inc, i) => (
-                      <div key={i} className="p-2.5 rounded-xl bg-forestGreen/10 text-xs font-medium text-slate-900 border border-forestGreen/20">
+                      <div
+                        key={i}
+                        className="p-2.5 rounded-xl bg-forestGreen/10 text-xs font-medium text-slate-900 border border-forestGreen/20"
+                      >
                         ✓ {isRtl ? inc.ar : inc.en}
                       </div>
                     ))}
                   </div>
                 </div>
-
               </div>
 
-              {/* Modal Footer */}
-              <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
-                <motion.button 
+              {/* Modal Footer (Pinned at bottom) */}
+              <div className="p-2 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="button"
@@ -289,7 +407,7 @@ export default function AdminDashTour ({ onEditTour }) {
                 >
                   {isRtl ? 'إغلاق' : 'Close'}
                 </motion.button>
-                <motion.button 
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="button"
@@ -303,11 +421,10 @@ export default function AdminDashTour ({ onEditTour }) {
                   <span>{isRtl ? 'تعديل هذه الرحلة' : 'Edit This Tour'}</span>
                 </motion.button>
               </div>
-
             </motion.div>
           </div>
         )}
       </AnimatePresence>
     </motion.div>
   );
-};
+}

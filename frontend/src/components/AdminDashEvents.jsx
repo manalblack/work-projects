@@ -48,7 +48,7 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
         if (isNaN(value)) return '0';
         return Number(value).toLocaleString('en-US');
     };
-
+    
     return (
         <div className="w-full px-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {allEvents.map((event, index) => {

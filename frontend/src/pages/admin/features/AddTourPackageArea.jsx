@@ -30,10 +30,6 @@ import {
 } from 'lucide-react';
 
 
-/*
-  fix the ui and work on the backend endpoint
-*/
-
 
 export default function AddTourPackageArea() {
 
@@ -52,10 +48,14 @@ export default function AddTourPackageArea() {
     descriptionAr: '',
     locationEn: '',
     locationAr: '',
-    earlyBirdsPrice: '',
-    lateBookingPrice: '',
-    familyCouplesPrice: '',
-    privateRoomPrice: '',
+    earlyBirdsPriceNgn: '',
+    earlyBirdsPriceSar: '',
+    lateBookingPriceNgn: '',
+    lateBookingPriceSar: '',
+    familyCouplesPriceNgn: '',
+    familyCouplesPriceSar: '',
+    privateRoomPriceNgn: '',
+    privateRoomPriceSar: '',
   });
 
   // Media States
@@ -126,7 +126,6 @@ export default function AddTourPackageArea() {
     errorMsg: isRtl ? 'حدث خطأ أثناء رفع البيانات' : 'Failed to publish tour package.',
   };
 
-
   const compressImage = async (file) => {
 
     const options = {
@@ -163,48 +162,6 @@ export default function AddTourPackageArea() {
     const { name, value } = e.target;
     setTourData(prev => ({ ...prev, [name]: value }));
   };
-
-  // Cover Image Handler
-  // const handleCoverImage = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setCoverImageFile(file);
-  //     setCoverImagePreview(URL.createObjectURL(file));
-  //   }
-
-  //   console.log(file);
-  //   console.log(URL.createObjectURL(file));
-    
-    
-  // };
-
-  // Carousel Images Handler (Max 5)
-  // const handleCarouselImages = (e) => {
-  //   const newFiles = Array.from(e.target.files);
-  //   if (newFiles.length === 0) return;
-
-  // // Combine existing files with the newly selected files
-  //   const combinedFiles = [...carouselFiles, ...newFiles];
-
-  //   // Enforce the maximum limit of 5 images
-  //   if (combinedFiles.length > 5) {
-  //       toast.error(isRtl ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' : 'Maximum 5 images allowed in total. Please remove some before adding more.');
-  //       e.target.value = ''; // Reset input
-  //       return;
-  //   }
-
-  //   // Create previews for the new files only
-  //   const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-    
-  //   // Combine previews
-  //   const combinedPreviews = [...carouselPreviews, ...newPreviews];
-
-  //   setCarouselFiles(combinedFiles);
-  //   setCarouselPreviews(combinedPreviews);
-
-  //   // Clear the input value so selecting the same file/batch again triggers onChange properly
-  //   e.target.value = '';
-  // };
 
   const handleCarouselImages = async (e) => {
     const newFiles = Array.from(e.target.files);
@@ -311,25 +268,9 @@ export default function AddTourPackageArea() {
   // Submit Handler
   const handleSubmitTour = async (e) => {
     e.preventDefault();
-
-    // if (!coverImageFile || carouselFiles.length < 4) {
-    //   toast.error(isRtl ? 'يرجى إرفاق صورة الغلاف و 4 صور على الأقل للمعرض' : 'Please upload a cover image and at least 4 gallery carousel images.');
-    //   return;
-    // }
-
-    // if (inclusions.length < 6) {
-    //   toast.error(isRtl ? 'يجب إضافة 6 ميزات على الأقل تشملها الباقة' : 'Please provide at least 6 package inclusions.');
-    //   return;
-    // }
-
-
     setLoading(true);
 
     try {
-
-
-      // handle image logic before sending data to backend
-
       // COVER IMAGE FILE LOGIC
       let coverImageUrl;
       if (coverImageFile) {
@@ -342,9 +283,7 @@ export default function AddTourPackageArea() {
 
         coverImageUrl = uploadedImage.publicUrl;
       }
-
       // CAROUSEL IMAGES FILE LOGIC
-
       const galleryImageUrls = [];
       if (carouselFiles && carouselFiles.length > 0) {
         for (const file of carouselFiles) {
@@ -358,34 +297,6 @@ export default function AddTourPackageArea() {
         }
       }
 
-
-      const updatedEvent = {
-        title: {
-          en: tourData.titleEn || '',
-          ar: tourData.titleAr || '',
-        },
-        description: {
-          en: tourData.descriptionEn || '',
-          ar: tourData.descriptionAr || '',
-        },
-        location: {
-          en: tourData.locationEn || '',
-          ar: tourData.locationAr || '',
-        },
-        tour_start_date: tourStartDate.toISOString().split('T')[0],
-        tour_end_date: tourEndDate.toISOString().split('T')[0],
-
-        duration_days: Math.ceil((tourEndDate - tourStartDate) / (1000 * 60 * 60 * 24)) + 1, // Calculate duration in days
-        early_birds: Number(tourData.earlyBirdsPrice) || 0,
-        late_booking: Number(tourData.lateBookingPrice) || 0,
-        family_couples: Number(tourData.familyCouplesPrice) || 0,
-        individual_room: Number(tourData.privateRoomPrice) || 0,
-        inclusions: inclusions,
-        cover_image: coverImageUrl || '',
-        gallery_images: galleryImageUrls || [],
-      } 
-
-
       const newTour = {
         titleEn: tourData.titleEn,
         titleAr: tourData.titleAr,
@@ -396,16 +307,18 @@ export default function AddTourPackageArea() {
         startDate: tourStartDate.toISOString().split('T')[0],
         endDate: tourEndDate.toISOString().split('T')[0],
         durationDays: calculateDurationDays(tourStartDate, tourEndDate),
-        earlyBirds: Number(tourData.earlyBirdsPrice) || 0,
-        lateBooking: Number(tourData.lateBookingPrice) || 0,
-        familyCouples: Number(tourData.familyCouplesPrice) || 0,
-        privateRoom: Number(tourData.privateRoomPrice) || 0,
+        earlyBirdsNgn: Number(tourData.earlyBirdsPriceNgn) || 0,
+        earlyBirdsSar: Number(tourData.earlyBirdsPriceSar) || 0,
+        lateBookingNgn: Number(tourData.lateBookingPriceNgn) || 0,
+        lateBookingSar: Number(tourData.lateBookingPriceSar) || 0,
+        familyCouplesNgn: Number(tourData.familyCouplesPriceNgn) || 0,
+        familyCouplesSar: Number(tourData.familyCouplesPriceSar) || 0,
+        privateRoomNgn: Number(tourData.privateRoomPriceNgn) || 0,
+        privateRoomSar: Number(tourData.privateRoomPriceSar) || 0,
         inclusions: inclusions,
         coverImage: coverImageUrl,
         carouselImages: galleryImageUrls,
-
       }
-    
 
       const response = await axios.post(`${API_URL}/admin/add-tour`, {newTour});
 
@@ -415,7 +328,6 @@ export default function AddTourPackageArea() {
         toast.success('Tour Added successfully!')
       }
     
-
     } catch (error) {
       
       console.error('Error adding tour package:', error);
@@ -744,75 +656,189 @@ export default function AddTourPackageArea() {
               <span>{t.pricingHeader}</span>
             </h3>
 
-            <div className="space-y-4">
-              {/* Early Birds */}
-              <div className="space-y-1">
-                <label className="flex gap-3 text-xs text-forestGreen font-semibold">
-                    <UserRound className='h-4 w-4 text-gold' />
-                    {t.earlyBirds}
+            <div className="space-y-5">
+              {/* 1. Early Birds */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-xs text-forestGreen font-semibold">
+                  <UserRound className="h-4 w-4 text-gold" />
+                  <span>{t.earlyBirds}</span>
                 </label>
 
-                <input 
-                  type="number" 
-                  name="earlyBirdsPrice" 
-                  value={tourData.earlyBirdsPrice} 
-                  onChange={handleFormChange}
-                  required
-                  placeholder="1500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                      NGN ₦
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="earlyBirdsPriceNgn"
+                      value={tourData.earlyBirdsPriceNgn}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="450000"
+                      className="w-full bg-white border border-forestGreen/40 pl-16 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                      SAR
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="earlyBirdsPriceSar"
+                      value={tourData.earlyBirdsPriceSar}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="1500"
+                      className="w-full bg-white border border-forestGreen/40 pl-12 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Late Booking */}
-              <div className="space-y-1">
-                <label className="text-xs flex gap-3 text-forestGreen font-semibold">
-                    <UserRound className='h-4 w-4 text-gold' />
-                    {t.lateBooking}
+              {/* 2. Late Booking */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-xs text-forestGreen font-semibold">
+                  <UserRound className="h-4 w-4 text-gold" />
+                  <span>{t.lateBooking}</span>
                 </label>
-                <input 
-                  type="number" 
-                  name="lateBookingPrice" 
-                  value={tourData.lateBookingPrice} 
-                  onChange={handleFormChange}
-                  required
-                  placeholder="2200"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                      NGN ₦
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="lateBookingPriceNgn"
+                      value={tourData.lateBookingPriceNgn}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="650000"
+                      className="w-full bg-white border border-forestGreen/40 pl-16 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                      SAR
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="lateBookingPriceSar"
+                      value={tourData.lateBookingPriceSar}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="2200"
+                      className="w-full bg-white border border-forestGreen/40 pl-12 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Family / Couples */}
-              <div className="space-y-1">
-                <label className="text-xs text-forestGreen font-semibold">
-                     <UsersRound className='h-4 w-4 text-gold' />
-                    {t.familyCouples}
+              {/* 3. Family / Couples */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-xs text-forestGreen font-semibold">
+                  <UsersRound className="h-4 w-4 text-gold" />
+                  <span>{t.familyCouples}</span>
                 </label>
-                <input 
-                  type="number" 
-                  name="familyCouplesPrice" 
-                  value={tourData.familyCouplesPrice} 
-                  onChange={handleFormChange}
-                  required
-                  placeholder="3800"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                      NGN ₦
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="familyCouplesPriceNgn"
+                      value={tourData.familyCouplesPriceNgn}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="1150000"
+                      className="w-full bg-white border border-forestGreen/40 pl-16 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                      SAR
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="familyCouplesPriceSar"
+                      value={tourData.familyCouplesPriceSar}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="3800"
+                      className="w-full bg-white border border-forestGreen/40 pl-12 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {/* Private Room Supplement */}
-              <div className="space-y-1">
-                <label className="text-xs text-forestGreen font-semibold flex items-center gap-1">
-                  {/* <BedDouble className="w-3.5 h-3.5 text-forestGreen" /> */}
-                   <UserRound className='h-4 w-4 text-gold' />
+              {/* 4. Private Room Supplement */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-xs text-forestGreen font-semibold">
+                  <UserRound className="h-4 w-4 text-gold" />
                   <span>{t.privateRoom}</span>
                 </label>
-                <input 
-                  type="number" 
-                  name="privateRoomPrice" 
-                  value={tourData.privateRoomPrice} 
-                  onChange={handleFormChange}
-                  required
-                  placeholder="850"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
-                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                      NGN ₦
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="privateRoomPriceNgn"
+                      value={tourData.privateRoomPriceNgn}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="250000"
+                      className="w-full bg-white border border-forestGreen/40 pl-16 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                      SAR
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      name="privateRoomPriceSar"
+                      value={tourData.privateRoomPriceSar}
+                      onChange={handleFormChange}
+                      required
+                      dir="ltr"
+                      placeholder="850"
+                      className="w-full bg-white border border-forestGreen/40 pl-12 pr-4 py-2.5 rounded-xl text-slate-950 placeholder-slate-400 text-sm focus:outline-none focus:border-gold transition-all"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

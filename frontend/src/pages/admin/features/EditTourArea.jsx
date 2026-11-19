@@ -72,10 +72,14 @@ export default function EditEventArea() {
     eventLocation: '',
     eventLocationAr: '',
     totalTickets: '',
-    earlyBirds: 0,
-    lateBooking: 0,
-    familyCouples: 0,
-    privateBooking: 0,
+    earlyBirdsNgn: 0,
+    lateBookingNgn: 0,
+    familyCouplesNgn: 0,
+    privateBookingNgn: 0,
+    earlyBirdsSar: 0,
+    lateBookingSar: 0,
+    familyCouplesSar: 0,
+    privateBookingSar: 0,
     vipPrice: '',
     regularPrice: '',
     eventTime: '',
@@ -335,10 +339,14 @@ export default function EditEventArea() {
           vipPrice: pulledEvent.vip_price,
           regularPrice: pulledEvent.regular_price,
           eventTime: pulledEvent.event_time,
-          earlyBirds: pulledEvent.early_birds || 0,
-          lateBooking: pulledEvent.late_booking || 0,
-          familyCouples: pulledEvent.family_couples || 0,
-          privateBooking: pulledEvent.individual_room || 0
+          earlyBirdsNgn: pulledEvent.early_birds['ngn'],
+          earlyBirdsSar: pulledEvent.early_birds['sar'],
+          lateBookingNgn: pulledEvent.late_booking['ngn'],
+          lateBookingSar: pulledEvent.late_booking['sar'],
+          familyCouplesNgn: pulledEvent.family_couples['ngn'],
+          familyCouplesSar: pulledEvent.family_couples['sar'],
+          privateBookingNgn: pulledEvent.individual_room['ngn'],
+          privateBookingSar: pulledEvent.individual_room['sar']
         });
 
         setInclusions(pulledEvent.inclusions);
@@ -498,10 +506,22 @@ export default function EditEventArea() {
           start_date: formatEventDate(startDate),
           end_date: formatEventDate(endDate),
           // event_time: formData.eventTime,
-          early_birds: formData.earlyBirds,
-          late_booking: formData.lateBooking,
-          family_couples: formData.familyCouples,
-          individual_room: formData.privateBooking,
+          early_birds: {
+            ngn: formData.earlyBirdsNgn,
+            sar: formData.earlyBirdsSar
+          },
+          late_booking: {
+            ngn: formData.lateBookingNgn,
+            sar: formData.lateBookingSar
+          },
+          family_couples: {
+            ngn: formData.familyCouplesNgn,
+            sar: FormDataEvent.familyCouplesSar
+          },
+          individual_room: {
+            ngn: formData.privateBookingNgn,
+            sar: formData.privateBookingSar
+          },
           cover_image: imageUrlToSave,
           gallery_images: finalGalleryImages,
           inclusions: inclusions,
@@ -889,8 +909,6 @@ export default function EditEventArea() {
               />
             </div>
 
-            {/* TODO: FIX BUG */}
-
             {/* Gallery Images */}
             <div className="space-y-3">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-600">Gallery Images</label>
@@ -927,70 +945,176 @@ export default function EditEventArea() {
               </label>
             </div>
 
-            <div className='grid grid-cols-2 gap-4 w-full'>
-              {/* packages */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <UserRound className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? ' الحجز المبكر' : 'Early Birds'}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="earlyBirds" 
-                  value={formData.earlyBirds} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <UserRound className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? ' الحجز المتأخر' : 'Late Booking'}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="lateBooking" 
-                  value={formData.lateBooking} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <Ticket className="w-4 h-4 text-gold" />
-                  <span>
-                    {isRtl ? 'العوائل او الكبلز' : 'Family / Couples'}
+            {/* Prices grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            {/* Early Birds */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <UserRound className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'الحجز المبكر' : 'Early Birds'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
                   </span>
-                </label>
-                <input 
-                  type="number" 
-                  name="familyCouples" 
-                  value={formData.familyCouples} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <Ticket className="w-4 h-4 text-gold" />
-                  <span>{t.totalTickets}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="privateBooking" 
-                  value={formData.privateBooking} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="earlyBirdsNgn"
+                    value={formData.earlyBirdsNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="450000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="earlyBirdsSar"
+                    value={formData.earlyBirdsSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
               </div>
             </div>
+
+            {/* Late Booking */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <UserRound className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'الحجز المتأخر' : 'Late Booking'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="lateBookingNgn"
+                    value={formData.lateBookingNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="650000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="lateBookingSar"
+                    value={formData.lateBookingSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Family / Couples */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Ticket className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'العوائل أو الكبلز' : 'Family / Couples'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="familyCouplesNgn"
+                    value={formData.familyCouplesNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="1150000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="familyCouplesSar"
+                    value={formData.familyCouplesSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Private Booking / Room Supplement */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Ticket className="w-4 h-4 text-gold" />
+                <span>{t.totalTickets}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="privateBookingNgn"
+                    value={formData.privateBookingNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="250000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="privateBookingSar"
+                    value={formData.privateBookingSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
              {/* Package Inclusions Card (6-12 items) */}
               <div className="bg-white border-white/0 rounded-2xl p-6 sm:p-8 space-y-5">
