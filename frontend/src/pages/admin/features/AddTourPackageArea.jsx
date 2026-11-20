@@ -340,7 +340,7 @@ export default function AddTourPackageArea() {
 
   if (loading) {
     return <MiniLoading />;
-  }
+  };
 
   return (
     <div className="w-full pb-16 text-slate-100 font-sans">
@@ -409,7 +409,7 @@ export default function AddTourPackageArea() {
                   required
                   dir="ltr"
                   placeholder="Yankari Natural Sanctuary"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right font-arabic"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right"
                 />
               </div>
 
@@ -450,7 +450,7 @@ export default function AddTourPackageArea() {
                   required
                   dir="ltr"
                   placeholder="Get lost in the natural beauty of yankari"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none text-right font-arabic"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none text-right font"
                 />
               </div>
             </div>
@@ -491,7 +491,7 @@ export default function AddTourPackageArea() {
                   required
                   dir="rtl"
                   placeholder="Yankari Natural Sanctuary, Bauchi State"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right font-arabic"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right font-ar"
                 />
               </div>
             

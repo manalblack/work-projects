@@ -397,20 +397,9 @@ export default function EditEventArea() {
 
   const updateEvent = async () => {
 
-    console.log(imageFile);
-    console.log(tourId);
-    
-
     setLoadingUpdate(true);
 
-    //  1 slice and format the date and time 
-    // const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
-    // const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
-    
-    // 2 Process image file 
     let imageUrlToSave = imagePreview;
-
-    // const fileName = `eventImage-${imageFile.name}`
 
     // 1. Handle Cover Image (Only upload if it's a NEW File object)
     if (imageFile instanceof File) {
@@ -432,34 +421,6 @@ export default function EditEventArea() {
     }
 
     // 2. Handle Gallery Images (Supports a mix of existing URL strings and new File objects)
-    const galleryImageUrls = [];
-    const incomingGallery = formData.gallery_images || []; // Can contain strings or Files
-
-    // if (incomingGallery.length > 0) {
-    //   for (const item of incomingGallery) {
-    //     if (item instanceof File) {
-    //       // It's a brand new uploaded file -> Upload to Supabase Storage
-    //       const fileExt = item.name.split('.').pop();
-    //       const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
-          
-    //       const { data, error } = await supabase.storage
-    //         .from('tours_images')
-    //         .upload(fileName, item);
-            
-    //       if (error) throw error;
-          
-    //       const { data: uploadedImage } = supabase.storage
-    //         .from('tours_images')
-    //         .getPublicUrl(fileName);
-            
-    //       galleryImageUrls.push(uploadedImage.publicUrl);
-    //     } else if (typeof item === 'string') {
-    //       // It's already an existing URL string from the database -> Keep it as is!
-    //       galleryImageUrls.push(item);
-    //     }
-    //   }
-    // }
-
     
     const newlyUploadedUrls = [];
 
@@ -516,7 +477,7 @@ export default function EditEventArea() {
           },
           family_couples: {
             ngn: formData.familyCouplesNgn,
-            sar: FormDataEvent.familyCouplesSar
+            sar: formData.familyCouplesSar
           },
           individual_room: {
             ngn: formData.privateBookingNgn,
@@ -525,14 +486,9 @@ export default function EditEventArea() {
           cover_image: imageUrlToSave,
           gallery_images: finalGalleryImages,
           inclusions: inclusions,
-        } 
-
-        console.log(updatedEvent);
-        
+        }         
 
         const response = await axios.patch(`${API_URL}/admin/edit-tour/${tourId}`, {updatedEvent});
-
-        console.log(response);
         
         setIsConfirmationModal(false);
 
@@ -763,6 +719,7 @@ export default function EditEventArea() {
                 name='eventTitle' 
                 onChange={handleChange}
                 placeholder="Event Title (EN)"
+                dir='ltr'
                 className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
               />
             </div>
