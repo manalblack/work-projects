@@ -19,10 +19,13 @@ import ScannedTicketsModal from "./ScannedTicketsModal";
 import { useLanguage } from "../../../hooks/LanguageContext";
 import AdminDashTour from "../../../components/admin-components/AdminDashTours";
 
+
 export default function MainDash() {
+  
   const { isRtl } = useLanguage(); // Pull language state from Dashboard outlet
 
   const [allEvents, setAllEvents] = useState([]);
+  const [allTours, setAllTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [soldOut, setSoldOut] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -76,8 +79,41 @@ export default function MainDash() {
         setLoading(false);
       }
     };
+
+    const fetchTours = async () => {
+
+       try {
+
+        const response = await axios.get(`${API_URL}/admin/all-tours`);
+
+        console.log(response.data);
+        
+
+        setAllTours(response.data);
+        
+            
+        // if (response.data.length > 0) {
+        //   const soldOutEvent = response.data.filter(event => event.total_tickets === 0);
+        //   const eventStatus = soldOutEvent[0]?.total_tickets <= 0 ? true : false;
+        //   setSoldOut(eventStatus);
+        // } else {
+        //   setSoldOut(null);
+        // }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error when fetching events', error);
+        setLoading(false);
+      }
+
+    }
+
+    fetchTours();
        
     fetchEvents();
+
+
+
   }, [API_URL]);
 
   const openScannedTicketsModal = (id) => {
@@ -253,7 +289,9 @@ export default function MainDash() {
           isRtl={isRtl}
         />
 
-        <AdminDashTour />
+        <AdminDashTour 
+          tours={allTours}
+        />
 
         
       </div>

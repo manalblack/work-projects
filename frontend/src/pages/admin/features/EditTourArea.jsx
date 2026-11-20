@@ -35,8 +35,6 @@ import LiveTourPreviewCard from "../../../components/LiveTourPreviewCard";
 
 
 
-
-
 // TODO: Work on the tour review section
 
 export default function EditEventArea() {
@@ -60,8 +58,12 @@ export default function EditEventArea() {
   const [endDate, setEndDate ] = useState(new Date());
 
   const [imagePreview, setImagePreview] = useState(null);
+
   const [existingGalleryUrls, setExistingGalleryUrls] = useState([]);
   const [newGalleryPreviews, setNewGalleryPreviews] = useState([]);
+  const [newGalleryFiles, setNewGalleryFiles] = useState([])
+  
+
   const [formData, setFormData] = useState({
     eventTitle: '',
     eventTitleAr: '',
@@ -70,10 +72,14 @@ export default function EditEventArea() {
     eventLocation: '',
     eventLocationAr: '',
     totalTickets: '',
-    earlyBirds: 0,
-    lateBooking: 0,
-    familyCouples: 0,
-    privateBooking: 0,
+    earlyBirdsNgn: 0,
+    lateBookingNgn: 0,
+    familyCouplesNgn: 0,
+    privateBookingNgn: 0,
+    earlyBirdsSar: 0,
+    lateBookingSar: 0,
+    familyCouplesSar: 0,
+    privateBookingSar: 0,
     vipPrice: '',
     regularPrice: '',
     eventTime: '',
@@ -85,6 +91,8 @@ export default function EditEventArea() {
   const [inclusionInputEn, setInclusionInputEn] = useState('')
   const [inclusionInputAr, setInclusionInputAr] = useState('')
   
+  const [isCompressingCover, setIsCompressingCover] = useState(false);
+  const [isCompressingCarousel, setIsCompressingCarousel] = useState(false);
 
   // Pull language state from parent Dashboard outlet
   const { isRtl } = useOutletContext() || { isRtl: false }; 
@@ -139,7 +147,35 @@ export default function EditEventArea() {
   }, [])
 
 
+  // const compressImage = async (file) => {
+  //   const options = {
+  //     maxSizeMB: 2,          // Aim for 1MB
+  //     maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
+  //     useWebWorker: true     // Keeps the UI from freezing during compression
+  //   }
+  //   const compressedFile = await imageCompression(file, options);
+
+  //   const finalFile = new File([compressedFile], file.name, {
+  //       type: compressedFile.type,
+  //       lastModified: Date.now(),
+  //   });
+
+  //     setImageFile(finalFile);
+
+  //     setImagePreview(URL.createObjectURL(finalFile));
+  // };
+
+  // const handelImageFile = async (e) => {
+
+  //   const selectedFile = e.target.files[0];
+  //   if(selectedFile) {
+  //       compressImage(selectedFile)
+  //   }
+  //   // setImageFile(URL.createObjectURL(e.target.files[0]));
+  // }
+
   const compressImage = async (file) => {
+  
     const options = {
       maxSizeMB: 2,          // Aim for 1MB
       maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
@@ -157,29 +193,121 @@ export default function EditEventArea() {
       setImagePreview(URL.createObjectURL(finalFile));
   };
 
+    
   const handelImageFile = async (e) => {
+    setIsCompressingCover(true);
 
     const selectedFile = e.target.files[0];
+
     if(selectedFile) {
-        compressImage(selectedFile)
+      compressImage(selectedFile)
     }
+
+    setIsCompressingCover(false);
+
     // setImageFile(URL.createObjectURL(e.target.files[0]));
   }
 
-  const handleGalleryImages = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
-    const newPreviews = files.map(file => URL.createObjectURL(file));
-    setNewGalleryPreviews(prev => [...prev, ...newPreviews]);
+  // const handleGalleryImages = (e) => {
+  //   const files = Array.from(e.target.files);
+  //   if (files.length === 0) return;
+  //   const newPreviews = files.map(file => URL.createObjectURL(file));
+  //   setNewGalleryPreviews(prev => [...prev, ...newPreviews]);
+  // };
+
+  const handleGalleryImages = async (e) => {
+    const newFiles = Array.from(e.target.files);
+    if (newFiles.length === 0) return;
+
+    // Check total combined count across existing URLs + already queued new files + incoming files
+    const totalCount = existingGalleryUrls.length + newGalleryFiles.length + newFiles.length;
+
+    if (totalCount > 5) {
+      toast.error(
+        isRtl 
+          ? 'يمكنك اختيار 5 صور كحد أقصى للمعرض' 
+          : 'Maximum 5 images allowed in total. Please remove some before adding more.'
+      );
+      e.target.value = '';
+      return;
+    }
+
+    setIsCompressingCarousel(true);
+
+    try {
+      // Compress only the newly selected files in parallel
+      const compressedNewFiles = await Promise.all(
+        newFiles.map(async (file) => {
+          const options = {
+            maxSizeMB: 0.8,
+            maxWidthOrHeight: 1280,
+            useWebWorker: true
+          };
+
+          const compressedBlob = await imageCompression(file, options);
+
+          return new File([compressedBlob], file.name, {
+            type: compressedBlob.type,
+            lastModified: Date.now(),
+          });
+        })
+      );
+
+      // 1. Add compressed File objects ONLY to newGalleryFiles (NOT existingGalleryUrls!)
+      setNewGalleryFiles((prev) => [...prev, ...compressedNewFiles]);
+
+      // 2. Add blob preview URLs ONLY to newGalleryPreviews
+      const newPreviewUrls = compressedNewFiles.map((file) => URL.createObjectURL(file));
+
+      setNewGalleryPreviews((prev) => [...prev, ...newPreviewUrls]);
+
+    } catch (error) {
+      console.error("Error compressing gallery images:", error);
+      toast.error(isRtl ? 'فشل ضغط بعض صور المعرض' : 'Failed to compress some gallery images.');
+
+    } finally {
+      setIsCompressingCarousel(false);
+      e.target.value = '';
+    }
   };
 
-  const removeExistingGalleryImage = (index) => {
-    setExistingGalleryUrls(prev => prev.filter((_, i) => i !== index));
+
+  // const removeExistingGalleryImage = (indexToRemove) => {
+  //   const targetPreview = newGalleryPreviews[indexToRemove];
+
+  //   // Revoke object URL if it's a local blob preview to prevent memory leaks
+  //   if (targetPreview && targetPreview.startsWith('blob:')) {
+  //     URL.revokeObjectURL(targetPreview);
+  //   }
+
+  //   setExistingGalleryUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  //   setNewGalleryPreviews((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  // };
+
+  // Remove an existing image from Supabase URLs list
+  const removeExistingGalleryImage = (indexToRemove) => {
+    setExistingGalleryUrls((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
-  const removeNewGalleryImage = (index) => {
-    setNewGalleryPreviews(prev => prev.filter((_, i) => i !== index));
+    // Remove a newly added image (cleans up both the File and the blob preview)
+  const removeNewGalleryImage = (indexToRemove) => {
+    const previewToRevoke = newGalleryPreviews[indexToRemove];
+    if (previewToRevoke) {
+    URL.revokeObjectURL(previewToRevoke);
+    }
+
+    setNewGalleryFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+    setNewGalleryPreviews((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
+
+
+  // const removeExistingGalleryImage = (index) => {
+  //   setExistingGalleryUrls(prev => prev.filter((_, i) => i !== index));
+  // };
+
+  // const removeNewGalleryImage = (index) => {
+  //   setNewGalleryPreviews(prev => prev.filter((_, i) => i !== index));
+  // };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -211,10 +339,14 @@ export default function EditEventArea() {
           vipPrice: pulledEvent.vip_price,
           regularPrice: pulledEvent.regular_price,
           eventTime: pulledEvent.event_time,
-          earlyBirds: pulledEvent.early_birds || 0,
-          lateBooking: pulledEvent.late_booking || 0,
-          familyCouples: pulledEvent.family_couples || 0,
-          privateBooking: pulledEvent.individual_room || 0
+          earlyBirdsNgn: pulledEvent.early_birds['ngn'],
+          earlyBirdsSar: pulledEvent.early_birds['sar'],
+          lateBookingNgn: pulledEvent.late_booking['ngn'],
+          lateBookingSar: pulledEvent.late_booking['sar'],
+          familyCouplesNgn: pulledEvent.family_couples['ngn'],
+          familyCouplesSar: pulledEvent.family_couples['sar'],
+          privateBookingNgn: pulledEvent.individual_room['ngn'],
+          privateBookingSar: pulledEvent.individual_room['sar']
         });
 
         setInclusions(pulledEvent.inclusions);
@@ -223,6 +355,7 @@ export default function EditEventArea() {
 
 
         setImagePreview(pulledEvent.cover_image);
+
         setExistingGalleryUrls(pulledEvent.gallery_images || []);
 
         // setImageFile(pulledEvent.image);
@@ -264,55 +397,56 @@ export default function EditEventArea() {
 
   const updateEvent = async () => {
 
-    console.log(imageFile);
-    console.log(tourId);
-    
-
     setLoadingUpdate(true);
 
-    //  1 slice and format the date and time 
-    // const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
-    // const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
-    
-    // 2 Process image file 
     let imageUrlToSave = imagePreview;
-    // TODO: FIX THE IMAGE UPLOAD PART IT'S ONLY WORKING WITH NEW IMAGES AND NOT THE EXISTING ONE.
 
-    // const fileName = `eventImage-${imageFile.name}`
+    // 1. Handle Cover Image (Only upload if it's a NEW File object)
+    if (imageFile instanceof File) {
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `tourCover-${crypto.randomUUID()}.${fileExt}`;
 
-    if(imageFile) {
-
-        const fileName = `tourImage-${imageFile.name}`;
-
-        const { data, error } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from('tours_images')
-        .upload(fileName, imageFile, {
-            contentType: 'img/*'
-        });
+        .upload(fileName, imageFile); // Let Supabase auto-detect content type
+
+      if (error) throw error;
+
+      // Get the public url for the newly uploaded cover image
+      const { data: publicData } = supabase.storage
+        .from('tours_images')
+        .getPublicUrl(fileName);
+        
+      imageUrlToSave = publicData.publicUrl;
+    }
+
+    // 2. Handle Gallery Images (Supports a mix of existing URL strings and new File objects)
+    
+    const newlyUploadedUrls = [];
+
+    // Loop over newGalleryFiles (the actual File objects), NOT newGalleryPreviews
+    if (newGalleryFiles.length > 0) {
+      for (const file of newGalleryFiles) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `tourGallery-${crypto.randomUUID()}.${fileExt}`;
+
+        const { error } = await supabase.storage
+          .from('tours_images')
+          .upload(fileName, file);
 
         if (error) throw error;
 
-        // Get the public url to save image to database
-        const { data: publicData } = supabase.storage
+        const { data: uploadedImage } = supabase.storage
           .from('tours_images')
           .getPublicUrl(fileName);
-          
-        imageUrlToSave = publicData.publicUrl;
+
+        newlyUploadedUrls.push(uploadedImage.publicUrl);
+      }
     }
 
-      const galleryImageUrls = [];
+    // Merge remaining existing URLs with the newly uploaded URLs
+    const finalGalleryImages = [...existingGalleryUrls, ...newlyUploadedUrls];
 
-      if (existingGalleryUrls && existingGalleryUrls.length > 0) {
-        for (const file of existingGalleryUrls) {
-          const fileName = `tourGallery-${crypto.randomUUID()}-${file.name}`;
-          
-          const { data, error } = await supabase.storage.from('tours_images').upload(fileName, file);
-          if (error) throw error;
-          
-          const { data: uploadedImage } = supabase.storage.from('tours_images').getPublicUrl(fileName);
-          galleryImageUrls.push(uploadedImage.publicUrl);
-        }
-      }
 
     try {
 
@@ -333,21 +467,28 @@ export default function EditEventArea() {
           start_date: formatEventDate(startDate),
           end_date: formatEventDate(endDate),
           // event_time: formData.eventTime,
-          early_birds: formData.earlyBirds,
-          late_booking: formData.lateBooking,
-          family_couples: formData.familyCouples,
-          individual_room: formData.privateBooking,
+          early_birds: {
+            ngn: formData.earlyBirdsNgn,
+            sar: formData.earlyBirdsSar
+          },
+          late_booking: {
+            ngn: formData.lateBookingNgn,
+            sar: formData.lateBookingSar
+          },
+          family_couples: {
+            ngn: formData.familyCouplesNgn,
+            sar: formData.familyCouplesSar
+          },
+          individual_room: {
+            ngn: formData.privateBookingNgn,
+            sar: formData.privateBookingSar
+          },
           cover_image: imageUrlToSave,
-          gallery_images: galleryImageUrls,
+          gallery_images: finalGalleryImages,
           inclusions: inclusions,
-        } 
-
-        console.log(updatedEvent);
-        
+        }         
 
         const response = await axios.patch(`${API_URL}/admin/edit-tour/${tourId}`, {updatedEvent});
-
-        // console.log(response);
         
         setIsConfirmationModal(false);
 
@@ -375,26 +516,39 @@ export default function EditEventArea() {
   const deleteEvent = async () => {
     setLoadingDelete(true)
     try {
-        const response = await axios.delete(`${API_URL}/admin/delete-event/${eventId}`);
+      const response = await axios.delete(`${API_URL}/admin/delete-tour/${tourId}`);
 
-        console.log(response);
-        if(response.status === 200) {
-            setFormData({
-                eventTitle: '',
-                eventDescription: '',
-                eventLocation: '',
-                totalTickets: 0,
-                vipPrice: 0,
-                regularPrice: 0
-            })
-            setImagePreview(null);
-            setImageFile(null);
-            setEventDate('');
-        }
-        setConfirmDelete(false)
-        setLoadingDelete(false);
+      console.log(response);
 
-        toast.success('Event deleted successfully!')
+      if(response.status === 200) {
+        setFormData({
+          eventTitle: '',
+          eventTitleAr: '',
+          eventDescription: '',
+          eventDescriptionAr: '',
+          eventLocation: '',
+          eventLocationAr: '',
+          totalTickets: '',
+          earlyBirds: 0,
+          lateBooking: 0,
+          familyCouples: 0,
+          privateBooking: 0,
+          vipPrice: '',
+          regularPrice: '',
+          eventTime: '',
+        })
+        setImagePreview(null);
+        setImageFile(null);
+        setEventDate('');
+
+        setInitialPageLoad(true);
+
+        toast.success('Tour deleted successfully!')
+      }
+
+      setConfirmDelete(false);
+      setLoadingDelete(false);
+    
         
     } catch (error) {
         console.log('error when deleting event', error);
@@ -421,28 +575,30 @@ export default function EditEventArea() {
     setInclusions((prev) => prev.filter((_, i) => i !== index));
   };
 
+
+
   if (loading) {
     return <MiniLoading />;
   };
 
-    if(loadingEventDetails) {
-      return (
-        <div>
-            <h2>
-                loading event data
-            </h2>
+  if(loadingEventDetails) {
+    return (
+      <div>
+          <h2>
+              Loading Tour data
+          </h2>
 
-            <MiniLoading />
-        </div>
-      )
-        // console.log(eventDetails.title);
+          <MiniLoading />
+      </div>
+    )
+    // console.log(eventDetails.title);
   }
 
   if(loadingDelete) {
     return (
       <div>
           <h2>
-              Deleting event from database
+              Deleting Tour from database
           </h2>
           <MiniLoading />
       </div>
@@ -452,10 +608,10 @@ export default function EditEventArea() {
   if (loadingUpdate) {
     return (
       <div className='h-screen w-full flex flex-col justify-center items-center'>
-          <h2 className="text-2xl font-bold">
-              updating event
-          </h2>
-          <MiniLoading />
+        <h2 className="text-2xl font-bold">
+          updating Tour
+        </h2>
+        <MiniLoading />
       </div>
     )
   }
@@ -563,6 +719,7 @@ export default function EditEventArea() {
                 name='eventTitle' 
                 onChange={handleChange}
                 placeholder="Event Title (EN)"
+                dir='ltr'
                 className="w-full bg-gold/80 border border-white/10 px-4 py-3 rounded-xl text-white text-sm focus:outline-none focus:border-gold transition-all"
               />
             </div>
@@ -745,70 +902,176 @@ export default function EditEventArea() {
               </label>
             </div>
 
-            <div className='grid grid-cols-2 gap-4 w-full'>
-              {/* packages */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <UserRound className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? ' الحجز المبكر' : 'Early Birds'}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="earlyBirds" 
-                  value={formData.earlyBirds} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <UserRound className="w-4 h-4 text-gold" />
-                  <span>{isRtl ? ' الحجز المتأخر' : 'Late Booking'}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="lateBooking" 
-                  value={formData.lateBooking} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <Ticket className="w-4 h-4 text-gold" />
-                  <span>
-                    {isRtl ? 'العوائل او الكبلز' : 'Family / Couples'}
+            {/* Prices grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            {/* Early Birds */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <UserRound className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'الحجز المبكر' : 'Early Birds'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
                   </span>
-                </label>
-                <input 
-                  type="number" 
-                  name="familyCouples" 
-                  value={formData.familyCouples} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
-                  <Ticket className="w-4 h-4 text-gold" />
-                  <span>{t.totalTickets}</span>
-                </label>
-                <input 
-                  type="number" 
-                  name="privateBooking" 
-                  value={formData.privateBooking} 
-                  onChange={handleChange}
-                  placeholder="500"
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all" 
-                />
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="earlyBirdsNgn"
+                    value={formData.earlyBirdsNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="450000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="earlyBirdsSar"
+                    value={formData.earlyBirdsSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
               </div>
             </div>
+
+            {/* Late Booking */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <UserRound className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'الحجز المتأخر' : 'Late Booking'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="lateBookingNgn"
+                    value={formData.lateBookingNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="650000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="lateBookingSar"
+                    value={formData.lateBookingSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Family / Couples */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Ticket className="w-4 h-4 text-gold" />
+                <span>{isRtl ? 'العوائل أو الكبلز' : 'Family / Couples'}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="familyCouplesNgn"
+                    value={formData.familyCouplesNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="1150000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="familyCouplesSar"
+                    value={formData.familyCouplesSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Private Booking / Room Supplement */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <Ticket className="w-4 h-4 text-gold" />
+                <span>{t.totalTickets}</span>
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-forestGreen/70 pointer-events-none">
+                    NGN ₦
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="privateBookingNgn"
+                    value={formData.privateBookingNgn}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="250000"
+                    className="w-full bg-white border border-forestGreen/40 pl-16 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-[11px] font-extrabold text-gold pointer-events-none">
+                    SAR
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    name="privateBookingSar"
+                    value={formData.privateBookingSar}
+                    onChange={handleChange}
+                    dir="ltr"
+                    placeholder="500"
+                    className="w-full bg-white border border-forestGreen/40 pl-12 pr-3 py-3 rounded-xl text-slate-950 text-sm focus:outline-none focus:border-gold transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
              {/* Package Inclusions Card (6-12 items) */}
               <div className="bg-white border-white/0 rounded-2xl p-6 sm:p-8 space-y-5">
@@ -881,7 +1144,7 @@ export default function EditEventArea() {
               </div>
 
             {/* Ticket Prices Box */}
-            <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
+            {/* <div className="p-5 rounded-2xl bg-gold/80 space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-forestGreen">
                 {t.pricingLabel}
               </h3>
@@ -911,7 +1174,7 @@ export default function EditEventArea() {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/10">

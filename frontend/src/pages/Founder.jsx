@@ -14,6 +14,7 @@ import { useLanguage } from '../hooks/LanguageContext';
 import { Link } from 'react-router-dom';
 import { FaWhatsapp, FaTiktok, FaInstagram } from "react-icons/fa";
 import axios from 'axios';
+import MiniLoading from '../components/admin-components/MiniLoading';
 
 
 const content = {
@@ -122,29 +123,8 @@ const content = {
 };
 
 
-// Animation Variants
-/*
-  change the event cover image and add a mutlti image modal
-
-*/
-
-
 export default function Founder() {
 
-
-  const [founder, setFounder] = useState([]);
-  
-
-  const API_URL = import.meta.env.VITE_API_URL;
-
-  useEffect(() => {
-
-    // create a function to fetch founder info
-
-    const fetchFounderInfo = () => {
-      
-    }
-  }, [])
 
   const { lang, toggleLanguage, isRtl } = useLanguage();
 

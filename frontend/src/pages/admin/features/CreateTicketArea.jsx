@@ -192,7 +192,6 @@ export default function CreateTicketArea() {
                 onChange={handelFormChange}
                 placeholder="customer@domain.com"
                 required
-                dir="ltr"
                 className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-left"
               />
             </div>

@@ -35,14 +35,14 @@ import {
 
 export default function EditEventArea() {
 
-    // loading states
-    const [loading, setLoading] = useState(true);
-    const [loadingEventDetails, setLoadingEventDetails] = useState(false);
+  // loading states
+  const [loading, setLoading] = useState(true);
+  const [loadingEventDetails, setLoadingEventDetails] = useState(false);
 
-    const [initialPageLoad, setInitialPageLoad] = useState(true);
+  const [initialPageLoad, setInitialPageLoad] = useState(true);
     
-    const [loadingUpdate, setLoadingUpdate] = useState(false);
-    const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
     const [allEvents, setAllEvents] = useState([]);
     const [eventId, setEventId] = useState('');
@@ -98,53 +98,81 @@ export default function EditEventArea() {
     const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        try {
+      try {
 
-          const fetchEvents = async () => {
-            // change this link to ngrok 
-            const response = await axios.get(`${API_URL}/admin/all-events`);
+        const fetchEvents = async () => {
+          // change this link to ngrok 
+          const response = await axios.get(`${API_URL}/admin/all-events`);
 
-            console.log(response.data);
+          console.log(response.data);
 
-            setAllEvents(response.data);
-            setLoading(false)      
+          setAllEvents(response.data);
+          setLoading(false)      
 
-          }
-
-          fetchEvents();
-        } catch (error) {
-            console.error('error when fetching events', error)
-            
         }
+
+        fetchEvents();
+      } catch (error) {
+          console.error('error when fetching events', error)
+          
+      }
     }, [])
 
 
-    const compressImage = async (file) => {
-        const options = {
-            maxSizeMB: 2,          // Aim for 1MB
-            maxWidthOrHeight: 1920, // Resize if it's a massive 4K photo
-            useWebWorker: true     // Keeps the UI from freezing during compression
-        }
-        const compressedFile = await imageCompression(file, options);
+//  const handelImageFile = (e) => {
+//     const selectedFile = e.target.files[0];
+//     if (selectedFile) {
+//       setImageFile(selectedFile);
+//       setImagePreview(URL.createObjectURL(selectedFile));
+//     }
+//   };
 
-        const finalFile = new File([compressedFile], file.name, {
-            type: compressedFile.type,
-            lastModified: Date.now(),
-        });
+  // Compress image before adding to DB
 
-        setImageFile(finalFile);
-
-        setImagePreview(URL.createObjectURL(finalFile));
-    };
-
-    const handelImageFile = async (e) => {
-
-        const selectedFile = e.target.files[0];
-        if(selectedFile) {
-            compressImage(selectedFile)
-        }
-        // setImageFile(URL.createObjectURL(e.target.files[0]));
+  const compressImage = async (file) => {
+  
+    const options = {
+      maxSizeMB: 0.8,          // Aim for 1MB
+      maxWidthOrHeight: 1280, // Resize if it's a massive 4K photo
+      useWebWorker: true     // Keeps the UI from freezing during compression
     }
+    const compressedFile = await imageCompression(file, options);
+
+    const finalFile = new File([compressedFile], file.name, {
+      type: compressedFile.type,
+      lastModified: Date.now(),
+    });
+
+    // setImageFile(finalFile);
+
+    // setImagePreview(URL.createObjectURL(finalFile));
+
+    console.log(`Compressed successfully! New size: ${(finalFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+    return finalFile;
+    
+  };
+  
+  const handelImageFile = async (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      try {
+        // Run compression right away in the background
+        const finalCompressedFile = await compressImage(selectedFile);
+
+        // Save the compressed File object to state (used for Supabase upload)
+        setImageFile(finalCompressedFile);
+
+        // Generate the preview URL from the compressed file
+        setImagePreview(URL.createObjectURL(finalCompressedFile));
+
+      } catch (error) {
+        console.error("Error during image compression:", error);
+      }
+    }
+  };
+
+
 
     const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -218,85 +246,85 @@ export default function EditEventArea() {
 
     const updateEvent = async () => {
 
-        console.log(imageFile);
-        console.log(eventId);
+      console.log(imageFile);
+      console.log(eventId);
+      
+
+      setLoadingUpdate(true);
+
+      //  1 slice and format the date and time 
+      // const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
+      // const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
+      
+      // 2 Process image file 
+      let imageUrlToSave = imagePreview;
+      // TODO: FIX THE IMAGE UPLOAD PART IT'S ONLY WORKING WITH NEW IMAGES AND NOT THE EXISTING ONE.
+
+      // const fileName = `eventImage-${imageFile.name}`
+
+      if(imageFile) {
+
+        const fileName = `eventImage-${imageFile.name}`;
+
+        const { data, error } = await supabase.storage
+        .from('events_images')
+        .upload(fileName, imageFile, {
+          contentType: 'img/*'
+        });
+
+        if (error) throw error;
+
+        // Get the public url to save image to database
+        const { data: publicData } = supabase.storage
+          .from('events_images')
+          .getPublicUrl(fileName);
+            
+        imageUrlToSave = publicData.publicUrl;
+
+      }
+
+    try {
+
+        // create a new object that contains all the updated event data to send it to db
+        const updatedEvent = {
+          title: {
+            en: formData.eventTitle || '',
+            ar: formData.eventTitleAr || '',
+          },
+          description: {
+            en: formData.eventDescription || '',
+            ar: formData.eventDescriptionAr || '',
+          },
+          location: {
+            en: formData.eventLocation || '',
+            ar: formData.eventLocationAr || '',
+          },
+          event_date: eventDate,
+          event_time: formData.eventTime,
+          total_tickets: Number(formData.totalTickets) || 0,
+          vip_price: Number(formData.vipPrice) || 0,
+          regular_price: Number(formData.regularPrice) || 0,
+          cover_image: imagePreview,
+        } 
+
+        console.log(updatedEvent);
         
 
-        setLoadingUpdate(true);
+        const response = await axios.patch(`${API_URL}/admin/edit-event/${eventId}`, {updatedEvent});
 
-        //  1 slice and format the date and time 
-        // const updatedDate = eventDate.toISOString().split('T')[0]; // "2026-04-02"
-        // const updatedTime = eventDate.toTimeString().split(' ')[0].slice(0, 5); // "18:30"
+        console.log(response);
         
-        // 2 Process image file 
-        let imageUrlToSave = imagePreview;
-            // TODO: FIX THE IMAGE UPLOAD PART IT'S ONLY WORKING WITH NEW IMAGES AND NOT THE EXISTING ONE.
+        setIsConfirmationModal(false);
 
-            // const fileName = `eventImage-${imageFile.name}`
-
-            if(imageFile) {
-
-                const fileName = `eventImage-${imageFile.name}`;
-
-                const { data, error } = await supabase.storage
-                .from('events_images')
-                .upload(fileName, imageFile, {
-                    contentType: 'img/*'
-                });
-
-                if (error) throw error;
-
-                // Get the public url to save image to database
-                const { data: publicData } = supabase.storage
-                    .from('events_images')
-                    .getPublicUrl(fileName);
-                    
-                imageUrlToSave = publicData.publicUrl;
-
-            }
-
-        try {
-
-            // create a new object that contains all the updated event data to send it to db
-            const updatedEvent = {
-              title: {
-                en: formData.eventTitle || '',
-                ar: formData.eventTitleAr || '',
-              },
-              description: {
-                en: formData.eventDescription || '',
-                ar: formData.eventDescriptionAr || '',
-              },
-              location: {
-                en: formData.eventLocation || '',
-                ar: formData.eventLocationAr || '',
-              },
-              event_date: eventDate,
-              event_time: formData.eventTime,
-              total_tickets: Number(formData.totalTickets) || 0,
-              vip_price: Number(formData.vipPrice) || 0,
-              regular_price: Number(formData.regularPrice) || 0,
-              cover_image: imagePreview,
-            } 
-
-            console.log(updatedEvent);
-            
-
-            const response = await axios.patch(`${API_URL}/admin/edit-event/${eventId}`, {updatedEvent});
-
-            console.log(response);
-            
-            setIsConfirmationModal(false);
-
-            setLoadingUpdate(false);
-            
-            console.log('event updated !!!!');
-            toast.success('Event updated successfully!')
-            
-        } catch (error) {
-            console.log('error when trying to update event data', error);
-            
-        }
+        setLoadingUpdate(false);
+        
+        console.log('event updated !!!!');
+        toast.success('Event updated successfully!')
+        
+    } catch (error) {
+      console.log('error when trying to update event data', error);
+        
+    }
        
         
     }

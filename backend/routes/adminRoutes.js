@@ -462,10 +462,26 @@ router.post('/add-tour', async (req, res) => {
             start_date: newTour.startDate,
             end_date: newTour.endDate,
             duration_days: newTour.durationDays,
-            early_birds: newTour.earlyBirds,
-            late_booking: newTour.lateBooking,
-            family_couples: newTour.familyCouples,
-            individual_room: newTour.privateRoom,
+            early_birds: {
+                ngn: newTour.earlyBirdsNgn,
+                sar: newTour.earlyBirdsSar
+            },
+            late_booking: {
+                ngn: newTour.lateBookingNgn,
+                sar: newTour.lateBookingSar
+            },
+            family_couples: {
+                ngn: newTour.familyCouplesNgn,
+                sar: newTour.familyCouplesSar
+            }, 
+            individual_room: {
+                ngn: newTour.privateRoomNgn,
+                sar: newTour.privateRoomSar,
+            },
+            // early_birds: newTour.earlyBirds,
+            // late_booking: newTour.lateBooking,
+            // family_couples: newTour.familyCouples,
+            // individual_room: newTour.privateRoom,
         };
 
 
@@ -485,7 +501,7 @@ router.post('/add-tour', async (req, res) => {
         res.status(500).json({ error: error.message }); 
     }
 
-})
+});
 
 router.patch('/edit-tour/:tourId', async (req, res) => {
 
@@ -520,10 +536,94 @@ router.patch('/edit-tour/:tourId', async (req, res) => {
     
    }
 
-})
+});
+
+router.delete('/delete-tour/:tourId', async (req, res) => {
+
+    const {tourId} = req.params;
+
+    console.log(tourId);
+
+    try {
+        // get the image first, to know which row to delete from the bucket
+        const { data: tour } = await supabase
+        .from('tours')
+        .select('cover_image, gallery_images')
+        .eq('id', tourId)
+        .single();
+
+        console.log('tour images: ', tour);
+        
+
+        // delete the event from the table
+        const { error: dbError } = await supabase
+        .from('tours')
+        .delete()
+        .eq('id', tourId);
+
+        if (dbError) throw dbError;
+
+        // delete the image from the bucket 
 
 
-router.get('/founder-info', async (req, res) => {
+        // if (tour?.cover_image || tour?.gallery_images) {
+        //     const fileName = tour.cover_image.split('/').pop(); // Extracts filename from URL
+        //     console.log(fileName);
+        //     await supabase.storage
+        //     .from('tours_images')
+        //     .remove([fileName]);
+        // }
+
+        const filesToDelete = [];
+
+        // Add cover image filename if it exists
+        if (tour?.cover_image) {
+            const coverFileName = decodeURIComponent(tour.cover_image.split('/').pop());
+            if (coverFileName) {
+                filesToDelete.push(coverFileName);
+            };
+        };
+
+        // Add gallery image filenames ONLY if gallery_images exists and has items
+        if (Array.isArray(tour?.gallery_images) && tour.gallery_images.length > 0) {
+        tour.gallery_images.forEach((url) => {
+            if (typeof url === 'string' && url.trim() !== '') {
+            const galleryFileName = decodeURIComponent(url.split('/').pop());
+            if (galleryFileName) {
+                filesToDelete.push(galleryFileName);
+            }
+            }
+        });
+        }
+
+        // 3. Delete all collected files in a single storage request (skipped if empty)
+        if (filesToDelete.length > 0) {
+        console.log('Deleting files from bucket:', filesToDelete);
+
+        const { error: storageError } = await supabase.storage
+            .from('tours_images')
+            .remove(filesToDelete);
+
+        if (storageError) {
+            console.error('Storage deletion error:', storageError);
+        }
+        }
+
+
+        res.status(200).json({message: 'Deleted'});
+
+
+    } catch (error) {
+        
+    }
+
+    
+
+});
+
+
+
+router.get('/founder', async (req, res) => {
 
     console.log('fetching founder info')
 
@@ -534,6 +634,7 @@ router.get('/founder-info', async (req, res) => {
         if(error) {
             return res.status(400).json({message: 'error when fetching founder info'});
         };
+
         console.log('Fetched Founder Data:', data);
 
         res.status(200).json(data);
@@ -543,6 +644,39 @@ router.get('/founder-info', async (req, res) => {
     }
 })
 
+router.patch('/update-founder/:userId', async (req, res) => {
+
+    const {userId} = req.params;
+
+    const {payload} = req.body;
+
+    
+    console.log('payload from frontend: ', payload);
+
+    console.log(userId);
+    
+    try {
+
+        // changing the table to translated events, for developments 
+        const { data, error } = await supabase
+        .from('founder_profiles')
+        .update(payload)   
+        .eq('founder_id', userId)
+        .select();      
+
+        if (error) throw error;
+
+        console.log(data);
+        
+
+        res.status(200).json(data);
+    
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    
+    }
+
+});
 
 /*      
     TODO:

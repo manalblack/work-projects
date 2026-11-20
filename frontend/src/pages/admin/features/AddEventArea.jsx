@@ -17,6 +17,7 @@ import {
   Type,
   CheckCircle2 
 } from "lucide-react";
+import imageCompression from 'browser-image-compression';
 
 
 export default function AddEventArea() {
@@ -69,13 +70,74 @@ export default function AddEventArea() {
     }));
   };
 
-  const handelImageFile = (e) => {
+  // const handelImageFile = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     setImageFile(selectedFile);
+  //     setImagePreview(URL.createObjectURL(selectedFile));
+  //   }
+  // };
+
+  // Compress image before adding to DB
+
+  const compressImage = async (file) => {
+  
+    const options = {
+      maxSizeMB: 0.8,          // Aim for 1MB
+      maxWidthOrHeight: 1280, // Resize if it's a massive 4K photo
+      useWebWorker: true     // Keeps the UI from freezing during compression
+    }
+    const compressedFile = await imageCompression(file, options);
+
+    const finalFile = new File([compressedFile], file.name, {
+      type: compressedFile.type,
+      lastModified: Date.now(),
+    });
+
+    // setImageFile(finalFile);
+
+    // setImagePreview(URL.createObjectURL(finalFile));
+
+    console.log(`Compressed successfully! New size: ${(finalFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+    return finalFile;
+    
+  };
+  
+  const handelImageFile = async (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setImageFile(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile));
+      try {
+        // Run compression right away in the background
+        const finalCompressedFile = await compressImage(selectedFile);
+
+        // Save the compressed File object to state (used for Supabase upload)
+        setImageFile(finalCompressedFile);
+
+        // Generate the preview URL from the compressed file
+        setImagePreview(URL.createObjectURL(finalCompressedFile));
+
+      } catch (error) {
+        console.error("Error during image compression:", error);
+      }
     }
   };
+
+  // const handelImageFile = async (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile) {
+  //     try {
+  //       const finalFile = await compressImage(selectedFile);
+
+  //       setImageFile(finalFile);
+
+  //       setImagePreview(URL.createObjectURL(finalFile));
+        
+  //     } catch (error) {
+  //       console.error("Error compressing image:", error);
+  //     }
+  //   }
+  // };
 
   const addEventToDb = async (e) => {
     e.preventDefault();
@@ -89,14 +151,26 @@ export default function AddEventArea() {
     }).split(' ')[0];
 
     setEventTime(formattedTime);
-     
+
+    // let fileToUpload = imageFile;
+
+    // if(imageFile instanceof File) {
+    //   fileToUpload = await compressImage(imageFile)
+    // }
+
+
     try {
 
       // Image handling logic
       const fileName = `eventImage-${Date.now()}-${imageFile.name}`;
+
+      console.log('Image file', imageFile);
+      
       
       const { data, error } = await supabase.storage.from('events_images').upload(fileName, imageFile);
+      
       if (error) throw error;
+
       const { data: uploadedImage } = supabase.storage.from('events_images').getPublicUrl(fileName);
       
       // const newEvent = {
@@ -239,7 +313,7 @@ export default function AddEventArea() {
               </div>
 
               <div className="space-y-2 w-1/2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <Type className="w-4 h-4 text-gold" />
                   <span>
                     Event Name
@@ -252,8 +326,8 @@ export default function AddEventArea() {
                     onChange={handelFormChange}
                     required
                     dir="ltr"
-                    placeholder={isRtl ? 'أدخل عنوان الفعالية' : 'e.g., Sovereign Gala Night'}
-                    className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                    placeholder='Enter event description'
+                    className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm font-sans focus:outline-none focus:border-gold transition-all"
                   />
               </div>
 
@@ -281,7 +355,7 @@ export default function AddEventArea() {
               </div>
 
               <div className="space-y-2 w-1/2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <FileText className="w-4 h-4 text-gold" />
                   <span>
                     Event description
@@ -293,8 +367,8 @@ export default function AddEventArea() {
                   onChange={handelFormChange}
                   required
                   dir='ltr'
-                  placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+                  placeholder='Enter event description'
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm font-sans focus:outline-none focus:border-gold transition-all resize-none" 
                 />
               </div>
             </div>
@@ -324,7 +398,7 @@ export default function AddEventArea() {
 
               {/* Location Input */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <MapPin className="w-4 h-4 text-gold" />
                   <span>
                     Venue / Location
@@ -338,7 +412,7 @@ export default function AddEventArea() {
                   required
                   dir='ltr'
                   placeholder={isRtl ? 'كانو نيجيريا' : 'Kano, Nigeria 123 event Center'}
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 font-sans rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
             </div>
