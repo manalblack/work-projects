@@ -162,7 +162,7 @@ export default function AdminDashTour({ onEditTour, tours }) {
               className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow flex flex-col justify-between group"
             >
               {/* Card Header Image */}
-              <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+              <div className="relative h-80 md:h-70 w-full overflow-hidden bg-slate-100">
                 <motion.img 
                   whileHover={{ scale: 1.08 }}
                   transition={{ duration: 0.4 }}
@@ -226,7 +226,7 @@ export default function AdminDashTour({ onEditTour, tours }) {
                 ...(Array.isArray(selectedTour.gallery_images) ? selectedTour.gallery_images : []),
               ].filter(Boolean)
             )
-          );
+        );
 
           return (
             <div

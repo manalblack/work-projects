@@ -556,7 +556,7 @@ export default function EditFounderInfo() {
                   value={newExp.brandNameEn}
                   onChange={handleExpChange}
                   dir="ltr"
-                  placeholder={t.companyPlaceholder}
+                  placeholder='Company name (English)'
                   className="bg-white border border-forestGreen/40 px-3 py-2 rounded-xl text-slate-950 text-xs focus:outline-none focus:border-gold"
                 />
               </div>

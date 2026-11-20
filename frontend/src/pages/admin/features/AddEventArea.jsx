@@ -313,7 +313,7 @@ export default function AddEventArea() {
               </div>
 
               <div className="space-y-2 w-1/2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <Type className="w-4 h-4 text-gold" />
                   <span>
                     Event Name
@@ -326,8 +326,8 @@ export default function AddEventArea() {
                     onChange={handelFormChange}
                     required
                     dir="ltr"
-                    placeholder={isRtl ? 'أدخل عنوان الفعالية' : 'e.g., Sovereign Gala Night'}
-                    className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                    placeholder='Enter event description'
+                    className="w-full bg-white border border-forestGreen/50 px-4 py-3 rounded-md text-slate-950 placeholder-slate-500 text-sm font-sans focus:outline-none focus:border-gold transition-all"
                   />
               </div>
 
@@ -355,7 +355,7 @@ export default function AddEventArea() {
               </div>
 
               <div className="space-y-2 w-1/2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <FileText className="w-4 h-4 text-gold" />
                   <span>
                     Event description
@@ -367,8 +367,8 @@ export default function AddEventArea() {
                   onChange={handelFormChange}
                   required
                   dir='ltr'
-                  placeholder={isRtl ? 'اكتب وصفاً تفصيلياً للفعالية...' : 'Write an extraordinary event description...'}
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none" 
+                  placeholder='Enter event description'
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-md h-32 text-slate-950 placeholder-slate-500 text-sm font-sans focus:outline-none focus:border-gold transition-all resize-none" 
                 />
               </div>
             </div>
@@ -398,7 +398,7 @@ export default function AddEventArea() {
 
               {/* Location Input */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
+                <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen font-sans">
                   <MapPin className="w-4 h-4 text-gold" />
                   <span>
                     Venue / Location
@@ -412,7 +412,7 @@ export default function AddEventArea() {
                   required
                   dir='ltr'
                   placeholder={isRtl ? 'كانو نيجيريا' : 'Kano, Nigeria 123 event Center'}
-                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
+                  className="w-full bg-white border border-forestGreen/40 px-4 py-3 font-sans rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
             </div>

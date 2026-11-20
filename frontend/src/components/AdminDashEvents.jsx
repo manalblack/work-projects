@@ -69,7 +69,7 @@ export default function AdminDashEvents({ allEvents, setAllEvents }) {
                     >
                         
                         {/* Cover Image Header */}
-                        <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                        <div className="relative h-80 md:h-70 w-full overflow-hidden bg-slate-100">
                             <motion.img 
                                 whileHover={{ scale: 1.08 }}
                                 transition={{ duration: 0.4 }}

@@ -390,7 +390,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir='rtl'
-                  placeholder="Add arabic placeholder"
+                  placeholder="أدخل عنوان الرحلة"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
@@ -399,7 +399,9 @@ export default function AddTourPackageArea() {
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <Type className="w-4 h-4 text-gold" />
-                  <span>{t.tourTitleLabel}</span>
+                  <span>
+                    Tour Name
+                  </span>
                 </label>
                 <input 
                   type="text" 
@@ -408,7 +410,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir="ltr"
-                  placeholder="Yankari Natural Sanctuary"
+                  placeholder="Enter tour name"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right"
                 />
               </div>
@@ -432,7 +434,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir='rtl'
-                  placeholder="Add Arabic description"
+                  placeholder="أدخل وصف الرحلة"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none"
                 />
               </div>
@@ -441,7 +443,9 @@ export default function AddTourPackageArea() {
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <FileText className="w-4 h-4 text-gold" />
-                  <span>{t.tourDescLabel}</span>
+                  <span>
+                    Tour description
+                  </span>
                 </label>
                 <textarea 
                   name="descriptionEn" 
@@ -449,7 +453,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir="ltr"
-                  placeholder="Get lost in the natural beauty of yankari"
+                  placeholder="Enter Tour description"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl h-32 text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all resize-none text-right font"
                 />
               </div>
@@ -472,7 +476,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir='rtl'
-                  placeholder="Add arabic description"
+                  placeholder="أدخل وجهة الرحلة"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all"
                 />
               </div>
@@ -481,7 +485,9 @@ export default function AddTourPackageArea() {
               <div className="space-y-2 w-1/2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-forestGreen">
                   <MapPin className="w-4 h-4 text-gold" />
-                  <span>{t.locationLabel}</span>
+                  <span>
+                    Destination
+                  </span>
                 </label>
                 <input 
                   type="text" 
@@ -490,7 +496,7 @@ export default function AddTourPackageArea() {
                   onChange={handleFormChange}
                   required
                   dir="rtl"
-                  placeholder="Yankari Natural Sanctuary, Bauchi State"
+                  placeholder="Enter destination"
                   className="w-full bg-white border border-forestGreen/40 px-4 py-3 rounded-xl text-slate-950 placeholder-slate-500 text-sm focus:outline-none focus:border-gold transition-all text-right font-ar"
                 />
               </div>
