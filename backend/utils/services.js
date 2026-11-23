@@ -6,6 +6,7 @@ import { supabase } from '../databaseConnection.js';
 // frontend url
 const siteUrl = process.env.SITE_URL;
 
+
 async function updateDb(eventId) {
 
     const {error: rpcError} = await supabase.rpc('handle_ticket_sale', {
