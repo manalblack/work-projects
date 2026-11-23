@@ -64,6 +64,7 @@ router.post('/verify-staff', (req, res) => {
     }
 });
 
+
 router.post('/scan-tickets', async (req, res) => {
   const {ticketId} = req.body;
   console.log('scanning route');
