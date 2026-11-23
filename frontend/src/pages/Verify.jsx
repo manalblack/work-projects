@@ -31,6 +31,7 @@ export default function Verify() {
     const {isStaff, IsAdmin} = useAuth();
 
     const navigate = useNavigate();
+
     const API_URL = import.meta.env.VITE_API_URL;
 
     const passKey = import.meta.env.VITE_ADMIN_PASS;
@@ -151,7 +152,6 @@ export default function Verify() {
     }
         
         
-    
 
     if(ticketStatus) {
         return <Loading>Verifying Ticket Status</Loading>
