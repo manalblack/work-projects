@@ -12,6 +12,9 @@ import path from 'path';
 import axios from 'axios';
 
 
+// Debugging / live server
+
+
 //  COMMIT THE LAST CHANGES AND MERGE AND UPDATE DROPLET
 
 // testing table schema 
@@ -48,7 +51,13 @@ const corsOptions = {
     // origin: 'https://ticket-hub-xwhv.onrender.com',
 }
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+app.use(cors({
+  origin: '*', // Allows all origins
+  credentials: true
+}));
+
 // app.use(express.json({
 //     verify: (req, res, buf) => {
 //         req.rawBody = buf.toString();
@@ -207,6 +216,7 @@ function verifyOpaySignature(req, res, next) {
     }
 
 };
+
 
 
 
