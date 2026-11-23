@@ -9,8 +9,9 @@ import toast from 'react-hot-toast';
 
 
 
-// This page should only open when a staff member scans a ticket
-// Testing
+// This page only open when a staff member scans a ticket
+
+
 
 
 export default function Verify() {
