@@ -11,6 +11,9 @@ const supabaseKey = process.env.SECRET_KEY
 
 // update
 export const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: {
+        persistSession: false,
+    },
     realtime: {
         transport: ws, // <--- Provide the WebSocket transport for Node < 22
     },
