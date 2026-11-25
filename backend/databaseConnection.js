@@ -4,6 +4,7 @@ import ws from 'ws'
 
 dotenv.config();
 
+globalThis.WebSocket = ws;
 
 const supabaseUrl = process.env.PROJECT_URL
 
