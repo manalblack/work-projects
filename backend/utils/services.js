@@ -2,6 +2,8 @@ import QRCode from 'qrcode'
 import PDFDocument from 'pdfkit'
 import { supabase } from '../databaseConnection.js';
 import sharp from 'sharp';
+import {Jimp, JimpMime} from 'jimp';
+
 
 // frontend url
 const siteUrl = process.env.SITE_URL;
@@ -31,11 +33,23 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     // Compress image size to keep pdf as small as possible
     console.log("Original buffer size:", imageBuffer.length);
 
-    const optimizedImageBuffer = await sharp(imageBuffer)
-        .resize(840, 840, { fit: 'cover' }) // 2x retina scale for 420x420 pt canvas
-        .jpeg({ quality: 70 })              // Compress JPEG quality to 70%
-        .toBuffer();
-        console.log("Optimized buffer size:", optimizedImageBuffer.length);
+    // const optimizedImageBuffer = await sharp(imageBuffer)
+    //     .resize(840, 840, { fit: 'cover' }) // 2x retina scale for 420x420 pt canvas
+    //     .jpeg({ quality: 70 })              // Compress JPEG quality to 70%
+    //     .toBuffer();
+    //     console.log("Optimized buffer size:", optimizedImageBuffer.length);
+
+
+    // const image = await Jimp.read(imageBuffer);
+
+    const image = await Jimp.read(imageBuffer);
+      const optimizedImageBuffer = await image
+          .resize({ w: 600, h: 600 }) 
+        //   .quality(70)      
+          .getBuffer(JimpMime.jpeg, {quality: 50});
+
+    console.log("Optimized buffer size:", optimizedImageBuffer.length);
+
 
 
     const qrBuffer = await QRCode.toBuffer(verifyUrl, {
