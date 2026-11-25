@@ -2,9 +2,11 @@ import {createClient} from '@supabase/supabase-js'
 import dotenv from 'dotenv';
 import ws from 'ws'
 
+// Debugging live server
+
 dotenv.config();
 
-globalThis.WebSocket = ws;
+// globalThis.WebSocket = ws;
 
 const supabaseUrl = process.env.PROJECT_URL
 
@@ -15,7 +17,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
         persistSession: false,
     },
-    realtime: {
-        transport: ws, // <--- Provide the WebSocket transport for Node < 22
-    },
+    // realtime: {
+    //     transport: ws,
+    // },
 })
