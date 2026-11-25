@@ -29,10 +29,13 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     const secondaryColor = isVip ? '#000000' : '#FFFFFF';
 
     // Compress image size to keep pdf as small as possible
+    console.log("Original buffer size:", imageBuffer.length);
+
     const optimizedImageBuffer = await sharp(imageBuffer)
         .resize(840, 840, { fit: 'cover' }) // 2x retina scale for 420x420 pt canvas
         .jpeg({ quality: 70 })              // Compress JPEG quality to 70%
         .toBuffer();
+        console.log("Optimized buffer size:", optimizedImageBuffer.length);
 
 
     const qrBuffer = await QRCode.toBuffer(verifyUrl, {
