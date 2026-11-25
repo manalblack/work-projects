@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import { Worker } from 'worker_threads';
 import path from 'path';
 import axios from 'axios';
+import ws from 'ws'
 
 
 // Debugging / live server
@@ -26,6 +27,8 @@ const __dirname = dirname(__filename);
 
  
 dotenv.config();
+
+globalThis.WebSocket = ws;
 
 const app = express();
 // Absolute route for testing

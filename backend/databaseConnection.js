@@ -6,8 +6,6 @@ import ws from 'ws'
 
 dotenv.config();
 
-// globalThis.WebSocket = ws;
-
 const supabaseUrl = process.env.PROJECT_URL
 
 const supabaseKey = process.env.SECRET_KEY
@@ -17,7 +15,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: {
         persistSession: false,
     },
-    // realtime: {
-    //     transport: ws,
-    // },
+    realtime: {
+        transport: ws,
+    },
 })
