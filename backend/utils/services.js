@@ -1,7 +1,7 @@
 import QRCode from 'qrcode'
 import PDFDocument from 'pdfkit'
 import { supabase } from '../databaseConnection.js';
-
+import sharp from 'sharp';
 
 // frontend url
 const siteUrl = process.env.SITE_URL;
@@ -28,6 +28,13 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
     const themeColor = isVip ? '#D4AF37' : '#2E5BFF';
     const secondaryColor = isVip ? '#000000' : '#FFFFFF';
 
+    // Compress image size to keep pdf as small as possible
+    const optimizedImageBuffer = await sharp(imageBuffer)
+        .resize(840, 840, { fit: 'cover' }) // 2x retina scale for 420x420 pt canvas
+        .jpeg({ quality: 70 })              // Compress JPEG quality to 70%
+        .toBuffer();
+
+
     const qrBuffer = await QRCode.toBuffer(verifyUrl, {
         color: {
             dark: isVip ? '#000000' : '#000000',
@@ -41,8 +48,10 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
 
     // break point
 
-    const doc = new PDFDocument({size: [420, 420],
-        margins: {top:0, left:0, right:0, bottom:0}
+    const doc = new PDFDocument({
+        size: [420, 420],
+        margins: {top:0, left:0, right:0, bottom:0},
+        compress: true
     });
 
     let chunks = [];
@@ -52,7 +61,7 @@ async function generatePdfTicket({customerName, ticketId, verifyUrl, type, event
 
 
     // Adding event image as the ticket background 
-    doc.image(imageBuffer, 0, 0, {
+    doc.image(optimizedImageBuffer, 0, 0, {
         width: doc.page.width,
         height: doc.page.height
     });
